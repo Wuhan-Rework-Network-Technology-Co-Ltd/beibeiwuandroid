@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_promotion_code"
                 android:drawableRight="@drawable/ic_right"
-                android:text="我的推广码"
+                android:text="分享得积分会员"
                 android:textAlignment="textStart" />
         </TableRow>
 

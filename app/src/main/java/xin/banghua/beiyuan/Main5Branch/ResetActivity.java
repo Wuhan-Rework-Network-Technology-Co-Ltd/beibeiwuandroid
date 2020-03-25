@@ -72,6 +72,7 @@ public class ResetActivity extends AppCompatActivity {
     Button submit_btn;
     EditText value_et;
     TextView title_tv;
+    TextView current_address;
     CircleImageView portrait;
     RadioGroup userGender;
     RadioGroup userProperty;
@@ -92,6 +93,9 @@ public class ResetActivity extends AppCompatActivity {
             }
         });
 
+
+        current_address = findViewById(R.id.current_address);
+        current_address.setVisibility(View.GONE);
 
         getDataPersonage("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=personage&m=socialchat");
     }
@@ -237,6 +241,7 @@ public class ResetActivity extends AppCompatActivity {
 
                 }
             });
+            spinner_age.setSelection(adapter_age.getPosition(jsonObject.getString("age")));
         }
         if (title.equals("性别设置")){
             value_et.setVisibility(View.GONE);
@@ -261,7 +266,8 @@ public class ResetActivity extends AppCompatActivity {
 
         if (title.equals("地区设置")){
             value_et.setVisibility(View.GONE);
-            value_et.setText("北京-北京");
+            current_address.setVisibility(View.VISIBLE);
+            current_address.setText("当前地址："+jsonObject.getString("region"));
             spCity = findViewById(R.id.spinner_city);
             spProvince = findViewById(R.id.spinner_province);
             spCity.setVisibility(View.VISIBLE);

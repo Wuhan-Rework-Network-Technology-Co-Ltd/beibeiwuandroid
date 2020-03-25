@@ -33,7 +33,11 @@ public class PinyinUtils {
             for (char curChar : input) {
                 if (Character.toString(curChar).matches("[\\u4E00-\\u9FA5]+")) {
                     String[] temp = PinyinHelper.toHanyuPinyinStringArray(curChar, format);
-                    output += temp[0];
+                    //部分符号导致获取的temp为空，需要判断，否则崩溃
+                    if (temp != null){
+                        output += temp[0];
+                    }
+
                 } else
                     output += Character.toString(curChar);
             }

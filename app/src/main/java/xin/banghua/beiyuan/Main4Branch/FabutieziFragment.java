@@ -2,6 +2,7 @@ package xin.banghua.beiyuan.Main4Branch;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 
@@ -61,6 +63,14 @@ public class FabutieziFragment extends Fragment {
 
     View mView;
 
+    private Context mContext;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.mContext = getActivity();
+
+
+    }
     public FabutieziFragment() {
 
     }
@@ -199,6 +209,7 @@ public class FabutieziFragment extends Fragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Log.d("进入handler", "handler");
+            Toast.makeText(mContext, "已发布成功，等待审核", Toast.LENGTH_LONG).show();
             if (msg.arg1==1) {
                 Log.d("跳转", "Navigation");
                 Navigation.findNavController(mView).navigate(R.id.fabutiezi_luntan_action);

@@ -32,10 +32,21 @@
             android:id="@+id/title_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:text="设置"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/current_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="当前地址："
+            android:textAlignment="center"
+            android:textColor="#673AB7"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TableLayout
             android:layout_width="match_parent"
