@@ -10,6 +10,7 @@ import io.rong.imkit.RongExtension;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.emoticon.IEmoticonTab;
 import io.rong.imkit.plugin.IPluginModule;
+import io.rong.imkit.widget.provider.FilePlugin;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 
@@ -70,6 +71,7 @@ public class ContactCardExtensionModule implements IExtensionModule {
         if (conversationType.equals(Conversation.ConversationType.PRIVATE)
                 || conversationType.equals(Conversation.ConversationType.GROUP)) {
             pluginModules.add(new ContactCardPlugin());
+            pluginModules.add(new FlashPhotoPlugin());
         }
         return pluginModules;
     }

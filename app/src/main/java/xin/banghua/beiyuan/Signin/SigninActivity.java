@@ -114,12 +114,13 @@ public class SigninActivity extends Activity {
         Intent intent = getIntent();
         String uniquelogin = intent.getStringExtra("uniquelogin");
         String forbidtime = intent.getStringExtra("forbidtime");
+        String forbidreason = intent.getStringExtra("forbidreason");
         if (uniquelogin!=null){
             Toast.makeText(this, "您的账号在其他设备登录，强制退出", Toast.LENGTH_LONG).show();
         }
         if (forbidtime!=null){
             Log.d(TAG, "onCreate: forbidtime"+forbidtime);
-            Toast.makeText(this, "已被封禁"+forbidtime+"天", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "已被封禁"+forbidtime+"天。"+forbidreason, Toast.LENGTH_LONG).show();
         }
 
         signIn = (Button) findViewById(R.id.signin_btn);

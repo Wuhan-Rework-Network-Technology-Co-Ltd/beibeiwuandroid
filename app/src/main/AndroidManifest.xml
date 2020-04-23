@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="xin.banghua.beiyuan">
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -10,16 +10,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Main5Branch.SoundActivity"></activity>
+        <activity android:name=".RongYunExtension.FlashPhotoActivity"></activity>
+        <activity android:name=".Main5Branch.SoundActivity" />
         <activity
             android:name=".Main3Branch.ConversationSettingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".SliderWebViewActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".Main2Branch.BlackListActivity"
             android:label="@string/app_name"
@@ -166,7 +165,6 @@
             </intent-filter>
         </activity>
         <activity android:name="io.rong.callkit.CallSelectMemberActivity" />
-
         <activity
             android:name="com.huawei.hms.activity.BridgeActivity"
             android:configChanges="orientation|locale|screenSize|layoutDirection|fontScale"
@@ -188,6 +186,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <provider
             android:name=".MyFileProvider"
             android:authorities="xin.banghua.beiyuan.FileProvider"
@@ -305,10 +304,12 @@
     <permission
         android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
+
     <permission
         android:name="xin.banghua.beiyuan.push.permission.MESSAGE"
         android:protectionLevel="signature" />
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -320,25 +321,20 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 小米 配置开始 < -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 小米 配置结束 < -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> <!-- 小米 配置开始 < -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 小米 配置结束 < -->
     <!-- 如果是安卓8.0，应用编译配置的targetSdkVersion>=26，请务必添加以下权限 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- MeiZu 配置开始 < -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- MeiZu 配置开始 < -->
     <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到 消息 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE" />
-
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
-    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" /> <!-- 兼容 flyme3.0 配置权限 -->
-    <uses-permission android:name="xin.banghua.beiyuan.push.permission.MESSAGE" /> <!-- MeiZu 配置结束 < -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- 兼容 flyme3.0 配置权限 -->
+    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" /> <!-- MeiZu 配置结束 < -->
     <!-- oppo 配置 -->
+    <uses-permission android:name="xin.banghua.beiyuan.push.permission.MESSAGE" />
     <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
 
     <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />

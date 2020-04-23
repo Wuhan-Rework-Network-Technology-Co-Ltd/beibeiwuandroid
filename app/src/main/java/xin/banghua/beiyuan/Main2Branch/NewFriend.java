@@ -50,6 +50,7 @@ public class NewFriend extends AppCompatActivity {
     private ArrayList<String> mUserNickName = new ArrayList<>();
     private ArrayList<String> mUserLeaveWords = new ArrayList<>();
     private ArrayList<Integer> mUserAgree = new ArrayList<>();
+    private ArrayList<String> mUserVIP = new ArrayList<>();
 
 
     private View mView;
@@ -66,11 +67,11 @@ public class NewFriend extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getDataFriends("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapply&m=socialchat");
+        getDataFriends(getString(R.string.friendsapply_url));
 
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this,handler);
-        badgeBottomNav.getDataFriendsapply("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
+        badgeBottomNav.getDataFriendsapply(getString(R.string.friendsapplynumber_url));
 
     }
 
@@ -108,6 +109,7 @@ public class NewFriend extends AppCompatActivity {
                 mUserNickName.add(jsonObject.getString("yournickname"));
                 mUserLeaveWords.add(jsonObject.getString("yourleavewords"));
                 mUserAgree.add(jsonObject.getInt("agree"));
+                mUserVIP.add(jsonObject.getString("yourvip"));
             }
         }
 
@@ -120,7 +122,7 @@ public class NewFriend extends AppCompatActivity {
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
         final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.newfriend_RecyclerView);
-        NewFriendsAdapter adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree);
+        NewFriendsAdapter adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP);
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));

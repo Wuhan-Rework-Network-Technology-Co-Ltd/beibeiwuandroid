@@ -2,6 +2,8 @@ package xin.banghua.beiyuan.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,6 +40,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     private List<FriendList> friendList;
     private List<FriendList> friendListFull;
 
+    Integer current_timestamp = Math.round(new Date().getTime()/1000);
 
     private Context mContext;
 
@@ -60,7 +65,47 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
         viewHolder.userID.setText(currentItem.getmUserID());
 
-        if (currentItem.getmVip().equals("VIP")) viewHolder.userPortrait.isVIP(true,mContext.getResources(),true);
+//        if (currentItem.getmVip().equals("VIP")) {
+//            viewHolder.userPortrait.isVIP(true,mContext.getResources(),true);
+//        }
+        //现在vip传过来的是时间
+        if (currentItem.getmVip().isEmpty()||currentItem.getmVip()=="null"){
+            viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+            viewHolder.vip_black.setVisibility(View.INVISIBLE);
+            viewHolder.vip_white.setVisibility(View.INVISIBLE);
+            viewHolder.vip_gray.setVisibility(View.VISIBLE);
+        }else {
+            int vip_time = Integer.parseInt(currentItem.getmVip());
+            if (vip_time > current_timestamp) {
+                //vipicon分级
+                Log.d("会员时长", ((Integer.parseInt(currentItem.getmVip())) - current_timestamp)+"");
+                if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_diamond.setVisibility(View.VISIBLE);
+                } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_black.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.VISIBLE);
+                }
+            } else {
+                viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                viewHolder.vip_gray.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+
+
         Glide.with(mContext)
                 .asBitmap()
                 .load(currentItem.getmUserPortrait())
@@ -146,6 +191,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         TextView userAttributes;
 
         RelativeLayout haoyouLayout;
+
+        ImageView vip_gray;
+        ImageView vip_diamond;
+        ImageView vip_black;
+        ImageView vip_white;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userID = itemView.findViewById(R.id.userID);
@@ -157,6 +207,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             userAttributes = itemView.findViewById(R.id.userAttribtes);
 
             haoyouLayout = itemView.findViewById(R.id.haoyou_layout);
+
+            vip_gray = itemView.findViewById(R.id.vip_gray);
+            vip_diamond = itemView.findViewById(R.id.vip_diamond);
+            vip_black = itemView.findViewById(R.id.vip_black);
+            vip_white = itemView.findViewById(R.id.vip_white);
         }
     }
 

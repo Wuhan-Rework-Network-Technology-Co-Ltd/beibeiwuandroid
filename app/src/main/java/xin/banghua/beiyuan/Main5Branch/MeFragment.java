@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.FormBody;
@@ -66,6 +70,11 @@ public class MeFragment extends Fragment {
 
     private Button privacypolity_btn,useragreement_btn;
     private Context mContext;
+
+    ImageView vip_gray;
+    ImageView vip_diamond;
+    ImageView vip_black;
+    ImageView vip_white;
 
     public MeFragment() {
         // Required empty public constructor
@@ -145,6 +154,11 @@ public class MeFragment extends Fragment {
         }).start();
     }
     private void initData(View view) {
+        vip_gray = view.findViewById(R.id.vip_gray);
+        vip_diamond = view.findViewById(R.id.vip_diamond);
+        vip_black = view.findViewById(R.id.vip_black);
+        vip_white = view.findViewById(R.id.vip_white);
+
         userportrait_iv = view.findViewById(R.id.userportrait_iv);
         userportrait_iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,18 +310,43 @@ public class MeFragment extends Fragment {
                 case 3:
 
                     String resultJson1 = msg.obj.toString();
-                    Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
-                    if (!(msg.obj.toString().equals("会员已到期")))  userportrait_iv.isVIP(true,getResources(),false);
+                    Log.d(TAG, "handleMessage: 会员时长信息"+msg.obj.toString());
+//                    if (!(msg.obj.toString().equals("会员已到期")))  userportrait_iv.isVIP(true,getResources(),false);
                     Glide.with(mContext)
                             .asBitmap()
                             .load(myportrait)
                             .into(userportrait_iv);
+                    if (!(msg.obj.toString().equals("会员已到期"))){
+                        // 按指定模式在字符串查找
+                        String line = msg.obj.toString();
+                        String pattern = "(\\D*)(\\d+)(.*)";
+                        // 创建 Pattern 对象
+                        Pattern r = Pattern.compile(pattern);
+                        // 现在创建 matcher 对象
+                        Matcher m = r.matcher(line);
+                        m.find( );
+                        Log.d(TAG, "handleMessage: 会员时长信息0"+m.group(0));
+                        Log.d(TAG, "handleMessage: 会员时长信息1"+m.group(1));
+                        Log.d(TAG, "handleMessage: 会员时长信息2"+m.group(2));
+                        Log.d(TAG, "handleMessage: 会员时长信息3"+m.group(3));
+                        //当前时间
+                        int vip_Remaining_time = (Integer.parseInt(m.group(2)+""))*3600;
+                        if (vip_Remaining_time < 3600 * 24 * 30) {
+                            vip_diamond.setVisibility(View.VISIBLE);
+                        } else if (vip_Remaining_time < 3600 * 24 * 180) {
+                            vip_black.setVisibility(View.VISIBLE);
+                        } else {
+                            vip_white.setVisibility(View.VISIBLE);
+                        }
+                    }else {
+                           vip_gray.setVisibility(View.VISIBLE);
+                    }
 
                     break;
             }
         }
     };
-    //TODO okhttp获取用户信息
+    //TODO okhttp获取用户
     public void getScore(final String url){
         new Thread(new Runnable() {
             @Override

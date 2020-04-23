@@ -23,6 +23,17 @@
     <string name="media_picker_read_Write_external_storage"><![CDATA[读写外部储存器]]></string>
     <string name="title_activity_personage">PersonageActivity</string>
 
+    <string name="tuijian_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=Tuijiannew&amp;m=socialchat</string>
+    <string name="fujin_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=Fujinnew&amp;m=socialchat</string>
+    <string name="friends_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsnew&amp;m=socialchat</string>
+    <string name="friendsapplynumber_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsapplynumber&amp;m=socialchat</string>
+    <string name="friendsapply_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsapplynew&amp;m=socialchat</string>
+    <string name="uniquelogin_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=uniquelogin&amp;m=socialchat</string>
+    <string name="personage_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=personagenew&amp;m=socialchat</string>
+    <string name="someonesluntan_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=someonesluntannew&amp;m=socialchat</string>
+    <string name="luntan_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=luntannew&amp;m=socialchat</string>
+
+
     <string-array name="age">
         <!--        <item>15</item>-->
         <!--        <item>16</item>-->

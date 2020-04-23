@@ -253,6 +253,7 @@ drawable callkit_mute_unavailable
 drawable callkit_select_ic_nav_back_x
 drawable callkit_selector_icon_search
 drawable callkit_voip_iphone
+drawable flashphoto
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low

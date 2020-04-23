@@ -190,12 +190,11 @@ public class SignupActivity extends Activity {
         }).start();
     }
 
-    //TODO okhttp获取用户信息
+    //TODO 倒计时
     public void countDown(){
         new Thread(new Runnable() {
             @Override
             public void run(){
-
                 while (countDown != 0) {
                     countDown--;
                     try {

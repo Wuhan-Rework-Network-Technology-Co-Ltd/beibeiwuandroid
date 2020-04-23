@@ -1,4 +1,4 @@
-package xin.banghua.beiyuan.RongYunContactCard;
+package xin.banghua.beiyuan.RongYunExtension;
 
 import android.content.Context;
 import android.content.Intent;

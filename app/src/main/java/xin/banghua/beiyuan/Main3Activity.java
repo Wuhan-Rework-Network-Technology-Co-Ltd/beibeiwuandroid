@@ -33,9 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import io.rong.contactcard.ContactCardExtensionModule;
-import io.rong.contactcard.IContactCardInfoProvider;
-import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imkit.manager.IUnReadMessageObserver;
@@ -48,7 +45,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.FriendList;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
-import xin.banghua.beiyuan.RongYunContactCard.MyContactCard;
+import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 

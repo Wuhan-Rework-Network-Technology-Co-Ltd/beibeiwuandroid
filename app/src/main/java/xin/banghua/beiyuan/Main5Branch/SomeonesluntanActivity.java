@@ -59,7 +59,7 @@ public class SomeonesluntanActivity extends AppCompatActivity {
         Intent intent = getIntent();
         authid = intent.getStringExtra("authid");
         Log.d(TAG, "onCreate: authid"+authid);
-        getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=someonesluntan&m=socialchat",authid,"1");
+        getDataPostlist(getString(R.string.someonesluntan_url),authid,"1");
 
     }
 
@@ -83,7 +83,12 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                 for (int i=0;i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String[] postPicture = jsonObject.getString("postpicture").split(",");
-                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),jsonObject.getString("time"));
+                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
+                            jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
+                            jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
+                            jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
+                            jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
+                            jsonObject.getString("time"),jsonObject.getString("vip"));
                     luntanLists.add(posts);
                 }
             }
@@ -95,7 +100,12 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                 for (int i=0;i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String[] postPicture = jsonObject.getString("postpicture").split(",");
-                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),jsonObject.getString("time"));
+                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
+                            jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
+                            jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
+                            jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
+                            jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
+                            jsonObject.getString("time"),jsonObject.getString("vip"));
                     luntanLists.add(posts);
                 }
             }
@@ -116,7 +126,7 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                 @Override
                 public void onLoadMore() {
                     pageindex = pageindex+1;
-                    getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=someonesluntan&m=socialchat",authid,pageindex+"");
+                    getDataPostlist(getString(R.string.someonesluntan_url),authid,pageindex+"");
                     Log.d(TAG, "个人帖子页码："+pageindex);
                     recyclerView.setPullLoadMoreCompleted();
                 }

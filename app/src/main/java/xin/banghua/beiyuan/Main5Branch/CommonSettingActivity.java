@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -37,16 +36,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.Adapter.FriendList;
-import xin.banghua.beiyuan.BadgeBottomNav;
-import xin.banghua.beiyuan.Main3Activity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.RongYunContactCard.MyContactCard;
+import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-
-import static io.rong.imkit.fragment.ConversationListFragment.TAG;
 
 public class CommonSettingActivity extends AppCompatActivity {
     private static final String TAG = "CommonSettingActivity";

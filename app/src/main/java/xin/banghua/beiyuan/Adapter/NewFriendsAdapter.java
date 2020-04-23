@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.FormBody;
@@ -39,6 +41,8 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.ViewHolder>  {
     private static final String TAG = "NewFriendsAdapter";
 
+    Integer current_timestamp = Math.round(new Date().getTime()/1000);
+
     //用户id,头像，昵称
 
     private ArrayList<String> mUserID = new ArrayList<>();
@@ -47,11 +51,13 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
     private ArrayList<String> mUserLeaveWords = new ArrayList<>();
     private ArrayList<Integer> mUserAgree = new ArrayList<>();
 
+    private ArrayList<String> mUserVIP = new ArrayList<>();
+
     ViewHolder viewHolder_btn;
 
     private Context mContext;
 
-    public NewFriendsAdapter(Context mContext,ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userLeaveWords,ArrayList<Integer> userAgree) {
+    public NewFriendsAdapter(Context mContext,ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userLeaveWords,ArrayList<Integer> userAgree,ArrayList<String> userVIP) {
 
         this.mUserID = userID;
         this.mUserPortrait = userPortrait;
@@ -59,6 +65,8 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
         this.mUserLeaveWords = userLeaveWords;
         this.mUserAgree = userAgree;
         this.mContext = mContext;
+
+        this.mUserVIP = userVIP;
     }
 
     @NonNull
@@ -76,6 +84,48 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                 .asBitmap()
                 .load(mUserPortrait.get(i))
                 .into(viewHolder.userPortrait);
+
+        //现在vip传过来的是时间
+        if (mUserVIP.get(i).isEmpty()||mUserVIP.get(i)=="null"){
+            viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+            viewHolder.vip_black.setVisibility(View.INVISIBLE);
+            viewHolder.vip_white.setVisibility(View.INVISIBLE);
+            viewHolder.vip_gray.setVisibility(View.VISIBLE);
+        }else {
+            Log.d("会员时间",mUserVIP.get(i));
+            int vip_time = Integer.parseInt(mUserVIP.get(i)+"");
+            if (vip_time > current_timestamp) {
+                //vipicon分级
+                Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_diamond.setVisibility(View.VISIBLE);
+                } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_black.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.VISIBLE);
+                }
+            } else {
+                viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                viewHolder.vip_gray.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+
+
+
+
         viewHolder.userNickName.setText(mUserNickName.get(i));
         viewHolder.userLeaveWords.setText(mUserLeaveWords.get(i));
 
@@ -182,6 +232,11 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
         Button agree_btn;
 
         RelativeLayout haoyouapply_layout;
+
+        ImageView vip_gray;
+        ImageView vip_diamond;
+        ImageView vip_black;
+        ImageView vip_white;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userID = itemView.findViewById(R.id.userID);
@@ -189,6 +244,12 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
             userNickName = itemView.findViewById(R.id.userNickName);
             userLeaveWords = itemView.findViewById(R.id.userLeaveWords);
             agree_btn = itemView.findViewById(R.id.agree_btn);
+
+
+            vip_gray = itemView.findViewById(R.id.vip_gray);
+            vip_diamond = itemView.findViewById(R.id.vip_diamond);
+            vip_black = itemView.findViewById(R.id.vip_black);
+            vip_white = itemView.findViewById(R.id.vip_white);
 
 
             haoyouapply_layout = itemView.findViewById(R.id.haoyouapply_layout);

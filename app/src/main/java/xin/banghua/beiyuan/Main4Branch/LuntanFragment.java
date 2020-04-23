@@ -96,9 +96,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
         super.onViewCreated(view, savedInstanceState);
 
         //首页初始化
-        getDataGonggao("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat");
-        getDataSlider("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","首页");
-        //getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","首页");
+        getDataGonggao(getString(R.string.luntan_url));
+        getDataSlider(getString(R.string.luntan_url),"首页");
 
         initNavigateButton(view);
         initSubnavigationButton(view);
@@ -128,9 +127,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton3.setChecked(false);
                 toggleButton4.setChecked(false);
                 toggleButton5.setChecked(false);
-                getDataGonggao("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat");
-                getDataSlider("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","首页");
-                //getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","首页");
+                getDataGonggao(getString(R.string.luntan_url));
+                getDataSlider(getString(R.string.luntan_url),"首页");
             }
         });
         toggleButton2 = view.findViewById(R.id.toggleButton2);
@@ -143,8 +141,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton4.setChecked(false);
                 toggleButton5.setChecked(false);
                 marqueeTv.setVisibility(View.GONE);
-                getDataSlider("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","自拍");
-                //getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","自拍");
+                getDataSlider(getString(R.string.luntan_url),"自拍");
             }
         });
         toggleButton3 = view.findViewById(R.id.toggleButton3);
@@ -157,8 +154,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton4.setChecked(false);
                 toggleButton5.setChecked(false);
                 marqueeTv.setVisibility(View.GONE);
-                getDataSlider("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","真实");
-                //getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","真实");
+                getDataSlider(getString(R.string.luntan_url),"真实");
             }
         });
         toggleButton4 = view.findViewById(R.id.toggleButton4);
@@ -171,8 +167,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton3.setChecked(false);
                 toggleButton5.setChecked(false);
                 marqueeTv.setVisibility(View.GONE);
-                getDataSlider("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","情感");
-                //getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","情感");
+                getDataSlider(getString(R.string.luntan_url),"情感");
             }
         });
         toggleButton5 = view.findViewById(R.id.toggleButton5);
@@ -186,8 +181,6 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton4.setChecked(false);
                 marqueeTv.setVisibility(View.GONE);
                 getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
-                //getDataSlider("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","大圈");
-                //getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","大圈");
             }
         });
     }
@@ -286,7 +279,12 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 for (int i=0;i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String[] postPicture = jsonObject.getString("postpicture").split(",");
-                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),jsonObject.getString("time"));
+                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
+                            jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
+                            jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
+                            jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
+                            jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
+                            jsonObject.getString("time"),jsonObject.getString("vip"));
                     luntanLists.add(posts);
                 }
             }
@@ -298,7 +296,12 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 for (int i=0;i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String[] postPicture = jsonObject.getString("postpicture").split(",");
-                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),jsonObject.getString("time"));
+                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
+                            jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
+                            jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
+                            jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
+                            jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
+                            jsonObject.getString("time"),jsonObject.getString("vip"));
                     luntanLists.add(posts);
                 }
             }
@@ -321,7 +324,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
 
                     pageindex = pageindex+1;
 
-                    getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat",subtitle,pageindex+"");
+                    getDataPostlist(getString(R.string.luntan_url),subtitle,pageindex+"");
                     Log.d(TAG, "论坛页码："+pageindex);
                     recyclerView.setPullLoadMoreCompleted();
                 }
@@ -353,7 +356,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         sliderJsonArray = jsonArray;
                         Log.d(TAG, "handleMessage: subtitle"+subtitle);
-                        getDataPostlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat",subtitle,"1");
+                        getDataPostlist(getString(R.string.luntan_url),subtitle,"1");
                         //initSlider(mView,jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -374,7 +377,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                     if (msg.obj.toString().equals("会员已到期")){
                         Toast.makeText(getActivity(), "此版块需要开通会员", Toast.LENGTH_LONG).show();
                     }else {
-                        getDataSlider("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntan&m=socialchat","精华");
+                        getDataSlider(getString(R.string.luntan_url),"精华");
                     }
                     break;
             }

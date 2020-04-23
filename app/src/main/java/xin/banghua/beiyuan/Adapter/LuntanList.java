@@ -20,7 +20,11 @@ public class LuntanList {
     String authregion;
     String authproperty;
 
-    public LuntanList(String authage,String authgender,String authregion,String authproperty,String id, String plateid, String platename, String authid, String authnickname, String authportrait, String posttip, String posttitle, String posttext, String[] postpicture, String like, String favorite, String time) {
+
+    String authvip;
+
+
+    public LuntanList(String authage, String authgender, String authregion, String authproperty, String id, String plateid, String platename, String authid, String authnickname, String authportrait, String posttip, String posttitle, String posttext, String[] postpicture, String like, String favorite, String time, String authvip) {
         this.authage = authage;
         this.authgender = authgender;
         this.authregion = authregion;
@@ -38,6 +42,8 @@ public class LuntanList {
         this.like = like;
         this.favorite = favorite;
         this.time = time;
+
+        this.authvip = authvip;
     }
 
     public String getAuthage() {
@@ -174,5 +180,13 @@ public class LuntanList {
 
     public String getTime() {
         return time;
+    }
+
+    public String getAuthvip() {
+        return authvip;
+    }
+
+    public void setAuthvip(String authvip) {
+        this.authvip = authvip;
     }
 }

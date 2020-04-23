@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.xp.wavesidebar.WaveSideBar;
 
 import org.json.JSONArray;
@@ -54,7 +53,7 @@ import xin.banghua.beiyuan.AlphabeticalOrder.TitleItemDecoration;
 import xin.banghua.beiyuan.Main2Branch.BlackListActivity;
 import xin.banghua.beiyuan.Main2Branch.NewFriend;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
-import xin.banghua.beiyuan.RongYunContactCard.MyContactCard;
+import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 
@@ -151,11 +150,11 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         };
         RongIM.getInstance().addUnReadMessageCountChangedObserver(iUnReadMessageObserver, Conversation.ConversationType.PRIVATE);
 
-        getDataFriends("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friends&m=socialchat");
+        getDataFriends(getString(R.string.friends_url));
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this, handler);
-        badgeBottomNav.getDataFriendsapply("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
-        //getDataFriendsapply("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
+        badgeBottomNav.getDataFriendsapply(getString(R.string.friendsapplynumber_url));
+
 
         Button newFriend = findViewById(R.id.new_friend);
         newFriend.setOnClickListener(new View.OnClickListener() {
@@ -206,7 +205,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         } else {
             //唯一登录验证
             uniquelogin = new Uniquelogin(this, handler);
-            uniquelogin.compareUniqueLoginToken("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken(getString(R.string.uniquelogin_url));
         }
     }
 

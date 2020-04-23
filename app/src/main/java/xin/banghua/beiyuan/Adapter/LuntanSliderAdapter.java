@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,6 +51,8 @@ import xin.banghua.beiyuan.SliderWebViewActivity;
 
 public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewPagerEx.OnPageChangeListener {
     private static final String TAG = "LuntanAdapter";
+
+    Integer current_timestamp = Math.round(new Date().getTime()/1000);
     //幻灯片
     SliderLayout mDemoSlider;
     JSONArray jsonArray;
@@ -160,10 +163,62 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             ((ViewHolder) viewHolder).platename.setText(currentItem.getPlatename());
             ((ViewHolder) viewHolder).authid.setText(currentItem.getAuthid());
             ((ViewHolder) viewHolder).authnickname.setText(currentItem.getAuthnickname());
+
+
             Glide.with(mContext)
                     .asBitmap()
                     .load(currentItem.getAuthportrait())
                     .into(((ViewHolder) viewHolder).authportrait);
+
+
+
+
+
+            //GOTO  会员标识
+            //现在vip传过来的是时间
+            if (currentItem.getAuthvip().isEmpty()||currentItem.getAuthvip()=="null"){
+                ((ViewHolder) viewHolder).vip_diamond.setVisibility(View.INVISIBLE);
+                ((ViewHolder) viewHolder).vip_black.setVisibility(View.INVISIBLE);
+                ((ViewHolder) viewHolder).vip_white.setVisibility(View.INVISIBLE);
+                ((ViewHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
+            }else {
+                Log.d("会员时间",currentItem.getAuthvip()+"");
+                int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
+                if (vip_time > current_timestamp) {
+                    //vipicon分级
+                    Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                    if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                        ((ViewHolder) viewHolder).vip_black.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_white.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_gray.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_diamond.setVisibility(View.VISIBLE);
+                    } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                        ((ViewHolder) viewHolder).vip_diamond.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_white.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_gray.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_black.setVisibility(View.VISIBLE);
+                    } else {
+                        ((ViewHolder) viewHolder).vip_diamond.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_black.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_gray.setVisibility(View.INVISIBLE);
+                        ((ViewHolder) viewHolder).vip_white.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    ((ViewHolder) viewHolder).vip_diamond.setVisibility(View.INVISIBLE);
+                    ((ViewHolder) viewHolder).vip_black.setVisibility(View.INVISIBLE);
+                    ((ViewHolder) viewHolder).vip_white.setVisibility(View.INVISIBLE);
+                    ((ViewHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
+                }
+            }
+
+
+
+
+
+
+
+
+
             ((ViewHolder) viewHolder).posttip.setText(currentItem.getPosttip().isEmpty()?"":currentItem.getPosttip());
             if (currentItem.getPosttip().equals("加精")){
                 Resources resources = mContext.getResources();
@@ -572,6 +627,11 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
 
         RelativeLayout luntanLayout;
 
+        ImageView vip_gray;
+        ImageView vip_diamond;
+        ImageView vip_black;
+        ImageView vip_white;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             id = itemView.findViewById(R.id.id);
@@ -597,6 +657,12 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             menu_btn = itemView.findViewById(R.id.menu_btn);
 
             detail_content = itemView.findViewById(R.id.detail_content);
+
+
+            vip_gray = itemView.findViewById(R.id.vip_gray);
+            vip_diamond = itemView.findViewById(R.id.vip_diamond);
+            vip_black = itemView.findViewById(R.id.vip_black);
+            vip_white = itemView.findViewById(R.id.vip_white);
         }
     }
 

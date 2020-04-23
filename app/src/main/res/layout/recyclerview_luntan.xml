@@ -25,11 +25,47 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/authportrait"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@mipmap/ic_launcher" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/authportrait"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@mipmap/ic_launcher" />
+                    <ImageView
+                        android:id="@+id/vip_gray"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="bottom|right"
+                        android:visibility="invisible"
+                        app:srcCompat="@drawable/ic_vip_gray" />
+
+                    <ImageView
+                        android:id="@+id/vip_diamond"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="bottom|right"
+                        android:visibility="invisible"
+                        app:srcCompat="@drawable/ic_vip_diamond" />
+
+                    <ImageView
+                        android:id="@+id/vip_black"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="bottom|right"
+                        android:visibility="invisible"
+                        app:srcCompat="@drawable/ic_vip_black" />
+
+                    <ImageView
+                        android:id="@+id/vip_white"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="bottom|right"
+                        android:visibility="invisible"
+                        app:srcCompat="@drawable/ic_vip_white" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

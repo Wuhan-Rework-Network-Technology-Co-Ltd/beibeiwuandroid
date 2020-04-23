@@ -14,11 +14,49 @@
         android:text="userID"
         android:visibility="gone" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/authportrait"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@mipmap/ic_launcher" />
+    <FrameLayout
+        android:id="@+id/authportrait_framelayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/authportrait"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/vip_gray"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom|right"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_vip_gray" />
+
+        <ImageView
+            android:id="@+id/vip_diamond"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom|right"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_vip_diamond" />
+
+        <ImageView
+            android:id="@+id/vip_black"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom|right"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_vip_black" />
+
+        <ImageView
+            android:id="@+id/vip_white"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom|right"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_vip_white" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/userNickName"
@@ -26,7 +64,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@id/authportrait"
+        android:layout_toRightOf="@id/authportrait_framelayout"
         android:text="userNickName"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp" />
@@ -37,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@id/authportrait"
+        android:layout_toRightOf="@id/authportrait_framelayout"
         android:text="userLeaveWords"
         android:textColor="@color/rc_ext_root_menu_item_text_color" />
 

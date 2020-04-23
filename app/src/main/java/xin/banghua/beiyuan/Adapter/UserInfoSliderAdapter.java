@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,6 +39,8 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
     private static final String TAG = "UserInfoSliderAdapter";
     private final static int TYPE_HEAD = 0;
     private final static int TYPE_CONTENT = 1;
+
+    Integer current_timestamp = Math.round(new Date().getTime()/1000);
     //幻灯片
     SliderLayout mDemoSlider;
     JSONArray jsonArray;
@@ -193,15 +196,60 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
             }
             ((UserinfoHolder) viewHolder).userRegion.setText(mUserRegion.get(i-1));
             ((UserinfoHolder) viewHolder).userVIP.setText(mUserVIP.get(i-1));
-            if (mUserVIP.get(i-1).equals("普通")){
+
+
+
+
+
+            //现在vip传过来的是时间
+            if (mUserVIP.get(i-1).isEmpty()||mUserVIP.get(i-1)=="null"){
                 Resources resources = mContext.getResources();
                 Drawable drawable = resources.getDrawable(R.drawable.nonmember,null);
                 ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
+
+                ((UserinfoHolder) viewHolder).vip_diamond.setVisibility(View.INVISIBLE);
+                ((UserinfoHolder) viewHolder).vip_black.setVisibility(View.INVISIBLE);
+                ((UserinfoHolder) viewHolder).vip_white.setVisibility(View.INVISIBLE);
+                ((UserinfoHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
             }else {
-                Resources resources = mContext.getResources();
-                Drawable drawable = resources.getDrawable(R.drawable.vip_image,null);
-                ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
+                Log.d("会员时间",mUserVIP.get(i - 1));
+                int vip_time = Integer.parseInt(mUserVIP.get(i - 1)+"");
+                if (vip_time > current_timestamp) {
+                    Resources resources = mContext.getResources();
+                    Drawable drawable = resources.getDrawable(R.drawable.vip_image, null);
+                    ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
+                    //vipicon分级
+                    Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                    if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                        ((UserinfoHolder) viewHolder).vip_black.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_white.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_gray.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_diamond.setVisibility(View.VISIBLE);
+                    } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                        ((UserinfoHolder) viewHolder).vip_diamond.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_white.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_gray.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_black.setVisibility(View.VISIBLE);
+                    } else {
+                        ((UserinfoHolder) viewHolder).vip_diamond.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_black.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_gray.setVisibility(View.INVISIBLE);
+                        ((UserinfoHolder) viewHolder).vip_white.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Resources resources = mContext.getResources();
+                    Drawable drawable = resources.getDrawable(R.drawable.nonmember, null);
+                    ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
+
+                    ((UserinfoHolder) viewHolder).vip_diamond.setVisibility(View.INVISIBLE);
+                    ((UserinfoHolder) viewHolder).vip_black.setVisibility(View.INVISIBLE);
+                    ((UserinfoHolder) viewHolder).vip_white.setVisibility(View.INVISIBLE);
+                    ((UserinfoHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
+                }
             }
+
+
+
 
             ((UserinfoHolder) viewHolder).userinfoLayout.setOnClickListener(new View.OnClickListener(){
 
@@ -268,6 +316,11 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
         TextView userRegion;
         TextView userVIP;
         RelativeLayout userinfoLayout;
+
+        ImageView vip_gray;
+        ImageView vip_diamond;
+        ImageView vip_black;
+        ImageView vip_white;
         public UserinfoHolder(@NonNull View itemView) {
             super(itemView);
             userID = itemView.findViewById(R.id.userID);
@@ -279,6 +332,11 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
             userLocation = itemView.findViewById(R.id.userLocation);
             userRegion = itemView.findViewById(R.id.userRegion);
             userVIP = itemView.findViewById(R.id.userVIP);
+
+            vip_gray = itemView.findViewById(R.id.vip_gray);
+            vip_diamond = itemView.findViewById(R.id.vip_diamond);
+            vip_black = itemView.findViewById(R.id.vip_black);
+            vip_white = itemView.findViewById(R.id.vip_white);
 
             userinfoLayout = itemView.findViewById(R.id.userinfo_layout);
             Log.d(TAG, "UserinfoHolder: 进入");

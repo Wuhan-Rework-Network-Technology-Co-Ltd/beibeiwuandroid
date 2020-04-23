@@ -24,6 +24,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.zolad.zoominimageview.ZoomInImageView;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,6 +39,9 @@ import xin.banghua.beiyuan.R;
 
 public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder> {
     private static final String TAG = "LuntanAdapter";
+
+
+    Integer current_timestamp = Math.round(new Date().getTime()/1000);
 
     private List<LuntanList> luntanLists;
     private Context mContext;
@@ -76,6 +80,53 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                 .asBitmap()
                 .load(currentItem.getAuthportrait())
                 .into(viewHolder.authportrait);
+
+
+
+        //GOTO  会员标识
+        //现在vip传过来的是时间
+        if (currentItem.getAuthvip().isEmpty()||currentItem.getAuthvip()=="null"){
+            viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+            viewHolder.vip_black.setVisibility(View.INVISIBLE);
+            viewHolder.vip_white.setVisibility(View.INVISIBLE);
+            viewHolder.vip_gray.setVisibility(View.VISIBLE);
+        }else {
+            Log.d("会员时间",currentItem.getAuthvip()+"");
+            int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
+            if (vip_time > current_timestamp) {
+                //vipicon分级
+                Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_diamond.setVisibility(View.VISIBLE);
+                } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_black.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
+                    viewHolder.vip_white.setVisibility(View.VISIBLE);
+                }
+            } else {
+                viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
+                viewHolder.vip_black.setVisibility(View.INVISIBLE);
+                viewHolder.vip_white.setVisibility(View.INVISIBLE);
+                viewHolder.vip_gray.setVisibility(View.VISIBLE);
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
         viewHolder.posttip.setText(currentItem.getPosttip().isEmpty()?"":currentItem.getPosttip());
         if (currentItem.getPosttip().equals("加精")){
             Resources resources = mContext.getResources();
@@ -465,6 +516,13 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         TextView authattributes;
         Button menu_btn;
 
+
+        ImageView vip_gray;
+        ImageView vip_diamond;
+        ImageView vip_black;
+        ImageView vip_white;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             id = itemView.findViewById(R.id.id);
@@ -490,6 +548,12 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
             menu_btn = itemView.findViewById(R.id.menu_btn);
 
             detail_content = itemView.findViewById(R.id.detail_content);
+
+
+            vip_gray = itemView.findViewById(R.id.vip_gray);
+            vip_diamond = itemView.findViewById(R.id.vip_diamond);
+            vip_black = itemView.findViewById(R.id.vip_black);
+            vip_white = itemView.findViewById(R.id.vip_white);
         }
     }
 

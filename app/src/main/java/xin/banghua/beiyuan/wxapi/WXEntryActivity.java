@@ -153,6 +153,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                             Log.d(TAG, "handleMessage: forbidtime"+jsonObject.get("forbidtime"));
                             Intent intent1 = new Intent(WXEntryActivity.this, SigninActivity.class);
                             intent1.putExtra("forbidtime",jsonObject.get("forbidtime")+"");
+                            intent1.putExtra("forbidreason",jsonObject.get("forbidreason")+"");
                             startActivity(intent1);
                         }
                         //不管登陆过没有，都保存本地数据

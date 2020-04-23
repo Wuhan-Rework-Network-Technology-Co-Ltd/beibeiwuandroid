@@ -1,6 +1,7 @@
 R_DEF: Internal format may change without notice
 local
 dimen contactcard_dimen_size_3
+drawable flashphoto
 drawable rc_contact_detail_activity_corner_bg
 drawable rc_contact_group_arrow
 drawable rc_contact_plugin_icon

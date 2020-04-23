@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
@@ -80,6 +81,11 @@ public class PersonageFragment extends Fragment {
 
     private Context mContext;
 
+    ImageView vip_gray;
+    ImageView vip_diamond;
+    ImageView vip_black;
+    ImageView vip_white;
+    Integer current_timestamp = Math.round(new Date().getTime()/1000);
 
     public PersonageFragment() {
         // Required empty public constructor
@@ -110,6 +116,11 @@ public class PersonageFragment extends Fragment {
 
         String result = getActivity().getIntent().getStringExtra("userID");
         mUserID = result;
+
+        vip_gray = view.findViewById(R.id.vip_gray);
+        vip_diamond = view.findViewById(R.id.vip_diamond);
+        vip_black = view.findViewById(R.id.vip_black);
+        vip_white = view.findViewById(R.id.vip_white);
 
         mUserNickName_tv=view.findViewById(R.id.user_nickname);
         mUserPortrait_iv=view.findViewById(R.id.user_portrait);
@@ -352,7 +363,7 @@ public class PersonageFragment extends Fragment {
         });
 
 
-        getDataPersonage("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=personage&m=socialchat");
+        getDataPersonage(getString(R.string.personage_url));
 
         addSawMe("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addsawme&m=socialchat");
 
@@ -430,11 +441,28 @@ public class PersonageFragment extends Fragment {
 
 
         mUserNickName_tv.setText(jsonObject.getString("nickname"));
-        if (jsonObject.getString("vip").equals("VIP"))  mUserPortrait_iv.isVIP(true,getResources(),false);
+        //if (jsonObject.getString("vip").equals("VIP"))  mUserPortrait_iv.isVIP(true,getResources(),false);
         Glide.with(view)
                 .asBitmap()
                 .load(jsonObject.getString("portrait"))
                 .into(mUserPortrait_iv);
+        int vip_time = Integer.parseInt(jsonObject.getString("vip")+"");
+        if (vip_time > current_timestamp) {
+            //vipicon分级
+            Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+            if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                vip_diamond.setVisibility(View.VISIBLE);
+            } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                vip_black.setVisibility(View.VISIBLE);
+            } else {
+                vip_white.setVisibility(View.VISIBLE);
+            }
+        } else {
+            vip_gray.setVisibility(View.VISIBLE);
+        }
+
+
+
         mUserAge_tv.setText(jsonObject.getString("age"));
         mUserRegion_tv.setText(jsonObject.getString("region"));
         mUserProperty_tv.setText(jsonObject.getString("property"));

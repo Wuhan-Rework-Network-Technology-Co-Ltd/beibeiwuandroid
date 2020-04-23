@@ -105,10 +105,9 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //使用okhttp获取全部用户信息
-        //getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fujin&m=socialchat");
+
         //使用okhttp获取推荐的幻灯片
-        getDataSlide("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fujin&m=socialchat");
+        getDataSlide(getString(R.string.fujin_url));
 
         initNavigateButton(view);
 
@@ -323,7 +322,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
 
                 pageindex = pageindex+1;
 
-                getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fujin&m=socialchat",pageindex+"");
+                getDataUserinfo(getString(R.string.fujin_url),pageindex+"");
                 Log.d(TAG, "附近页码："+pageindex);
                 recyclerView.setPullLoadMoreCompleted();
             }
@@ -423,7 +422,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                         Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         sliderJsonArray = jsonArray;
-                        getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fujin&m=socialchat","1");
+                        getDataUserinfo(getString(R.string.fujin_url),"1");
                         //initSlider(mView,jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();

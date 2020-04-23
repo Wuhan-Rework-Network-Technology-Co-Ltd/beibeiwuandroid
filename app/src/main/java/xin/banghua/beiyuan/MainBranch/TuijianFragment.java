@@ -108,9 +108,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
 
 
         //使用okhttp获取推荐的幻灯片,然后获取全部用户信息，再赋值adpter
-        getDataSlide("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=tuijian&m=socialchat");
-        //使用okhttp获取全部用户信息
-        //getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=tuijian&m=socialchat");
+        getDataSlide(getString(R.string.tuijian_url));
 
         initNavigateButton(view);
         recyclerView = view.findViewById(R.id.tuijian_RecyclerView);
@@ -330,7 +328,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
             public void onLoadMore() {
                 pageindex = pageindex+1;
 
-                getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=tuijian&m=socialchat",pageindex+"");
+                getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
                 Log.d(TAG, "推荐页码："+pageindex);
                 recyclerView.setPullLoadMoreCompleted();
             }
@@ -432,7 +430,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
                         Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         sliderJsonArray = jsonArray;
-                        getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=tuijian&m=socialchat","1");
+                        getDataUserinfo(getString(R.string.tuijian_url),"1");
                         //initSlider(mView,jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();

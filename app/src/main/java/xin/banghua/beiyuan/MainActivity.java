@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         //判断是否登录
         ifSignin();
 
-
+        CheckPermission.verifyStoragePermission(this);
 
         //定位问题
         localization();
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.navigation_shenbian);
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this,handler);
-        badgeBottomNav.getDataFriendsapply("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
+        badgeBottomNav.getDataFriendsapply(getString(R.string.friendsapplynumber_url));
         //未读信息监听
         iUnReadMessageObserver = new IUnReadMessageObserver() {
             @Override
