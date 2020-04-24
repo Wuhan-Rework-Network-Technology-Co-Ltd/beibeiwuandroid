@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.xp.wavesidebar.WaveSideBar;
 
 import org.json.JSONArray;
@@ -62,6 +63,8 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
 
     Uniquelogin uniquelogin;
 
+    private Integer pageindex = 1;
+
     private List<FriendList> friendList = new ArrayList<>();
 
     private FriendAdapter adapter;
@@ -78,7 +81,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
     private WaveSideBar mSideBar;
     private LinearLayoutManager manager;
     private TitleItemDecoration mDecoration;
-    private RecyclerView mRecyclerView;
+    private PullLoadMoreRecyclerView mRecyclerView;
     /**
      * 根据拼音来排列RecyclerView里面的数据类
      */
@@ -256,8 +259,11 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
             myContactCard.initContactCard();
         }
 
-
-        initRecyclerView(view);
+        if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
+            adapter.swapData(friendList);//重新赋值并调用notifyDataSetChanged();
+        }else {//初次加载
+            initRecyclerView(view);
+        }
     }
 
     /**
@@ -312,7 +318,25 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         //RecyclerView设置manager
         manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.getRecyclerView().setLayoutManager(manager);
+        mRecyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+            @Override
+            public void onRefresh() {
+
+                Log.d(TAG, "onRefresh: start");
+                mRecyclerView.setPullLoadMoreCompleted();
+            }
+
+            @Override
+            public void onLoadMore() {
+
+                pageindex = pageindex+1;//页数加一
+                getDataFriends(getString(R.string.friends_url));//重新加载
+
+                Log.d(TAG, "onLoadMore: start");
+                mRecyclerView.setPullLoadMoreCompleted();
+            }
+        });
         mDecoration = new TitleItemDecoration(this, friendList);
         //如果add两个，那么按照先后顺序，依次渲染。
         mRecyclerView.addItemDecoration(mDecoration);
@@ -379,6 +403,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", userID)
+                        .add("pageindex", pageindex+"")
                         .build();
                 Request request = new Request.Builder()
                         .url(url)

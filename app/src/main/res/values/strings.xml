@@ -32,7 +32,8 @@
     <string name="personage_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=personagenew&amp;m=socialchat</string>
     <string name="someonesluntan_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=someonesluntannew&amp;m=socialchat</string>
     <string name="luntan_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=luntannew&amp;m=socialchat</string>
-
+    <string name="sawme_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=sawmenew&amp;m=socialchat</string>
+    <string name="blacklist_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getblacklistnew&amp;m=socialchat</string>
 
     <string-array name="age">
         <!--        <item>15</item>-->

@@ -37,6 +37,9 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
 public class SawMeActivity extends AppCompatActivity {
     private static final String TAG = "SawMeActivity";
+
+    private Integer pageindex = 1;
+    UserInfoAdapter adapter;
     //vars
     private ArrayList<String> mUserID = new ArrayList<>();
     private ArrayList<String> mUserPortrait = new ArrayList<>();
@@ -120,15 +123,19 @@ public class SawMeActivity extends AppCompatActivity {
             }
         }
 
+        if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
+            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);//重新赋值并调用notifyDataSetChanged();
+        }else {//初次加载
+            initRecyclerView(view);
+        }
 
-        initRecyclerView(view);
     }
     //TODO 初始化用户recyclerview
     private void initRecyclerView(View view){
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
         final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.sawme_RecyclerView);
-        UserInfoAdapter adapter = new UserInfoAdapter(view.getContext(),mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+        adapter = new UserInfoAdapter(view.getContext(),mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();;
         recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
@@ -141,6 +148,9 @@ public class SawMeActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
+
+                pageindex = pageindex+1;//页数加一
+                getDataUserinfo(getString(R.string.sawme_url));//重新加载
 
                 Log.d(TAG, "onLoadMore: start");
                 recyclerView.setPullLoadMoreCompleted();
@@ -163,6 +173,7 @@ public class SawMeActivity extends AppCompatActivity {
                         .add("userID",myid)
                         .add("latitude",locationInfo.get("latitude"))
                         .add("longitude",locationInfo.get("longitude"))
+                        .add("pageindex",pageindex+"")
                         .build();
                 Request request = new Request.Builder()
                         .url(url)
@@ -250,7 +261,7 @@ public class SawMeActivity extends AppCompatActivity {
                             }
                         });
                     }else {
-                        getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sawme&m=socialchat");
+                        getDataUserinfo(getString(R.string.sawme_url));
                     }
                     break;
             }

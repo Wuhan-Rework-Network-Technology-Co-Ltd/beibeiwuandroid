@@ -36,6 +36,8 @@ public class BlackListActivity extends AppCompatActivity {
 
     private static final String TAG = "BlackListActivity";
 
+    private Integer pageindex = 1;
+
     private List<FriendList> friendList = new ArrayList<>();
 
     private BlackListAdapter adapter;
@@ -65,7 +67,7 @@ public class BlackListActivity extends AppCompatActivity {
             }
         });
 
-        getBlackList("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getblacklist&m=socialchat");
+        getBlackList(getString(R.string.blacklist_url));
     }
 
     @Override  //菜单的点击，其中返回键的id是android.R.id.home
@@ -96,8 +98,11 @@ public class BlackListActivity extends AppCompatActivity {
             }
         }
 
-
-        initRecyclerView(view);
+        if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
+            adapter.swapData(friendList);//重新赋值并调用notifyDataSetChanged();
+        }else {//初次加载
+            initRecyclerView(view);
+        }
     }
 
     //TODO 初始化好友recyclerview
@@ -118,6 +123,9 @@ public class BlackListActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
+
+                pageindex = pageindex+1;//页数加一
+                getBlackList(getString(R.string.blacklist_url));//重新加载
 
                 Log.d(TAG, "onLoadMore: start");
                 recyclerView.setPullLoadMoreCompleted();
@@ -157,6 +165,7 @@ public class BlackListActivity extends AppCompatActivity {
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
+                        .add("pageindex", pageindex+"")
                         .build();
                 Request request = new Request.Builder()
                         .url(url)

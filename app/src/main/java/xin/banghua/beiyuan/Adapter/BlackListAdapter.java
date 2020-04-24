@@ -58,6 +58,14 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.View
         this.friendListFull = new ArrayList<>(friendList);
     }
 
+    public void swapData( List<FriendList> friendList) {
+
+        this.friendList = friendList;
+        this.friendListFull = new ArrayList<>(friendList);
+
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

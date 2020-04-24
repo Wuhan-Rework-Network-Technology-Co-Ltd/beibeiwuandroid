@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.v7.widget.RecyclerView
+                <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
                     android:id="@+id/haoyou_RecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                </android.support.v7.widget.RecyclerView>
+                </com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
 
                 <com.xp.wavesidebar.WaveSideBar
                     android:id="@+id/sideBar"

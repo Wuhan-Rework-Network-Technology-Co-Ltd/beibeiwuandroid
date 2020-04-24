@@ -44,6 +44,8 @@ public class NewFriend extends AppCompatActivity {
 
     private static final String TAG = "NewFriend";
 
+    private Integer pageindex = 1;
+    NewFriendsAdapter adapter;
     //vars
     private ArrayList<String> mUserID = new ArrayList<>();
     private ArrayList<String> mUserPortrait = new ArrayList<>();
@@ -113,8 +115,12 @@ public class NewFriend extends AppCompatActivity {
             }
         }
 
+        if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
+            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP);//重新赋值并调用notifyDataSetChanged();
+        }else {//初次加载
+            initRecyclerView(view);
+        }
 
-        initRecyclerView(view);
     }
 
     //TODO 初始化好友recyclerview
@@ -122,7 +128,7 @@ public class NewFriend extends AppCompatActivity {
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
         final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.newfriend_RecyclerView);
-        NewFriendsAdapter adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP);
+        adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP);
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -136,6 +142,9 @@ public class NewFriend extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
+
+                pageindex = pageindex+1;//页数加一
+                getDataFriends(getString(R.string.friendsapply_url));//重新加载
 
                 Log.d(TAG, "onLoadMore: start");
                 recyclerView.setPullLoadMoreCompleted();
@@ -182,6 +191,7 @@ public class NewFriend extends AppCompatActivity {
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", userID)
+                        .add("pageindex", pageindex+"")
                         .build();
                 Request request = new Request.Builder()
                         .url(url)

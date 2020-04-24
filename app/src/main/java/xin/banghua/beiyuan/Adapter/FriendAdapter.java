@@ -50,6 +50,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         this.friendList = friendList;
         this.friendListFull = new ArrayList<>(friendList);
     }
+    public void swapData(List<FriendList> friendList) {
+
+        this.friendList = friendList;
+        this.friendListFull = new ArrayList<>(friendList);
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override

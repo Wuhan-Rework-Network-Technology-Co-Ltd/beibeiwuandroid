@@ -69,6 +69,19 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
         this.mUserVIP = userVIP;
     }
 
+    public void swapData(ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userLeaveWords,ArrayList<Integer> userAgree,ArrayList<String> userVIP) {
+
+        this.mUserID = userID;
+        this.mUserPortrait = userPortrait;
+        this.mUserNickName = userNickName;
+        this.mUserLeaveWords = userLeaveWords;
+        this.mUserAgree = userAgree;
+
+        this.mUserVIP = userVIP;
+
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
