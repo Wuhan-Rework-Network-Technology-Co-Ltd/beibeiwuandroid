@@ -86,9 +86,9 @@ public class SousuoresultFragment extends Fragment {
 
         if (getArguments().getString("type")=="direct") {
             //获取用户信息
-            getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=directsousuo&m=socialchat",getArguments(),"1");
+            getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),"1");
         }else if(getArguments().getString("type")=="condition"){
-            getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=conditionsousuo&m=socialchat",getArguments(),"1");
+            getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),"1");
         }
     }
 
@@ -165,7 +165,11 @@ public class SousuoresultFragment extends Fragment {
             @Override
             public void onLoadMore() {
                 pageindex = pageindex+1;
-                getDataUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=conditionsousuo&m=socialchat",getArguments(),pageindex+"");
+                if (getArguments().getString("type")=="direct") {
+                    getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),pageindex+"");
+                }else {
+                    getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),pageindex+"");
+                }
                 Log.d(TAG, "搜索页码："+pageindex);
                 recyclerView.setPullLoadMoreCompleted();
             }
@@ -190,6 +194,7 @@ public class SousuoresultFragment extends Fragment {
                             .add("nameorphone",getArguments().getString("nameOrPhone"))
                             .add("latitude",locationInfo.get("latitude"))
                             .add("longitude",locationInfo.get("longitude"))
+                            .add("pageindex",pageindex)
                             .build();
                 }else if(getArguments().getString("type")=="condition"){
                     Log.d(TAG, "run: 进入condition post");
