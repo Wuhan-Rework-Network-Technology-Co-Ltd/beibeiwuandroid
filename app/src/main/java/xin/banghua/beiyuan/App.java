@@ -51,6 +51,13 @@ public class App extends Application implements Application.ActivityLifecycleCal
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //每次新启动，设值为1
+        SharedHelper shvalue = new SharedHelper(getApplicationContext());
+        shvalue.saveOnestart(1);
+
+
+
         Log.d(TAG, "onCreate: onActivityonCreate:");
         registerActivityLifecycleCallbacks(this);
         //融云

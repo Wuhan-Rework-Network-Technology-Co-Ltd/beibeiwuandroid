@@ -140,4 +140,19 @@ public class SharedHelper {
 
         return sp.getString("SoundSet", "");
     }
+
+    //定义一个保存数据的方法   保存用户信息
+    public void saveOnestart(int num) {
+        SharedPreferences sp = mContext.getSharedPreferences("onestart", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("onestart", num);
+        editor.commit();
+        //Toast.makeText(mContext, "信息已写入SharedPreference中", Toast.LENGTH_SHORT).show();
+    }
+
+    //定义一个读取SP文件的方法
+    public int readOnestart() {
+        SharedPreferences sp = mContext.getSharedPreferences("onestart", Context.MODE_PRIVATE);
+        return sp.getInt("onestart", 0);
+    }
 }
