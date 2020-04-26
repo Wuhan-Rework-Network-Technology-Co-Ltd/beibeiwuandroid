@@ -43,11 +43,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.CircleImageViewExtension;
+import xin.banghua.beiyuan.Main5Branch.BuyvipActivity;
 import xin.banghua.beiyuan.Main5Branch.SomeonesluntanActivity;
 import xin.banghua.beiyuan.MainActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+
+import static cn.rongcloud.rtc.core.ContextUtils.getApplicationContext;
 
 
 /**
@@ -73,6 +76,7 @@ public class PersonageFragment extends Fragment {
     private EditText mLeaveWords_et;
 
     private Button make_friend;
+    private Button move_friendapply;
     private Button user_tiezi;
 
     private Button balcklist_btn;
@@ -197,6 +201,13 @@ public class PersonageFragment extends Fragment {
                         dialog.dismiss();
                     }
                 });
+            }
+        });
+        move_friendapply = view.findViewById(R.id.move_friendapply);
+        move_friendapply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
             }
         });
 
@@ -369,6 +380,37 @@ public class PersonageFragment extends Fragment {
 
         ifFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=iffriend&m=socialchat");
     }
+    //TODO okhttp获取用户信息
+    public void getVipinfo(final String url){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                SharedHelper shuserinfo = new SharedHelper(mContext);
+                String myid = shuserinfo.readUserInfo().get("userID");
+
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("id", myid)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    Message message=handler.obtainMessage();
+                    message.obj=response.body().string();
+                    message.what=8;
+                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+                    handler.sendMessageDelayed(message,10);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     //TODO okhttp删除黑名单
     public void deleteBlackList(final String url){
         new Thread(new Runnable() {
@@ -505,6 +547,7 @@ public class PersonageFragment extends Fragment {
                 case 2:
                     make_friend.setEnabled(false);
                     make_friend.setText("已申请，等待对方同意");
+                    move_friendapply.setVisibility(View.VISIBLE);
                     Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
 //                    Intent intent = new Intent(mContext, MainActivity.class);
 //                    startActivity(intent);
@@ -539,6 +582,7 @@ public class PersonageFragment extends Fragment {
                             startconversation_btn.setVisibility(View.VISIBLE);
                             Toast.makeText(mContext,friendinfo,Toast.LENGTH_LONG).show();
                         }else if (friendinfo.equals("已申请，等待对方同意")){
+                            move_friendapply.setVisibility(View.VISIBLE);
                             make_friend.setEnabled(false);
                             make_friend.setText(friendinfo);
                         }
@@ -556,9 +600,95 @@ public class PersonageFragment extends Fragment {
                     balcklist_btn.setText("加入黑名单");
                     Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
                     break;
+                case 8:
+                    if (msg.obj.toString().equals("会员已到期")){
+                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                                .setAdapter(new BaseAdapter() {
+                                    @Override
+                                    public int getCount() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public Object getItem(int position) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public long getItemId(int position) {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public View getView(int position, View convertView, ViewGroup parent) {
+                                        return null;
+                                    }
+                                })
+                                .setFooter(R.layout.dialog_foot_needvip)
+                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                                .create();
+                        dialog.show();
+                        View view = dialog.getFooterView();
+                        Button buvip = view.findViewById(R.id.buyvip_btn);
+                        buvip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext, BuyvipActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                        Button cancel = view.findViewById(R.id.goback_btn);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }else {
+                        deleteFriendNumber(mUserID,"https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
+                    }
+                    break;
+                case 9:
+                    Toast.makeText(mContext,"撤销成功",Toast.LENGTH_LONG).show();
+                    make_friend.setText("申请好友");
+                    make_friend.setEnabled(true);
+                    move_friendapply.setVisibility(View.GONE);
+                    break;
             }
         }
     };
+
+    //TODO okhttp获取好友人数
+    public void deleteFriendNumber(final String yourid,final String url){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                SharedHelper shuserinfo = new SharedHelper(mContext.getApplicationContext());
+                String myid = shuserinfo.readUserInfo().get("userID");
+                Log.d(TAG, "删除新好友myid"+myid+"yourid"+yourid);
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", myid)
+                        .add("yourid", yourid)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    Message message=handler.obtainMessage();
+                    message.what=9;
+                    Log.d(TAG, "run: 查看返回值"+response.body().string());
+                    handler.sendMessageDelayed(message,10);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     //TODO okhttp获取用户信息
     public void getDataPersonage(final String url){
         new Thread(new Runnable() {

@@ -228,7 +228,7 @@
                 android:id="@+id/leave_words"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="留言"
+                android:hint="申请好友留言"
                 android:inputType="textPersonName" />
 
         </TableRow>
@@ -262,6 +262,22 @@
                 android:text="申请好友"
                 android:textColor="@color/colorPrimaryDark" />
 
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/move_friendapply"
+                style="@android:style/Widget.DeviceDefault.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rc_btn_voice_hover"
+                android:text="撤销申请（会员功能）"
+                android:textColor="@color/colorPrimaryDark"
+                android:visibility="gone" />
         </TableRow>
 
         <TableRow
