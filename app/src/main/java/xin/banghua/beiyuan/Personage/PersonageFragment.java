@@ -488,18 +488,22 @@ public class PersonageFragment extends Fragment {
                 .asBitmap()
                 .load(jsonObject.getString("portrait"))
                 .into(mUserPortrait_iv);
-        int vip_time = Integer.parseInt(jsonObject.getString("vip")+"");
-        if (vip_time > current_timestamp) {
-            //vipicon分级
-            Log.d("会员时长", ((vip_time - current_timestamp) + ""));
-            if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
-                vip_diamond.setVisibility(View.VISIBLE);
-            } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
-                vip_black.setVisibility(View.VISIBLE);
+        if (jsonObject.getString("vip")!="null") {
+            int vip_time = Integer.parseInt(jsonObject.getString("vip") + "");
+            if (vip_time > current_timestamp) {
+                //vipicon分级
+                Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                    vip_diamond.setVisibility(View.VISIBLE);
+                } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                    vip_black.setVisibility(View.VISIBLE);
+                } else {
+                    vip_white.setVisibility(View.VISIBLE);
+                }
             } else {
-                vip_white.setVisibility(View.VISIBLE);
+                vip_gray.setVisibility(View.VISIBLE);
             }
-        } else {
+        }else {
             vip_gray.setVisibility(View.VISIBLE);
         }
 

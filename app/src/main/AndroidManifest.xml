@@ -10,6 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <service android:name=".MainBranch.LocationService">
+        </service>
         <activity android:name=".RongYunExtension.FlashPhotoActivity"></activity>
         <activity android:name=".Main5Branch.SoundActivity" />
         <activity

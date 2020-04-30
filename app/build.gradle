@@ -16,8 +16,8 @@ android {
         applicationId "xin.banghua.beiyuan"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 9
-        versionName "9.0"
+        versionCode 10
+        versionName "10.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -101,7 +101,7 @@ dependencies {
     implementation 'com.meizu.flyme.internet:push-internal:3.6.+@aar'
     //dialog
     implementation 'com.orhanobut:dialogplus:1.11@aar'
-    implementation files('libs/Amap_2DMap_V5.2.0_20170627.jar')
     implementation files('libs/pinyin4j-2.5.0.jar')
     implementation project(path: ':wavesidebar')
+    implementation files('libs/AMap3DMap_7.3.0_AMapSearch_7.3.0_AMapLocation_4.9.0_20200407.jar')
 }

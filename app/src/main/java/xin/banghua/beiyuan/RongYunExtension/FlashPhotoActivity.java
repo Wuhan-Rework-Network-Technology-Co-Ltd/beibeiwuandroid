@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class FlashPhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flash_photo);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
 
         countdown_textview = findViewById(R.id.countdown_textview);
         flashphoto_imageview = findViewById(R.id.flashphoto_imageview);

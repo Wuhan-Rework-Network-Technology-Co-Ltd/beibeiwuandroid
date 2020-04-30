@@ -50,6 +50,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
+import xin.banghua.beiyuan.MainBranch.LocationService;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         CheckPermission.verifyStoragePermission(this);
 
         //定位问题
-        localization();
+        //localization();
 
         //底部导航初始化和配置监听，默认选项
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
@@ -194,7 +195,10 @@ public class MainActivity extends AppCompatActivity {
             //获取用户id和定位值
             SharedHelper shlocation = new SharedHelper(getApplicationContext());
             Map<String,String> locationInfo = shlocation.readLocation();
-            postLocationInfo(userInfo.get("userID"),locationInfo.get("latitude"),locationInfo.get("longitude"),"https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=updatelocation&m=socialchat");
+            //postLocationInfo(userInfo.get("userID"),locationInfo.get("latitude"),locationInfo.get("longitude"),"https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=updatelocation&m=socialchat");
+            //开启定位服务
+            Intent startIntent = new Intent(this, LocationService.class);
+            startService(startIntent);
         }
     }
 
