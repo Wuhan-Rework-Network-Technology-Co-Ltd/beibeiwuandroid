@@ -302,6 +302,35 @@
                 <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
         </service>
+
+
+
+        <!-- vivo 推送配置项 -->
+        <meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="42e08441-ce3f-408d-a0a5-0d5ffbd4d19e"/>
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="20018"/>
+
+        <!-- vivo 推送服务需要配置的 service、activity -->
+        <service
+            android:name="com.vivo.push.sdk.service.CommandClientService"
+            android:exported="true"/>
+        <activity
+            android:name="com.vivo.push.sdk.LinkProxyClientActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <!-- vivo push 推送 receiver 声明 -->
+        <receiver android:name="io.rong.push.platform.vivo.VivoPushMessageReceiver" >
+            <intent-filter>
+                <!-- 接收 vivo push 消息 -->
+                <action android:name="com.vivo.pushclient.action.RECEIVE" />
+            </intent-filter>
+        </receiver>
+
     </application>
     <permission
         android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE"
@@ -311,6 +340,11 @@
         android:name="xin.banghua.beiyuan.push.permission.MESSAGE"
         android:protectionLevel="signature" />
     <uses-feature android:name="android.hardware.camera" />
+
+
+
+
+
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

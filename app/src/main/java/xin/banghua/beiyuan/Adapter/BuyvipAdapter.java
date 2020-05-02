@@ -85,6 +85,18 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
         viewHolder.viptime.setText(currentItem.getViptime()+"天");
         viewHolder.vipprice.setText(currentItem.getVipprice()+"元");
 
+        switch (currentItem.getVipname()){
+            case "钻石会员":
+                viewHolder.vip_privilege_tv.setText("点亮会员标识，专享7大特权");
+                break;
+            case "黑金会员":
+                viewHolder.vip_privilege_tv.setText("升级尊贵标识，7大特权，优惠18％");
+                break;
+            case "白金会员":
+                viewHolder.vip_privilege_tv.setText("专享年会贵宾标识，7大特权，优惠23%");
+                break;
+        }
+
         viewHolder.weixin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +123,7 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
         TextView vipname;
         TextView viptime;
         TextView vipprice;
+        TextView vip_privilege_tv;
         Button weixin_btn;
         Button alipay_btn;
         RelativeLayout buyvipLayout;
@@ -120,6 +133,7 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
             vipname = itemView.findViewById(R.id.vipname);
             viptime = itemView.findViewById(R.id.viptime);
             vipprice = itemView.findViewById(R.id.vipprice);
+            vip_privilege_tv = itemView.findViewById(R.id.vip_privilege_tv);
             weixin_btn = itemView.findViewById(R.id.weixin_btn);
             alipay_btn = itemView.findViewById(R.id.alipay_btn);
             buyvipLayout = itemView.findViewById(R.id.buyvip_layout);

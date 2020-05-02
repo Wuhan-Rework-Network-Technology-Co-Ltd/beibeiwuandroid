@@ -104,4 +104,6 @@ dependencies {
     implementation files('libs/pinyin4j-2.5.0.jar')
     implementation project(path: ':wavesidebar')
     implementation files('libs/AMap3DMap_7.3.0_AMapSearch_7.3.0_AMapLocation_4.9.0_20200407.jar')
+    // vivo推送
+    implementation(name: 'vivo_pushsdk-v2.9.0.0', ext: 'aar')
 }
