@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,8 +30,6 @@ import xin.banghua.beiyuan.Adapter.PostAdapter;
 import xin.banghua.beiyuan.Adapter.PostHead;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
-
-import static java.security.AccessController.getContext;
 
 public class PostListActivity extends AppCompatActivity {
     private static final String TAG = "PostListActivity";

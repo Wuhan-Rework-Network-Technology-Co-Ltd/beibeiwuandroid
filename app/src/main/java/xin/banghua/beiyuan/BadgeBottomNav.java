@@ -3,17 +3,16 @@ package xin.banghua.beiyuan;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
-import android.support.design.widget.BottomNavigationView;
-import android.util.Log;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import java.io.IOException;
 
-import io.rong.imkit.manager.IUnReadMessageObserver;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

@@ -1,49 +1,23 @@
 package xin.banghua.beiyuan;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.rong.imkit.RongIM;
-import io.rong.imlib.RongIMClient;
-import io.rong.imlib.model.Conversation;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.ConversationSettingActivity;
-import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
-import xin.banghua.beiyuan.Personage.PersonageActivity;
-import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-
-import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.DO_NOT_DISTURB;
-import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.NOTIFY;
 
 
 public class ConversationActivity extends AppCompatActivity {

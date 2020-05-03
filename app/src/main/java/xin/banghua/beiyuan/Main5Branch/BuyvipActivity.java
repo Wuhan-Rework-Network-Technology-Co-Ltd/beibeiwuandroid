@@ -3,7 +3,7 @@ package xin.banghua.beiyuan.Main5Branch;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +26,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.BuyvipAdapter;
 import xin.banghua.beiyuan.Adapter.BuyvipList;
-import xin.banghua.beiyuan.Adapter.DongtaiList;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 

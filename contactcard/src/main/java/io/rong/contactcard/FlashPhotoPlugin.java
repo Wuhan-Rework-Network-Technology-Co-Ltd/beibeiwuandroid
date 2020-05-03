@@ -1,31 +1,19 @@
 package io.rong.contactcard;
 
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import net.alhazmy13.mediapicker.Image.ImagePicker;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
 
 import io.rong.imkit.RongExtension;
 import io.rong.imkit.RongIM;
@@ -34,7 +22,6 @@ import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
-import io.rong.message.ImageMessage;
 import io.rong.message.TextMessage;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;

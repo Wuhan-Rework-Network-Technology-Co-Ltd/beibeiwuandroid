@@ -320,7 +320,7 @@
         <activity
             android:name="com.vivo.push.sdk.LinkProxyClientActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <!-- vivo push 推送 receiver 声明 -->

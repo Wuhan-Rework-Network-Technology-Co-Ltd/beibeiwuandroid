@@ -50,7 +50,7 @@
 
     </TableLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
@@ -435,7 +435,7 @@
                 android:background="#E0E1E7" />
 
         </TableLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </FrameLayout>
