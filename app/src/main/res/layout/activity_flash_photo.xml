@@ -19,8 +19,7 @@
             android:id="@+id/flashphoto_imageview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/countdown_textview"
@@ -31,5 +30,12 @@
             android:text="5"
             android:textSize="24sp"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/longtouch_btn"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="按住屏幕可查看5秒" />
     </FrameLayout>
 </android.support.constraint.ConstraintLayout>

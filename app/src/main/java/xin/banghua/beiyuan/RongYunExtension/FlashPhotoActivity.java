@@ -6,7 +6,10 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,10 +29,15 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_UP;
+
 public class FlashPhotoActivity extends AppCompatActivity {
+    private String TAG = "FlashPhoto";
     Integer countDown = 5;
     TextView countdown_textview;
     ImageView flashphoto_imageview;
+    Button longtouch_btn;
 
     String uniqueid;
     @Override
@@ -40,11 +48,27 @@ public class FlashPhotoActivity extends AppCompatActivity {
 
         countdown_textview = findViewById(R.id.countdown_textview);
         flashphoto_imageview = findViewById(R.id.flashphoto_imageview);
+        longtouch_btn = findViewById(R.id.longtouch_btn);
 
 
         uniqueid = getIntent().getStringExtra("uniqueid");
 
-        getFlashPhoto("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getflashphoto&m=socialchat");
+        longtouch_btn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.v(TAG, "EVENT" + event.toString());
+                Log.v(TAG, "getAction" + event.getAction());
+                if(event.getAction() == ACTION_DOWN) {// pressed
+                    longtouch_btn.setText("");
+                    getFlashPhoto("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getflashphoto&m=socialchat");
+                }else if (event.getAction() == ACTION_UP){
+                    Toast.makeText(getApplicationContext(), "图片已销毁", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+                return false;
+            }
+        });
+
     }
 
     @SuppressLint("HandlerLeak")

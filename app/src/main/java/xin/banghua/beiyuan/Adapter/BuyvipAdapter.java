@@ -87,13 +87,13 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
 
         switch (currentItem.getVipname()){
             case "钻石会员":
-                viewHolder.vip_privilege_tv.setText("点亮会员标识，专享7大特权");
+                viewHolder.vip_privilege_tv.setText("点亮标识，7大特权");
                 break;
             case "黑金会员":
-                viewHolder.vip_privilege_tv.setText("升级尊贵标识，7大特权，优惠18％");
+                viewHolder.vip_privilege_tv.setText("尊贵标识，优惠18％");
                 break;
             case "白金会员":
-                viewHolder.vip_privilege_tv.setText("专享年会贵宾标识，7大特权，优惠23%");
+                viewHolder.vip_privilege_tv.setText("年会贵宾标识，优惠23%，(排名靠前)");
                 break;
         }
 
