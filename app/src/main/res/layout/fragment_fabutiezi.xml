@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="3"
                 android:gravity="top"
-                android:hint="内容"
+                android:hint="内容(发帖审核通过后才会显示，超12小时未显示请看乐园公约)"
                 android:inputType="textMultiLine|textPersonName"
                 android:minLines="10" />
         </TableRow>

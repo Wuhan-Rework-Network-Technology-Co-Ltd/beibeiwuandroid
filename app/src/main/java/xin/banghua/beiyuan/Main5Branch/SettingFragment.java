@@ -170,7 +170,7 @@ public class SettingFragment extends Fragment {
         version_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "当前版本：8.0", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "当前版本：10.0", Toast.LENGTH_LONG).show();
             }
         });
 
