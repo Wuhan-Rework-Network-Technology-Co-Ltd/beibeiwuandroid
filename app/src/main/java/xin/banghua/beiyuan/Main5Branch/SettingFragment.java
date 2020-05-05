@@ -34,9 +34,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.PackageUtils;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.SliderWebViewActivity;
 
 import static io.rong.imkit.fragment.ConversationListFragment.TAG;
 
@@ -170,7 +172,8 @@ public class SettingFragment extends Fragment {
         version_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "当前版本：10.0", Toast.LENGTH_LONG).show();
+                updateVersion();
+                //Toast.makeText(mContext, "当前版本：10.0", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -238,7 +241,36 @@ public class SettingFragment extends Fragment {
 
 
     }
+    public void updateVersion(){
+        //判断是不是关闭后的第一次启动
+        SharedHelper shvalue = new SharedHelper(mContext);
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("system", "android")
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(getString(R.string.getversion_url))
+                            .post(formBody)
+                            .build();
 
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful())
+                            throw new IOException("Unexpected code " + response);
+
+                        Message message = handler.obtainMessage();
+                        message.obj = response.body().string();
+                        message.what = 2;
+                        Log.d(TAG, "run: Userinfo发送的值" + message.obj.toString());
+                        handler.sendMessageDelayed(message, 10);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+    }
     //TODO okhttp获取用户信息
     public void setAccountdelete_btn(final String url){
         new Thread(new Runnable() {
@@ -287,6 +319,58 @@ public class SettingFragment extends Fragment {
                         startActivity(intent);
                     }else {
                         Toast.makeText(getActivity().getApplicationContext(), "删除失败", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case 2:
+                    if (!msg.obj.toString().equals(PackageUtils.getVersionName(mContext))){
+                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                                .setAdapter(new BaseAdapter() {
+                                    @Override
+                                    public int getCount() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public Object getItem(int position) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public long getItemId(int position) {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public View getView(int position, View convertView, ViewGroup parent) {
+                                        return null;
+                                    }
+                                })
+                                .setFooter(R.layout.dialog_foot_newversion)
+                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                                .create();
+                        dialog.show();
+                        View view = dialog.getFooterView();
+                        TextView scoreresult = view.findViewById(R.id.scoreresult);
+                        scoreresult.setText("亲，有新版本"+msg.obj.toString()+"可更新喽");
+                        Button vipconversion_btn = view.findViewById(R.id.newversion_btn);
+                        vipconversion_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+                                intent.putExtra("slidername","新版本");
+                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
+                                mContext.startActivity(intent);
+                            }
+                        });
+                        Button dismissdialog_btn = view.findViewById(R.id.dismissdialog_btn);
+                        dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }else {
+                        Toast.makeText(mContext, "当前版本："+PackageUtils.getVersionName(mContext), Toast.LENGTH_LONG).show();
                     }
                     break;
             }

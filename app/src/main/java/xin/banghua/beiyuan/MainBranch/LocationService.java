@@ -20,6 +20,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
 public class LocationService extends Service implements AMapLocationListener {
@@ -79,7 +80,7 @@ public class LocationService extends Service implements AMapLocationListener {
 //        mLocationOption.setOnceLocationLatest(true);
 
         //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
-        mLocationOption.setInterval(6000);
+        mLocationOption.setInterval(60000);
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
@@ -115,7 +116,7 @@ public class LocationService extends Service implements AMapLocationListener {
             //Float latitude = (float)(Math.round(location.getLatitude()*10))/10;
             shuserinfo.saveLocation(latitude+"",longitude+"");
             //上传定位值
-            postLocationInfo(myid, latitude + "", longitude + "", "https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=updatelocation&m=moyuan");
+            postLocationInfo(myid, latitude + "", longitude + "", getString(R.string.updatelocation_url));
         }
     }
     //更新定位信息
