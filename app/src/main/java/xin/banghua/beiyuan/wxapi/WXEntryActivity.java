@@ -9,6 +9,7 @@ import android.os.Message;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -71,6 +72,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onResp(BaseResp baseResp) {
+        Toast.makeText(this, "登陆中......", Toast.LENGTH_LONG).show();
         Log.d(TAG, "onResp: ");
         if (baseResp.getType() == ConstantsAPI.COMMAND_SENDAUTH) {
             SendAuth.Resp authResp = (SendAuth.Resp)baseResp;
