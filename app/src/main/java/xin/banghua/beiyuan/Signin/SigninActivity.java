@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -307,5 +308,23 @@ public class SigninActivity extends Activity {
                 }
             }
         }).start();
+    }
+
+
+    //禁用返回键
+    @Override
+    public void onBackPressed() {
+    }
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+            return false;// return false 或者return true 都不会走onBackPressed了
+        return false;
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+            return super.onKeyDown(keyCode, event);// 不拦截，如果这里拦截了，也不会走到onBackPressed方法了
+        return false;
     }
 }
