@@ -28,6 +28,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_UP;
@@ -135,9 +136,13 @@ public class FlashPhotoActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run(){
+                SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
+                String myid = shuserinfo.readUserInfo().get("userID");
+
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("uniqueid", uniqueid)
+                        .add("senderuserid", myid)
                         .build();
                 Request request = new Request.Builder()
                         .url(url)
