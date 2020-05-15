@@ -544,8 +544,10 @@ public class PersonageFragment extends Fragment {
                     break;
                 case 2:
                     make_friend.setEnabled(false);
-                    make_friend.setText("已申请，等待对方同意");
-                    move_friendapply.setVisibility(View.VISIBLE);
+                    make_friend.setText(msg.obj.toString());
+                    if (!msg.obj.toString().equals("对方已将您加入黑名单")){
+                        move_friendapply.setVisibility(View.VISIBLE);
+                    }
                     Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
 //                    Intent intent = new Intent(mContext, MainActivity.class);
 //                    startActivity(intent);
