@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case 1:
-                    if (!msg.obj.toString().equals(PackageUtils.getVersionName(MainActivity.this))){
+                    if (Double.parseDouble(msg.obj.toString())>Double.parseDouble(PackageUtils.getVersionName(MainActivity.this))){
                         final DialogPlus dialog = DialogPlus.newDialog(mContext)
                                 .setAdapter(new BaseAdapter() {
                                     @Override

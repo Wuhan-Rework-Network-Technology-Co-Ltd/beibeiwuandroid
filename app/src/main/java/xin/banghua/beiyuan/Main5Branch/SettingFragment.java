@@ -322,7 +322,7 @@ public class SettingFragment extends Fragment {
                     }
                     break;
                 case 2:
-                    if (!msg.obj.toString().equals(PackageUtils.getVersionName(mContext))){
+                    if (Double.parseDouble(msg.obj.toString())>Double.parseDouble(PackageUtils.getVersionName(mContext))){
                         final DialogPlus dialog = DialogPlus.newDialog(mContext)
                                 .setAdapter(new BaseAdapter() {
                                     @Override
