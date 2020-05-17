@@ -1,9 +1,13 @@
 package xin.banghua.beiyuan.Main5Branch;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 
@@ -29,7 +33,14 @@ public class HelpCenter extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        init("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {//27就是8.1
+            //做一些处理  webview打开
+            init("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+        } else{
+            //在版本低于此的时候，做一些处理   浏览器打开
+            openBrower("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+        }
+        //init("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
     }
 
 
@@ -121,6 +132,12 @@ public class HelpCenter extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void openBrower(String web_address){
+        Uri uri = Uri.parse(web_address);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     public final class InJavaScriptLocalObj

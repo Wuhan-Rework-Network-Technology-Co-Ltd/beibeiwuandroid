@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
@@ -34,7 +37,14 @@ public class SliderWebViewActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(slidername);
 
-        init(sliderurl);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {//27就是8.1
+            //做一些处理  webview打开
+            init(sliderurl);
+        } else{
+            //在版本低于此的时候，做一些处理   浏览器打开
+            openBrower(sliderurl);
+        }
+        //init(sliderurl);
     }
     @Override  //菜单的点击，其中返回键的id是android.R.id.home
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -73,6 +83,9 @@ public class SliderWebViewActivity extends AppCompatActivity {
         // 设置是否开启DOM存储API权限，默认false，未开启，设置为true，WebView能够使用DOM storage API
         mWebView.getSettings().setDomStorageEnabled(true);
 
+        //开启缓存
+        mWebView.getSettings().setAppCacheEnabled(true);
+
         // 触摸焦点起作用.如果不设置，则在点击网页文本输入框时，不能弹出软键盘及不响应其他的一些事件。
         mWebView.requestFocus();
 
@@ -94,7 +107,7 @@ public class SliderWebViewActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // 拦截 url 跳转,在里边添加点击链接跳转或者操作
+                // 拦截 url 跳转,在里边添加点击链接跳转或者操作   返回false是点击链接后在内部跳转，返回true是在浏览器中跳转
 //                if( url.startsWith("http:") || url.startsWith("https:") ) {
 //                    return false;
 //                }
@@ -134,6 +147,12 @@ public class SliderWebViewActivity extends AppCompatActivity {
         });
     }
 
+    public void openBrower(String web_address){
+        Uri uri = Uri.parse(web_address);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
     public final class InJavaScriptLocalObj
     {
         @JavascriptInterface
@@ -146,4 +165,5 @@ public class SliderWebViewActivity extends AppCompatActivity {
             System.out.println("====>html=" + str);
         }
     }
+
 }
