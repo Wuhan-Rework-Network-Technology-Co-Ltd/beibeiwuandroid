@@ -46,7 +46,7 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
  */
 public class TuijianFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener{
     private static final String TAG = "TuijianFragment";
-
+    private String selectedGender = "all";
     private View mView;
     private Integer pageindex = 1;
     private SliderLayout mDemoSlider;
@@ -126,74 +126,115 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
         seeall_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selectedGender = "all";
+                pageindex = 1;
                 //显示全部
-                adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+                mUserID.clear();
+                mUserPortrait.clear();
+                mUserNickName.clear();
+                mUserAge.clear();
+                mUserGender.clear();
+                mUserProperty.clear();
+                mUserLocation.clear();
+                mUserRegion.clear();
+                mUserVIP.clear();
+                mAllowLocation.clear();
+                getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
             }
         });
         seefemale_btn = view.findViewById(R.id.seefemale_btn);
         seefemale_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUserID1.clear();
-                mUserPortrait1.clear();
-                mUserNickName1.clear();
-                mUserAge1.clear();
-                mUserGender1.clear();
-                mUserProperty1.clear();
-                mUserLocation1.clear();
-                mUserRegion1.clear();
-                mUserVIP1.clear();
-                mAllowLocation1.clear();
-                //剔除男的
-                for (int i=0;i<mUserID.size();i++){
-                    if (mUserGender.get(i).equals("女")){
-                        mUserID1.add(mUserID.get(i));
-                        mUserPortrait1.add(mUserPortrait.get(i));
-                        mUserNickName1.add(mUserNickName.get(i));
-                        mUserAge1.add(mUserAge.get(i));
-                        mUserGender1.add(mUserGender.get(i));
-                        mUserProperty1.add(mUserProperty.get(i));
-                        mUserLocation1.add(mUserLocation.get(i));
-                        mUserRegion1.add(mUserRegion.get(i));
-                        mUserVIP1.add(mUserVIP.get(i));
-                        mAllowLocation1.add(mAllowLocation.get(i));
-                    }
-                }
-                //显示女
-                adapter.swapData(mUserID1,mUserPortrait1,mUserNickName1,mUserAge1,mUserGender1,mUserProperty1,mUserLocation1,mUserRegion1,mUserVIP1,mAllowLocation1);
+                selectedGender = "女";
+                pageindex = 1;
+
+//                mUserID1.clear();
+//                mUserPortrait1.clear();
+//                mUserNickName1.clear();
+//                mUserAge1.clear();
+//                mUserGender1.clear();
+//                mUserProperty1.clear();
+//                mUserLocation1.clear();
+//                mUserRegion1.clear();
+//                mUserVIP1.clear();
+//                mAllowLocation1.clear();
+//                //剔除男的
+//                for (int i=0;i<mUserID.size();i++){
+//                    if (mUserGender.get(i).equals("女")){
+//                        mUserID1.add(mUserID.get(i));
+//                        mUserPortrait1.add(mUserPortrait.get(i));
+//                        mUserNickName1.add(mUserNickName.get(i));
+//                        mUserAge1.add(mUserAge.get(i));
+//                        mUserGender1.add(mUserGender.get(i));
+//                        mUserProperty1.add(mUserProperty.get(i));
+//                        mUserLocation1.add(mUserLocation.get(i));
+//                        mUserRegion1.add(mUserRegion.get(i));
+//                        mUserVIP1.add(mUserVIP.get(i));
+//                        mAllowLocation1.add(mAllowLocation.get(i));
+//                    }
+//                }
+//                //显示女
+//                adapter.swapData(mUserID1,mUserPortrait1,mUserNickName1,mUserAge1,mUserGender1,mUserProperty1,mUserLocation1,mUserRegion1,mUserVIP1,mAllowLocation1);
+                mUserID.clear();
+                mUserPortrait.clear();
+                mUserNickName.clear();
+                mUserAge.clear();
+                mUserGender.clear();
+                mUserProperty.clear();
+                mUserLocation.clear();
+                mUserRegion.clear();
+                mUserVIP.clear();
+                mAllowLocation.clear();
+                getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
             }
         });
         seemale_btn = view.findViewById(R.id.seemale_btn);
         seemale_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUserID1.clear();
-                mUserPortrait1.clear();
-                mUserNickName1.clear();
-                mUserAge1.clear();
-                mUserGender1.clear();
-                mUserProperty1.clear();
-                mUserLocation1.clear();
-                mUserRegion1.clear();
-                mUserVIP1.clear();
-                mAllowLocation1.clear();
-                //剔除男的
-                for (int i=0;i<mUserID.size();i++){
-                    if (mUserGender.get(i).equals("男")){
-                        mUserID1.add(mUserID.get(i));
-                        mUserPortrait1.add(mUserPortrait.get(i));
-                        mUserNickName1.add(mUserNickName.get(i));
-                        mUserAge1.add(mUserAge.get(i));
-                        mUserGender1.add(mUserGender.get(i));
-                        mUserProperty1.add(mUserProperty.get(i));
-                        mUserLocation1.add(mUserLocation.get(i));
-                        mUserRegion1.add(mUserRegion.get(i));
-                        mUserVIP1.add(mUserVIP.get(i));
-                        mAllowLocation1.add(mAllowLocation.get(i));
-                    }
-                }
-                //显示男
-                adapter.swapData(mUserID1,mUserPortrait1,mUserNickName1,mUserAge1,mUserGender1,mUserProperty1,mUserLocation1,mUserRegion1,mUserVIP1,mAllowLocation1);
+                selectedGender = "男";
+                pageindex = 1;
+
+//                mUserID1.clear();
+//                mUserPortrait1.clear();
+//                mUserNickName1.clear();
+//                mUserAge1.clear();
+//                mUserGender1.clear();
+//                mUserProperty1.clear();
+//                mUserLocation1.clear();
+//                mUserRegion1.clear();
+//                mUserVIP1.clear();
+//                mAllowLocation1.clear();
+//                //剔除男的
+//                for (int i=0;i<mUserID.size();i++){
+//                    if (mUserGender.get(i).equals("男")){
+//                        mUserID1.add(mUserID.get(i));
+//                        mUserPortrait1.add(mUserPortrait.get(i));
+//                        mUserNickName1.add(mUserNickName.get(i));
+//                        mUserAge1.add(mUserAge.get(i));
+//                        mUserGender1.add(mUserGender.get(i));
+//                        mUserProperty1.add(mUserProperty.get(i));
+//                        mUserLocation1.add(mUserLocation.get(i));
+//                        mUserRegion1.add(mUserRegion.get(i));
+//                        mUserVIP1.add(mUserVIP.get(i));
+//                        mAllowLocation1.add(mAllowLocation.get(i));
+//                    }
+//                }
+//                //显示男
+//                adapter.swapData(mUserID1,mUserPortrait1,mUserNickName1,mUserAge1,mUserGender1,mUserProperty1,mUserLocation1,mUserRegion1,mUserVIP1,mAllowLocation1);
+
+                mUserID.clear();
+                mUserPortrait.clear();
+                mUserNickName.clear();
+                mUserAge.clear();
+                mUserGender.clear();
+                mUserProperty.clear();
+                mUserLocation.clear();
+                mUserRegion.clear();
+                mUserVIP.clear();
+                mAllowLocation.clear();
+                getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
             }
         });
     }
@@ -275,21 +316,21 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
     private void initUserInfo(View view,JSONArray jsonArray) throws JSONException {
         Log.d(TAG, "initUserInfo: preparing userinfo");
 
-        if (jsonArray.length()>0){
-            for (int i=0;i<jsonArray.length();i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                mUserID.add(jsonObject.getString("id"));
-                mUserPortrait.add(jsonObject.getString("portrait"));
-                mUserNickName.add(jsonObject.getString("nickname"));
-                mUserAge.add(jsonObject.getString("age"));
-                mUserGender.add(jsonObject.getString("gender"));
-                mUserProperty.add(jsonObject.getString("property"));
-                mUserLocation.add(jsonObject.getString("location"));
-                mUserRegion.add(jsonObject.getString("region"));
-                mUserVIP.add(jsonObject.getString("vip"));
-                mAllowLocation.add(jsonObject.getString("allowlocation"));
+            if (jsonArray.length()>0){
+                for (int i=0;i<jsonArray.length();i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    mUserID.add(jsonObject.getString("id"));
+                    mUserPortrait.add(jsonObject.getString("portrait"));
+                    mUserNickName.add(jsonObject.getString("nickname"));
+                    mUserAge.add(jsonObject.getString("age"));
+                    mUserGender.add(jsonObject.getString("gender"));
+                    mUserProperty.add(jsonObject.getString("property"));
+                    mUserLocation.add(jsonObject.getString("location"));
+                    mUserRegion.add(jsonObject.getString("region"));
+                    mUserVIP.add(jsonObject.getString("vip"));
+                    mAllowLocation.add(jsonObject.getString("allowlocation"));
+                }
             }
-        }
 
 
         if (pageindex>1){
@@ -350,6 +391,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
                         .add("latitude",locationInfo.get("latitude"))
                         .add("longitude",locationInfo.get("longitude"))
                         .add("pageindex",pageindex)
+                        .add("selectedGender",selectedGender)
                         .build();
                 Request request = new Request.Builder()
                         .url(url)

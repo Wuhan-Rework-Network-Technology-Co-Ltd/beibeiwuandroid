@@ -16,8 +16,8 @@ android {
         applicationId "xin.banghua.beiyuan"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 13
-        versionName "13.0"
+        versionCode 14
+        versionName "14.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -93,7 +93,6 @@ dependencies {
     implementation(name: 'alipaySdk-15.6.5-20190718211148', ext: 'aar')
     //微信sdk
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-    implementation files('libs/MiPush_SDK_Client_3_6_19.jar')
     //华为推送
     api 'com.huawei.android.hms:base:2.6.3.301'
     api 'com.huawei.android.hms:push:2.6.3.301'
@@ -108,5 +107,8 @@ dependencies {
     //implementation(name: 'vivo_pushsdk-v2.9.0.0', ext: 'aar')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation files('libs/vivo_pushsdk-v2.9.0.0.aar')
+    //vivo和oppo和小米推送
+    implementation files('libs/vivo_push_v2.3.1.jar')
+    implementation files('libs/oppo_push-2.0.2.jar')
+    implementation files('libs/MiPush_SDK_Client_3_6_9.jar')
 }

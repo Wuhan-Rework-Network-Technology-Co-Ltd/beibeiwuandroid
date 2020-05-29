@@ -46,7 +46,7 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
                     view.getContext().startActivity(intent);
                 }
         }
-        Log.d("闪图","发送了消息"+message.getContent().getJSONUserInfo()+"|"+message.getContent().getJsonMentionInfo());
+        //Log.d("闪图","发送了消息"+message.getContent().getJSONUserInfo()+"|"+message.getContent().getJsonMentionInfo());
         return false;
     }
 
