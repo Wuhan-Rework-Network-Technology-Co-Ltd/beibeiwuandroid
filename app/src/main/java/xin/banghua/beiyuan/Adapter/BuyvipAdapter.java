@@ -91,7 +91,7 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
         viewHolder.weixin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getUnifiedorder("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=payunifiedorder&m=socialchat",currentItem.getVipid());
+                getUnifiedorder("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=payunifiedorder2&m=socialchat",currentItem.getVipid());
             }
         });
         viewHolder.alipay_btn.setOnClickListener(new View.OnClickListener() {
@@ -167,10 +167,10 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
                 case 2:
                     //支付宝生成订单后，调用后端签名，获取orderString
                     Log.d(TAG, "handleMessage: 进入2");
-                    alipay("https://www.banghua.xin/alipay-sdk-PHP/alipaybeiyuan.php",msg.obj.toString());
+                    alipay("https://www.banghua.xin/alipay-sdk-PHP/alipaybeiyuan2.php",msg.obj.toString());
                     break;
                 case 3:
-                    alipay("https://www.banghua.xin/alipay-sdk-PHP/alipaybeiyuan.php",msg.obj.toString());
+                    alipay("https://www.banghua.xin/alipay-sdk-PHP/alipaybeiyuan2.php",msg.obj.toString());
                     break;
                 case 4:
                     //支付宝返回orderString，用orderString发起支付

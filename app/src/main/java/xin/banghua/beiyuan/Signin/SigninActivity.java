@@ -11,7 +11,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -119,9 +121,11 @@ public class SigninActivity extends Activity {
         if (uniquelogin!=null){
             Toast.makeText(this, "您的账号在其他设备登录，强制退出", Toast.LENGTH_LONG).show();
         }
-        if (forbidtime!=null){
+        if (!TextUtils.isEmpty(forbidtime)){
             Log.d(TAG, "onCreate: forbidtime"+forbidtime);
-            Toast.makeText(this, "已被封禁"+forbidtime+"天。"+forbidreason, Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(getApplicationContext(), "已被封禁"+forbidtime+"天。"+forbidreason, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         }
 
         signIn = (Button) findViewById(R.id.signin_btn);

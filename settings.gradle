@@ -1,1 +1,3 @@
-include ':app', ':CallLib', ':CallKit', ':Sight', ':wavesidebar', ':contactcard', ':IMLib', ':IMKit'
+include ':IMLib'
+include ':IMKit'
+include ':app', ':CallLib', ':CallKit', ':Sight', ':wavesidebar', ':contactcard'
