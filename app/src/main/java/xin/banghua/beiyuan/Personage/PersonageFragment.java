@@ -33,18 +33,24 @@ import java.io.IOException;
 import java.util.Date;
 
 import io.rong.imkit.RongIM;
+import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.message.TextMessage;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.CircleImageViewExtension;
+import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.Main5Branch.BuysvipActivity;
 import xin.banghua.beiyuan.Main5Branch.BuyvipActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+
+import static io.rong.imlib.model.Conversation.ConversationType.PRIVATE;
 
 
 /**
@@ -76,6 +82,7 @@ public class PersonageFragment extends Fragment {
     private Button balcklist_btn;
     private Button deletefriend_btn;
     private Button startconversation_btn;
+    private Button svip_chat_btn;
 
     private Context mContext;
 
@@ -84,6 +91,9 @@ public class PersonageFragment extends Fragment {
     ImageView vip_black;
     ImageView vip_white;
     Integer current_timestamp = Math.round(new Date().getTime()/1000);
+
+
+    String vipTime = null;
 
     public PersonageFragment() {
         // Required empty public constructor
@@ -191,6 +201,9 @@ public class PersonageFragment extends Fragment {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        move_friendapply.setVisibility(View.VISIBLE);
+                        make_friend.setEnabled(false);
+                        make_friend.setText("申请中...");
                         getFriendNumber("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsnumber&m=socialchat");
                         dialog.dismiss();
                     }
@@ -201,7 +214,11 @@ public class PersonageFragment extends Fragment {
         move_friendapply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+                if (vipTime == null) {
+                    getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
+                }else {
+                    moveFriendApply();
+                }
             }
         });
 
@@ -367,6 +384,18 @@ public class PersonageFragment extends Fragment {
             }
         });
 
+        svip_chat_btn = view.findViewById(R.id.svip_chat_btn);
+        svip_chat_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (vipTime == null) {
+                    getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
+                }else {
+                    svipChat();
+                }
+            }
+        });
+
 
         getDataPersonage(getString(R.string.personage_url));
 
@@ -375,7 +404,7 @@ public class PersonageFragment extends Fragment {
         ifFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=iffriend&m=socialchat");
     }
     //TODO okhttp获取用户信息
-    public void getVipinfo(final String url){
+    public void getVipinfo(final String url,int moveOrChat){
         new Thread(new Runnable() {
             @Override
             public void run(){
@@ -396,7 +425,11 @@ public class PersonageFragment extends Fragment {
 
                     Message message=handler.obtainMessage();
                     message.obj=response.body().string();
-                    message.what=8;
+                    if (moveOrChat == 1) {
+                        message.what = 8;
+                    }else {
+                        message.what = 10;
+                    }
                     Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
                     handler.sendMessageDelayed(message,10);
                 }catch (Exception e) {
@@ -522,6 +555,11 @@ public class PersonageFragment extends Fragment {
             make_friend.setText("拒绝添加好友");
         }
 
+        if (jsonObject.getString("allowsvip").equals("0")){
+            svip_chat_btn.setEnabled(false);
+            svip_chat_btn.setText("拒绝直接聊天");
+        }
+
     }
     //网络数据部分
     @SuppressLint("HandlerLeak")
@@ -547,6 +585,8 @@ public class PersonageFragment extends Fragment {
                     make_friend.setText(msg.obj.toString());
                     if (!msg.obj.toString().equals("对方已将您加入黑名单")){
                         move_friendapply.setVisibility(View.VISIBLE);
+                        svip_chat_btn.setVisibility(View.VISIBLE);
+
                     }
                     Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
 //                    Intent intent = new Intent(mContext, MainActivity.class);
@@ -563,7 +603,51 @@ public class PersonageFragment extends Fragment {
                         makeFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addfriend&m=socialchat");
                     }else {
                         Log.d(TAG, "handleMessage: 会员数量满");
-                        Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
+                        //Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
+                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                                .setAdapter(new BaseAdapter() {
+                                    @Override
+                                    public int getCount() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public Object getItem(int position) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public long getItemId(int position) {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public View getView(int position, View convertView, ViewGroup parent) {
+                                        return null;
+                                    }
+                                })
+                                .setFooter(R.layout.dialog_foot_needvip)
+                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                                .create();
+                        dialog.show();
+                        View view = dialog.getFooterView();
+                        TextView buyvip_tv = view.findViewById(R.id.buyvip_tv);
+                        buyvip_tv.setText("非会员每日可发起5次添加好友请求，请明日再试，也可开通会员，享受无限制添加好友和7大特权");
+                        Button buvip = view.findViewById(R.id.buyvip_btn);
+                        buvip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext, BuyvipActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                        Button cancel = view.findViewById(R.id.goback_btn);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
                     }
                     break;
                 case 5:
@@ -601,52 +685,8 @@ public class PersonageFragment extends Fragment {
                     Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
                     break;
                 case 8:
-                    if (msg.obj.toString().equals("会员已到期")){
-                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
-                                .setAdapter(new BaseAdapter() {
-                                    @Override
-                                    public int getCount() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public Object getItem(int position) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public long getItemId(int position) {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public View getView(int position, View convertView, ViewGroup parent) {
-                                        return null;
-                                    }
-                                })
-                                .setFooter(R.layout.dialog_foot_needvip)
-                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
-                                .create();
-                        dialog.show();
-                        View view = dialog.getFooterView();
-                        Button buvip = view.findViewById(R.id.buyvip_btn);
-                        buvip.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(mContext, BuyvipActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        Button cancel = view.findViewById(R.id.goback_btn);
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
-                    }else {
-                        deleteFriendNumber(mUserID,"https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
-                    }
+                    vipTime = msg.obj.toString();
+                    moveFriendApply();
                     break;
                 case 9:
                     Toast.makeText(mContext,"撤销成功",Toast.LENGTH_LONG).show();
@@ -654,10 +694,145 @@ public class PersonageFragment extends Fragment {
                     make_friend.setEnabled(true);
                     move_friendapply.setVisibility(View.GONE);
                     break;
+                case 10:
+                    vipTime = msg.obj.toString();
+                    svipChat();
+                    break;
+                case 11:
+                    if (msg.obj.toString().equals("1")) {
+                        if (RongIM.getInstance() != null) {
+                            RongIM.getInstance().startPrivateChat(mContext, mUserID, mUserNickName_tv.getText().toString());
+                        }
+                    }else {
+                        Toast.makeText(mContext,"对方不允许SVIP直接发起聊天",Toast.LENGTH_LONG).show();
+                    }
+                    break;
             }
         }
     };
 
+    public void moveFriendApply(){
+        if (vipTime.equals("会员已到期")){
+            final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                    .setAdapter(new BaseAdapter() {
+                        @Override
+                        public int getCount() {
+                            return 0;
+                        }
+
+                        @Override
+                        public Object getItem(int position) {
+                            return null;
+                        }
+
+                        @Override
+                        public long getItemId(int position) {
+                            return 0;
+                        }
+
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            return null;
+                        }
+                    })
+                    .setFooter(R.layout.dialog_foot_needvip)
+                    .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                    .create();
+            dialog.show();
+            View view = dialog.getFooterView();
+            Button buvip = view.findViewById(R.id.buyvip_btn);
+            buvip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, BuyvipActivity.class);
+                    startActivity(intent);
+                }
+            });
+            Button cancel = view.findViewById(R.id.goback_btn);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        }else {
+            deleteFriendNumber(mUserID,"https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
+        }
+    }
+    public void svipChat(){
+        if (!vipTime.contains("svip")){
+            final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                    .setAdapter(new BaseAdapter() {
+                        @Override
+                        public int getCount() {
+                            return 0;
+                        }
+
+                        @Override
+                        public Object getItem(int position) {
+                            return null;
+                        }
+
+                        @Override
+                        public long getItemId(int position) {
+                            return 0;
+                        }
+
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            return null;
+                        }
+                    })
+                    .setFooter(R.layout.dialog_foot_needsvip)
+                    .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                    .create();
+            dialog.show();
+            View view = dialog.getFooterView();
+            Button buvip = view.findViewById(R.id.buyvip_btn);
+            buvip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, BuysvipActivity.class);
+                    startActivity(intent);
+                }
+            });
+            Button cancel = view.findViewById(R.id.goback_btn);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        }else {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    SharedHelper shuserinfo = new SharedHelper(mContext.getApplicationContext());
+                    String myid = shuserinfo.readUserInfo().get("userID");
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("myid", myid)
+                            .add("yourid", mUserID)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(getString(R.string.setsvipchat_url))
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                        Message message=handler.obtainMessage();
+                        message.what=11;
+                        Log.d(TAG, "run: 查看返回值"+response.body().string());
+                        handler.sendMessageDelayed(message,10);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
+    }
     //TODO okhttp获取好友人数
     public void deleteFriendNumber(final String yourid,final String url){
         new Thread(new Runnable() {

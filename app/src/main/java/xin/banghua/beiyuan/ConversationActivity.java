@@ -1,5 +1,6 @@
 package xin.banghua.beiyuan;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,17 +8,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.ConversationSettingActivity;
+import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
 
 public class ConversationActivity extends AppCompatActivity {
@@ -31,10 +43,16 @@ public class ConversationActivity extends AppCompatActivity {
 
     String title;
     String targetId;
+
+    TextView svip_hint_tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
+
+
+        svip_hint_tv = findViewById(R.id.svip_hint_tv);
+
         CheckPermission.verifyStoragePermission(this);
         Intent intent = getIntent();
         title = intent.getData().getQueryParameter("title") ;
@@ -48,9 +66,59 @@ public class ConversationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(title);
 
-
+        getSVIPChat();
     }
 
+    //TODO okhttp获取用户信息
+    public void getSVIPChat(){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
+                String myid = shuserinfo.readUserInfo().get("userID");
+
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", targetId)
+                        .add("yourid", myid)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(getString(R.string.getsvipchat_url))
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    Message message=handler.obtainMessage();
+                    message.obj=response.body().string();
+                    message.what=1;
+                    Log.d(TAG, "run: getDataPersonage"+message.obj.toString());
+                    handler.sendMessageDelayed(message,10);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    @SuppressLint("HandlerLeak")
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            //1是用户数据，2是幻灯片
+            switch (msg.what){
+                case 1:
+                    if (msg.obj.toString().equals("1")){
+                        svip_hint_tv.setVisibility(View.VISIBLE);
+                        svip_hint_tv.postDelayed(() -> svip_hint_tv.setVisibility(View.GONE), 10000);
+                    }else {
+                        svip_hint_tv.setVisibility(View.GONE);
+                    }
+                    break;
+            }
+        }
+    };
     @Override  //菜单的填充
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

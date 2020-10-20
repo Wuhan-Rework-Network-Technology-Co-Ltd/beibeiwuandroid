@@ -146,12 +146,12 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                 @Override
                 public void onClick(View v) {
                     if (mUserAgree.get(i)==0){
-                    Log.d(TAG, "是否已同意: " + mUserAgree.get(i));
-                    //Toast.makeText(mContext, mUserID.get(i) + mUserNickName.get(i), Toast.LENGTH_LONG).show();
-                    viewHolder_btn = viewHolder;
-                    agreeFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=agreefriend&m=socialchat",mUserID.get(i),mUserPortrait.get(i),mUserNickName.get(i));
-                    mUserAgree.set(i,1);
-                    viewHolder.agree_btn.setText("已同意");
+                        Log.d(TAG, "是否已同意: " + mUserAgree.get(i));
+                        //Toast.makeText(mContext, mUserID.get(i) + mUserNickName.get(i), Toast.LENGTH_LONG).show();
+                        viewHolder_btn = viewHolder;
+                        mUserAgree.set(i,1);
+                        viewHolder.agree_btn.setText("已同意");
+                        agreeFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=agreefriend&m=socialchat",mUserID.get(i),mUserPortrait.get(i),mUserNickName.get(i));
                     }
                 }
             });

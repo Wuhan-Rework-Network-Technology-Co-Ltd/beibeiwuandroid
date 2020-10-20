@@ -97,13 +97,30 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center">
+            android:gravity="center"
+            android:paddingBottom="30dp">
 
             <Switch
                 android:id="@+id/switch4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="允许添加好友"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="30dp">
+
+            <Switch
+                android:id="@+id/switch5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="允许SVIP发起聊天"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp" />
 

@@ -123,15 +123,99 @@ public class CommonSettingActivity extends AppCompatActivity {
         clearCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "清除缓存", Toast.LENGTH_LONG).show();
+                final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                        .setAdapter(new BaseAdapter() {
+                            @Override
+                            public int getCount() {
+                                return 0;
+                            }
+
+                            @Override
+                            public Object getItem(int position) {
+                                return null;
+                            }
+
+                            @Override
+                            public long getItemId(int position) {
+                                return 0;
+                            }
+
+                            @Override
+                            public View getView(int position, View convertView, ViewGroup parent) {
+                                return null;
+                            }
+                        })
+                        .setFooter(R.layout.dialog_foot_confirm)
+                        .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                        .create();
+                dialog.show();
+                View view = dialog.getFooterView();
+                TextView prompt = view.findViewById(R.id.prompt_tv);
+                prompt.setText("确定要清除缓存吗？");
+                Button dismissdialog_btn = view.findViewById(R.id.cancel_btn);
+                dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button confirm_btn = view.findViewById(R.id.confirm_btn);
+                confirm_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(mContext, "清除缓存", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
         clearChat = findViewById(R.id.clearChat);
         clearChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getDataFriends("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friends&m=socialchat");
-                Toast.makeText(mContext, "清除聊天记录", Toast.LENGTH_LONG).show();
+                final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                        .setAdapter(new BaseAdapter() {
+                            @Override
+                            public int getCount() {
+                                return 0;
+                            }
+
+                            @Override
+                            public Object getItem(int position) {
+                                return null;
+                            }
+
+                            @Override
+                            public long getItemId(int position) {
+                                return 0;
+                            }
+
+                            @Override
+                            public View getView(int position, View convertView, ViewGroup parent) {
+                                return null;
+                            }
+                        })
+                        .setFooter(R.layout.dialog_foot_confirm)
+                        .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                        .create();
+                dialog.show();
+                View view = dialog.getFooterView();
+                TextView prompt = view.findViewById(R.id.prompt_tv);
+                prompt.setText("确定要清除聊天记录吗？");
+                Button dismissdialog_btn = view.findViewById(R.id.cancel_btn);
+                dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button confirm_btn = view.findViewById(R.id.confirm_btn);
+                confirm_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getDataFriends("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friends&m=socialchat");
+                        Toast.makeText(mContext, "清除聊天记录", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
     }

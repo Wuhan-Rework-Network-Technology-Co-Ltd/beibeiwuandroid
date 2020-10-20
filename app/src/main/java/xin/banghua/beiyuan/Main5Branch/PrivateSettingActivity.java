@@ -31,7 +31,7 @@ public class PrivateSettingActivity extends AppCompatActivity {
 
     private static final String TAG = "PrivateSettingActivity";
 
-    Switch switch1,switch2,switch3,switch4;
+    Switch switch1,switch2,switch3,switch4,switch5;
 
     Context mContext;
     @Override
@@ -51,6 +51,7 @@ public class PrivateSettingActivity extends AppCompatActivity {
         switch2 = findViewById(R.id.switch2);
         switch3 = findViewById(R.id.switch3);
         switch4 = findViewById(R.id.switch4);
+        switch5 = findViewById(R.id.switch5);
 
         getPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getprivatesetting&m=socialchat");
     }
@@ -106,6 +107,19 @@ public class PrivateSettingActivity extends AppCompatActivity {
                 }
             }
         });
+
+        switch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(mContext, "开启", Toast.LENGTH_LONG).show();
+                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","svip");
+                }else {
+                    Toast.makeText(mContext, "关闭", Toast.LENGTH_LONG).show();
+                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","svip");
+                }
+            }
+        });
     }
 
 
@@ -144,6 +158,11 @@ public class PrivateSettingActivity extends AppCompatActivity {
                             switch4.setChecked(true);
                         }else {
                             switch4.setChecked(false);
+                        }
+                        if (jsonObject.getString("allowsvip").equals("1")){
+                            switch5.setChecked(true);
+                        }else {
+                            switch5.setChecked(false);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

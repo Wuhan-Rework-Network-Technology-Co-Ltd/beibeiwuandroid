@@ -53,7 +53,11 @@ import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.CityAdapter;
 import xin.banghua.beiyuan.Signin.ProvinceAdapter;
+import xin.banghua.beiyuan.Signin.SignupActivity;
+import xin.banghua.beiyuan.Signin.Userset;
 import xin.banghua.beiyuan.bean.AddrBean;
+
+import static io.rong.imkit.fragment.ConversationFragment.TAG;
 
 public class ResetActivity extends AppCompatActivity {
 
@@ -67,13 +71,16 @@ public class ResetActivity extends AppCompatActivity {
     private List<AddrBean.ProvinceBean.CityBean> cityBeanList;
     private AddrBean.ProvinceBean provinceBean;
     //var
-    Button submit_btn;
-    EditText value_et;
+    Button submit_btn,verificationCode_btn;
+    EditText value_et,verificationCode_et;
     TextView title_tv;
     TextView current_address;
     CircleImageView portrait;
     RadioGroup userGender;
     RadioGroup userProperty;
+    String smscode;
+    String userAcountString,verificationCodeString;;
+    Integer countDown = 60;
 
     String title,userPortrait,value;
     @Override
@@ -81,7 +88,7 @@ public class ResetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset);
 
-
+        title = getIntent().getStringExtra("title");
 
         ImageView back_btn = findViewById(R.id.iv_back_left);
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -96,9 +103,37 @@ public class ResetActivity extends AppCompatActivity {
         current_address.setVisibility(View.GONE);
 
         getDataPersonage("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=personage&m=socialchat");
+
+
+        if (title.equals("手机绑定")){
+            verificationCode_btn = findViewById(R.id.verificationCode_btn);
+            verificationCode_et = findViewById(R.id.verificationCode_et);
+            verificationCode_et.setVisibility(View.VISIBLE);
+            verificationCode_btn.setVisibility(View.VISIBLE);
+            verificationCode_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    userAcountString = value_et.getText().toString();
+                    if (userAcountString.length()!=11){
+                        Toast.makeText(ResetActivity.this, "请输入手机号", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    sendCode("https://www.banghua.xin/sms.php",userAcountString);
+                    countDown();
+                }
+            });
+        }
+
     }
 
-
+    //TODO okhttp验证信息
+    public void verificationCode(final String verificationCodeString){
+        if (smscode.equals(verificationCodeString)){
+            submitValue("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=feedback&m=socialchat","其他");
+        }else {
+            Toast.makeText(ResetActivity.this, "验证码错误", Toast.LENGTH_LONG).show();
+        }
+    }
     private void initView() {
         spCity = findViewById(R.id.spinner_city);
         spProvince = findViewById(R.id.spinner_province);
@@ -191,7 +226,7 @@ public class ResetActivity extends AppCompatActivity {
 
     public void initPersonage(JSONObject jsonObject) throws JSONException {
 
-        title = getIntent().getStringExtra("title");
+
 
 
         submit_btn = findViewById(R.id.submit_btn);
@@ -213,12 +248,10 @@ public class ResetActivity extends AppCompatActivity {
                     .asBitmap()
                     .load(myportrait)
                     .into(portrait);
-        }
-        if (title.equals("昵称设置")){
+        }else if (title.equals("昵称设置")){
             value_et.setVisibility(View.VISIBLE);
             value_et.setText(jsonObject.getString("nickname"));
-        }
-        if (title.equals("年龄设置")){
+        }else if (title.equals("年龄设置")){
             value_et.setVisibility(View.GONE);
             value_et.setText(jsonObject.getString("age"));
             //年龄选择器
@@ -240,8 +273,7 @@ public class ResetActivity extends AppCompatActivity {
                 }
             });
             spinner_age.setSelection(adapter_age.getPosition(jsonObject.getString("age")));
-        }
-        if (title.equals("性别设置")){
+        }else if (title.equals("性别设置")){
             value_et.setVisibility(View.GONE);
             userGender.setVisibility(View.VISIBLE);
             if (jsonObject.getString("gender").equals("男")){
@@ -249,8 +281,7 @@ public class ResetActivity extends AppCompatActivity {
             }else {
                 userGender.check(R.id.female);
             }
-        }
-        if (title.equals("属性设置")){
+        }else if (title.equals("属性设置")){
             value_et.setVisibility(View.GONE);
             userProperty.setVisibility(View.VISIBLE);
             if (jsonObject.getString("property").equals("双")){
@@ -260,9 +291,7 @@ public class ResetActivity extends AppCompatActivity {
             }else if(jsonObject.getString("property").equals("B")){
                 userProperty.check(R.id.bProperty);
             }
-        }
-
-        if (title.equals("地区设置")){
+        }else if (title.equals("地区设置")){
             value_et.setVisibility(View.GONE);
             current_address.setVisibility(View.VISIBLE);
             current_address.setText("当前地址："+jsonObject.getString("region"));
@@ -273,8 +302,7 @@ public class ResetActivity extends AppCompatActivity {
             initView();
             loadData();
             register();
-        }
-        if (title.equals("签名设置")){
+        }else if (title.equals("签名设置")){
             value_et.setVisibility(View.VISIBLE);
             value_et.setText(jsonObject.getString("signature"));
         }
@@ -310,6 +338,9 @@ public class ResetActivity extends AppCompatActivity {
                         break;
                     case "意见反馈":
                         submitValue("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=feedback&m=socialchat","意见");
+                        break;
+                    case "手机绑定":
+                        verificationCode(verificationCode_et.getText().toString());
                         break;
                     default:
                         submitValue("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","其他");
@@ -370,6 +401,20 @@ public class ResetActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    break;
+                case 4:
+                    if (msg.arg1==0){
+                        verificationCode_btn.setText("点击获取验证码");
+                        verificationCode_btn.setEnabled(true);
+                        countDown = 60;
+                    }else {
+                        verificationCode_btn.setText(msg.arg1+"");
+                        verificationCode_btn.setEnabled(false);
+                    }
+                    break;
+                case 5:
+                    Toast.makeText(ResetActivity.this, "验证码发送成功", Toast.LENGTH_LONG).show();
+                    smscode = msg.obj.toString();
                     break;
             }
         }
@@ -499,5 +544,56 @@ public class ResetActivity extends AppCompatActivity {
                 userPortrait = mPath;
             }
         }
+    }
+
+    //TODO okhttp获取用户信息
+    public void sendCode(final String url,final String phoneNumber){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("phoneNumber", phoneNumber)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    Message message=handler.obtainMessage();
+                    message.obj=response.body().string();
+                    message.what=5;
+                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+                    handler.sendMessageDelayed(message,10);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //TODO 倒计时
+    public void countDown(){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                while (countDown != 0) {
+                    countDown--;
+                    try {
+                        Thread.sleep(1000);
+                        Message message=handler.obtainMessage();
+                        message.arg1=countDown;
+                        message.what=4;
+                        handler.sendMessageDelayed(message,10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }).start();
     }
 }

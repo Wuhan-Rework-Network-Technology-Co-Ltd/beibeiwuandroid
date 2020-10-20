@@ -101,7 +101,7 @@ public class SousuoFragment extends Fragment {
         spCity = view.findViewById(R.id.spinner_city);
         spProvince = view.findViewById(R.id.spinner_province);
         //vip
-        getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+        //getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
         //初始化导航按钮
         initNavigateButton(view);
 
@@ -236,7 +236,11 @@ public class SousuoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: 直接搜索"+getDirectBundle().getString("nameOrPhone"));
-                Navigation.findNavController(v).navigate(R.id.sousuo_result_action, getDirectBundle());
+//                Navigation.findNavController(v).navigate(R.id.sousuo_result_action, getDirectBundle());
+                Bundle bundle = new Bundle();
+                bundle.putString("type","direct");
+                bundle.putString("nameOrPhone",searchView.getQuery().toString());
+                Navigation.findNavController(view).navigate(R.id.sousuo_result_action, bundle);
             }
         });
         condition_btn.setOnClickListener(new View.OnClickListener() {

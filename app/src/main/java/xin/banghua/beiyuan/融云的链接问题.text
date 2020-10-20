@@ -6,3 +6,6 @@
 
 不能为了应用进入后台后接受消息通知，而在onActivityPaused中断开融云链接
 因为发送图片也会触发onActivityPaused而断开融云链接，导致发送图片失败
+
+
+*音视频服务在后台关闭的情况下，不能CallLib，CallKit库，会造成语音的声道被占用

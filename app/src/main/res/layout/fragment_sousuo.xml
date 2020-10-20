@@ -109,13 +109,21 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone">
+                android:gravity="center"
+                android:visibility="visible">
 
                 <Button
                     android:id="@+id/direct_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/rc_cs_button_bg"
                     android:text="搜索" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/direct_et"
@@ -124,13 +132,8 @@
                     android:layout_span="2"
                     android:ems="10"
                     android:hint="按昵称或手机号搜索"
-                    android:inputType="textPersonName" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+                    android:inputType="textPersonName"
+                    android:visibility="gone" />
             </TableRow>
 
             <TableRow
@@ -226,7 +229,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -267,7 +271,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="高级选项（会员专享）"
+                    android:text="高级选项"
                     android:textAlignment="center" />
             </TableRow>
 
@@ -352,7 +356,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -384,7 +389,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"

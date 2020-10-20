@@ -37,14 +37,15 @@ public class SliderWebViewActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(slidername);
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {//27就是8.1
-            //做一些处理  webview打开
-            init(sliderurl);
-        } else{
-            //在版本低于此的时候，做一些处理   浏览器打开
-            openBrower(sliderurl);
-        }
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {//27就是8.1
+//            //做一些处理  webview打开
+//            init(sliderurl);
+//        } else{
+//            //在版本低于此的时候，做一些处理   浏览器打开
+//            openBrower(sliderurl);
+//        }
         //init(sliderurl);
+        openBrower(sliderurl);
     }
     @Override  //菜单的点击，其中返回键的id是android.R.id.home
     public boolean onOptionsItemSelected(MenuItem item) {

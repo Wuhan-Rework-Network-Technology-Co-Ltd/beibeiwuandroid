@@ -39,6 +39,10 @@
     <string name="conditionsousuo_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=conditionsousuonew&amp;m=socialchat</string>
     <string name="updatelocation_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=updatelocation&amp;m=socialchat</string>
     <string name="getversion_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getversion&amp;m=socialchat</string>
+    <string name="payunifiedorder2svip_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=payunifiedorder2svip&amp;m=socialchat</string>
+    <string name="alipayaddorder2svip_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=alipayaddorder2svip&amp;m=socialchat</string>
+    <string name="setsvipchat_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=setsvipchat&amp;m=socialchat</string>
+    <string name="getsvipchat_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getsvipchat&amp;m=socialchat</string>
 
     <string-array name="age">
         <!--        <item>15</item>-->
@@ -116,5 +120,19 @@
         <item>48</item>
         <item>49</item>
         <item>50</item>
+    </string-array>
+
+
+    <string-array name="sousuo_gender">
+        <item>不限</item>
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+
+    <string-array name="sousuo_property">
+        <item>不限</item>
+        <item>Z</item>
+        <item>B</item>
+        <item>双</item>
     </string-array>
 </resources>

@@ -8,13 +8,20 @@ import android.os.Message;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -30,6 +37,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import androidx.navigation.Navigation;
 import okhttp3.FormBody;
@@ -68,6 +76,18 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
     private View mView;
 
     private String subtitle;
+
+
+    String filter_search = "";
+
+    String filter_property = "不限";
+
+    String filter_gender = "不限";
+    int checkedItemFilter = 0;
+    int checkedItem = 0;
+
+
+    FloatingActionButton search_btn;
     public LuntanFragment() {
         // Required empty public constructor
     }
@@ -94,6 +114,77 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
         initNavigateButton(view);
         initSubnavigationButton(view);
         initTieziRelease(view);
+
+
+        search_btn = view.findViewById(R.id.search_btn);
+        search_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setIcon(R.drawable.ic_search);
+                builder.setTitle("搜索相关");
+                final AlertDialog dialog = builder.create();
+                View dialogView = View.inflate(getActivity(), R.layout.dialog_foot_luntan_search, null);
+                dialog.setView(dialogView);
+                dialog.show();
+                EditText editText =  dialogView.findViewById(R.id.editText);
+                Spinner spinner_gender = dialogView.findViewById(R.id.spinner_gender);
+                ArrayAdapter<CharSequence> adapter_gender = ArrayAdapter.createFromResource(getActivity(),R.array.sousuo_gender,android.R.layout.simple_spinner_item);
+                adapter_gender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_gender.setAdapter(adapter_gender);
+                spinner_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String selected_property = parent.getItemAtPosition(position).toString();
+                        filter_gender = selected_property;
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        filter_gender = "不限";
+                    }
+                });
+                Spinner spinner_property = dialogView.findViewById(R.id.spinner_property);
+                ArrayAdapter<CharSequence> adapter_property = ArrayAdapter.createFromResource(getActivity(),R.array.sousuo_property,android.R.layout.simple_spinner_item);
+                adapter_property.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_property.setAdapter(adapter_property);
+                spinner_property.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String selected_property = parent.getItemAtPosition(position).toString();
+                        filter_property = selected_property;
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        filter_property = "不限";
+                    }
+                });
+                editText.setHint("填写标题关键词~");
+                if (!filter_search.equals("")) {
+                    editText.setText(filter_search);
+                }
+                TextView dialog_hint = dialogView.findViewById(R.id.dialog_hint);
+                dialog_hint.setVisibility(View.GONE);
+                Button dismissdialog_btn = dialogView.findViewById(R.id.cancel_btn);
+                dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button confirm_btn = dialogView.findViewById(R.id.confirm_btn);
+                confirm_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        filter_search = editText.getText().toString();
+                        pageindex = 1;
+                        getDataPostlist(getString(R.string.luntan_url),subtitle,pageindex+"");
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     //三个按钮初始化
@@ -279,8 +370,9 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                             jsonObject.getString("time"),jsonObject.getString("vip"));
                     luntanLists.add(posts);
                 }
+                adapter.swapData(luntanLists);
             }
-            adapter.swapData(luntanLists);
+
         }else {
             //不同板块，需要先清零
             luntanLists.clear();
@@ -444,6 +536,9 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         .add("myid", myid)
                         .add("platename", subNav)
                         .add("pageindex",pageindex)
+                        .add("filter_gender", filter_gender)
+                        .add("filter_search", filter_search)
+                        .add("filter_property", filter_property)
                         .build();
                 Request request = new Request.Builder()
                         .url(url)

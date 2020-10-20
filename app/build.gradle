@@ -16,8 +16,8 @@ android {
         applicationId "xin.banghua.beiyuan"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 15
-        versionName "15.0"
+        versionCode 17
+        versionName "17.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -85,8 +85,8 @@ dependencies {
     //融云
     implementation project(':IMLib')
     implementation project(':IMKit')
-    implementation project(':CallLib')
-    implementation project(':CallKit')
+//    implementation project(':CallLib')
+//    implementation project(':CallKit')
     implementation project(':Sight')
     implementation project(':contactcard')
     //支付宝sdk

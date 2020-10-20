@@ -97,7 +97,7 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
         viewHolder.alipay_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alipayorder("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=alipayaddorder&m=socialchat",currentItem.getVipid());
+                alipayorder("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=alipayaddorder2&m=socialchat",currentItem.getVipid());
             }
         });
 
@@ -165,7 +165,7 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
                     }
                     break;
                 case 2:
-                    //支付宝生成订单后，调用后端签名，获取orderString
+                    //支付宝生成订单后，调用后端签名，获取orderString    2和3都作废了，现在订单放到了服务端
                     Log.d(TAG, "handleMessage: 进入2");
                     alipay("https://www.banghua.xin/alipay-sdk-PHP/alipaybeiyuan2.php",msg.obj.toString());
                     break;

@@ -86,8 +86,8 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                             jsonObject.getString("time"),jsonObject.getString("vip"));
                     luntanLists.add(posts);
                 }
+                adapter.swapData(luntanLists);
             }
-            adapter.swapData(luntanLists);
         }else {
             //不同板块，需要先清零
             luntanLists.clear();

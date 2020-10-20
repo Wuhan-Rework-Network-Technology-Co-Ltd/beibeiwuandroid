@@ -179,6 +179,24 @@
             android:background="#FFFFFF">
 
             <Button
+                android:id="@+id/opensvip_btn"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_vip"
+                android:drawableRight="@drawable/ic_right"
+                android:text="开通SVIP会员"
+                android:textAlignment="textStart" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#FFFFFF">
+
+            <Button
                 android:id="@+id/jifen_btn"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"

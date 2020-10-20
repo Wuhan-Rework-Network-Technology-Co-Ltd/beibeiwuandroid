@@ -1,7 +1,13 @@
 package xin.banghua.beiyuan.MainBranch;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,12 +15,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -36,6 +45,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
+import xin.banghua.beiyuan.GlobalDialogSingle;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
@@ -101,7 +111,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        locationCheck();
         //使用okhttp获取推荐的幻灯片
         getDataSlide(getString(R.string.fujin_url));
 
@@ -415,4 +425,34 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
         }
     };
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 23421) {
+            //TODO something;
+            Log.d("开启权限","定位权限返回");
+        }
+    }
+    public void locationCheck() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!checkPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)||!checkPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Toast.makeText(getActivity(), "当前无权限，请授权", Toast.LENGTH_SHORT);
+                new GlobalDialogSingle(getActivity(), "", "当前未获取定位权限权限", "去开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                        intent.setData(uri);
+                        getActivity().startActivityForResult(intent, 23421);
+                        //startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                }).show();
+            }
+        }
+    }
+
+    private boolean checkPermissionGranted(String permission) {
+        return getActivity().checkPermission(permission, android.os.Process.myPid(), android.os.Process.myUid()) == PackageManager.PERMISSION_GRANTED;
+    }
 }

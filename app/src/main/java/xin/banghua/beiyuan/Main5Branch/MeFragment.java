@@ -52,11 +52,13 @@ public class MeFragment extends Fragment {
     Button personalinfo_btn;
     Button xiangce_btn;
     Button openvip_btn;
+    Button opensvip_btn;
     Button luntan_btn;
     Button jifen_btn;
     Button tuiguangma_btn;
     Button sawme_btn;
     Button setting_btn;
+
     String myportrait;
 
     private Button privacypolity_btn,useragreement_btn;
@@ -172,6 +174,7 @@ public class MeFragment extends Fragment {
         personalinfo_btn = view.findViewById(R.id.personalinfo_btn);
         xiangce_btn = view.findViewById(R.id.xiangce_btn);
         openvip_btn = view.findViewById(R.id.openvip_btn);
+        opensvip_btn = view.findViewById(R.id.opensvip_btn);
         luntan_btn= view.findViewById(R.id.luntan_btn);
         jifen_btn = view.findViewById(R.id.jifen_btn);
         tuiguangma_btn = view.findViewById(R.id.tuiguangma_btn);
@@ -225,6 +228,13 @@ public class MeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),BuyvipActivity.class);
+                startActivity(intent);
+            }
+        });
+        opensvip_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),BuysvipActivity.class);
                 startActivity(intent);
             }
         });

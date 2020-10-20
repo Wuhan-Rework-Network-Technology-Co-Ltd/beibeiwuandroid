@@ -23,8 +23,8 @@ dependencies {
     //融云
     api project(':IMLib')
     api project(':IMKit')
-    api project(':CallLib')
-    api project(':CallKit')
+//    api project(':CallLib')
+//    api project(':CallKit')
     api project(':Sight')
     implementation 'net.alhazmy13.MediaPicker:libary:2.4.4'
     implementation 'com.squareup.okhttp3:okhttp:4.0.0'

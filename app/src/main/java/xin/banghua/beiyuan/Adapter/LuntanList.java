@@ -1,6 +1,8 @@
 package xin.banghua.beiyuan.Adapter;
 
-public class LuntanList {
+import java.io.Serializable;
+
+public class LuntanList  implements Serializable {
     String id;
     String plateid;
     String platename;

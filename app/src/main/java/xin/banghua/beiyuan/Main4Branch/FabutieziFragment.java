@@ -160,6 +160,7 @@ public class FabutieziFragment extends Fragment {
                 posttext = content_et.getText().toString();
                 platename = ((RadioButton)mView.findViewById(bankuai_rg.getCheckedRadioButtonId())).getText().toString();
 
+                release_btn.setClickable(false);
                 postFabutiezi("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabutiezi&m=socialchat");
 
             }

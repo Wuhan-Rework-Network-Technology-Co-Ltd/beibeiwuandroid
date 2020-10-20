@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/rc_btn_voice_hover"
         android:orientation="horizontal">
 
@@ -17,13 +17,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/vipid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="vipid"
-                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -82,6 +75,13 @@
                     android:textAlignment="center"
                     android:textColor="@color/rc_draft_color" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/vipid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="vipid"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout

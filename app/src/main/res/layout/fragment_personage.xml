@@ -296,6 +296,24 @@
                 android:textColor="@color/callkit_normal_text" />
 
         </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/svip_chat_btn"
+                style="@android:style/Widget.DeviceDefault.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rc_btn_voice_hover"
+                android:drawableTop="@drawable/ic_startconversation"
+                android:text="直接聊天"
+                android:textColor="@color/callkit_normal_text"
+                android:visibility="gone" />
+
+        </TableRow>
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">

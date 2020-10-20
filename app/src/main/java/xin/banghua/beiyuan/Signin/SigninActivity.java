@@ -154,6 +154,7 @@ public class SigninActivity extends Activity {
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 userAccount = (EditText) findViewById(R.id.userAccount);
                 userPassword = (EditText) findViewById(R.id.userPassword);
                 if(userAccount.getText().toString().equals("")||userPassword.getText().toString().equals("")){
@@ -163,6 +164,8 @@ public class SigninActivity extends Activity {
                         Toast.makeText(mContext, "勾选小贝乐园用户协议", Toast.LENGTH_LONG).show();
                         return;
                     }
+                    signIn.setClickable(false);
+                    Toast.makeText(mContext, "登陆中", Toast.LENGTH_LONG).show();
                     postSignIn("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signin&m=socialchat",userAccount.getText().toString(),userPassword.getText().toString());
                 }
 
@@ -205,6 +208,7 @@ public class SigninActivity extends Activity {
                             postRongyunUserRegister("https://rongyun.banghua.xin/RongCloud/example/User/userregister.php",object.getString("userID"),object.getString("userNickName"),object.getString("userPortrait"));
 
                         }else {
+                            signIn.setClickable(true);
                             Log.d(TAG, "handleMessage: test");
                             Toast.makeText(SigninActivity.this,object.getString("info"),Toast.LENGTH_LONG).show();
                         }

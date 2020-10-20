@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.os.Message;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Main4Branch.ImagerPagerActivity;
 import xin.banghua.beiyuan.Main4Branch.PostListActivity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
@@ -268,45 +271,9 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 ((ViewHolder) viewHolder).postpicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
-                                .setAdapter(new BaseAdapter() {
-                                    @Override
-                                    public int getCount() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public Object getItem(int position) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public long getItemId(int position) {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public View getView(int position, View convertView, ViewGroup parent) {
-                                        return null;
-                                    }
-                                })
-                                .setFooter(R.layout.dialog_original_image)
-                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
-                                .create();
-                        dialog.show();
-                        View view = dialog.getFooterView();
-                        ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
-                        Glide.with(mContext)
-                                .asBitmap()
-                                .load(currentItem.getPostpicture()[0])
-                                .into(originalImage);
-                        Button dismissdialog_btn = view.findViewById(R.id.cancel);
-                        dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
+                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+                        intent.putExtra("luntanlist", currentItem);
+                        v.getContext().startActivity(intent);
                     }
                 });
             }
@@ -321,45 +288,9 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 ((ViewHolder) viewHolder).postpicture1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
-                                .setAdapter(new BaseAdapter() {
-                                    @Override
-                                    public int getCount() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public Object getItem(int position) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public long getItemId(int position) {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public View getView(int position, View convertView, ViewGroup parent) {
-                                        return null;
-                                    }
-                                })
-                                .setFooter(R.layout.dialog_original_image)
-                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
-                                .create();
-                        dialog.show();
-                        View view = dialog.getFooterView();
-                        ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
-                        Glide.with(mContext)
-                                .asBitmap()
-                                .load(currentItem.getPostpicture()[0])
-                                .into(originalImage);
-                        Button dismissdialog_btn = view.findViewById(R.id.cancel);
-                        dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
+                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+                        intent.putExtra("luntanlist", currentItem);
+                        v.getContext().startActivity(intent);
                     }
                 });
             }
@@ -374,45 +305,9 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 ((ViewHolder) viewHolder).postpicture2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
-                                .setAdapter(new BaseAdapter() {
-                                    @Override
-                                    public int getCount() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public Object getItem(int position) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public long getItemId(int position) {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public View getView(int position, View convertView, ViewGroup parent) {
-                                        return null;
-                                    }
-                                })
-                                .setFooter(R.layout.dialog_original_image)
-                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
-                                .create();
-                        dialog.show();
-                        View view = dialog.getFooterView();
-                        ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
-                        Glide.with(mContext)
-                                .asBitmap()
-                                .load(currentItem.getPostpicture()[1])
-                                .into(originalImage);
-                        Button dismissdialog_btn = view.findViewById(R.id.cancel);
-                        dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
+                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+                        intent.putExtra("luntanlist", currentItem);
+                        v.getContext().startActivity(intent);
                     }
                 });
             }
@@ -427,45 +322,9 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 ((ViewHolder) viewHolder).postpicture3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
-                                .setAdapter(new BaseAdapter() {
-                                    @Override
-                                    public int getCount() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public Object getItem(int position) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public long getItemId(int position) {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public View getView(int position, View convertView, ViewGroup parent) {
-                                        return null;
-                                    }
-                                })
-                                .setFooter(R.layout.dialog_original_image)
-                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
-                                .create();
-                        dialog.show();
-                        View view = dialog.getFooterView();
-                        ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
-                        Glide.with(mContext)
-                                .asBitmap()
-                                .load(currentItem.getPostpicture()[2])
-                                .into(originalImage);
-                        Button dismissdialog_btn = view.findViewById(R.id.cancel);
-                        dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
+                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+                        intent.putExtra("luntanlist", currentItem);
+                        v.getContext().startActivity(intent);
                     }
                 });
             }
