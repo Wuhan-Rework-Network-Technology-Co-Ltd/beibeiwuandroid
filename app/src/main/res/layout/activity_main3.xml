@@ -7,9 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Main3Activity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -35,6 +33,40 @@
                 android:text="会话列表"
                 android:textSize="18sp" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/notification_hint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#D81B60"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="系统检测到您的通知处于关闭状态，点击"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/open_note_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开启通知"
+                android:textColor="#FDD835" />
+
+            <TextView
+                android:id="@+id/close_note_hint_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="X"
+                android:textAlignment="center" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

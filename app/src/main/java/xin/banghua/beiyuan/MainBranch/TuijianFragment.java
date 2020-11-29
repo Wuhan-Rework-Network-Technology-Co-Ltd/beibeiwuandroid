@@ -5,16 +5,18 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableRow;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -29,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import androidx.navigation.Navigation;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -66,6 +67,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
     private ArrayList<String> mUserLocation = new ArrayList<>();
     private ArrayList<String> mUserRegion = new ArrayList<>();
     private ArrayList<String> mUserVIP = new ArrayList<>();
+    private ArrayList<String> mUserSVIP = new ArrayList<>();
     private ArrayList<String> mAllowLocation = new ArrayList<>();
 
     //vars用来存放快捷键后的值
@@ -328,6 +330,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
                     mUserLocation.add(jsonObject.getString("location"));
                     mUserRegion.add(jsonObject.getString("region"));
                     mUserVIP.add(jsonObject.getString("vip"));
+                    mUserSVIP.add(jsonObject.getString("svip"));
                     mAllowLocation.add(jsonObject.getString("allowlocation"));
                 }
             }
@@ -335,19 +338,19 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
 
         if (pageindex>1){
             //第二页以上，只加载刷新，不新建recyclerView
-            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
         }else {
             //初次加载
-            initRecyclerView(view,mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+            initRecyclerView(view,mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
         }
 
     }
 
     //TODO 初始化用户recyclerview
-    private void initRecyclerView(View view,ArrayList<String> mUserID,ArrayList<String> mUserPortrait,ArrayList<String> mUserNickName,ArrayList<String> mUserAge,ArrayList<String> mUserGender,ArrayList<String> mUserProperty,ArrayList<String> mUserLocation,ArrayList<String> mUserRegion,ArrayList<String> mUserVIP,ArrayList<String> mAllowLocation){
+    private void initRecyclerView(View view,ArrayList<String> mUserID,ArrayList<String> mUserPortrait,ArrayList<String> mUserNickName,ArrayList<String> mUserAge,ArrayList<String> mUserGender,ArrayList<String> mUserProperty,ArrayList<String> mUserLocation,ArrayList<String> mUserRegion,ArrayList<String> mUserVIP,ArrayList<String> mUserSVIP,ArrayList<String> mAllowLocation){
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
-        adapter = new UserInfoSliderAdapter(view.getContext(),sliderJsonArray,mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+        adapter = new UserInfoSliderAdapter(view.getContext(),sliderJsonArray,mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="xin.banghua.beiyuan">
-    <!-- 小米 配置开始 < -->
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -10,12 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Main5Branch.BuysvipActivity"
-            android:parentActivityName=".Main5Activity"
-            android:theme="@style/AppTheme.ActionBar.Show"></activity>
-
+        <activity android:name=".Personage.SetFriendsTagActivity"></activity>
+        <activity android:name=".Personage.SetRemarkAndTagActivity" />
         <activity android:name=".RongYunExtension.FlashPhotoActivity" />
-
+        <activity
+            android:name=".Main5Branch.BuysvipActivity"
+            android:parentActivityName=".Main5Activity"
+            android:theme="@style/AppTheme.ActionBar.Show" />
         <activity android:name=".Main4Branch.ImagerPagerActivity" />
         <activity android:name=".Main5Branch.SoundActivity" />
         <activity
@@ -90,11 +92,15 @@
             android:label="@string/title_activity_main4" />
         <activity
             android:name=".Main3Activity"
-            android:label="@string/title_activity_main3" />
+            android:label="@string/title_activity_main3">
+            <intent-filter>
+                <action android:name="xin.banghua.beiyuan.Main3Activity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name=".Main2Activity"
-            android:label="通讯录"
-            android:theme="@style/AppTheme.ActionBar.Show" />
+            android:name=".Main2Activity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
@@ -130,83 +136,25 @@
                     android:pathPrefix="/conversation/"
                     android:scheme="rong" />
             </intent-filter>
-        </activity> <!-- 会话列表 -->
-        <activity
-            android:name="io.rong.callkit.MultiVideoCallActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-            <intent-filter>
-                <action android:name="io.rong.intent.action.voip.MULTIVIDEO" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity> <!-- 会话界面 -->
-        <activity
-            android:name="io.rong.callkit.SingleCallActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-            <intent-filter>
-                <action android:name="io.rong.intent.action.voip.SINGLEVIDEO" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="io.rong.intent.action.voip.SINGLEAUDIO" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
-            android:name="io.rong.callkit.MultiAudioCallActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-            <intent-filter>
-                <action android:name="io.rong.intent.action.voip.MULTIAUDIO" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name="io.rong.callkit.CallSelectMemberActivity" />
-        <activity
-            android:name="com.huawei.hms.activity.BridgeActivity"
-            android:configChanges="orientation|locale|screenSize|layoutDirection|fontScale"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            android:theme="@android:style/Theme.Translucent">
-            <meta-data
-                android:name="hwc-theme"
-                android:value="androidhwext:style/Theme.Emui.Translucent" />
-        </activity>
-        <activity
-            android:name="com.vivo.push.sdk.LinkProxyClientActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
+            android:name=".PushPackage.Oppo.OppoMessageReceiverActivity"
+            android:exported="true" /> <!-- 小米 配置开始 < -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="f0c1f7d9d1447712dab45332883b5fc1" /> <!-- 小米 配置开始 < -->
-        <meta-data
-            android:name="com.huawei.hms.client.appid"
-            android:value="101234849" />
+            android:value="f0c1f7d9d1447712dab45332883b5fc1" /> <!-- Vivo Push需要配置的service、activity -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
         <meta-data
             android:name="com.vivo.push.api_key"
-            android:value="42e08441-ce3f-408d-a0a5-0d5ffbd4d19e" /> <!-- 注：此service必须在2.2.5版本以后（包括2.2.5版本）加入 -->
+            android:value="42e08441-ce3f-408d-a0a5-0d5ffbd4d19e" />
+        <!-- 官方推送相关 -->
+        <!-- 新华为 配置开始 < -->
         <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="20018" /> <!-- 注：此service必须在3.0.1版本以后（包括3.0.1版本）加入 -->
-        <!-- 小米 配置开始 < -->
+            android:value="20018" /> <!-- 新华为 配置结束 < -->
+        <!-- 新小米 配置开始 < -->
         <provider
             android:name=".MyFileProvider"
             android:authorities="xin.banghua.beiyuan.FileProvider"
@@ -215,12 +163,23 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/rc_file_path" />
-        </provider> <!-- 第三方相关 :接收Push消息（注册、Push消息、Push连接状态）广播 -->
-        <provider
-            android:name="com.huawei.hms.update.provider.UpdateProvider"
-            android:authorities="xin.banghua.beiyuan.hms.update.provider"
-            android:exported="false"
-            android:grantUriPermissions="true" />
+        </provider>
+
+        <receiver
+            android:name=".PushPackage.Xiaomi.XiaomiMessageReceiver"
+            android:exported="true">
+
+            <!-- 这里com.xiaomi.mipushdemo.DemoMessageRreceiver改成app中定义的完整类名 -->
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.ERROR" />
+            </intent-filter>
+        </receiver> <!-- 注：此service必须在3.0.1版本以后（包括3.0.1版本）加入 -->
         <receiver
             android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver"
             android:exported="true">
@@ -232,46 +191,13 @@
         </receiver>
         <receiver
             android:name="com.xiaomi.push.service.receivers.PingReceiver"
-            android:exported="false">
+            android:exported="false"
+            android:process=":pushservice">
             <intent-filter>
                 <action android:name="com.xiaomi.push.PING_TIMER" />
             </intent-filter>
-        </receiver>
-        <receiver
-            android:name="io.rong.push.platform.mi.MiMessageReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.xiaomi.mipush.ERROR" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="io.rong.push.platform.hms.HMSReceiver">
-            <intent-filter>
-
-                <!-- 必须,用于接收token -->
-                <action android:name="com.huawei.android.push.intent.REGISTRATION" />
-                <!-- 必须，用于接收消息 -->
-                <action android:name="com.huawei.android.push.intent.RECEIVE" />
-                <!-- 可选，用于点击通知栏或通知栏上的按钮后触发onEvent回调 -->
-                <action android:name="com.huawei.android.push.intent.CLICK" />
-                <!-- 可选，查看push通道是否连接，不查看则不需要 -->
-                <action android:name="com.huawei.intent.action.PUSH_STATE" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.huawei.hms.support.api.push.PushEventReceiver">
-            <intent-filter>
-
-                <!-- 接收通道发来的通知栏消息，兼容老版本Push -->
-                <action android:name="com.huawei.intent.action.PUSH" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="io.rong.push.platform.meizu.MeiZuReceiver">
+        </receiver> <!-- 注：此service必须在2.2.5版本以后（包括2.2.5版本）加入 -->
+        <receiver android:name=".PushPackage.Meizu.MeizuMessageReceiver">
             <intent-filter>
 
                 <!-- 接收 push 消息 -->
@@ -286,108 +212,109 @@
 
                 <category android:name="xin.banghua.beiyuan" />
             </intent-filter>
-        </receiver> <!-- 小米 配置结束 < -->
-        <receiver android:name="io.rong.push.platform.vivo.VivoPushMessageReceiver">
+        </receiver>
+        <receiver android:name=".PushPackage.Vivo.PushMessageReceiverImpl">
             <intent-filter>
 
-                <!-- 接收 vivo push 消息 -->
+                <!-- 接收push消息 -->
                 <action android:name="com.vivo.pushclient.action.RECEIVE" />
             </intent-filter>
         </receiver>
-        <service android:name=".MainBranch.LocationService"></service> <!-- BridgeActivity定义了HMS-SDK中一些跳转所需要的透明页面 -->
+
+        <service android:name=".MainBranch.LocationService" /> <!-- 新小米 配置结束 < -->
+        <!-- 新魅族 配置开始 < -->
+        <service
+            android:name=".PushPackage.Huawei.HuaweiMessageReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service> <!-- 新魅族 配置结束 < -->
+        <!-- 新oppo 配置开始 < -->
         <service
             android:name="com.xiaomi.push.service.XMPushService"
-            android:enabled="true" /> <!-- &lt;!&ndash; 解决华为移动服务升级问题的透明界面（必须声明）&ndash;&gt; -->
-        <!-- <activity -->
-        <!-- android:name="com.huawei.android.hms.agent.common.HMSAgentActivity" -->
-        <!-- android:configChanges="orientation|locale|screenSize|layoutDirection|fontScale" -->
-        <!-- android:excludeFromRecents="true" -->
-        <!-- android:exported="false" -->
-        <!-- android:hardwareAccelerated="true" -->
-        <!-- android:theme="@android:style/Theme.Translucent" > -->
-        <!-- <meta-data -->
-        <!-- android:name="hwc-theme" -->
-        <!-- android:value="androidhwext:style/Theme.Emui.Translucent" /> -->
-        <!-- </activity> -->
-        <!-- MeiZu 配置结束 < -->
-        <!-- oppo 配置 -->
+            android:enabled="true"
+            android:process=":pushservice" />
+        <service
+            android:name="com.xiaomi.push.service.XMJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":pushservice" /> <!-- 兼容Q以下版本 -->
         <service
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true" /> <!-- 兼容Q版本 -->
+        <!-- 新oppo 配置结束 < -->
+        <!-- 新vivo 配置开始 < -->
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
-            android:enabled="true" /> <!-- vivo 推送配置项 -->
+            android:enabled="true" />
         <service
-            android:name="com.xiaomi.push.service.XMJobService"
-            android:enabled="true"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name="com.xiaomi.push.service.XMJobService"
-            android:enabled="true"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- vivo 推送服务需要配置的 service、activity -->
-        <service
-            android:name="com.heytap.mcssdk.PushService"
+            android:name="com.heytap.msp.push.service.CompatibleDataMessageCallbackService"
             android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE">
             <intent-filter>
                 <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
         </service>
-
         <service
-            android:name="com.heytap.mcssdk.AppPushService"
-            android:permission="com.heytap.mcs.permission.SEND_MCS_MESSAGE">
+            android:name="com.heytap.msp.push.service.DataMessageCallbackService"
+            android:permission="com.heytap.mcs.permission.SEND_PUSH_MESSAGE">
             <intent-filter>
                 <action android:name="com.heytap.mcs.action.RECEIVE_MCS_MESSAGE" />
+                <action android:name="com.heytap.msp.push.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
-        </service> <!-- vivo push 推送 receiver 声明 -->
+        </service>
         <service
             android:name="com.vivo.push.sdk.service.CommandClientService"
             android:exported="true" />
     </application>
-
-    <permission
-        android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature" /> <!-- 小米 配置结束 < -->
     <permission
         android:name="xin.banghua.beiyuan.push.permission.MESSAGE"
         android:protectionLevel="signature" />
+    <permission
+        android:name="xin.banghua.beiyuan.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
+    <permission
+        android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature" />
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <uses-permission android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 小米 配置开始 < -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" /> <!-- 小米 配置开始 < -->
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 小米 配置结束 < -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 小米 配置结束 < -->
     <!-- 如果是安卓8.0，应用编译配置的targetSdkVersion>=26，请务必添加以下权限 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- MeiZu 配置开始 < -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- MeiZu 配置开始 < -->
     <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到 消息 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 兼容 flyme3.0 配置权限 -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" /> <!-- MeiZu 配置结束 < -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 官方推送权限相关 -->
+    <!-- 魅族的权限  配置开始 -->
+    <!-- 兼容 Flyme5 的权限配置 -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 兼容 flyme3.0 配置权限 -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- MeiZu 配置结束 < -->
-    <!-- oppo 配置 -->
-    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" />
-    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
-    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" />
-    <uses-permission android:name="xin.banghua.beiyuan.push.permission.MESSAGE" />
-    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- 兼容 Flyme3 的权限配置 -->
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
-
     <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
+    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" /> <!-- 魅族的权限  配置结束 -->
+    <!-- 小米的权限  配置开始 -->
+    <uses-permission android:name="xin.banghua.beiyuan.push.permission.MESSAGE" /> <!-- 这里com.xiaomi.mipushdemo改成app的包名 -->
+    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" /> <!-- 这里com.xiaomi.mipushdemo改成app的包名 -->
+    <!-- 小米的权限  配置结束 -->
+    <!-- oppo的权限  配置开始 -->
+    <uses-permission android:name="xin.banghua.beiyuan.permission.C2D_MESSAGE" />
+    <uses-permission android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+
+    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" />
 
 </manifest>

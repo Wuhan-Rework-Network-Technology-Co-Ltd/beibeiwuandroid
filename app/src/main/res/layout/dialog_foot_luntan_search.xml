@@ -23,6 +23,33 @@
         android:hint="说点好听的~"
         android:inputType="textPersonName|textEmailAddress" />
 
+    <EditText
+        android:id="@+id/userRegion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="地区"
+        android:inputType="textPersonName"
+        android:text="不限"
+        android:textAlignment="textStart"
+        android:visibility="gone" />
+
+    <Spinner
+        android:id="@+id/spinner_province"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:foreground="@drawable/ic_region"
+        android:foregroundGravity="center_vertical"
+        android:visibility="visible" />
+
+    <Spinner
+        android:id="@+id/spinner_city"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:foreground="@drawable/ic_city"
+        android:foregroundGravity="center_vertical"
+        android:visibility="visible" />
+
     <Spinner
         android:id="@+id/spinner_gender"
         android:layout_width="match_parent"
@@ -30,7 +57,8 @@
         android:layout_marginTop="3dp"
         android:foreground="@drawable/ic_gender"
         android:foregroundGravity="center_vertical"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:visibility="gone" />
 
     <Spinner
         android:id="@+id/spinner_property"
@@ -39,7 +67,8 @@
         android:layout_marginTop="3dp"
         android:foreground="@drawable/ic_property"
         android:foregroundGravity="center_vertical"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"

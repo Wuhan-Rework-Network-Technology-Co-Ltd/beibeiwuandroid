@@ -11,13 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-//import android.support.design.widget.BottomNavigationView;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,15 +19,24 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.orhanobut.dialogplus.DialogPlus;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
@@ -45,8 +47,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.MainBranch.LocationService;
+import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+
+//import android.support.design.widget.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -193,6 +198,11 @@ public class MainActivity extends AppCompatActivity {
             //开启定位服务
             Intent startIntent = new Intent(this, LocationService.class);
             startService(startIntent);
+
+            //获取自己信息，储存在Common类中
+            if (Common.myInfo == null) {
+                getDataMyInfo(getString(R.string.personage_url),userInfo.get("userID"));
+            }
         }
     }
 
@@ -295,6 +305,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * TODO okhttp获取自己信息，储存在Common类中
+     * @param url
+     */
+    //
+    public void getDataMyInfo(final String url,String userID) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("userid", userID)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful())
+                        throw new IOException("Unexpected code " + response);
+
+                    Message message = handler.obtainMessage();
+                    message.obj = response.body().string();
+                    message.what = 2;
+                    Log.d(TAG, "run: getDataMyInfo发送的值" + message.obj.toString());
+                    handler.sendMessageDelayed(message, 10);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
     @SuppressLint("HandlerLeak")
     private Handler handler=new Handler(){
         @Override
@@ -303,7 +348,6 @@ public class MainActivity extends AppCompatActivity {
             //1是用户数据，2是幻灯片
             switch (msg.what){
                 case 11:
-                    String resultJson1 = msg.obj.toString();
                     //Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
                     SharedHelper shvalue = new SharedHelper(getApplicationContext());
                     String newFriendApplyNumber = shvalue.readNewFriendApplyNumber();
@@ -313,7 +357,6 @@ public class MainActivity extends AppCompatActivity {
                     }else {
                         BadgeBottomNav.newFriendApplicationBadge(bottomNavigationView,msg.obj.toString(),getApplicationContext());
                     }
-
                     break;
                 case 10:
                     if (msg.obj.toString().equals("false")){
@@ -363,10 +406,13 @@ public class MainActivity extends AppCompatActivity {
                         vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-                                intent.putExtra("slidername","新版本");
-                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
-                                mContext.startActivity(intent);
+//                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+//                                intent.putExtra("slidername","新版本");
+//                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
+//                                mContext.startActivity(intent);
+                                new DownloadUtils(MainActivity.this, "https://www.banghua.xin/beibeiwu.apk", "beibeiwu.apk");
+                                Toast.makeText(MainActivity.this, "正在下载中......", Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
                             }
                         });
                         Button dismissdialog_btn = view.findViewById(R.id.dismissdialog_btn);
@@ -376,6 +422,24 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.dismiss();
                             }
                         });
+                    }
+                    break;
+                case 2:
+                    Common.myInfo = msg.obj.toString();
+                    try {
+                        //缓存好友备注
+                        JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
+                        if (!jsonObject.getString("friendsremark").equals("null")&&!jsonObject.getString("friendsremark").equals("")){
+                            Map<String,String> map = new HashMap();
+                            String[] friendsRemarkArray = jsonObject.getString("friendsremark").split(";");//id1:remark1
+                            for (int i=0;i<friendsRemarkArray.length;i++){
+                                String[] friendRemark = friendsRemarkArray[i].split(":");//id1    remark1
+                                map.put(friendRemark[0],friendRemark[1]);
+                            }
+                            Common.friendsRemarkMap = map;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     break;
             }

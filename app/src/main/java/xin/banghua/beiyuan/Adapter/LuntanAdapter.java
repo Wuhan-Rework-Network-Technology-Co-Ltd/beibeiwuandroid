@@ -7,19 +7,17 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -88,40 +86,104 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
 
         //GOTO  会员标识
         //现在vip传过来的是时间
-        if (currentItem.getAuthvip().isEmpty()||currentItem.getAuthvip()=="null"){
-            viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
-            viewHolder.vip_black.setVisibility(View.INVISIBLE);
-            viewHolder.vip_white.setVisibility(View.INVISIBLE);
-            viewHolder.vip_gray.setVisibility(View.VISIBLE);
-        }else {
-            Log.d("会员时间",currentItem.getAuthvip()+"");
-            int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
-            if (vip_time > current_timestamp) {
-                //vipicon分级
-                Log.d("会员时长", ((vip_time - current_timestamp) + ""));
-                if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
-                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_diamond.setVisibility(View.VISIBLE);
-                } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
-                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_black.setVisibility(View.VISIBLE);
+        viewHolder.vip_gray.setVisibility(View.VISIBLE);
+        if (currentItem.getAuthsvip().isEmpty()||currentItem.getAuthsvip()=="null"){
+            if (currentItem.getAuthvip().isEmpty()||currentItem.getAuthvip()=="null"){
+
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(R.drawable.ic_vip_gray)
+                        .into(viewHolder.vip_gray);
+            }else {
+                Log.d("会员时间",currentItem.getAuthvip()+"");
+                int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
+                if (vip_time > current_timestamp) {
+                    //vipicon分级
+                    Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                    if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_diamond)
+                                .into(viewHolder.vip_gray);
+                    } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_black)
+                                .into(viewHolder.vip_gray);
+                    } else {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_white)
+                                .into(viewHolder.vip_gray);
+                    }
                 } else {
-                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_white.setVisibility(View.VISIBLE);
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_vip_gray)
+                            .into(viewHolder.vip_gray);
+                }
+            }
+        }else {
+            Log.d("会员时间",currentItem.getAuthsvip()+"");
+            int svip_time = Integer.parseInt(currentItem.getAuthsvip()+"");
+            if (svip_time > current_timestamp) {
+                //vipicon分级
+                Log.d("会员时长", ((svip_time - current_timestamp) + ""));
+                if ((svip_time - current_timestamp) < 3600 * 24 * 30) {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_diamond)
+                            .into(viewHolder.vip_gray);
+                } else if ((svip_time - current_timestamp) < 3600 * 24 * 180) {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_black)
+                            .into(viewHolder.vip_gray);
+                } else {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_white)
+                            .into(viewHolder.vip_gray);
                 }
             } else {
-                viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
-                viewHolder.vip_black.setVisibility(View.INVISIBLE);
-                viewHolder.vip_white.setVisibility(View.INVISIBLE);
-                viewHolder.vip_gray.setVisibility(View.VISIBLE);
+                if (currentItem.getAuthvip().isEmpty()||currentItem.getAuthvip()=="null"){
+                    viewHolder.vip_gray.setVisibility(View.VISIBLE);
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_vip_gray)
+                            .into(viewHolder.vip_gray);
+                }else {
+                    Log.d("会员时间",currentItem.getAuthvip()+"");
+                    int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
+                    if (vip_time > current_timestamp) {
+                        //vipicon分级
+                        Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                        if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_diamond)
+                                    .into(viewHolder.vip_gray);
+                        } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_black)
+                                    .into(viewHolder.vip_gray);
+                        } else {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_white)
+                                    .into(viewHolder.vip_gray);
+                        }
+                    } else {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_gray)
+                                .into(viewHolder.vip_gray);
+                    }
+                }
             }
         }
+
         
         
         

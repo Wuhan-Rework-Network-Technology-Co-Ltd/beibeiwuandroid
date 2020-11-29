@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
@@ -37,12 +37,13 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
     private ArrayList<String> mUserLocation = new ArrayList<>();
     private ArrayList<String> mUserRegion = new ArrayList<>();
     private ArrayList<String> mUserVIP = new ArrayList<>();
+    private ArrayList<String> mUserSVIP = new ArrayList<>();
     private ArrayList<String> mAllowLocation = new ArrayList<>();
     private Context mContext;
 
     Integer current_timestamp = Math.round(new Date().getTime()/1000);
 
-    public UserInfoAdapter(Context mContext,ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userAge,ArrayList<String> userGender,ArrayList<String> userProperty,ArrayList<String> userLocation,ArrayList<String> userRegion,ArrayList<String> userVIP,ArrayList<String> allowLocation) {
+    public UserInfoAdapter(Context mContext,ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userAge,ArrayList<String> userGender,ArrayList<String> userProperty,ArrayList<String> userLocation,ArrayList<String> userRegion,ArrayList<String> userVIP,ArrayList<String> mUserSVIP,ArrayList<String> allowLocation) {
         this.mUserID = userID;
         this.mUserPortrait = userPortrait;
         this.mUserNickName = userNickName;
@@ -52,11 +53,12 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         this.mUserLocation = userLocation;
         this.mUserRegion = userRegion;
         this.mUserVIP = userVIP;
+        this.mUserSVIP = mUserSVIP;
         this.mAllowLocation = allowLocation;
         this.mContext = mContext;
     }
     //替换数据，并更新
-    public void swapData(ArrayList<String> mUserID,ArrayList<String> mUserPortrait,ArrayList<String> mUserNickName,ArrayList<String> mUserAge,ArrayList<String> mUserGender,ArrayList<String> mUserProperty,ArrayList<String> mUserLocation,ArrayList<String> mUserRegion,ArrayList<String> mUserVIP,ArrayList<String> mAllowLocation){
+    public void swapData(ArrayList<String> mUserID,ArrayList<String> mUserPortrait,ArrayList<String> mUserNickName,ArrayList<String> mUserAge,ArrayList<String> mUserGender,ArrayList<String> mUserProperty,ArrayList<String> mUserLocation,ArrayList<String> mUserRegion,ArrayList<String> mUserVIP,ArrayList<String> mUserSVIP,ArrayList<String> mAllowLocation){
         this.mUserID = mUserID;
         this.mUserPortrait = mUserPortrait;
         this.mUserNickName = mUserNickName;
@@ -66,6 +68,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         this.mUserLocation = mUserLocation;
         this.mUserRegion = mUserRegion;
         this.mUserVIP = mUserVIP;
+        this.mUserSVIP = mUserSVIP;
         this.mAllowLocation = mAllowLocation;
         notifyDataSetChanged();
     }
@@ -117,49 +120,116 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
 //        }
 
         //现在vip传过来的是时间
-        if (mUserVIP.get(i).isEmpty()||mUserVIP.get(i)=="null"){
-            Resources resources = mContext.getResources();
-            Drawable drawable = resources.getDrawable(R.drawable.nonmember,null);
-            viewHolder.userVIP.setForeground(drawable);
-
-            viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
-            viewHolder.vip_black.setVisibility(View.INVISIBLE);
-            viewHolder.vip_white.setVisibility(View.INVISIBLE);
-            viewHolder.vip_gray.setVisibility(View.VISIBLE);
-        }else {
-            Log.d("会员时间",mUserVIP.get(i));
-            int vip_time = Integer.parseInt(mUserVIP.get(i)+"");
-            if (vip_time > current_timestamp) {
+        //GOTO  会员标识
+        //现在vip传过来的是时间
+        viewHolder.vip_gray.setVisibility(View.VISIBLE);
+        if (mUserSVIP.get(i).isEmpty()||mUserSVIP.get(i)=="null"){
+            if (mUserVIP.get(i).isEmpty()||mUserVIP.get(i)=="null"){
                 Resources resources = mContext.getResources();
-                Drawable drawable = resources.getDrawable(R.drawable.vip_image, null);
+                Drawable drawable = resources.getDrawable(R.drawable.nonmember,null);
                 viewHolder.userVIP.setForeground(drawable);
-                //vipicon分级
-                Log.d("会员时长", ((vip_time - current_timestamp) + ""));
-                if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
-                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_diamond.setVisibility(View.VISIBLE);
-                } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
-                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_white.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_black.setVisibility(View.VISIBLE);
+
+
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(R.drawable.ic_vip_gray)
+                        .into(viewHolder.vip_gray);
+            }else {
+                int vip_time = Integer.parseInt(mUserVIP.get(i)+"");
+                if (vip_time > current_timestamp) {
+                    //vipicon分级
+                    Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                    if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_diamond)
+                                .into(viewHolder.vip_gray);
+                    } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_black)
+                                .into(viewHolder.vip_gray);
+                    } else {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_white)
+                                .into(viewHolder.vip_gray);
+                    }
                 } else {
-                    viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_black.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_gray.setVisibility(View.INVISIBLE);
-                    viewHolder.vip_white.setVisibility(View.VISIBLE);
+                    Resources resources = mContext.getResources();
+                    Drawable drawable = resources.getDrawable(R.drawable.nonmember, null);
+                    viewHolder.userVIP.setForeground(drawable);
+
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_vip_gray)
+                            .into(viewHolder.vip_gray);
+                }
+            }
+        }else {
+            int svip_time = Integer.parseInt(mUserSVIP.get(i)+"");
+            if (svip_time > current_timestamp) {
+                //vipicon分级
+                Log.d("会员时长", ((svip_time - current_timestamp) + ""));
+                if ((svip_time - current_timestamp) < 3600 * 24 * 30) {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_diamond)
+                            .into(viewHolder.vip_gray);
+                } else if ((svip_time - current_timestamp) < 3600 * 24 * 180) {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_gray)
+                            .into(viewHolder.vip_gray);
+                } else {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_white)
+                            .into(viewHolder.vip_gray);
                 }
             } else {
-                Resources resources = mContext.getResources();
-                Drawable drawable = resources.getDrawable(R.drawable.nonmember, null);
-                viewHolder.userVIP.setForeground(drawable);
+                if (mUserVIP.get(i).isEmpty()||mUserVIP.get(i)=="null"){
+                    Resources resources = mContext.getResources();
+                    Drawable drawable = resources.getDrawable(R.drawable.nonmember,null);
+                    viewHolder.userVIP.setForeground(drawable);
 
-                viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
-                viewHolder.vip_black.setVisibility(View.INVISIBLE);
-                viewHolder.vip_white.setVisibility(View.INVISIBLE);
-                viewHolder.vip_gray.setVisibility(View.VISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.VISIBLE);
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_vip_gray)
+                            .into(viewHolder.vip_gray);
+                }else {
+                    int vip_time = Integer.parseInt(mUserVIP.get(i)+"");
+                    if (vip_time > current_timestamp) {
+                        //vipicon分级
+                        Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                        if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_diamond)
+                                    .into(viewHolder.vip_gray);
+                        } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_black)
+                                    .into(viewHolder.vip_gray);
+                        } else {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_white)
+                                    .into(viewHolder.vip_gray);
+                        }
+                    } else {
+                        Resources resources = mContext.getResources();
+                        Drawable drawable = resources.getDrawable(R.drawable.nonmember, null);
+                        viewHolder.userVIP.setForeground(drawable);
+
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_gray)
+                                .into(viewHolder.vip_gray);
+                    }
+                }
             }
         }
 

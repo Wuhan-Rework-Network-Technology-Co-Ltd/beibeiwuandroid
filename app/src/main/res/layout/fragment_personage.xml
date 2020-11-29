@@ -311,7 +311,7 @@
                 android:drawableTop="@drawable/ic_startconversation"
                 android:text="直接聊天"
                 android:textColor="@color/callkit_normal_text"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
         </TableRow>
         <TableRow

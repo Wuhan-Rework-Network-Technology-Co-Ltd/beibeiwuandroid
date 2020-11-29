@@ -1,13 +1,14 @@
 package xin.banghua.beiyuan.Main5Branch;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -82,8 +83,10 @@ public class BuyvipActivity extends AppCompatActivity {
         if (jsonArray.length()>0){
             for (int i=0;i<jsonArray.length();i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                BuyvipList buyvipList = new BuyvipList(jsonObject.getString("id"),jsonObject.getString("vipname"),jsonObject.getString("viptime"),jsonObject.getString("vipprice"));
-                buyvipLists.add(buyvipList);
+                if (Integer.parseInt(jsonObject.getString("id"))<6) {
+                    BuyvipList buyvipList = new BuyvipList(jsonObject.getString("id"), jsonObject.getString("vipname"), jsonObject.getString("viptime"), jsonObject.getString("vipprice"));
+                    buyvipLists.add(buyvipList);
+                }
             }
         }
         initRecyclerView(view);

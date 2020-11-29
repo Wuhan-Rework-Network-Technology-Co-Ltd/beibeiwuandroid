@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
-
-import androidx.navigation.Navigation;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -331,18 +331,53 @@ public class MeFragment extends Fragment {
                         Log.d(TAG, "handleMessage: 会员时长信息2"+m.group(2));
                         Log.d(TAG, "handleMessage: 会员时长信息3"+m.group(3));
                         //当前时间
-                        int vip_Remaining_time = (Integer.parseInt(m.group(2)+""))*3600;
-                        if (vip_Remaining_time < 3600 * 24 * 30) {
-                            vip_diamond.setVisibility(View.VISIBLE);
-                        } else if (vip_Remaining_time < 3600 * 24 * 180) {
-                            vip_black.setVisibility(View.VISIBLE);
-                        } else {
-                            vip_white.setVisibility(View.VISIBLE);
+                        vip_gray.setVisibility(View.VISIBLE);
+                        if (m.group(0).contains("svip")){
+                            int vip_Remaining_time = (Integer.parseInt(m.group(2)+""))*3600;
+                            if (vip_Remaining_time < 3600 * 24 * 30) {
+                                //vip_diamond.setVisibility(View.VISIBLE);
+                                Glide.with(mContext)
+                                        .asBitmap()
+                                        .load(R.drawable.ic_svip_diamond)
+                                        .into(vip_gray);
+                            } else if (vip_Remaining_time < 3600 * 24 * 180) {
+                                //vip_black.setVisibility(View.VISIBLE);
+                                Glide.with(mContext)
+                                        .asBitmap()
+                                        .load(R.drawable.ic_svip_black)
+                                        .into(vip_gray);
+                            } else {
+                                //vip_white.setVisibility(View.VISIBLE);
+                                Glide.with(mContext)
+                                        .asBitmap()
+                                        .load(R.drawable.ic_svip_white)
+                                        .into(vip_gray);
+                            }
+                        }else {
+                            int vip_Remaining_time = (Integer.parseInt(m.group(2)+""))*3600;
+                            if (vip_Remaining_time < 3600 * 24 * 30) {
+                                //vip_diamond.setVisibility(View.VISIBLE);
+                                Glide.with(mContext)
+                                        .asBitmap()
+                                        .load(R.drawable.ic_vip_diamond)
+                                        .into(vip_gray);
+                            } else if (vip_Remaining_time < 3600 * 24 * 180) {
+                                //vip_black.setVisibility(View.VISIBLE);
+                                Glide.with(mContext)
+                                        .asBitmap()
+                                        .load(R.drawable.ic_vip_black)
+                                        .into(vip_gray);
+                            } else {
+                                //vip_white.setVisibility(View.VISIBLE);
+                                Glide.with(mContext)
+                                        .asBitmap()
+                                        .load(R.drawable.ic_vip_white)
+                                        .into(vip_gray);
+                            }
                         }
                     }else {
                            vip_gray.setVisibility(View.VISIBLE);
                     }
-
                     break;
             }
         }

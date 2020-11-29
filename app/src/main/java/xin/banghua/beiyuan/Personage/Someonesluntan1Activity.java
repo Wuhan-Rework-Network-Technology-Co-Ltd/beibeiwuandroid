@@ -5,9 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -83,7 +84,7 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
                     luntanLists.add(posts);
                 }
                 adapter.swapData(luntanLists);
@@ -100,7 +101,7 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
                     luntanLists.add(posts);
                 }
             }

@@ -5,15 +5,17 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
@@ -27,7 +29,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import androidx.navigation.Navigation;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -61,6 +62,7 @@ public class SousuoresultFragment extends Fragment {
     private ArrayList<String> mUserLocation = new ArrayList<>();
     private ArrayList<String> mUserRegion = new ArrayList<>();
     private ArrayList<String> mUserVIP = new ArrayList<>();
+    private ArrayList<String> mUserSVIP = new ArrayList<>();
     private ArrayList<String> mAllowLocation = new ArrayList<>();
 
     public SousuoresultFragment() {
@@ -122,6 +124,7 @@ public class SousuoresultFragment extends Fragment {
                 mUserLocation.add(jsonObject.getString("location"));
                 mUserRegion.add(jsonObject.getString("region"));
                 mUserVIP.add(jsonObject.getString("vip"));
+                mUserSVIP.add(jsonObject.getString("svip"));
                 mAllowLocation.add(jsonObject.getString("allowlocation"));
             }
         }else {
@@ -134,12 +137,13 @@ public class SousuoresultFragment extends Fragment {
             mUserLocation.add(getJsonObject.getString("location"));
             mUserRegion.add(getJsonObject.getString("region"));
             mUserVIP.add(getJsonObject.getString("vip"));
+            mUserSVIP.add(getJsonObject.getString("svip"));
             mAllowLocation.add(getJsonObject.getString("allowlocation"));
         }
 
         if (pageindex>1){
             //第二页以上，只加载刷新，不新建recyclerView
-            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
         }else {
             //初次加载
             initRecyclerView(view);
@@ -151,7 +155,7 @@ public class SousuoresultFragment extends Fragment {
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
         final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.tuijian_RecyclerView);
-        adapter = new UserInfoAdapter(view.getContext(),mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+        adapter = new UserInfoAdapter(view.getContext(),mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();;
         recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {

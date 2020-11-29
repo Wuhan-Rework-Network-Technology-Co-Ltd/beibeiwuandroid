@@ -5,9 +5,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,14 +19,17 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-
-import androidx.navigation.Navigation;
-
-import com.google.gson.GsonBuilder;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -101,7 +101,7 @@ public class SousuoFragment extends Fragment {
         spCity = view.findViewById(R.id.spinner_city);
         spProvince = view.findViewById(R.id.spinner_province);
         //vip
-        //getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+        getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
         //初始化导航按钮
         initNavigateButton(view);
 
@@ -284,20 +284,18 @@ public class SousuoFragment extends Fragment {
             //1是用户数据
             switch (msg.what){
                 case 1:
-
-                        String resultJson1 = msg.obj.toString();
                         Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
 
                         viptime_tv.setText(msg.obj.toString());
-                        if (msg.obj.toString().equals("会员已到期")){
-                            zProperty_rb.setEnabled(false);
-                            bProperty_rb.setEnabled(false);
-                            dProperty_rb.setEnabled(false);
-                            userRegion_et.setEnabled(false);
-                            spCity.setEnabled(false);
-                            spProvince.setEnabled(false);
-
-                        }
+//                        if (msg.obj.toString().equals("会员已到期")){
+//                            zProperty_rb.setEnabled(false);
+//                            bProperty_rb.setEnabled(false);
+//                            dProperty_rb.setEnabled(false);
+//                            userRegion_et.setEnabled(false);
+//                            spCity.setEnabled(false);
+//                            spProvince.setEnabled(false);
+//
+//                        }
 
                     break;
             }

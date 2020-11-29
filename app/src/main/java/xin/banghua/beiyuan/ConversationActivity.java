@@ -3,12 +3,6 @@ package xin.banghua.beiyuan;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -18,6 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,11 +44,26 @@ public class ConversationActivity extends AppCompatActivity {
     String targetId;
 
     TextView svip_hint_tv;
+
+    private final static int CONVERSATION_SETTING = 2415;
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        Log.d(TAG, "onResume: ConversationActivity");
+
+//        if (!Common.conversationSettingUserName.equals(title)){
+//            title = Common.conversationSettingUserName;
+//            getSupportActionBar().setTitle(title);
+//        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
-
 
         svip_hint_tv = findViewById(R.id.svip_hint_tv);
 
@@ -137,7 +151,7 @@ public class ConversationActivity extends AppCompatActivity {
             Intent intent = new Intent(ConversationActivity.this, ConversationSettingActivity.class);
             intent.putExtra("targetId",targetId);
             intent.putExtra("title",title);
-            startActivity(intent);
+            startActivityForResult(intent,CONVERSATION_SETTING);
             return true;
         }
         switch (item.getItemId()) {
@@ -153,6 +167,13 @@ public class ConversationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(TAG, "onActivityResult: 进入1");
+        if (requestCode == CONVERSATION_SETTING) {
+            Log.d(TAG, "onActivityResult: 进入2");
+            title = Common.conversationSettingUserName;
+            getSupportActionBar().setTitle(title);
+        }
 
 
         /**
@@ -171,6 +192,5 @@ public class ConversationActivity extends AppCompatActivity {
                 }
             }
         }
-
     }
 }

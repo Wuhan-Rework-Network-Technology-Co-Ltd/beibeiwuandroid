@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.PermissionChecker;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 
 public class LaunchActivity extends Activity {
     private static final String TAG = "LaunchActivity";
@@ -28,7 +29,6 @@ public class LaunchActivity extends Activity {
 
         //启动图
         initLaunchImage();
-
 
     }
 

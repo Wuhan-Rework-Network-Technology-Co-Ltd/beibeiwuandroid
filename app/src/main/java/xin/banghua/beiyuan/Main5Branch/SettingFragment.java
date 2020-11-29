@@ -8,11 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,22 +18,28 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.orhanobut.dialogplus.DialogPlus;
 
 import java.io.IOException;
 
+import io.rong.imlib.RongIMClient;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.DownloadUtils;
 import xin.banghua.beiyuan.PackageUtils;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.SliderWebViewActivity;
 
 import static io.rong.imkit.fragment.ConversationListFragment.TAG;
 
@@ -180,6 +181,12 @@ public class SettingFragment extends Fragment {
         logout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //注销推送
+                SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+                String myid = shuserinfo.readUserInfo().get("userID");
+                updateRedisCache(myid);
+
+                RongIMClient.getInstance().disconnect();
                 SharedPreferences sp = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("userID", "");
@@ -241,6 +248,29 @@ public class SettingFragment extends Fragment {
 
 
     }
+
+    //TODO 登录 form形式的post
+    public void updateRedisCache(String myid){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", myid)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignout&m=rediscache")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     public void updateVersion(){
         //判断是不是关闭后的第一次启动
         SharedHelper shvalue = new SharedHelper(mContext);
@@ -356,10 +386,13 @@ public class SettingFragment extends Fragment {
                         vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-                                intent.putExtra("slidername","新版本");
-                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
-                                mContext.startActivity(intent);
+//                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+//                                intent.putExtra("slidername","新版本");
+//                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
+//                                mContext.startActivity(intent);
+                                new DownloadUtils(getActivity(), "https://www.banghua.xin/beibeiwu.apk", "beibeiwu.apk");
+                                Toast.makeText(getActivity(), "正在下载中......", Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
                             }
                         });
                         Button dismissdialog_btn = view.findViewById(R.id.dismissdialog_btn);

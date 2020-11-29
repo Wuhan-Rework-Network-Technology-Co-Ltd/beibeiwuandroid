@@ -35,7 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SVIP会员发起，如不希望被直接发起聊天，可到设置隐私中关闭SVIP直接发起，如只是不希望被此用户打扰可拉黑此用户"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

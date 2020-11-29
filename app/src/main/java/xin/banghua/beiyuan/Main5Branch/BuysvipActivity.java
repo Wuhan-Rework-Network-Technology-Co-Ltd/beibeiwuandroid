@@ -1,7 +1,5 @@
 package xin.banghua.beiyuan.Main5Branch;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,8 +7,9 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.alipay.sdk.app.PayTask;
 import com.tencent.mm.opensdk.modelpay.PayReq;
@@ -80,19 +79,19 @@ public class BuysvipActivity extends AppCompatActivity {
         alipay1_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alipayorder(getString(R.string.alipayaddorder2svip_url),11,"SVIP白金会员",360,1);
+                alipayorder(getString(R.string.alipayaddorder2svip_url),11,"SVIP白金会员",360,1098);
             }
         });
         alipay2_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alipayorder(getString(R.string.alipayaddorder2svip_url),12,"SVIP黑金会员",180,2);
+                alipayorder(getString(R.string.alipayaddorder2svip_url),12,"SVIP黑金会员",180,588);
             }
         });
         alipay3_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alipayorder(getString(R.string.alipayaddorder2svip_url),13,"SVIP钻石会员",30,3);
+                alipayorder(getString(R.string.alipayaddorder2svip_url),13,"SVIP钻石会员",30,128);
             }
         });
     }

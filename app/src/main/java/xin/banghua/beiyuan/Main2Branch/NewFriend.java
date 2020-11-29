@@ -3,16 +3,17 @@ package xin.banghua.beiyuan.Main2Branch;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.appcompat.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -49,6 +50,10 @@ public class NewFriend extends AppCompatActivity {
     private ArrayList<String> mUserLeaveWords = new ArrayList<>();
     private ArrayList<Integer> mUserAgree = new ArrayList<>();
     private ArrayList<String> mUserVIP = new ArrayList<>();
+    private ArrayList<String> mUserAge = new ArrayList<>();
+    private ArrayList<String> mUserGender = new ArrayList<>();
+    private ArrayList<String> mUserRegion = new ArrayList<>();
+    private ArrayList<String> mUserProperty = new ArrayList<>();
 
 
     private View mView;
@@ -108,11 +113,15 @@ public class NewFriend extends AppCompatActivity {
                 mUserLeaveWords.add(jsonObject.getString("yourleavewords"));
                 mUserAgree.add(jsonObject.getInt("agree"));
                 mUserVIP.add(jsonObject.getString("yourvip"));
+                mUserAge.add(jsonObject.getString("age"));
+                mUserGender.add(jsonObject.getString("gender"));
+                mUserRegion.add(jsonObject.getString("region"));
+                mUserProperty.add(jsonObject.getString("property"));
             }
         }
 
         if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
-            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP);//重新赋值并调用notifyDataSetChanged();
+            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP,mUserAge,mUserGender,mUserRegion,mUserProperty);//重新赋值并调用notifyDataSetChanged();
         }else {//初次加载
             initRecyclerView(view);
         }
@@ -124,7 +133,7 @@ public class NewFriend extends AppCompatActivity {
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
         final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.newfriend_RecyclerView);
-        adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP);
+        adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP,mUserAge,mUserGender,mUserRegion,mUserProperty);
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));

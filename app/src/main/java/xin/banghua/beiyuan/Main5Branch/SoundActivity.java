@@ -1,14 +1,20 @@
 package xin.banghua.beiyuan.Main5Branch;
 
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
@@ -41,6 +47,8 @@ public class SoundActivity extends AppCompatActivity {
 
 
                         if (radiobutton.getText().toString().equals("响铃提醒")){
+                            updateRedisCache("0");
+
                             RongIM.getInstance().removeNotificationQuietHours(new RongIMClient.OperationCallback() {
                                 @Override
                                 public void onSuccess() {
@@ -55,6 +63,8 @@ public class SoundActivity extends AppCompatActivity {
                                 }
                             });
                         }else{
+                            updateRedisCache("1");
+
                             RongIM.getInstance().setNotificationQuietHours("00:00:00", 1339, new RongIMClient.OperationCallback() {
                                 @Override
                                 public void onSuccess() {
@@ -73,5 +83,32 @@ public class SoundActivity extends AppCompatActivity {
                 }
         );
 
+    }
+
+
+    //TODO 登录 form形式的post
+    public void updateRedisCache(String disturb){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
+                String myid = shuserinfo.readUserInfo().get("userID");
+
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", myid)
+                        .add("disturb", disturb)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeidisturb&m=rediscache")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

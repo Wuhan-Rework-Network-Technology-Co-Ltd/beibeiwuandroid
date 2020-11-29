@@ -2,11 +2,9 @@ package xin.banghua.beiyuan.Main3Branch;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +15,9 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -35,8 +36,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
+import xin.banghua.beiyuan.Personage.SetRemarkAndTagActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
@@ -50,17 +53,35 @@ public class ConversationSettingActivity extends AppCompatActivity {
     CircleImageView portrait;
     TextView nickname;
     Switch istop,donotdisturb;
-    Button recored_clear,blacklist_btn,deletefriend_btn;
+    Button recored_clear,blacklist_btn,deletefriend_btn,remark_tag_btn;
 
+
+
+    String targetId;
+    String title;
+
+
+    private final static int REMARK_TAG_SETTING = 2413;
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation_setting);
 
+        Log.d(TAG, "onCreate: ConversationSettingActivity");
+
         Intent intent = getIntent();
-        final String targetId = intent.getStringExtra("targetId");
-        final String title = intent.getStringExtra("title");
+        targetId = intent.getStringExtra("targetId");
+        title = intent.getStringExtra("title");
+
+        Common.conversationSettingUserId = targetId;
+        Common.conversationSettingUserName = title;
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -338,7 +359,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
 
                             }
                         });
-                        deleteFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deletefriend&m=socialchat",targetId);
+                        deleteFriend(getString(R.string.deletefriendnew_url),targetId);
                         dialog.dismiss();
                     }
                 });
@@ -346,13 +367,38 @@ public class ConversationSettingActivity extends AppCompatActivity {
             }
         });
 
-        getDataPersonage("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=personage&m=socialchat",targetId);
+
+        remark_tag_btn = findViewById(R.id.remark_tag_btn);
+        remark_tag_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ConversationSettingActivity.this, SetRemarkAndTagActivity.class);
+                startActivityForResult(intent, REMARK_TAG_SETTING);
+            }
+        });
+
+        getDataPersonage(getString(R.string.personage_url),targetId);
     }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: 修改备注后改名");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REMARK_TAG_SETTING) {
+            title = Common.conversationSettingUserName;
+            nickname.setText(title);
+            getSupportActionBar().setTitle(title);
+        }
+    }
+
     public void initPersonage(JSONObject jsonObject) throws JSONException {
         Glide.with(this)
                 .asBitmap()
                 .load(jsonObject.getString("portrait"))
                 .into(portrait);
+
+        Common.conversationSettingUserPortrait = jsonObject.getString("portrait");
     }
     //网络数据部分
     @SuppressLint("HandlerLeak")
@@ -364,7 +410,6 @@ public class ConversationSettingActivity extends AppCompatActivity {
             switch (msg.what){
                 case 1:
                     try {
-                        String resultJson1 = msg.obj.toString();
                         Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
 
                         JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();

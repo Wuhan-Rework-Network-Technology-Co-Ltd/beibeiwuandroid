@@ -8,14 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,6 +16,14 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.xp.wavesidebar.WaveSideBar;
 
@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +67,8 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
     private Integer pageindex = 1;
 
     private List<FriendList> friendList = new ArrayList<>();
+
+    Map<String,FriendList> friendListMap = new HashMap();
 
     private FriendAdapter adapter;
 
@@ -123,10 +126,28 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         }
     };
 
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        if (Common.newFriendOrDeleteFriend){
+            Common.newFriendOrDeleteFriend = false;
+            friendList.clear();
+            for (Map.Entry<String, FriendList> m : Common.friendListMap.entrySet()) {//通过entrySet
+                friendList.add(m.getValue());
+            }
+            initRecyclerView(getWindow().getDecorView());
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+
+        Log.d(TAG, "onCreate: Main2Activity");
         //登录判断
         ifSignin();
 
@@ -153,7 +174,19 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         };
         RongIM.getInstance().addUnReadMessageCountChangedObserver(iUnReadMessageObserver, Conversation.ConversationType.PRIVATE);
 
-        getDataFriends(getString(R.string.friends_url));
+        Log.d(TAG, "onCreate: Common.friendList"+Common.friendList);
+
+        //这里用了缓存  *好友列表还是暂时别缓存了，对方同意好友没优化，更改备注也没优化
+        //getDataFriends(getString(R.string.friends_url));
+        if (Common.friendListMap==null) {
+            getDataFriends(getString(R.string.friends_url));
+        }else {
+            for (Map.Entry<String, FriendList> m : Common.friendListMap.entrySet()) {//通过entrySet
+                friendList.add(m.getValue());
+            }
+            initRecyclerView(getWindow().getDecorView());
+        }
+        //getDataFriends(getString(R.string.friends_url));
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this, handler);
         badgeBottomNav.getDataFriendsapply(getString(R.string.friendsapplynumber_url));
@@ -247,10 +280,24 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         if (jsonArray.length() > 0) {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                FriendList friends = new FriendList(jsonObject.getString("id"), jsonObject.getString("portrait"), jsonObject.getString("nickname"), jsonObject.getString("age"), jsonObject.getString("gender"), jsonObject.getString("region"), jsonObject.getString("property"), jsonObject.getString("vip"));
-                friendList.add(filledData(friends));
 
-                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), jsonObject.getString("nickname"), Uri.parse(jsonObject.getString("portrait")));
+                //替换备注
+                String nickname = jsonObject.getString("nickname");
+                if (Common.friendsRemarkMap!=null){
+                    for (Map.Entry<String, String> m : Common.friendsRemarkMap.entrySet()) {//通过entrySet
+                        System.out.println("key:" + m.getKey() + " value:" + m.getValue());
+                        if (m.getKey().equals(jsonObject.getString("id"))){
+                            nickname = m.getValue();
+                        }
+                    }
+                }
+                //好友信息
+                FriendList friends = new FriendList(jsonObject.getString("id"), jsonObject.getString("portrait"), nickname, jsonObject.getString("age"), jsonObject.getString("gender"), jsonObject.getString("region"), jsonObject.getString("property"), jsonObject.getString("vip"),jsonObject.getString("svip"));
+                friendList.add(filledData(friends));
+                friendListMap.put(jsonObject.getString("id"),filledData(friends));
+
+                //融云个人信息
+                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(jsonObject.getString("portrait")));
                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                 userInfoList.add(userInfo);
             }
@@ -258,7 +305,8 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
             myContactCard.setUserInfoList(userInfoList);
             myContactCard.initContactCard();
         }
-
+        Common.friendList = friendList;
+        Common.friendListMap = friendListMap;
         if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
             adapter.swapData(friendList);//重新赋值并调用notifyDataSetChanged();
         }else {//初次加载
@@ -272,7 +320,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
      * @param data
      * @return
      */
-    private FriendList filledData(FriendList data) {
+    public static FriendList filledData(FriendList data) {
         //汉字转换成拼音   表情会报StringIndexOutOfBoundsException
         String pinyin = PinyinUtils.getPingYin(data.getmUserNickName());
         String sortString = "#";
@@ -322,19 +370,18 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         mRecyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
             public void onRefresh() {
-
+                mRecyclerView.postDelayed(() -> mRecyclerView.setPullLoadMoreCompleted(), 1000);
                 Log.d(TAG, "onRefresh: start");
-                mRecyclerView.setPullLoadMoreCompleted();
             }
 
             @Override
             public void onLoadMore() {
 
-                pageindex = pageindex+1;//页数加一
-                getDataFriends(getString(R.string.friends_url));//重新加载
-
-                Log.d(TAG, "onLoadMore: start");
-                mRecyclerView.setPullLoadMoreCompleted();
+//                pageindex = pageindex+1;//页数加一
+//                getDataFriends(getString(R.string.friends_url));//重新加载
+//
+//                Log.d(TAG, "onLoadMore: start");
+                mRecyclerView.postDelayed(() -> mRecyclerView.setPullLoadMoreCompleted(), 1000);
             }
         });
         mDecoration = new TitleItemDecoration(this, friendList);
@@ -353,8 +400,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
             switch (msg.what) {
                 case 1:
                     try {
-                        String resultJson1 = msg.obj.toString();
-                        Log.d(TAG, "handleMessage: 用户数据接收的值" + msg.obj.toString());
+                        Log.d(TAG, "handleMessage: 用户数据接收的值case 1" + msg.obj.toString());
 
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         initFriends(getWindow().getDecorView(), jsonArray);
@@ -363,7 +409,6 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
                     }
                     break;
                 case 11:
-                    String resultJson1 = msg.obj.toString();
                     Log.d(TAG, "handleMessage: 用户数据接收的值" + msg.obj.toString());
                     friendApply = findViewById(R.id.new_friend);
                     friendApply.setText("+新朋友 " + msg.obj.toString());

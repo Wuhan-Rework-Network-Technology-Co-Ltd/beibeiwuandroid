@@ -9,9 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
 
@@ -33,10 +34,8 @@ import java.io.IOException;
 import java.util.Date;
 
 import io.rong.imkit.RongIM;
-import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
-import io.rong.message.TextMessage;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -49,8 +48,6 @@ import xin.banghua.beiyuan.Main5Branch.BuyvipActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-
-import static io.rong.imlib.model.Conversation.ConversationType.PRIVATE;
 
 
 /**
@@ -91,9 +88,6 @@ public class PersonageFragment extends Fragment {
     ImageView vip_black;
     ImageView vip_white;
     Integer current_timestamp = Math.round(new Date().getTime()/1000);
-
-
-    String vipTime = null;
 
     public PersonageFragment() {
         // Required empty public constructor
@@ -214,7 +208,7 @@ public class PersonageFragment extends Fragment {
         move_friendapply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (vipTime == null) {
+                if (Common.vipTime == null) {
                     getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
                 }else {
                     moveFriendApply();
@@ -267,6 +261,11 @@ public class PersonageFragment extends Fragment {
                     confirm_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            //拉黑了好友，则刷新
+                            Common.newFriendOrDeleteFriend = true;
+                            Common.friendListMap.remove(mUserID);
+
+
                             addBlacklist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
                             dialog.dismiss();
                         }
@@ -364,6 +363,14 @@ public class PersonageFragment extends Fragment {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //删除了好友，则刷新
+                        Common.newFriendOrDeleteFriend = true;
+                        Common.friendListMap.remove(mUserID);
+                        if (Common.friendsRemarkMap!=null){
+                            Common.friendsRemarkMap.remove(mUserID);
+                        }
+
+
                         RongIM.getInstance().removeConversation(Conversation.ConversationType.PRIVATE,mUserID,new io.rong.imlib.RongIMClient.ResultCallback(){
 
                             @Override
@@ -376,7 +383,7 @@ public class PersonageFragment extends Fragment {
 
                             }
                         });
-                        deleteFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deletefriend&m=socialchat");
+                        deleteFriend(getString(R.string.deletefriendnew_url));
                         dialog.dismiss();
                     }
                 });
@@ -388,7 +395,7 @@ public class PersonageFragment extends Fragment {
         svip_chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (vipTime == null) {
+                if (Common.vipTime == null) {
                     getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
                 }else {
                     svipChat();
@@ -401,7 +408,7 @@ public class PersonageFragment extends Fragment {
 
         addSawMe("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addsawme&m=socialchat");
 
-        ifFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=iffriend&m=socialchat");
+        ifFriend(getString(R.string.iffriendnew_url));
     }
     //TODO okhttp获取用户信息
     public void getVipinfo(final String url,int moveOrChat){
@@ -426,9 +433,9 @@ public class PersonageFragment extends Fragment {
                     Message message=handler.obtainMessage();
                     message.obj=response.body().string();
                     if (moveOrChat == 1) {
-                        message.what = 8;
+                        message.what=8;
                     }else {
-                        message.what = 10;
+                        message.what=10;
                     }
                     Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
                     handler.sendMessageDelayed(message,10);
@@ -515,23 +522,96 @@ public class PersonageFragment extends Fragment {
                 .asBitmap()
                 .load(jsonObject.getString("portrait"))
                 .into(mUserPortrait_iv);
-        if (jsonObject.getString("vip")!="null") {
+
+        vip_gray.setVisibility(View.VISIBLE);
+        if (jsonObject.getString("svip")!="null") {
+            int svip_time = Integer.parseInt(jsonObject.getString("svip") + "");
+            if (svip_time > current_timestamp) {
+                //vipicon分级
+                Log.d("会员时长", ((svip_time - current_timestamp) + ""));
+                if ((svip_time - current_timestamp) < 3600 * 24 * 30) {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_diamond)
+                            .into(vip_gray);
+                } else if ((svip_time - current_timestamp) < 3600 * 24 * 180) {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_black)
+                            .into(vip_gray);
+                } else {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_svip_white)
+                            .into(vip_gray);
+                }
+            } else {
+                if (jsonObject.getString("vip")!="null") {
+                    int vip_time = Integer.parseInt(jsonObject.getString("vip") + "");
+                    if (vip_time > current_timestamp) {
+                        //vipicon分级
+                        Log.d("会员时长", ((vip_time - current_timestamp) + ""));
+                        if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_diamond)
+                                    .into(vip_gray);
+                        } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_black)
+                                    .into(vip_gray);
+                        } else {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(R.drawable.ic_vip_white)
+                                    .into(vip_gray);
+                        }
+                    } else {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(R.drawable.ic_vip_gray)
+                                .into(vip_gray);
+                    }
+                }else {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_vip_gray)
+                            .into(vip_gray);
+                }
+            }
+        }else if (jsonObject.getString("vip")!="null") {
             int vip_time = Integer.parseInt(jsonObject.getString("vip") + "");
             if (vip_time > current_timestamp) {
                 //vipicon分级
                 Log.d("会员时长", ((vip_time - current_timestamp) + ""));
                 if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
-                    vip_diamond.setVisibility(View.VISIBLE);
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_vip_diamond)
+                            .into(vip_gray);
                 } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
-                    vip_black.setVisibility(View.VISIBLE);
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_vip_black)
+                            .into(vip_gray);
                 } else {
-                    vip_white.setVisibility(View.VISIBLE);
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(R.drawable.ic_vip_white)
+                            .into(vip_gray);
                 }
             } else {
-                vip_gray.setVisibility(View.VISIBLE);
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(R.drawable.ic_vip_gray)
+                        .into(vip_gray);
             }
         }else {
-            vip_gray.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(R.drawable.ic_vip_gray)
+                    .into(vip_gray);
         }
 
 
@@ -586,7 +666,6 @@ public class PersonageFragment extends Fragment {
                     if (!msg.obj.toString().equals("对方已将您加入黑名单")){
                         move_friendapply.setVisibility(View.VISIBLE);
                         svip_chat_btn.setVisibility(View.VISIBLE);
-
                     }
                     Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
 //                    Intent intent = new Intent(mContext, MainActivity.class);
@@ -603,6 +682,7 @@ public class PersonageFragment extends Fragment {
                         makeFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addfriend&m=socialchat");
                     }else {
                         Log.d(TAG, "handleMessage: 会员数量满");
+                        make_friend.setText("申请失败");
                         //Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
                         final DialogPlus dialog = DialogPlus.newDialog(mContext)
                                 .setAdapter(new BaseAdapter() {
@@ -685,7 +765,7 @@ public class PersonageFragment extends Fragment {
                     Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
                     break;
                 case 8:
-                    vipTime = msg.obj.toString();
+                    Common.vipTime = msg.obj.toString();
                     moveFriendApply();
                     break;
                 case 9:
@@ -695,24 +775,27 @@ public class PersonageFragment extends Fragment {
                     move_friendapply.setVisibility(View.GONE);
                     break;
                 case 10:
-                    vipTime = msg.obj.toString();
+                    Common.vipTime = msg.obj.toString();
                     svipChat();
                     break;
                 case 11:
-                    if (msg.obj.toString().equals("1")) {
-                        if (RongIM.getInstance() != null) {
-                            RongIM.getInstance().startPrivateChat(mContext, mUserID, mUserNickName_tv.getText().toString());
-                        }
-                    }else {
-                        Toast.makeText(mContext,"对方不允许SVIP直接发起聊天",Toast.LENGTH_LONG).show();
+                    if (RongIM.getInstance() != null) {
+                        RongIM.getInstance().startPrivateChat(mContext, mUserID, mUserNickName_tv.getText().toString());
                     }
+//                    if (msg.obj.toString().equals("1")) {
+//                        if (RongIM.getInstance() != null) {
+//                            RongIM.getInstance().startPrivateChat(mContext, mUserID, mUserNickName_tv.getText().toString());
+//                        }
+//                    }else {
+//                        Toast.makeText(mContext,"对方不允许SVIP直接发起聊天",Toast.LENGTH_LONG).show();
+//                    }
                     break;
             }
         }
     };
 
     public void moveFriendApply(){
-        if (vipTime.equals("会员已到期")){
+        if (Common.vipTime.equals("会员已到期")){
             final DialogPlus dialog = DialogPlus.newDialog(mContext)
                     .setAdapter(new BaseAdapter() {
                         @Override
@@ -760,7 +843,7 @@ public class PersonageFragment extends Fragment {
         }
     }
     public void svipChat(){
-        if (!vipTime.contains("svip")){
+        if (!Common.vipTime.contains("svip")){
             final DialogPlus dialog = DialogPlus.newDialog(mContext)
                     .setAdapter(new BaseAdapter() {
                         @Override

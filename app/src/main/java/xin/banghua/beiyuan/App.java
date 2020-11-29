@@ -11,20 +11,24 @@ import android.util.Log;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 
-import io.rong.contactcard.ContactCardContext;
 import io.rong.contactcard.ContactCardExtensionModule;
 import io.rong.contactcard.IContactCardInfoProvider;
-import io.rong.imkit.RongExtension;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
-import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.push.RongPushClient;
 import io.rong.push.pushconfig.PushConfig;
 import io.rong.sight.SightExtensionModule;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
+import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
 /**
@@ -60,17 +64,18 @@ public class App extends Application implements Application.ActivityLifecycleCal
         SharedHelper shvalue = new SharedHelper(getApplicationContext());
         shvalue.saveOnestart(1);
 
+        PushClass.initPushService(getApplicationContext());
 
 
         Log.d(TAG, "onCreate: onActivityonCreate:");
         registerActivityLifecycleCallbacks(this);
         //融云
         PushConfig config = new PushConfig.Builder()
-                .enableHWPush(true)
-                .enableVivoPush(true)
-                .enableMiPush("2882303761518213592", "5531821328592")
-                .enableMeiZuPush("124945","399a4bb4701046ffbff85a5505251abb")
-                .enableOppoPush("09cbed5f985842c1b962b9b509ee3ef1","726b8a421d1b4e4e80e4813ed04d85a5")
+                //.enableHWPush(true)
+                //.enableVivoPush(true)
+                //.enableMiPush("2882303761518213592", "5531821328592")
+                //.enableMeiZuPush("124945","399a4bb4701046ffbff85a5505251abb")
+                //.enableOppoPush("09cbed5f985842c1b962b9b509ee3ef1","726b8a421d1b4e4e80e4813ed04d85a5")
                 .build();
         RongPushClient.setPushConfig(config);
         RongIM.setOnReceiveMessageListener(new RongIMClient.OnReceiveMessageListener() {
@@ -90,7 +95,86 @@ public class App extends Application implements Application.ActivityLifecycleCal
 //        String token = shuserinfo.readRongtoken().get("Rongtoken");
 //        connect(token);
         closeAndroidPDialog();
+
+
+
+
+
+
+        frontOrBack();
     }
+    /**
+     * 判断在前台还是后台
+     */
+    public int count = 0;
+    private void frontOrBack() {
+        //前后台切换判断
+        registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+            }
+            @Override
+            public void onActivityStarted(Activity activity) {
+                if (count == 0) {
+                    Log.v("vergo", "**********切到前台**********");
+                    setFrontOrBack("1");
+                }
+                count++;
+            }
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+            @Override
+            public void onActivityStopped(Activity activity) {
+                count--;
+                if (count == 0) {
+                    Log.v("vergo", "**********切到后台**********");
+                    setFrontOrBack("0");
+                }
+            }
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+            }
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+            }
+        });
+    }
+
+    private void setFrontOrBack(String frontOrBack){
+        Map<String, String> userInfo;
+        SharedHelper sh;
+        sh = new SharedHelper(getApplicationContext());
+        userInfo = sh.readUserInfo();
+        //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
+        if (!userInfo.get("userID").equals("")) {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("myid", userInfo.get("userID"))
+                            .add("frontorback", frontOrBack)
+                            .add("phonebrand", PushClass.phoneBrand)
+                            .add("pushregid",PushClass.pushRegID)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeifrontorback&m=rediscache")
+                            .post(formBody)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
+    }
+
 
     private void closeAndroidPDialog(){
         try {

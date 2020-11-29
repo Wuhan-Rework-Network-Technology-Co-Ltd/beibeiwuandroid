@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.huawei.agconnect'
 
 android {
     signingConfigs {
@@ -16,8 +17,8 @@ android {
         applicationId "xin.banghua.beiyuan"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 17
-        versionName "17.0"
+        versionCode 18
+        versionName "18.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -57,6 +58,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation files('libs\\MiPush_SDK_Client_3_8_3.jar')
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
@@ -93,22 +96,40 @@ dependencies {
     implementation(name: 'alipaySdk-15.6.5-20190718211148', ext: 'aar')
     //微信sdk
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-    //华为推送
-    api 'com.huawei.android.hms:base:2.6.3.301'
-    api 'com.huawei.android.hms:push:2.6.3.301'
-    //魅族推送
-    implementation 'com.meizu.flyme.internet:push-internal:3.6.+@aar'
+
+    //推送
+    implementation 'com.meizu.flyme.internet:push-internal:4.0.2'  //魅族
+    implementation(name: 'vivo_pushsdk-v2.9.0.0', ext: 'aar')   //vivo
+    implementation(name: 'com.heytap.msp', ext: 'aar')   //oppo
+    implementation files('libs/MiPush_SDK_Client_3_8_3.jar')   //小米
+    implementation 'com.huawei.hms:push:5.0.2.300'  //华为
+    implementation 'com.huawei.agconnect:agconnect-core:1.4.1.300'   //华为这个好像是AppGallery Connect基础库，主要负责云托管，云储存，云测试，联运，付费等。远程通知用下面的
+
+
+    //
+    //华为
+//    api 'com.huawei.android.hms:base:2.6.1.301'
+//    api 'com.huawei.android.hms:push:2.6.1.301'
     //dialog
     implementation 'com.orhanobut:dialogplus:1.11@aar'
     implementation files('libs/pinyin4j-2.5.0.jar')
     implementation project(path: ':wavesidebar')
     implementation files('libs/AMap3DMap_7.3.0_AMapSearch_7.3.0_AMapLocation_4.9.0_20200407.jar')
     // vivo推送
-    //implementation(name: 'vivo_pushsdk-v2.9.0.0', ext: 'aar')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    //vivo和oppo和小米推送
-    implementation files('libs/vivo_push_v2.3.1.jar')
-    implementation files('libs/oppo_push-2.0.2.jar')
-    implementation files('libs/MiPush_SDK_Client_3_6_9.jar')
+    //implementation files('libs/vivo_push_v2.3.1.jar')  //vivo
+    //oppo和小米推送
+//    implementation files('libs/oppo_push-2.0.2.jar')   //oppo
+//    implementation files('libs/MiPush_SDK_Client_3_6_9.jar')   //小米
+    //implementation files("libs/com.heytap.msp.aar")
+//    implementation 'com.meizu.flyme.internet:push-internal:3.6.+@aar'   //魅族
+    //vivoSDK
+    //implementation files("libs/vivo_pushsdk-v2.9.0.0.aar")
+
+
+    //华为推送  作废
+
+    //标签选择器
+    implementation 'co.lujun:androidtagview:1.1.7'
+
+
 }

@@ -4,10 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,6 +31,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
 import xin.banghua.beiyuan.MainActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
+import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
@@ -160,13 +160,18 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         SharedHelper sh = new SharedHelper(mContext);
                         sh.saveUserInfo(jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"),"20","男","z","中国");
                         if (jsonObject.getString("type").equals("1")){
+                            //更新redis缓存
+                            updateRedisCache(jsonObject.getString("id"));
                             //注册融云
                             //跳转首页
                             postRongyunUserRegisterExist("https://rongyun.banghua.xin/RongCloud/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
                         }else if (jsonObject.getString("type").equals("2")){
+                            //更新redis缓存
+                            updateRedisCache(jsonObject.getString("id"));
                             //不存在，注册融云，然后跳转设置页
                             postRongyunUserRegister("https://rongyun.banghua.xin/RongCloud/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
                         }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -297,6 +302,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         .add("nickname", nickname)
                         .add("portrait", portrait)
                         .add("uniquelogintoken",new Uniquelogin(mContext,handler).saveToken())
+                        .add("phonebrand", PushClass.phoneBrand)
+                        .add("pushregid",PushClass.pushRegID)
                         .build();
                 Request request = new Request.Builder()
                         .url(url)
@@ -318,7 +325,30 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         }).start();
     }
 
+    //TODO 登录 form形式的post
+    public void updateRedisCache(String myid){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", myid)
+                        .add("phonebrand", PushClass.phoneBrand)
+                        .add("pushregid",PushClass.pushRegID)
+                        .add("frontorback","1")
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
+                        .post(formBody)
+                        .build();
 
+                try (Response response = client.newCall(request).execute()) {
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     //TODO 登录 form形式的post
     public void postRongyunUserRegister(final String url, final String userID, final String userNickName,final String userPortrait){
         new Thread(new Runnable() {

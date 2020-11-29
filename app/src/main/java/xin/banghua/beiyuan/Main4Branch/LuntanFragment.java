@@ -5,13 +5,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +18,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.GsonBuilder;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import org.json.JSONArray;
@@ -35,11 +36,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import androidx.navigation.Navigation;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -52,6 +53,9 @@ import xin.banghua.beiyuan.MarqueeTextViewClickListener;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.Signin.CityAdapter;
+import xin.banghua.beiyuan.Signin.ProvinceAdapter;
+import xin.banghua.beiyuan.bean.AddrBean;
 
 
 /**
@@ -77,12 +81,23 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
 
     private String subtitle;
 
+    Spinner spProvince, spCity;
+    private AddrBean addrBean;
+    private ProvinceAdapter adpProvince;
+    private CityAdapter adpCity;
+    private List<AddrBean.ProvinceBean.CityBean> cityBeanList;
+    private AddrBean.ProvinceBean provinceBean;
 
     String filter_search = "";
 
     String filter_property = "不限";
 
     String filter_gender = "不限";
+
+    String filter_region = "不限";
+
+    EditText editText,userRegion_et;
+
     int checkedItemFilter = 0;
     int checkedItem = 0;
 
@@ -120,6 +135,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                filter_region = "不限";
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setIcon(R.drawable.ic_search);
                 builder.setTitle("搜索相关");
@@ -127,7 +143,11 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 View dialogView = View.inflate(getActivity(), R.layout.dialog_foot_luntan_search, null);
                 dialog.setView(dialogView);
                 dialog.show();
-                EditText editText =  dialogView.findViewById(R.id.editText);
+                editText =  dialogView.findViewById(R.id.editText);
+                userRegion_et = dialogView.findViewById(R.id.userRegion);
+                spCity = dialogView.findViewById(R.id.spinner_city);
+                spProvince = dialogView.findViewById(R.id.spinner_province);
+                loadAddressData();
                 Spinner spinner_gender = dialogView.findViewById(R.id.spinner_gender);
                 ArrayAdapter<CharSequence> adapter_gender = ArrayAdapter.createFromResource(getActivity(),R.array.sousuo_gender,android.R.layout.simple_spinner_item);
                 adapter_gender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -160,7 +180,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         filter_property = "不限";
                     }
                 });
-                editText.setHint("填写标题关键词~");
+                editText.setHint("填写内容关键词~");
+
                 if (!filter_search.equals("")) {
                     editText.setText(filter_search);
                 }
@@ -178,6 +199,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                     @Override
                     public void onClick(View v) {
                         filter_search = editText.getText().toString();
+                        filter_region = userRegion_et.getText().toString();
                         pageindex = 1;
                         getDataPostlist(getString(R.string.luntan_url),subtitle,pageindex+"");
                         dialog.dismiss();
@@ -186,7 +208,59 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
             }
         });
     }
+    private void loadAddressData() {
+        adpProvince = new ProvinceAdapter(getActivity());
+        adpCity = new CityAdapter(getActivity());
+        try {
+            InputStream inputStream = getActivity().getAssets().open("addr_china_selected.json");
 
+            addrBean = new GsonBuilder().create().fromJson(new InputStreamReader(inputStream), AddrBean.class);
+
+            spProvince.setAdapter(adpProvince);
+            adpProvince.setProvinceBeanList(addrBean.getProvinceList());
+
+            spCity.setAdapter(adpCity);
+            adpCity.setCityBeanList(addrBean.getProvinceList().get(0).getCitylist());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spCity.setVisibility(View.VISIBLE);
+                cityBeanList = addrBean.getProvinceList().get(position).getCitylist();
+                provinceBean = addrBean.getProvinceList().get(position);
+                adpCity.setCityBeanList(addrBean.getProvinceList().get(position).getCitylist());
+                //选择省份后，只传递省份
+                String selected_province = provinceBean.getProvince();
+                userRegion_et.setText(selected_province);
+                spCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        //选择城市后，只传递城市
+                        String selected_province = provinceBean.getProvince();
+                        String selected_city = cityBeanList.get(position).getCityName();
+                        if (selected_city.equals("不限")){
+                            userRegion_et.setText(selected_province);
+                        }else {
+                            userRegion_et.setText(selected_city);
+                        }
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
     //三个按钮初始化
     private void initNavigateButton(View view){
         Button guangchang = view.findViewById(R.id.guangchang_btn);
@@ -367,7 +441,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
                     luntanLists.add(posts);
                 }
                 adapter.swapData(luntanLists);
@@ -385,7 +459,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
                     luntanLists.add(posts);
                 }
             }
@@ -530,6 +604,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 SharedHelper sh = new SharedHelper(getActivity());
                 String myid = sh.readUserInfo().get("userID");
 
+                Log.d(TAG, "run: 搜索帖子地址："+filter_region);
+
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getPostlist")
@@ -539,6 +615,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         .add("filter_gender", filter_gender)
                         .add("filter_search", filter_search)
                         .add("filter_property", filter_property)
+                        .add("filter_region", filter_region)
                         .build();
                 Request request = new Request.Builder()
                         .url(url)

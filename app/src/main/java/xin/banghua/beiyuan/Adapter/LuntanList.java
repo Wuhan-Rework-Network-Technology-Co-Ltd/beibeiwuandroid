@@ -25,8 +25,10 @@ public class LuntanList  implements Serializable {
 
     String authvip;
 
+    String authsvip;
 
-    public LuntanList(String authage, String authgender, String authregion, String authproperty, String id, String plateid, String platename, String authid, String authnickname, String authportrait, String posttip, String posttitle, String posttext, String[] postpicture, String like, String favorite, String time, String authvip) {
+
+    public LuntanList(String authage, String authgender, String authregion, String authproperty, String id, String plateid, String platename, String authid, String authnickname, String authportrait, String posttip, String posttitle, String posttext, String[] postpicture, String like, String favorite, String time, String authvip,String authsvip) {
         this.authage = authage;
         this.authgender = authgender;
         this.authregion = authregion;
@@ -46,6 +48,15 @@ public class LuntanList  implements Serializable {
         this.time = time;
 
         this.authvip = authvip;
+        this.authsvip = authsvip;
+    }
+
+    public String getAuthsvip() {
+        return authsvip;
+    }
+
+    public void setAuthsvip(String authsvip) {
+        this.authsvip = authsvip;
     }
 
     public String getAuthage() {

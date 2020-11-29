@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,8 +30,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -40,8 +37,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
 import xin.banghua.beiyuan.MainActivity;
-import xin.banghua.beiyuan.OkHttp.OkHttpHelper;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
+import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.SliderWebViewActivity;
@@ -204,6 +201,8 @@ public class SigninActivity extends Activity {
                             mContext = getApplicationContext();
                             SharedHelper sh = new SharedHelper(mContext);
                             sh.saveUserInfo(object.getString("userID"),object.getString("userNickName"),object.getString("userPortrait"),object.getString("userAge"),object.getString("userGender"),object.getString("userProperty"),object.getString("userRegion"));
+                            //更新redis缓存
+                            updateRedisCache(object.getString("userID"));
                             //判断token是否存在
                             postRongyunUserRegister("https://rongyun.banghua.xin/RongCloud/example/User/userregister.php",object.getString("userID"),object.getString("userNickName"),object.getString("userPortrait"));
 
@@ -256,6 +255,8 @@ public class SigninActivity extends Activity {
                         .add("userAccount", userAccount)
                         .add("userPassword",userPassword)
                         .add("uniquelogintoken",new Uniquelogin(mContext,handler).saveToken())
+                        .add("phonebrand", PushClass.phoneBrand)
+                        .add("pushregid",PushClass.pushRegID)
                         .build();
                 Request request = new Request.Builder()
                         .url(url)
@@ -274,6 +275,31 @@ public class SigninActivity extends Activity {
                     JSONObject jsonObject = new ParseJSONObject(message.obj.toString()).getParseJSON();
                     Log.d("登录信息",jsonObject.getString("info"));
                     handler.sendMessageDelayed(message,10);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //TODO 登录 form形式的post
+    public void updateRedisCache(String myid){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", myid)
+                        .add("phonebrand", PushClass.phoneBrand)
+                        .add("pushregid",PushClass.pushRegID)
+                        .add("frontorback","1")
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
                 }catch (Exception e) {
                     e.printStackTrace();
                 }

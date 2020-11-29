@@ -80,7 +80,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="60dp"
                             android:drawableLeft="@drawable/ic_money"
-                            android:text="2780元"
+                            android:text="1098元"
                             android:textAlignment="center"
                             android:textColor="@color/rc_draft_color" />
                     </LinearLayout>
@@ -198,7 +198,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="60dp"
                             android:drawableLeft="@drawable/ic_money"
-                            android:text="1480元"
+                            android:text="588元"
                             android:textAlignment="center"
                             android:textColor="@color/rc_draft_color" />
                     </LinearLayout>
@@ -316,7 +316,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="60dp"
                             android:drawableLeft="@drawable/ic_money"
-                            android:text="300元"
+                            android:text="128元"
                             android:textAlignment="center"
                             android:textColor="@color/rc_draft_color" />
                     </LinearLayout>

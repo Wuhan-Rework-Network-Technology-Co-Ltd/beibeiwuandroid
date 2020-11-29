@@ -2,16 +2,17 @@ package xin.banghua.beiyuan.Main5Branch;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.orhanobut.dialogplus.DialogPlus;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
@@ -49,6 +50,7 @@ public class SawMeActivity extends AppCompatActivity {
     private ArrayList<String> mUserLocation = new ArrayList<>();
     private ArrayList<String> mUserRegion = new ArrayList<>();
     private ArrayList<String> mUserVIP = new ArrayList<>();
+    private ArrayList<String> mUserSVIP = new ArrayList<>();
     private ArrayList<String> mAllowLocation = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,12 +120,13 @@ public class SawMeActivity extends AppCompatActivity {
                 mUserLocation.add(jsonObject.getString("location"));
                 mUserRegion.add(jsonObject.getString("region"));
                 mUserVIP.add(jsonObject.getString("vip"));
+                mUserSVIP.add(jsonObject.getString("svip"));
                 mAllowLocation.add(jsonObject.getString("allowlocation"));
             }
         }
 
         if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
-            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);//重新赋值并调用notifyDataSetChanged();
+            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);//重新赋值并调用notifyDataSetChanged();
         }else {//初次加载
             initRecyclerView(view);
         }
@@ -134,7 +137,7 @@ public class SawMeActivity extends AppCompatActivity {
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
         final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.sawme_RecyclerView);
-        adapter = new UserInfoAdapter(view.getContext(),mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+        adapter = new UserInfoAdapter(view.getContext(),mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();;
         recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {

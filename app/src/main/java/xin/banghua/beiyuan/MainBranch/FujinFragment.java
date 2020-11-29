@@ -11,11 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +19,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -38,7 +40,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import androidx.navigation.Navigation;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -49,12 +50,13 @@ import xin.banghua.beiyuan.GlobalDialogSingle;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.GpsUtil;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FujinFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener{
+public class FujinFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
     private static final String TAG = "TuijianFragment";
     private String selectedGender = "all";
     JSONArray sliderJsonArray;
@@ -65,7 +67,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     PullLoadMoreRecyclerView recyclerView;
     //button
     TableRow seewho_tablerow;
-    Button seewho_btn,seeall_btn,seefemale_btn,seemale_btn;
+    Button seewho_btn, seeall_btn, seefemale_btn, seemale_btn;
     //vars
     private ArrayList<String> mUserID = new ArrayList<>();
     private ArrayList<String> mUserPortrait = new ArrayList<>();
@@ -76,6 +78,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     private ArrayList<String> mUserLocation = new ArrayList<>();
     private ArrayList<String> mUserRegion = new ArrayList<>();
     private ArrayList<String> mUserVIP = new ArrayList<>();
+    private ArrayList<String> mUserSVIP = new ArrayList<>();
     private ArrayList<String> mAllowLocation = new ArrayList<>();
 
     //vars用来存放快捷键后的值
@@ -89,6 +92,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     private ArrayList<String> mUserRegion1 = new ArrayList<>();
     private ArrayList<String> mUserVIP1 = new ArrayList<>();
     private ArrayList<String> mAllowLocation1 = new ArrayList<>();
+
     public FujinFragment() {
         // Required empty public constructor
     }
@@ -111,7 +115,9 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        locationCheck();
+        if (!(GpsUtil.isOPen(getContext()))){
+            openGPS();
+        }
         //使用okhttp获取推荐的幻灯片
         getDataSlide(getString(R.string.fujin_url));
 
@@ -125,9 +131,9 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
             @Override
             public void onClick(View v) {
 
-                if (seewho_tablerow.getVisibility()==View.VISIBLE){
+                if (seewho_tablerow.getVisibility() == View.VISIBLE) {
                     seewho_tablerow.setVisibility(View.GONE);
-                }else {
+                } else {
                     seewho_tablerow.setVisibility(View.VISIBLE);
                 }
             }
@@ -149,7 +155,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                 mUserRegion.clear();
                 mUserVIP.clear();
                 mAllowLocation.clear();
-                getDataUserinfo(getString(R.string.fujin_url),pageindex+"");
+                getDataUserinfo(getString(R.string.fujin_url), pageindex + "");
             }
         });
         seefemale_btn = view.findViewById(R.id.seefemale_btn);
@@ -169,7 +175,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                 mUserRegion.clear();
                 mUserVIP.clear();
                 mAllowLocation.clear();
-                getDataUserinfo(getString(R.string.fujin_url),pageindex+"");
+                getDataUserinfo(getString(R.string.fujin_url), pageindex + "");
             }
         });
         seemale_btn = view.findViewById(R.id.seemale_btn);
@@ -189,13 +195,15 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                 mUserRegion.clear();
                 mUserVIP.clear();
                 mAllowLocation.clear();
-                getDataUserinfo(getString(R.string.fujin_url),pageindex+"");
+                getDataUserinfo(getString(R.string.fujin_url), pageindex + "");
             }
         });
+
+        locationCheck();
     }
 
     //三个按钮初始化
-    private void initNavigateButton(View view){
+    private void initNavigateButton(View view) {
         Button tuijian = view.findViewById(R.id.tuijian_btn);
         //Button fujin = view.findViewById(R.id.fujin_btn);
         Button sousuo = view.findViewById(R.id.sousuo_btn);
@@ -207,7 +215,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     }
 
     //TODO 幻灯片相关
-    private void initSlider(View view,JSONArray jsonArray) throws JSONException {
+    private void initSlider(View view, JSONArray jsonArray) throws JSONException {
 //        mDemoSlider = view.findViewById(R.id.tuijian_slider);
 //
 //        HashMap<String,String> url_maps = new HashMap<String, String>();
@@ -240,6 +248,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
 //        mDemoSlider.setDuration(4000);
 //        mDemoSlider.addOnPageChangeListener(this);
     }
+
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Log.d(TAG, "onSliderClick: clicked");
@@ -266,11 +275,11 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
 
 
     //TODO 用户列表
-    private void initUserInfo(View view,JSONArray jsonArray) throws JSONException {
+    private void initUserInfo(View view, JSONArray jsonArray) throws JSONException {
         Log.d(TAG, "initUserInfo: preparing userinfo");
 
-        if (jsonArray.length()>0){
-            for (int i=0;i<jsonArray.length();i++){
+        if (jsonArray.length() > 0) {
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 mUserID.add(jsonObject.getString("id"));
                 mUserPortrait.add(jsonObject.getString("portrait"));
@@ -281,23 +290,24 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                 mUserLocation.add(jsonObject.getString("location"));
                 mUserRegion.add(jsonObject.getString("region"));
                 mUserVIP.add(jsonObject.getString("vip"));
+                mUserSVIP.add(jsonObject.getString("svip"));
                 mAllowLocation.add(jsonObject.getString("allowlocation"));
             }
         }
 
-        if (pageindex>1){
+        if (pageindex > 1) {
             //第二页以上，只加载刷新，不新建recyclerView
-            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
-        }else {
+            adapter.swapData(mUserID, mUserPortrait, mUserNickName, mUserAge, mUserGender, mUserProperty, mUserLocation, mUserRegion, mUserVIP,mUserSVIP, mAllowLocation);
+        } else {
             //初次加载
-            initRecyclerView(view,mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+            initRecyclerView(view, mUserID, mUserPortrait, mUserNickName, mUserAge, mUserGender, mUserProperty, mUserLocation, mUserRegion, mUserVIP,mUserSVIP, mAllowLocation);
         }
     }
 
-    private void initRecyclerView(View view,ArrayList<String> mUserID,ArrayList<String> mUserPortrait,ArrayList<String> mUserNickName,ArrayList<String> mUserAge,ArrayList<String> mUserGender,ArrayList<String> mUserProperty,ArrayList<String> mUserLocation,ArrayList<String> mUserRegion,ArrayList<String> mUserVIP,ArrayList<String> mAllowLocation){
+    private void initRecyclerView(View view, ArrayList<String> mUserID, ArrayList<String> mUserPortrait, ArrayList<String> mUserNickName, ArrayList<String> mUserAge, ArrayList<String> mUserGender, ArrayList<String> mUserProperty, ArrayList<String> mUserLocation, ArrayList<String> mUserRegion, ArrayList<String> mUserVIP,ArrayList<String> mUserSVIP, ArrayList<String> mAllowLocation) {
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
-        adapter = new UserInfoSliderAdapter(view.getContext(),sliderJsonArray,mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mAllowLocation);
+        adapter = new UserInfoSliderAdapter(view.getContext(), sliderJsonArray, mUserID, mUserPortrait, mUserNickName, mUserAge, mUserGender, mUserProperty, mUserLocation, mUserRegion, mUserVIP, mUserSVIP,mAllowLocation);
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
@@ -312,10 +322,10 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
             @Override
             public void onLoadMore() {
 
-                pageindex = pageindex+1;
+                pageindex = pageindex + 1;
 
-                getDataUserinfo(getString(R.string.fujin_url),pageindex+"");
-                Log.d(TAG, "附近页码："+pageindex);
+                getDataUserinfo(getString(R.string.fujin_url), pageindex + "");
+                Log.d(TAG, "附近页码：" + pageindex);
                 recyclerView.setPullLoadMoreCompleted();
             }
         });
@@ -323,22 +333,22 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
 
 
     //TODO okhttp获取用户信息
-    public void getDataUserinfo(final String url,final String pageindex){
+    public void getDataUserinfo(final String url, final String pageindex) {
         new Thread(new Runnable() {
             @Override
-            public void run(){
+            public void run() {
                 SharedHelper sh = new SharedHelper(getActivity());
-                Map<String,String> locationInfo = sh.readLocation();
+                Map<String, String> locationInfo = sh.readLocation();
                 String myid = sh.readUserInfo().get("userID");
 
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getUserInfo")
                         .add("myid", myid)
-                        .add("latitude",locationInfo.get("latitude"))
-                        .add("longitude",locationInfo.get("longitude"))
-                        .add("pageindex",pageindex)
-                        .add("selectedGender",selectedGender)
+                        .add("latitude", locationInfo.get("latitude"))
+                        .add("longitude", locationInfo.get("longitude"))
+                        .add("pageindex", pageindex)
+                        .add("selectedGender", selectedGender)
                         .build();
                 Request request = new Request.Builder()
                         .url(url)
@@ -346,14 +356,15 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                         .build();
 
                 try (Response response = client.newCall(request).execute()) {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (!response.isSuccessful())
+                        throw new IOException("Unexpected code " + response);
 
-                    Message message=handler.obtainMessage();
-                    message.obj=response.body().string();
-                    message.what=1;
-                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
-                    handler.sendMessageDelayed(message,10);
-                }catch (Exception e) {
+                    Message message = handler.obtainMessage();
+                    message.obj = response.body().string();
+                    message.what = 1;
+                    Log.d(TAG, "run: Userinfo发送的值" + message.obj.toString());
+                    handler.sendMessageDelayed(message, 10);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -362,10 +373,10 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     }
 
     //TODO okhttp获取幻灯片
-    public void getDataSlide(final String url){
+    public void getDataSlide(final String url) {
         new Thread(new Runnable() {
             @Override
-            public void run(){
+            public void run() {
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getSlide")
@@ -376,14 +387,15 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                         .build();
 
                 try (Response response = client.newCall(request).execute()) {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (!response.isSuccessful())
+                        throw new IOException("Unexpected code " + response);
 
-                    Message message=handler.obtainMessage();
-                    message.obj=response.body().string();
-                    message.what=2;
-                    Log.d(TAG, "run: Slide发送的值"+message.obj.toString());
-                    handler.sendMessageDelayed(message,10);
-                }catch (Exception e) {
+                    Message message = handler.obtainMessage();
+                    message.obj = response.body().string();
+                    message.what = 2;
+                    Log.d(TAG, "run: Slide发送的值" + message.obj.toString());
+                    handler.sendMessageDelayed(message, 10);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -392,19 +404,19 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
     }
 
     @SuppressLint("HandlerLeak")
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             //1是用户数据，2是幻灯片
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     try {
                         String resultJson1 = msg.obj.toString();
-                        Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
+                        Log.d(TAG, "handleMessage: 用户数据接收的值" + msg.obj.toString());
 
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
-                        initUserInfo(mView,jsonArray);
+                        initUserInfo(mView, jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -412,10 +424,10 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                 case 2:
                     try {
                         String resultJson2 = msg.obj.toString();
-                        Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
+                        Log.d(TAG, "handleMessage: 幻灯片接收的值" + msg.obj.toString());
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         sliderJsonArray = jsonArray;
-                        getDataUserinfo(getString(R.string.fujin_url),"1");
+                        getDataUserinfo(getString(R.string.fujin_url), "1");
                         //initSlider(mView,jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -430,12 +442,15 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 23421) {
             //TODO something;
-            Log.d("开启权限","定位权限返回");
+            Log.d("开启权限", "定位权限返回");
+        }else if(requestCode == 887){
+            locationCheck();
         }
     }
+
     public void locationCheck() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!checkPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)||!checkPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            if (!checkPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) || !checkPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 Toast.makeText(getActivity(), "当前无权限，请授权", Toast.LENGTH_SHORT);
                 new GlobalDialogSingle(getActivity(), "", "当前未获取定位权限权限", "去开启", new DialogInterface.OnClickListener() {
                     @Override
@@ -454,5 +469,24 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
 
     private boolean checkPermissionGranted(String permission) {
         return getActivity().checkPermission(permission, android.os.Process.myPid(), android.os.Process.myUid()) == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    //gps
+    private void openGPS() {
+        new AlertDialog.Builder(getContext())
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle("提示")
+                .setMessage("检测到您还没有开始GPS定位")
+                .setNegativeButton("取消", null)
+                .setPositiveButton("开启定位", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 887);
+                        dialogInterface.dismiss();
+                    }
+                })
+                .show();
     }
 }

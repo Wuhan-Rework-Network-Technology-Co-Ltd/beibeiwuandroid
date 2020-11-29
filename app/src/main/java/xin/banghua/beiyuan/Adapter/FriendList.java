@@ -9,8 +9,9 @@ public class FriendList {
     String mUserRegion;
     String mUserProperty;
     String mVip;
+    String mSVip;
     private String letters;//显示拼音的首字母
-    public FriendList(String userID, String userPotrait, String userNickName,String userAge,String userGender,String userRegion,String userProperty,String userVip){
+    public FriendList(String userID, String userPotrait, String userNickName,String userAge,String userGender,String userRegion,String userProperty,String userVip,String userSVip){
         this.mUserID = userID;
         this.mUserPortrait = userPotrait;
         this.mUserNickName = userNickName;
@@ -19,6 +20,15 @@ public class FriendList {
         this.mUserRegion = userRegion;
         this.mUserProperty = userProperty;
         this.mVip = userVip;
+        this.mSVip = userSVip;
+    }
+
+    public String getmSVip() {
+        return mSVip;
+    }
+
+    public void setmSVip(String mSVip) {
+        this.mSVip = mSVip;
     }
 
     public String getmVip() {

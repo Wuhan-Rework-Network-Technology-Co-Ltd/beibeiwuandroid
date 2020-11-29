@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +14,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -30,6 +31,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.Main2Activity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
@@ -48,12 +51,17 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
     private ArrayList<Integer> mUserAgree = new ArrayList<>();
 
     private ArrayList<String> mUserVIP = new ArrayList<>();
+    private ArrayList<String> mUserAge = new ArrayList<>();
+    private ArrayList<String> mUserGender = new ArrayList<>();
+    private ArrayList<String> mUserRegion = new ArrayList<>();
+    private ArrayList<String> mUserProperty = new ArrayList<>();
+
 
     ViewHolder viewHolder_btn;
 
     private Context mContext;
 
-    public NewFriendsAdapter(Context mContext,ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userLeaveWords,ArrayList<Integer> userAgree,ArrayList<String> userVIP) {
+    public NewFriendsAdapter(Context mContext,ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userLeaveWords,ArrayList<Integer> userAgree,ArrayList<String> userVIP,ArrayList<String> userAge,ArrayList<String> userGender,ArrayList<String> userRegion,ArrayList<String> userProperty) {
 
         this.mUserID = userID;
         this.mUserPortrait = userPortrait;
@@ -63,9 +71,13 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
         this.mContext = mContext;
 
         this.mUserVIP = userVIP;
+        this.mUserAge = userAge;
+        this.mUserGender = userGender;
+        this.mUserRegion = userRegion;
+        this.mUserProperty = userProperty;
     }
 
-    public void swapData(ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userLeaveWords,ArrayList<Integer> userAgree,ArrayList<String> userVIP) {
+    public void swapData(ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userLeaveWords,ArrayList<Integer> userAgree,ArrayList<String> userVIP,ArrayList<String> userAge,ArrayList<String> userGender,ArrayList<String> userRegion,ArrayList<String> userProperty) {
 
         this.mUserID = userID;
         this.mUserPortrait = userPortrait;
@@ -74,6 +86,10 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
         this.mUserAgree = userAgree;
 
         this.mUserVIP = userVIP;
+        this.mUserAge = userAge;
+        this.mUserGender = userGender;
+        this.mUserRegion = userRegion;
+        this.mUserProperty = userProperty;
 
         notifyDataSetChanged();
     }
@@ -151,7 +167,12 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                         viewHolder_btn = viewHolder;
                         mUserAgree.set(i,1);
                         viewHolder.agree_btn.setText("已同意");
-                        agreeFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=agreefriend&m=socialchat",mUserID.get(i),mUserPortrait.get(i),mUserNickName.get(i));
+                        agreeFriend(mContext.getString(R.string.agreefriendnew_url),mUserID.get(i),mUserPortrait.get(i),mUserNickName.get(i));
+
+                        //同意了好友，则刷新
+                        Common.newFriendOrDeleteFriend = true;
+                        FriendList friends = new FriendList(mUserID.get(i), mUserPortrait.get(i), mUserNickName.get(i), mUserAge.get(i), mUserGender.get(i), mUserRegion.get(i), mUserProperty.get(i), mUserVIP.get(i),mUserVIP.get(i));
+                        Common.friendListMap.put(mUserID.get(i), Main2Activity.filledData(friends));
                     }
                 }
             });
