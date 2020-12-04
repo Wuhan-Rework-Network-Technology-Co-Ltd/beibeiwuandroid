@@ -32,7 +32,6 @@
     <string name="someonesluntan_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=someonesluntannew&amp;m=socialchat</string>
     <string name="luntan_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=luntannew&amp;m=socialchat</string>
     <string name="sawme_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=sawmenew&amp;m=socialchat</string>
-    <string name="blacklist_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getblacklistnew&amp;m=socialchat</string>
     <string name="viptimeinsousuo_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=viptimeinsousuo&amp;m=socialchat</string>
     <string name="directsousuo_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=directsousuonew&amp;m=socialchat</string>
     <string name="conditionsousuo_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=conditionsousuonew&amp;m=socialchat</string>
@@ -47,6 +46,7 @@
     <string name="iffriendnew_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=iffriendnew&amp;m=socialchat</string>
     <string name="agreefriendnew_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=agreefriendnew&amp;m=socialchat</string>
     <string name="deletefriendnew_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=deletefriendnew&amp;m=socialchat</string>
+    <string name="blacklist_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getblacklistnew&amp;m=socialchat</string>
     <!-- 备注和标签 -->
     <string name="setfriendsremark_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=setfriendsremark&amp;m=socialchat</string>
 

@@ -122,8 +122,12 @@ public class SetRemarkAndTagActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: add_tag_tv");
-                Intent intent = new Intent(SetRemarkAndTagActivity.this, SetFriendsTagActivity.class);
-                startActivity(intent);
+                Toast toast = Toast.makeText(SetRemarkAndTagActivity.this, "功能开发中，敬请期待", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+//                Intent intent = new Intent(SetRemarkAndTagActivity.this, SetFriendsTagActivity.class);
+//                startActivity(intent);
+
             }
         });
 

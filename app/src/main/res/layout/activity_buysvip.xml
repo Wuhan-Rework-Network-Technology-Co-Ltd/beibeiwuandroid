@@ -291,7 +291,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:text="SVIP年会标识，排名靠前"
+                            android:text="SVIP标识，排名靠前"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -371,6 +371,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="温馨提示：SVIP会员拥有普通会员的全部权限外增加免加好友直接发起聊天的尊贵特权，权力越大责任越大，广大SVIP会员请勿发生骚扰行为，谨防被投诉" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="会员权限： \n1，上推荐受万众瞩目 \n2，可查看精华帖 \n3，可用谁看过我 \n4，每日发起添加好友次数无限制 \n5，可使用撤销好友添加 \n6，尊贵标识" />
 
 
     </LinearLayout>

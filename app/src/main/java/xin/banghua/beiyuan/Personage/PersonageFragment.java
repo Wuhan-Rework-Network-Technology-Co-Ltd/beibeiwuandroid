@@ -197,7 +197,7 @@ public class PersonageFragment extends Fragment {
                     public void onClick(View v) {
                         move_friendapply.setVisibility(View.VISIBLE);
                         make_friend.setEnabled(false);
-                        make_friend.setText("申请中...");
+                        make_friend.setText("申请好友中，等待对方同意");
                         getFriendNumber("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsnumber&m=socialchat");
                         dialog.dismiss();
                     }
@@ -266,6 +266,9 @@ public class PersonageFragment extends Fragment {
                             Common.friendListMap.remove(mUserID);
 
 
+                            balcklist_btn.setText("移除黑名单");
+                            Toast.makeText(mContext,"已加入黑名单",Toast.LENGTH_LONG).show();
+
                             addBlacklist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
                             dialog.dismiss();
                         }
@@ -311,6 +314,8 @@ public class PersonageFragment extends Fragment {
                     confirm_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            balcklist_btn.setText("加入黑名单");
+                            Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
                             deleteBlackList("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteblacklist&m=socialchat");
                             dialog.dismiss();
                         }
@@ -383,6 +388,12 @@ public class PersonageFragment extends Fragment {
 
                             }
                         });
+
+                        Toast.makeText(mContext,"已删除好友",Toast.LENGTH_LONG).show();
+                        deletefriend_btn.setVisibility(View.INVISIBLE);
+                        make_friend.setVisibility(View.VISIBLE);
+                        startconversation_btn.setVisibility(View.GONE);
+
                         deleteFriend(getString(R.string.deletefriendnew_url));
                         dialog.dismiss();
                     }

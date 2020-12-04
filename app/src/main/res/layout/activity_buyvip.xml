@@ -52,11 +52,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imageView6"
+            <TextView
+                android:id="@+id/textView18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/vip_privilege" />
+                android:layout_margin="10dp"
+                android:text="会员权限： \n1，上推荐受万众瞩目 \n2，可查看精华帖 \n3，可用谁看过我 \n4，每日发起添加好友次数无限制 \n5，可使用撤销好友添加 \n6，尊贵标识"
+                android:textAlignment="textStart" />
         </TableRow>
 
         <TableRow

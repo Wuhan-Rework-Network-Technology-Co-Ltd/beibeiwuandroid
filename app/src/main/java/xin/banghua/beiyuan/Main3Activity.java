@@ -37,6 +37,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.FriendList;
+import xin.banghua.beiyuan.AlphabeticalOrder.PinyinUtils;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
@@ -67,6 +69,7 @@ public class Main3Activity extends AppCompatActivity {
     private Fragment mConversationFragment = null;
     private List<Fragment> mFragment = new ArrayList<>();
     private List<FriendList> friendList = new ArrayList<>();
+    Map<String,FriendList> friendListMap = new HashMap();
     private ImageView iv_back_left;
 
     private TextView mTextMessage;
@@ -124,12 +127,13 @@ public class Main3Activity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
 
         //getDataFriends(getString(R.string.friends_url));
-//        if (Common.friendList==null) {
-//            getDataFriends(getString(R.string.friends_url));
-//        }else {
-//            friendList = Common.friendList;
-//            initRecyclerView(getWindow().getDecorView());
-//        }
+        if (Common.friendListMap==null) {
+            getDataFriends(getString(R.string.friends_url));
+        }else {
+            for (Map.Entry<String, FriendList> m : Common.friendListMap.entrySet()) {//通过entrySet
+                friendList.add(m.getValue());
+            }
+        }
 
         //底部导航初始化和配置监听，默认选项
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
@@ -418,8 +422,7 @@ public class Main3Activity extends AppCompatActivity {
         if (jsonArray.length()>0){
             for (int i=0;i<jsonArray.length();i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                FriendList friends = new FriendList(jsonObject.getString("id"),jsonObject.getString("portrait"),jsonObject.getString("nickname"),jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),jsonObject.getString("property"),jsonObject.getString("vip"),jsonObject.getString("svip"));
-                friendList.add(friends);
+
 
                 String nickname = jsonObject.getString("nickname");
                 //替换备注
@@ -432,6 +435,11 @@ public class Main3Activity extends AppCompatActivity {
                     }
                 }
 
+                //好友信息
+                FriendList friends = new FriendList(jsonObject.getString("id"), jsonObject.getString("portrait"), nickname, jsonObject.getString("age"), jsonObject.getString("gender"), jsonObject.getString("region"), jsonObject.getString("property"), jsonObject.getString("vip"),jsonObject.getString("svip"));
+                friendList.add(filledData(friends));
+                friendListMap.put(jsonObject.getString("id"),filledData(friends));
+
                 UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(jsonObject.getString("portrait")));
                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                 userInfoList.add(userInfo);
@@ -440,47 +448,74 @@ public class Main3Activity extends AppCompatActivity {
             myContactCard.setUserInfoList(userInfoList);
             myContactCard.initContactCard();
         }
+        Common.friendList = friendList;
+        Common.friendListMap = friendListMap;
     }
 
+    /**
+     * 将数据中的用户名拼音首字母加入数据数组
+     *
+     * @param data
+     * @return
+     */
+    public static FriendList filledData(FriendList data) {
+        //汉字转换成拼音   表情会报StringIndexOutOfBoundsException
+        String pinyin = PinyinUtils.getPingYin(data.getmUserNickName());
+        String sortString = "#";
+        try {
+            sortString = pinyin.substring(0, 1).toUpperCase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        // 正则表达式，判断首字母是否是英文字母
+        if (sortString.matches("[A-Z]")) {
+            data.setLetters(sortString.toUpperCase());
+        } else {
+            data.setLetters("#");
+        }
+        return data;
+    }
     public void initNotification() {
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        // areNotificationsEnabled方法的有效性官方只最低支持到API 19，低于19的仍可调用此方法不过只会返回true，即默认为用户已经开启了通知。
+        boolean isOpened = manager.areNotificationsEnabled();
+        if (!isOpened){
+            notification_hint_layout.setVisibility(View.VISIBLE);
+            open_note_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                        intent.putExtra("android.provider.extra.APP_PACKAGE", Main3Activity.this.getPackageName());
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {  //5.0
+                        intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                        intent.putExtra("app_package", Main3Activity.this.getPackageName());
+                        intent.putExtra("app_uid", Main3Activity.this.getApplicationInfo().uid);
+                        startActivity(intent);
+                    } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {  //4.4
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.setData(Uri.parse("package:" + Main3Activity.this.getPackageName()));
+                    } else if (Build.VERSION.SDK_INT >= 15) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                        intent.setData(Uri.fromParts("package", Main3Activity.this.getPackageName(), null));
+                    }
+                    startActivity(intent);
+                }
+            });
+            close_note_hint_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    notification_hint_layout.setVisibility(View.GONE);
+                }
+            });
+
         SharedPreferences sp = getApplication().getSharedPreferences("firstStarted", Context.MODE_PRIVATE);
         if (sp.getString("firstStarted", "null").equals("null")) {
-            NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-            // areNotificationsEnabled方法的有效性官方只最低支持到API 19，低于19的仍可调用此方法不过只会返回true，即默认为用户已经开启了通知。
-            boolean isOpened = manager.areNotificationsEnabled();
-            if (!isOpened){
-                notification_hint_layout.setVisibility(View.VISIBLE);
-                open_note_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-                            intent.putExtra("android.provider.extra.APP_PACKAGE", Main3Activity.this.getPackageName());
-                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {  //5.0
-                            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-                            intent.putExtra("app_package", Main3Activity.this.getPackageName());
-                            intent.putExtra("app_uid", Main3Activity.this.getApplicationInfo().uid);
-                            startActivity(intent);
-                        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {  //4.4
-                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-                            intent.setData(Uri.parse("package:" + Main3Activity.this.getPackageName()));
-                        } else if (Build.VERSION.SDK_INT >= 15) {
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-                            intent.setData(Uri.fromParts("package", Main3Activity.this.getPackageName(), null));
-                        }
-                        startActivity(intent);
-                    }
-                });
-                close_note_hint_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        notification_hint_layout.setVisibility(View.GONE);
-                    }
-                });
+
 
 
 
