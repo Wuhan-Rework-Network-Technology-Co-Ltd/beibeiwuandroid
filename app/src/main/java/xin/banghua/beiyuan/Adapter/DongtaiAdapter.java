@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +13,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -32,6 +33,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHolder>{
     private static final String TAG = "DongtaiAdapter";
@@ -69,7 +71,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
         viewHolder.userID.setText(currentItem.getMyid());
         Glide.with(mContext)
                 .asBitmap()
-                .load(currentItem.getMyportrait())
+                .load(ConstantValue.getOssResourceUrl(currentItem.getMyportrait()))
                 .into(viewHolder.userPortrait);
         viewHolder.userPortrait.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +87,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
         if (currentItem.getPicture1() != ""){
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getPicture1())
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getPicture1()))
                     .into(viewHolder.dongtaiImage1);
             viewHolder.dongtaiImage1.setVisibility(View.VISIBLE);
             viewHolder.dongtaiImage1.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +123,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
                     ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                     Glide.with(mContext)
                             .asBitmap()
-                            .load(currentItem.getPicture1())
+                            .load(ConstantValue.getOssResourceUrl(currentItem.getPicture1()))
                             .into(originalImage);
                     Button dismissdialog_btn = view.findViewById(R.id.cancel);
                     dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +140,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
         if (currentItem.getPicture2() != ""){
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getPicture2())
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getPicture2()))
                     .into(viewHolder.dongtaiImage2);
             viewHolder.dongtaiImage2.setVisibility(View.VISIBLE);
             viewHolder.dongtaiImage2.setOnClickListener(new View.OnClickListener() {
@@ -174,7 +176,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
                     ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                     Glide.with(mContext)
                             .asBitmap()
-                            .load(currentItem.getPicture2())
+                            .load(ConstantValue.getOssResourceUrl(currentItem.getPicture2()))
                             .into(originalImage);
                     Button dismissdialog_btn = view.findViewById(R.id.cancel);
                     dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +194,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
             Log.d(TAG, "onBindViewHolder: getPicture3"+currentItem.getPicture3());
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getPicture3())
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getPicture3()))
                     .into(viewHolder.dongtaiImage3);
             viewHolder.dongtaiImage3.setVisibility(View.VISIBLE);
             viewHolder.dongtaiImage3.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +230,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
                     ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                     Glide.with(mContext)
                             .asBitmap()
-                            .load(currentItem.getPicture3())
+                            .load(ConstantValue.getOssResourceUrl(currentItem.getPicture3()))
                             .into(originalImage);
                     Button dismissdialog_btn = view.findViewById(R.id.cancel);
                     dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
@@ -253,7 +255,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
                 Log.d(TAG, "onClick: clicked on: " + currentItem.getId());
                 //Toast.makeText(mContext, mUserID.get(i) + mUserNickName.get(i), Toast.LENGTH_LONG).show();
                 viewHolder_btn = viewHolder;
-                like("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchanglike&m=socialchat",currentItem.getId());
+                like("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchanglike&m=socialchat",currentItem.getId());
             }
         });
 //        viewHolder.dongtaiLayout.setOnClickListener(new View.OnClickListener(){

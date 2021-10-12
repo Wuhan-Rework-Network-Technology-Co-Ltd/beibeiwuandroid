@@ -2,13 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <com.daimajia.slider.library.SliderLayout
         android:id="@+id/recyclerview_slider"
         android:layout_width="match_parent"
-
         android:layout_height="100dp">
 
     </com.daimajia.slider.library.SliderLayout>
+
+<!--    <xin.banghua.beiyuan.custom_ui.BannerAdFrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
 </LinearLayout>

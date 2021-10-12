@@ -6,15 +6,69 @@
     android:layout_height="match_parent"
     tools:context=".LaunchActivity">
 
-    <ImageView
-        android:id="@+id/launchImage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/load_more_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/backgrounds/scenic"
-        android:scaleType="fitXY"/>
+
+
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ad_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:id="@+id/image_framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:layout_weight="1">
+            <!-- 使用cloud_code_cc_slot_id 配置广告位ID -->
+            <xin.banghua.beiyuan.custom_ui.SplashAdFrameLayout
+                android:id="@+id/splashAdFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="visible" />
+
+
+            <ImageView
+                android:id="@+id/launchImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/load_more_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/backgrounds/scenic"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@color/background"
+            android:visibility="gone">
+
+            <xin.banghua.beiyuan.custom_ui.NiceImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/logo"
+                app:corner_radius="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color_1"
+                android:text="@string/app_name" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

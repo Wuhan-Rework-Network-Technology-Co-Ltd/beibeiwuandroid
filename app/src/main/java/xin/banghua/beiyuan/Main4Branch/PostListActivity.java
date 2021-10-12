@@ -100,7 +100,7 @@ public class PostListActivity extends AppCompatActivity {
             }
         });
 
-        //getDataPosthead("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=postdetail&m=socialchat");
+        //getDataPosthead("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=postdetail&m=socialchat");
         initPostHead();
     }
 
@@ -127,7 +127,7 @@ public class PostListActivity extends AppCompatActivity {
                 PostHead posts = new PostHead(posttitle,authid,authnickname,authportrait,posttext,postPicture1,postPicture2,postPicture3,time);
                 postHeads.add(posts);
 
-        getDataFollowlist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=postdetail&m=socialchat");
+        getDataFollowlist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=postdetail&m=socialchat");
 
     }
 

@@ -38,6 +38,7 @@ import xin.banghua.beiyuan.CircleImageViewExtension;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.SliderWebViewActivity;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 
 /**
@@ -91,7 +92,7 @@ public class MeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initData(view);
         //vip
-        getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+        getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
 
 
         useragreement_btn = view.findViewById(R.id.useragreement_btn);
@@ -214,14 +215,14 @@ public class MeFragment extends Fragment {
                 //Toast.makeText(mContext, "您的推广码是："+myid, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","分享推广码");
-                intent.putExtra("sliderurl","https://applet.banghua.xin/app/index.php?i=99999&c=entry&do=referralgetscore_page&m=socialchat&userid="+myid);
+                intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=99999&c=entry&do=referralgetscore_page&m=socialchat&userid="+myid);
                 mContext.startActivity(intent);
             }
         });
         jifen_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getScore("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getscore&m=socialchat");
+                getScore("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getscore&m=socialchat");
             }
         });
         openvip_btn.setOnClickListener(new View.OnClickListener() {
@@ -294,7 +295,7 @@ public class MeFragment extends Fragment {
                     vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sorttovip("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sorttovip&m=socialchat",allscore);
+                            sorttovip("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sorttovip&m=socialchat",allscore);
                         }
                     });
                     Button dismissdialog_btn = view.findViewById(R.id.dismissdialog_btn);
@@ -315,7 +316,7 @@ public class MeFragment extends Fragment {
 //                    if (!(msg.obj.toString().equals("会员已到期")))  userportrait_iv.isVIP(true,getResources(),false);
                     Glide.with(mContext)
                             .asBitmap()
-                            .load(myportrait)
+                            .load(ConstantValue.getOssResourceUrl(myportrait))
                             .into(userportrait_iv);
                     if (!(msg.obj.toString().equals("会员已到期"))){
                         // 按指定模式在字符串查找

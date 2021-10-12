@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,10 +22,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.google.gson.GsonBuilder;
+import androidx.appcompat.app.AppCompatActivity;
 
-import net.alhazmy13.mediapicker.Image.ImagePicker;
+import com.bumptech.glide.Glide;
+import com.donkingliang.imageselector.utils.ImageSelector;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,8 +35,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
@@ -47,17 +48,18 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.Main5Activity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.CityAdapter;
 import xin.banghua.beiyuan.Signin.ProvinceAdapter;
-import xin.banghua.beiyuan.Signin.SignupActivity;
-import xin.banghua.beiyuan.Signin.Userset;
 import xin.banghua.beiyuan.bean.AddrBean;
+import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.util.MD5Tool;
 
-import static io.rong.imkit.fragment.ConversationFragment.TAG;
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
 
 public class ResetActivity extends AppCompatActivity {
 
@@ -102,7 +104,7 @@ public class ResetActivity extends AppCompatActivity {
         current_address = findViewById(R.id.current_address);
         current_address.setVisibility(View.GONE);
 
-        getDataPersonage("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=personage&m=socialchat");
+        getDataPersonage("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=personage&m=socialchat");
 
 
         if (title.equals("手机绑定")){
@@ -129,7 +131,7 @@ public class ResetActivity extends AppCompatActivity {
     //TODO okhttp验证信息
     public void verificationCode(final String verificationCodeString){
         if (smscode.equals(verificationCodeString)){
-            submitValue("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=feedback&m=socialchat","其他");
+            submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=feedback&m=socialchat","其他");
         }else {
             Toast.makeText(ResetActivity.this, "验证码错误", Toast.LENGTH_LONG).show();
         }
@@ -137,6 +139,7 @@ public class ResetActivity extends AppCompatActivity {
     private void initView() {
         spCity = findViewById(R.id.spinner_city);
         spProvince = findViewById(R.id.spinner_province);
+
 
         adpProvince = new ProvinceAdapter(this);
         adpCity = new CityAdapter(this);
@@ -224,6 +227,8 @@ public class ResetActivity extends AppCompatActivity {
         }).start();
     }
 
+
+    private final int  RequestCode = 101;
     public void initPersonage(JSONObject jsonObject) throws JSONException {
 
 
@@ -244,10 +249,18 @@ public class ResetActivity extends AppCompatActivity {
             String myportrait = shuserinfo.readUserInfo().get("userPortrait");
             value_et.setVisibility(View.GONE);
             portrait.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .asBitmap()
-                    .load(myportrait)
-                    .into(portrait);
+            if (TextUtils.isEmpty(myportrait)){
+                Glide.with(this)
+                        .asBitmap()
+                        .load(R.drawable.picture_icon_placeholder)
+                        .into(portrait);
+            }else {
+                Glide.with(this)
+                        .asBitmap()
+                        .load(ConstantValue.getOssResourceUrl(myportrait))
+                        .into(portrait);
+            }
+
         }else if (title.equals("昵称设置")){
             value_et.setVisibility(View.VISIBLE);
             value_et.setText(jsonObject.getString("nickname"));
@@ -306,18 +319,29 @@ public class ResetActivity extends AppCompatActivity {
             value_et.setVisibility(View.VISIBLE);
             value_et.setText(jsonObject.getString("signature"));
         }
+
+
         portrait.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ImagePicker.Builder(ResetActivity.this)
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                        .directory(ImagePicker.Directory.DEFAULT)
-                        .extension(ImagePicker.Extension.PNG)
-                        .scale(600, 600)
-                        .allowMultipleImages(false)
-                        .enableDebuggingMode(true)
-                        .build();
+//                new ImagePicker.Builder(ResetActivity.this)
+//                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+//                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+//                        .directory(ImagePicker.Directory.DEFAULT)
+//                        .extension(ImagePicker.Extension.PNG)
+//                        .scale(600, 600)
+//                        .allowMultipleImages(false)
+//                        .enableDebuggingMode(true)
+//                        .build();
+
+                CheckPermission.verifyPermissionCameraAndStorage(ResetActivity.this);
+
+                ImageSelector.builder()
+                        .useCamera(true) // 设置是否使用拍照
+                        .setCrop(true)  // 设置是否使用图片剪切功能。
+                        .setSingle(true)  //设置是否单选
+                        .setViewImage(true) //是否点击放大图片查看,，默认为true
+                        .start(ResetActivity.this, IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
             }
         });
 
@@ -328,22 +352,22 @@ public class ResetActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (title){
                     case "头像设置":
-                        setUserPortrait("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat");
+                        setUserPortrait("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat");
                         break;
                     case "性别设置":
-                        submitValue("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","性别");
+                        submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","性别");
                         break;
                     case "属性设置":
-                        submitValue("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","属性");
+                        submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","属性");
                         break;
                     case "意见反馈":
-                        submitValue("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=feedback&m=socialchat","意见");
+                        submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=feedback&m=socialchat","意见");
                         break;
                     case "手机绑定":
                         verificationCode(verificationCode_et.getText().toString());
                         break;
                     default:
-                        submitValue("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","其他");
+                        submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","其他");
                         break;
                 }
                 Toast.makeText(v.getContext(), "提交成功", Toast.LENGTH_LONG).show();
@@ -371,7 +395,7 @@ public class ResetActivity extends AppCompatActivity {
                         String myid = shuserinfo.readUserInfo().get("userID");
                         String mynickname = shuserinfo.readUserInfo().get("userNickName");
                         String myportrait = shuserinfo.readUserInfo().get("userPortrait");
-                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(myid, mynickname, Uri.parse(myportrait)));
+                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(myid, mynickname, Uri.parse(ConstantValue.getOssResourceUrl(myportrait))));
                     }
 
                     startActivity(intent);
@@ -387,7 +411,7 @@ public class ResetActivity extends AppCompatActivity {
                     String myid = shuserinfo.readUserInfo().get("userID");
                     String mynickname = shuserinfo.readUserInfo().get("userNickName");
                     String myportrait = shuserinfo.readUserInfo().get("userPortrait");
-                    RongIM.getInstance().refreshUserInfoCache(new UserInfo(myid, mynickname, Uri.parse(myportrait)));
+                    RongIM.getInstance().refreshUserInfoCache(new UserInfo(myid, mynickname, Uri.parse(ConstantValue.getOssResourceUrl(myportrait))));
 
                     startActivity(intent);
                     break;
@@ -434,22 +458,25 @@ public class ResetActivity extends AppCompatActivity {
                     case "性别":
                         value = ((RadioButton) findViewById(userGender.getCheckedRadioButtonId())).getText().toString();
                          formBody = new FormBody.Builder()
-                                .add("type",title)
-                                .add("userID", myid)
-                                .add("value",value)
-                                .build();
+                                 .add("sign", MD5Tool.getSign(myid))
+                                 .add("type",title)
+                                 .add("userID", myid)
+                                 .add("value",value)
+                                 .build();
                     break;
                     case "属性":
                         value = ((RadioButton) findViewById(userProperty.getCheckedRadioButtonId())).getText().toString();
                          formBody = new FormBody.Builder()
-                                .add("type",title)
-                                .add("userID", myid)
-                                .add("value",value)
-                                .build();
+                                 .add("sign", MD5Tool.getSign(myid))
+                                 .add("type",title)
+                                 .add("userID", myid)
+                                 .add("value",value)
+                                 .build();
                         break;
                     case "意见":
                         value = value_et.getText().toString();
                         formBody = new FormBody.Builder()
+                                .add("sign", MD5Tool.getSign(myid))
                                 .add("type",title)
                                 .add("userID", myid)
                                 .add("nickname", mynickname)
@@ -460,10 +487,11 @@ public class ResetActivity extends AppCompatActivity {
                     default:
                         value = value_et.getText().toString();
                          formBody = new FormBody.Builder()
-                                .add("type",title)
-                                .add("userID", myid)
-                                .add("value",value)
-                                .build();
+                                 .add("sign", MD5Tool.getSign(myid))
+                                 .add("type",title)
+                                 .add("userID", myid)
+                                 .add("value",value)
+                                 .build();
                         break;
                 }
 
@@ -503,6 +531,7 @@ public class ResetActivity extends AppCompatActivity {
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
+                        .addFormDataPart("sign", MD5Tool.getSign(myid))
                         .addFormDataPart("type", title)
                         .addFormDataPart("userID", myid)
                         .addFormDataPart("userPortrait",fileName,RequestBody.create(new File(userPortrait),MEDIA_TYPE_PNG))
@@ -533,16 +562,38 @@ public class ResetActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            List<String> mPaths = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
-            //Your Code
-            ListIterator<String> listIterator = mPaths.listIterator();
-            while (listIterator.hasNext()){
-                String mPath = listIterator.next();
-                Log.d("path", mPath);
-                portrait.setImageURI(Uri.parse(mPath));
-                userPortrait = mPath;
-            }
+//        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+//            List<String> mPaths = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
+//            //Your Code
+//            ListIterator<String> listIterator = mPaths.listIterator();
+//            while (listIterator.hasNext()){
+//                String mPath = listIterator.next();
+//                Log.d("来自选单的单选地址", mPath);
+//                portrait.setImageURI(Uri.parse(mPath));
+//                userPortrait = mPath;
+//            }
+//        }
+        switch (requestCode) {
+            //从图片选择器回来
+            case IMAGE_SELECTOR_REQUEST_CODE:
+                if (data != null) {
+                    ArrayList<String> images = data.getStringArrayListExtra(ImageSelector.SELECT_RESULT);
+                    boolean isCameraImage = data.getBooleanExtra(ImageSelector.IS_CAMERA_IMAGE, false);
+                    boolean isFull = data.getBooleanExtra(ImageSelector.IS_FULL, false);
+                    Log.d("isCameraImage", "是否是拍照图片：" + isCameraImage);
+                    if (images == null || images.size() <= 0) {
+                        Toast.makeText(this, "取消设置", Toast.LENGTH_SHORT).show();
+                    }
+                    for (String image : images){
+                        Log.d(TAG, "onActivityResult: 图片地址"+image);
+                        String mPath = image;
+//                        portrait.setImageURI(Uri.fromFile(new File(image)));
+
+                        portrait.setImageURI(Uri.parse(mPath));
+                        userPortrait = mPath;
+                    }
+                }
+                break;
         }
     }
 

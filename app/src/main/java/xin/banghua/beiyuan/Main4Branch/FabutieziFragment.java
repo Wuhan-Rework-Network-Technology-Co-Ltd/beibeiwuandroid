@@ -8,9 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,24 +19,29 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import net.alhazmy13.mediapicker.Image.ImagePicker;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import com.donkingliang.imageselector.utils.ImageSelector;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.ArrayList;
 
-import androidx.navigation.Navigation;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.MD5Tool;
 
-import static android.app.Activity.RESULT_OK;
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
 
 
 public class FabutieziFragment extends Fragment {
@@ -90,6 +92,8 @@ public class FabutieziFragment extends Fragment {
         ImageView back_btn = view.findViewById(R.id.iv_back_left);
         back_btn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fabutiezi_luntan_action));
 
+        CheckPermission.verifyPermissionCameraAndStorage(getActivity());
+
         title_et = view.findViewById(R.id.title_et);
         content_et = view.findViewById(R.id.content_et);
         bankuai_rg = view.findViewById(R.id.bankuai_rg);
@@ -109,45 +113,42 @@ public class FabutieziFragment extends Fragment {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ImagePicker.Builder(getActivity())
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                        .directory(ImagePicker.Directory.DEFAULT)
-                        .extension(ImagePicker.Extension.PNG)
-                        .scale(600, 600)
-                        .allowMultipleImages(false)
-                        .enableDebuggingMode(true)
-                        .build();
+                CheckPermission.verifyPermissionCameraAndStorage(getActivity());
+
+                ImageSelector.builder()
+                        .onlyImage(true)
+                        .useCamera(true) // 设置是否使用拍照
+                        .setSingle(true)  //设置是否单选
+                        .setViewImage(true) //是否点击放大图片查看,，默认为true
+                        .start(getActivity(), IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
                 imageView_state = 1;
             }
         });
         imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ImagePicker.Builder(getActivity())
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                        .directory(ImagePicker.Directory.DEFAULT)
-                        .extension(ImagePicker.Extension.PNG)
-                        .scale(600, 600)
-                        .allowMultipleImages(false)
-                        .enableDebuggingMode(true)
-                        .build();
+                CheckPermission.verifyPermissionCameraAndStorage(getActivity());
+
+                ImageSelector.builder()
+                        .onlyImage(true)
+                        .useCamera(true) // 设置是否使用拍照
+                        .setSingle(true)  //设置是否单选
+                        .setViewImage(true) //是否点击放大图片查看,，默认为true
+                        .start(getActivity(), IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
                 imageView_state = 2;
             }
         });
         imageView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ImagePicker.Builder(getActivity())
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                        .directory(ImagePicker.Directory.DEFAULT)
-                        .extension(ImagePicker.Extension.PNG)
-                        .scale(600, 600)
-                        .allowMultipleImages(false)
-                        .enableDebuggingMode(true)
-                        .build();
+                CheckPermission.verifyPermissionCameraAndStorage(getActivity());
+
+                ImageSelector.builder()
+                        .onlyImage(true)
+                        .useCamera(true) // 设置是否使用拍照
+                        .setSingle(true)  //设置是否单选
+                        .setViewImage(true) //是否点击放大图片查看,，默认为true
+                        .start(getActivity(), IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
                 imageView_state = 3;
             }
         });
@@ -161,7 +162,7 @@ public class FabutieziFragment extends Fragment {
                 platename = ((RadioButton)mView.findViewById(bankuai_rg.getCheckedRadioButtonId())).getText().toString();
 
                 release_btn.setClickable(false);
-                postFabutiezi("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabutiezi&m=socialchat");
+                postFabutiezi("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabutiezi&m=socialchat");
 
             }
         });
@@ -172,35 +173,75 @@ public class FabutieziFragment extends Fragment {
         Log.d(TAG, "onActivityResult: 动态图片地址");
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            List<String> mPaths = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
-            //Your Code
-            ListIterator<String> listIterator = mPaths.listIterator();
-            while (listIterator.hasNext()){
-                String mPath = listIterator.next();
+//        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+//            List<String> mPaths = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
+//            //Your Code
+//            ListIterator<String> listIterator = mPaths.listIterator();
+//            while (listIterator.hasNext()){
+//                String mPath = listIterator.next();
+//
+//                Log.d("path", mPath);
+//                switch (imageView_state){
+//                    case 1:
+//                        imageView1.setImageURI(Uri.parse(mPath));
+//                        postpicture1 = mPath;
+//                        imageView2.setVisibility(View.VISIBLE);
+//                        Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture1);
+//                        break;
+//                    case 2:
+//                        imageView2.setImageURI(Uri.parse(mPath));
+//                        postpicture2 = mPath;
+//                        imageView3.setVisibility(View.VISIBLE);
+//                        Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture2);
+//                        break;
+//                    case 3:
+//                        imageView3.setImageURI(Uri.parse(mPath));
+//                        postpicture3 = mPath;
+//                        Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture3);
+//                        break;
+//                }
+//
+//            }
+//        }
 
-                Log.d("path", mPath);
-                switch (imageView_state){
-                    case 1:
-                        imageView1.setImageURI(Uri.parse(mPath));
-                        postpicture1 = mPath;
-                        imageView2.setVisibility(View.VISIBLE);
-                        Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture1);
-                        break;
-                    case 2:
-                        imageView2.setImageURI(Uri.parse(mPath));
-                        postpicture2 = mPath;
-                        imageView3.setVisibility(View.VISIBLE);
-                        Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture2);
-                        break;
-                    case 3:
-                        imageView3.setImageURI(Uri.parse(mPath));
-                        postpicture3 = mPath;
-                        Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture3);
-                        break;
+        switch (requestCode) {
+            //从图片选择器回来
+            case IMAGE_SELECTOR_REQUEST_CODE:
+                if (data != null) {
+                    ArrayList<String> images = data.getStringArrayListExtra(ImageSelector.SELECT_RESULT);
+                    boolean isCameraImage = data.getBooleanExtra(ImageSelector.IS_CAMERA_IMAGE, false);
+                    boolean isFull = data.getBooleanExtra(ImageSelector.IS_FULL, false);
+                    Log.d("isCameraImage", "是否是拍照图片：" + isCameraImage);
+                    if (images == null || images.size() <= 0) {
+                        Toast.makeText(getActivity(), "取消设置", Toast.LENGTH_SHORT).show();
+                    }
+                    for (String image : images){
+                        Log.d(TAG, "onActivityResult: 图片地址"+image);
+                        String mPath = image;
+//                        portrait.setImageURI(Uri.fromFile(new File(image)));
+
+                        switch (imageView_state){
+                            case 1:
+                                imageView1.setImageURI(Uri.parse(mPath));
+                                postpicture1 = mPath;
+                                imageView2.setVisibility(View.VISIBLE);
+                                Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture1);
+                                break;
+                            case 2:
+                                imageView2.setImageURI(Uri.parse(mPath));
+                                postpicture2 = mPath;
+                                imageView3.setVisibility(View.VISIBLE);
+                                Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture2);
+                                break;
+                            case 3:
+                                imageView3.setImageURI(Uri.parse(mPath));
+                                postpicture3 = mPath;
+                                Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture3);
+                                break;
+                        }
+                    }
                 }
-
-            }
+                break;
         }
     }
 
@@ -234,6 +275,7 @@ public class FabutieziFragment extends Fragment {
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
                 MultipartBody.Builder multipartBody = new MultipartBody.Builder();
                 multipartBody.setType(MultipartBody.FORM);
+                multipartBody.addFormDataPart("sign", MD5Tool.getSign(myid));
                 multipartBody.addFormDataPart("authid", myid);
                 multipartBody.addFormDataPart("posttitle", posttitle);
                 multipartBody.addFormDataPart("posttext", posttext);

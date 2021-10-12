@@ -29,6 +29,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class BuysvipActivity extends AppCompatActivity {
     private static final String TAG = "BuysvipActivity";
@@ -60,18 +61,21 @@ public class BuysvipActivity extends AppCompatActivity {
         weixin1_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ConstantValue.ifBuySVip = true;
                 getUnifiedorder(getString(R.string.payunifiedorder2svip_url),11,"SVIP白金会员",360,1098);
             }
         });
         weixin2_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ConstantValue.ifBuySVip = true;
                 getUnifiedorder(getString(R.string.payunifiedorder2svip_url),12,"SVIP黑金会员",180,588);
             }
         });
         weixin3_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ConstantValue.ifBuySVip = true;
                 getUnifiedorder(getString(R.string.payunifiedorder2svip_url),13,"SVIP钻石会员",30,128);
             }
         });
@@ -79,18 +83,21 @@ public class BuysvipActivity extends AppCompatActivity {
         alipay1_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ConstantValue.ifBuySVip = true;
                 alipayorder(getString(R.string.alipayaddorder2svip_url),11,"SVIP白金会员",360,1098);
             }
         });
         alipay2_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ConstantValue.ifBuySVip = true;
                 alipayorder(getString(R.string.alipayaddorder2svip_url),12,"SVIP黑金会员",180,588);
             }
         });
         alipay3_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ConstantValue.ifBuySVip = true;
                 alipayorder(getString(R.string.alipayaddorder2svip_url),13,"SVIP钻石会员",30,128);
             }
         });
@@ -252,10 +259,10 @@ public class BuysvipActivity extends AppCompatActivity {
                 case 2:
                     //支付宝生成订单后，调用后端签名，获取orderString    2和3都作废了，现在订单放到了服务端
                     Log.d(TAG, "handleMessage: 进入2");
-                    alipay("https://www.banghua.xin/alipay-sdk-PHP/alipaybeiyuan2.php",msg.obj.toString());
+                    alipay("https://console.banghua.xin/otherinterface/alipay-sdk-PHP/alipaybeiyuan2.php",msg.obj.toString());
                     break;
                 case 3:
-                    alipay("https://www.banghua.xin/alipay-sdk-PHP/alipaybeiyuan2.php",msg.obj.toString());
+                    alipay("https://console.banghua.xin/otherinterface/alipay-sdk-PHP/alipaybeiyuan2.php",msg.obj.toString());
                     break;
                 case 4:
                     //支付宝返回orderString，用orderString发起支付

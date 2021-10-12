@@ -8,12 +8,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.alibaba.ha.adapter.AliHaAdapter;
+import com.alibaba.ha.adapter.AliHaConfig;
+import com.alibaba.ha.adapter.Plugin;
+import com.alibaba.sdk.android.cloudcode.CloudCodeInitializer;
+import com.alibaba.sdk.android.cloudcode.CloudCodeLog;
+import com.alibaba.sdk.android.logger.LogLevel;
+import com.baidu.mobads.sdk.api.BDAdConfig;
+import com.baidu.mobads.sdk.api.BDDialogParams;
+import com.baidu.mobads.sdk.api.MobadsPermissionSettings;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import io.rong.contactcard.ContactCardExtensionModule;
 import io.rong.contactcard.IContactCardInfoProvider;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
@@ -31,6 +40,9 @@ import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
 import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
+//import xin.banghua.beiyuan.ContactCardExtensionModule;
+//import io.rong.contactcard.IContactCardInfoProvider;
+
 /**
  * 作者：Administrator
  * 时间：2019/3/1
@@ -38,6 +50,11 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
  */
 public class App extends Application implements Application.ActivityLifecycleCallbacks{
     private static final String TAG = "App";
+
+    public static Application mApplication;
+    public static Application getApplication() {
+        return mApplication;
+    }
     /**
      * APP key:mgb7ka1nmddvg
      * App Secret: XMifrzdXUJz
@@ -59,6 +76,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mApplication = this;
 
         //每次新启动，设值为1
         SharedHelper shvalue = new SharedHelper(getApplicationContext());
@@ -84,25 +103,104 @@ public class App extends Application implements Application.ActivityLifecycleCal
                 return false;
             }
         });
-        RongIM.init(this);
+        RongIM.init(this,"m7ua80gbmo0km");
         RongExtensionManager.getInstance().registerExtensionModule(new SightExtensionModule());
         RongIM.getInstance().setConversationClickListener(new MyConversationClickListener());
-        //initContactCard();
+//        initContactCard();
         //验证连接成功
 //          connect("JeXL+71vahbPjzSTYBlf3Okw/3FJenp53iTgy0iFgV+zWO2xI0jlx8+r479bFjga59uiwpcN87KhrP49wK/ZpQ==");
         //为了测试 这是贝吉塔的token 贝吉塔跟super果实现单聊
 //        SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
 //        String token = shuserinfo.readRongtoken().get("Rongtoken");
 //        connect(token);
-        closeAndroidPDialog();
+
+//        closeAndroidPDialog();
 
 
+        //获取融云token
+        SharedHelper sh = new SharedHelper(getApplicationContext());
+        String token  = sh.readRongtoken().get("Rongtoken");
+        RongyunConnect rongyunConnect = new RongyunConnect();
+        rongyunConnect.connect(token);
 
 
 
 
         frontOrBack();
+
     }
+
+
+
+    public static void initThirdSDK(){
+        Log.d(TAG, "initThirdSDK: 启动第三方sdk");
+        initHa();
+        adInit();
+    }
+
+    /**
+     * 云码广告初始化
+     */
+    public static void adInit(){
+
+        //云码
+        // 用户签署隐私协议之后，调用云码sdk初始化
+        CloudCodeInitializer.init(getApplication());
+        // 如果没有在manifest中配置渠道ID和媒体ID，需要在此处传入
+//        CloudCodeInitializer.init(this, "598394599954655233", "598800657214651394");
+        // 设置日志输出级别为debug
+        CloudCodeLog.setLevel(LogLevel.DEBUG);
+
+
+        //百度广告
+        BDAdConfig bdAdConfig = new BDAdConfig.Builder()
+                // 1、设置app名称，可选
+                .setAppName("小贝乐园")
+                // 2、应用在mssp平台申请到的appsid，和包名一一对应，此处设置等同于在AndroidManifest.xml里面设置
+                .setAppsid("f678b1ce")
+                // 3、设置下载弹窗的类型和按钮动效样式，可选
+                .setDialogParams(new BDDialogParams.Builder()
+                        .setDlDialogType(BDDialogParams.TYPE_BOTTOM_POPUP)
+                        .setDlDialogAnimStyle(BDDialogParams.ANIM_STYLE_NONE)
+                        .build())
+                .build(getApplication());
+        bdAdConfig.init();
+
+        // 设置SDK可以使用的权限，包含：设备信息、定位、存储、APP LIST
+        // 注意：建议授权SDK读取设备信息，SDK会在应用获得系统权限后自行获取IMEI等设备信息
+        // 授权SDK获取设备信息会有助于提升ECPM
+        MobadsPermissionSettings.setPermissionReadDeviceID(true);
+        MobadsPermissionSettings.setPermissionLocation(true);
+        MobadsPermissionSettings.setPermissionStorage(true);
+        MobadsPermissionSettings.setPermissionAppList(true);
+
+
+        //腾讯广告
+    }
+
+    /**
+     * 阿里云性能分析
+     */
+    public static void initHa() {
+        AliHaConfig config = new AliHaConfig();
+        config.appKey = "333510424"; //配置项
+        config.appVersion = BuildConfig.VERSION_NAME; //配置项
+        config.appSecret = "ac4d390a63d645b79340e3b89efd8d3a"; //配置项
+        config.channel = "mqc_test"; //配置项
+        config.userNick = null; //配置项
+        config.application = getApplication(); //配置项
+        config.context = getApplication(); //配置项
+        config.isAliyunos = false; //配置项
+        config.rsaPublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx8PPK8UA6sxYfnfgIJjixl55IHxlAGkHKUxhsbd/VBmjG86vDVO9QLH8VRQgIPp/e/rjByFjwf60SALTozd3BS/xT3XLG1Oo8TuCsSrb9HiysfERGjmah54pDXl8O6oRiNhHYsh1qjR9JFaiRWGnW8NnLzHtIUGXahjf/JtmwyQIDAQAB"; //配置项
+        AliHaAdapter.getInstance().addPlugin(Plugin.crashreporter);//崩溃
+//        AliHaAdapter.getInstance().addPlugin(Plugin.apm);//性能
+        AliHaAdapter.getInstance().openDebug(true);
+        AliHaAdapter.getInstance().start(config);
+
+        Log.d(TAG, "initHa: 启动阿里云性能分析");
+//        TLogService.updateLogLevel(TLogLevel.XXXXXX);//配置项：控制台可拉取的日志级别
+    }
+
     /**
      * 判断在前台还是后台
      */
@@ -162,7 +260,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
                             .add("pushregid",PushClass.pushRegID)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeifrontorback&m=rediscache")
+                            .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeifrontorback&m=rediscache")
                             .post(formBody)
                             .build();
                     try (Response response = client.newCall(request).execute()) {
@@ -204,7 +302,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
              * @param contactInfoCallback
              */
             @Override
-            public void getContactAllInfoProvider(IContactCardInfoCallback contactInfoCallback) {
+            public void getContactAllInfoProvider(IContactCardInfoProvider.IContactCardInfoCallback contactInfoCallback) {
                 Log.d(TAG, "getContactAllInfoProvider: 呵呵");
                 //imInfoProvider.getAllContactUserInfo(contactInfoCallback);
             }
@@ -241,20 +339,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
      */
     public void connect(String token) {
         if (getApplicationInfo().packageName.equals(App.getCurProcessName(getApplicationContext()))) {
-
             Log.d(TAG, "connect: 进入app的融云链接");
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
-
-                /**
-                 * Token 错误。可以从下面两点检查
-                 * 1.  Token 是否过期，如果过期您需要向 App Server 重新请求一个新的 Token
-                 * 2.  token 对应的 appKey 和工程里设置的 appKey 是否一致
-                 */
-                @Override
-                public void onTokenIncorrect() {
-                    Log.d("RONGCLOUD", "--onTokenIncorrect");
-                }
-
                 /**
                  * 连接融云成功
                  * @param userid 当前 token 对应的用户 id
@@ -265,13 +351,14 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
                 }
 
-                /**
-                 * 连接融云失败
-                 * @param errorCode 错误码，可到官网 查看错误码对应的注释
-                 */
                 @Override
-                public void onError(RongIMClient.ErrorCode errorCode) {
-                    Log.d("RONGCLOUD", "--error" + errorCode.getMessage());
+                public void onError(RongIMClient.ConnectionErrorCode connectionErrorCode) {
+
+                }
+
+                @Override
+                public void onDatabaseOpened(RongIMClient.DatabaseOpenStatus databaseOpenStatus) {
+
                 }
             });
         }
@@ -312,11 +399,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
     @Override
     public void onActivityResumed(Activity activity) {
         Log.d(TAG, "onActivityResumed: ");
-        //获取融云token
-        SharedHelper sh = new SharedHelper(getApplicationContext());
-        String token  = sh.readRongtoken().get("Rongtoken");
-        RongyunConnect rongyunConnect = new RongyunConnect();
-        rongyunConnect.connect(token);
+
     }
 
     @Override

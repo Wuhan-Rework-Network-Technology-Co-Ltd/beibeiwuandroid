@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- 使用cloud_code_cc_slot_id 配置广告位ID -->
+    <com.alibaba.sdk.android.cloudcode.SplashAdView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:cloud_code_cc_slot_id="649808463224683520"
+        android:visibility="visible"
+        android:id="@+id/splashAdView" />
+
+    <RelativeLayout android:id="@+id/adsRl"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

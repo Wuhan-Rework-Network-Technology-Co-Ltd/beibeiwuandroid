@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,12 +17,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -50,6 +53,7 @@ import xin.banghua.beiyuan.MainBranch.LocationService;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 //import android.support.design.widget.BottomNavigationView;
 
@@ -90,26 +94,38 @@ public class MainActivity extends AppCompatActivity {
                     //startActivity(intent1);
                     return true;
                 case R.id.navigation_haoyou:
-
-                    Intent intent2 = new Intent(MainActivity.this, Main2Activity.class);
-                    startActivity(intent2);
+                    if (ConstantValue.myId==null){
+                        Intent intentSignin = new Intent(mContext, SigninActivity.class);
+                        mContext.startActivity(intentSignin);
+                    }else {
+                        Intent intent2 = new Intent(MainActivity.this, Main2Activity.class);
+                        startActivity(intent2);
+                    }
                     return true;
                 case R.id.navigation_xiaoxi:
 
                     //Intent intent3 = new Intent(MainActivity.this, Main3Activity.class);
                     //startActivity(intent3);
                     //启动会话列表
-                    startActivity(new Intent(MainActivity.this, Main3Activity.class));
+                    if (ConstantValue.myId==null){
+                        Intent intentSignin = new Intent(mContext, SigninActivity.class);
+                        mContext.startActivity(intentSignin);
+                    }else {
+                        startActivity(new Intent(MainActivity.this, Main3Activity.class));
+                    }
                     return true;
                 case R.id.navigation_dongtai:
-
                     Intent intent4 = new Intent(MainActivity.this, Main4Activity.class);
                     startActivity(intent4);
                     return true;
                 case R.id.navigation_wode:
-
-                    Intent intent5 = new Intent(MainActivity.this, Main5Activity.class);
-                    startActivity(intent5);
+                    if (ConstantValue.myId==null){
+                        Intent intentSignin = new Intent(mContext, SigninActivity.class);
+                        mContext.startActivity(intentSignin);
+                    }else {
+                        Intent intent5 = new Intent(MainActivity.this, Main5Activity.class);
+                        startActivity(intent5);
+                    }
                     return true;
             }
             return false;
@@ -118,6 +134,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /**
+         * 【注意】开屏点睛需要开屏和主页的窗口具有特性 {@linkplain Window.FEATURE_ACTIVITY_TRANSITIONS}
+         * Tips: 一般具有Material Design风格的App主题，系统会默认开启该特性。
+         *       若没有该特性，可以在{@link #setContentView(int)}之前
+         *       调用 {@link #requestWindowFeature(int)} 即可开启特性，如下：
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            requestWindowFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+        }
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -127,7 +154,15 @@ public class MainActivity extends AppCompatActivity {
         //判断版本号是否需要更新
         updateVersion();
 
-        CheckPermission.verifyStoragePermission(this);
+        SharedPreferences sp = getApplication().getSharedPreferences("firstStarted", Context.MODE_PRIVATE);
+        if (sp.getString("firstStarted", "null").equals("null")) {
+
+            CheckPermission.verifyPermissionLocation(this);
+
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("firstStarted", "firstStarted");
+            editor.commit();
+        }
 
         //定位问题
         //localization();
@@ -184,23 +219,26 @@ public class MainActivity extends AppCompatActivity {
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
         if(userInfo.get("userID")==""){
-            Intent intentSignin = new Intent(MainActivity.this, SigninActivity.class);
-            startActivity(intentSignin);
+
+            ConstantValue.myId = null;
+//            Intent intentSignin = new Intent(MainActivity.this, SigninActivity.class);
+//            startActivity(intentSignin);
         }else{
             //唯一登录验证
+            ConstantValue.myId = userInfo.get("userID");
             uniquelogin = new Uniquelogin(this,handler);
-            uniquelogin.compareUniqueLoginToken("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
             //登录后，更新定位信息，包括经纬度和更新时间
             //获取用户id和定位值
             SharedHelper shlocation = new SharedHelper(getApplicationContext());
             Map<String,String> locationInfo = shlocation.readLocation();
-            //postLocationInfo(userInfo.get("userID"),locationInfo.get("latitude"),locationInfo.get("longitude"),"https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=updatelocation&m=socialchat");
+            //postLocationInfo(userInfo.get("userID"),locationInfo.get("latitude"),locationInfo.get("longitude"),"https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=updatelocation&m=socialchat");
             //开启定位服务
             Intent startIntent = new Intent(this, LocationService.class);
             startService(startIntent);
 
             //获取自己信息，储存在Common类中
-            if (Common.myInfo == null) {
+            if (xin.banghua.beiyuan.Common.myInfo == null) {
                 getDataMyInfo(getString(R.string.personage_url),userInfo.get("userID"));
             }
         }
@@ -219,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                             .add("system", "android")
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getversion&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getversion&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -342,6 +380,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("HandlerLeak")
     private Handler handler=new Handler(){
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -372,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case 1:
-                    if (Double.parseDouble(msg.obj.toString())>Double.parseDouble(PackageUtils.getVersionName(MainActivity.this))){
+                    if (Double.parseDouble(msg.obj.toString())> BuildConfig.VERSION_CODE){
                         final DialogPlus dialog = DialogPlus.newDialog(mContext)
                                 .setAdapter(new BaseAdapter() {
                                     @Override
@@ -401,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
                         dialog.show();
                         View view = dialog.getFooterView();
                         TextView scoreresult = view.findViewById(R.id.scoreresult);
-                        scoreresult.setText("亲，有新版本"+msg.obj.toString()+"可更新喽");
+                        scoreresult.setText("请尽快更新版本"+msg.obj.toString()+",否则部分功能可能无法使用！！！");
                         Button vipconversion_btn = view.findViewById(R.id.newversion_btn);
                         vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -425,10 +464,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case 2:
-                    Common.myInfo = msg.obj.toString();
+                    xin.banghua.beiyuan.Common.myInfo = msg.obj.toString();
                     try {
                         //缓存好友备注
                         JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
+                        if (jsonObject.getInt("svip_try")==1){
+                            Log.d(TAG, "svip已试用");
+                            SharedHelper.getInstance(MainActivity.this).saveTryChat(1);
+                        }
                         if (!jsonObject.getString("friendsremark").equals("null")&&!jsonObject.getString("friendsremark").equals("")){
                             Map<String,String> map = new HashMap();
                             String[] friendsRemarkArray = jsonObject.getString("friendsremark").split(";");//id1:remark1
@@ -436,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
                                 String[] friendRemark = friendsRemarkArray[i].split(":");//id1    remark1
                                 map.put(friendRemark[0],friendRemark[1]);
                             }
-                            Common.friendsRemarkMap = map;
+                            xin.banghua.beiyuan.Common.friendsRemarkMap = map;
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

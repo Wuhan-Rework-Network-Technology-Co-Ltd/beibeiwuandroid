@@ -31,6 +31,7 @@ public class PushMessageReceiverImpl  extends OpenClientPushMessageReceiver {
 
         //跳转到Main3再跳转会话页
         Intent intent = new Intent(context, Main3Activity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         intent.putExtra("userid",msg.getParams().get("userid"));
         intent.putExtra("username",msg.getParams().get("username"));
         context.startActivity(intent);

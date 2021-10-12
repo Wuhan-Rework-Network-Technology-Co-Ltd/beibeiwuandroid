@@ -20,8 +20,10 @@ public class RealPathFromUriUtils {
      * @return Uri
      */
     public static Uri getDrawableFromDrawableRes(Context context, int id) {
-        String flashphotopath = io.rong.contactcard.RealPathFromUriUtils.getRealPathFromUri(context, RealPathFromUriUtils.getUriFromDrawableRes(context, id),"iamge");
-        Uri uri = Uri.parse("file://"+flashphotopath);
+//        String flashphotopath = io.rong.contactcard.RealPathFromUriUtils.getRealPathFromUri(context, RealPathFromUriUtils.getUriFromDrawableRes(context, id),"iamge");
+//        Uri uri = Uri.parse("file://"+flashphotopath);
+
+        Uri uri = Uri.parse("file://");
         return uri;
     }
     /**

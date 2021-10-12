@@ -142,7 +142,7 @@
                     android:id="@+id/privacypolity_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true" />
+                    android:checked="false" />
 
                 <Button
                     android:id="@+id/useragreement_btn"

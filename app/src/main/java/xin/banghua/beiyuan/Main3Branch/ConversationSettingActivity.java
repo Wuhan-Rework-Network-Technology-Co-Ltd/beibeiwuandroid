@@ -42,6 +42,7 @@ import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.Personage.SetRemarkAndTagActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.DO_NOT_DISTURB;
 import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.NOTIFY;
@@ -53,7 +54,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
     CircleImageView portrait;
     TextView nickname;
     Switch istop,donotdisturb;
-    Button recored_clear,blacklist_btn,deletefriend_btn,remark_tag_btn;
+    Button recored_clear,blacklist_btn,deletefriend_btn,remark_tag_btn,report_btn;
 
 
 
@@ -89,6 +90,14 @@ public class ConversationSettingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(title);
 
+
+        report_btn = findViewById(R.id.report_btn);
+        report_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"举报已提交",Toast.LENGTH_LONG).show();
+            }
+        });
 
         portrait = findViewById(R.id.portrait);
         portrait.setOnClickListener(new View.OnClickListener() {
@@ -296,7 +305,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        addBlacklist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat",targetId);
+                        addBlacklist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat",targetId);
                         dialog.dismiss();
                     }
                 });
@@ -395,7 +404,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
     public void initPersonage(JSONObject jsonObject) throws JSONException {
         Glide.with(this)
                 .asBitmap()
-                .load(jsonObject.getString("portrait"))
+                .load(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait")))
                 .into(portrait);
 
         Common.conversationSettingUserPortrait = jsonObject.getString("portrait");

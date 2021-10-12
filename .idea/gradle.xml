@@ -11,11 +11,12 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/IMKit" />
-            <option value="$PROJECT_DIR$/IMLib" />
+            <option value="$PROJECT_DIR$/MediaPicker" />
             <option value="$PROJECT_DIR$/Sight" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/bottomsheetpicker" />
             <option value="$PROJECT_DIR$/contactcard" />
+            <option value="$PROJECT_DIR$/imageselector" />
             <option value="$PROJECT_DIR$/wavesidebar" />
           </set>
         </option>

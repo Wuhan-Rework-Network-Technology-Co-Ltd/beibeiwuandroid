@@ -1,13 +1,14 @@
 package xin.banghua.beiyuan.Main5Branch;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -49,7 +50,7 @@ public class CircleActivity extends AppCompatActivity {
 
         mView = getWindow().getDecorView();
 
-        getDataDongtai("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=circle&m=socialchat");
+        getDataDongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=circle&m=socialchat");
 
         ImageView back_btn = findViewById(R.id.iv_back_left);
         back_btn.setOnClickListener(new View.OnClickListener() {

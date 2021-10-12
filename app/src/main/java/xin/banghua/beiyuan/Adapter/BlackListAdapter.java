@@ -34,6 +34,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "BlackListAdapter";
@@ -79,7 +80,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.View
         viewHolder.userID.setText(currentItem.getmUserID());
         Glide.with(mContext)
                 .asBitmap()
-                .load(currentItem.getmUserPortrait())
+                .load(ConstantValue.getOssResourceUrl(currentItem.getmUserPortrait()))
                 .into(viewHolder.userPortrait);
         viewHolder.userNickName.setText(currentItem.getmUserNickName());
         viewHolder.userLeaveWords.setText("");
@@ -106,7 +107,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.View
             @Override
             public void onClick(View v) {
                 //删除黑名单
-                deleteBlackList("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteblacklist&m=socialchat",currentItem.getmUserID());
+                deleteBlackList("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteblacklist&m=socialchat",currentItem.getmUserID());
                 if (friendList.size() > 0) {
                     friendList.remove(i);
                     notifyDataSetChanged();

@@ -42,12 +42,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.CircleImageViewExtension;
-import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main5Branch.BuysvipActivity;
 import xin.banghua.beiyuan.Main5Branch.BuyvipActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.util.OkHttpInstance;
 
 
 /**
@@ -198,7 +199,7 @@ public class PersonageFragment extends Fragment {
                         move_friendapply.setVisibility(View.VISIBLE);
                         make_friend.setEnabled(false);
                         make_friend.setText("申请好友中，等待对方同意");
-                        getFriendNumber("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsnumber&m=socialchat");
+                        getFriendNumber("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsnumber&m=socialchat");
                         dialog.dismiss();
                     }
                 });
@@ -208,11 +209,15 @@ public class PersonageFragment extends Fragment {
         move_friendapply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Common.vipTime == null) {
-                    getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
-                }else {
-                    moveFriendApply();
-                }
+//                if (ConstantValue.vipTime == null && !ConstantValue.ifBuySVip) {
+//                    ConstantValue.ifBuySVip = false;
+//                    getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
+//                }else {
+//                    moveFriendApply();
+//                }
+
+                ConstantValue.ifBuySVip = false;
+                getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
             }
         });
 
@@ -262,14 +267,18 @@ public class PersonageFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             //拉黑了好友，则刷新
-                            Common.newFriendOrDeleteFriend = true;
-                            Common.friendListMap.remove(mUserID);
+                            try {
+                                xin.banghua.beiyuan.Common.newFriendOrDeleteFriend = true;
+                                xin.banghua.beiyuan.Common.friendListMap.remove(mUserID);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
 
                             balcklist_btn.setText("移除黑名单");
                             Toast.makeText(mContext,"已加入黑名单",Toast.LENGTH_LONG).show();
 
-                            addBlacklist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
+                            addBlacklist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
                             dialog.dismiss();
                         }
                     });
@@ -316,7 +325,7 @@ public class PersonageFragment extends Fragment {
                         public void onClick(View v) {
                             balcklist_btn.setText("加入黑名单");
                             Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
-                            deleteBlackList("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteblacklist&m=socialchat");
+                            deleteBlackList("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteblacklist&m=socialchat");
                             dialog.dismiss();
                         }
                     });
@@ -369,10 +378,10 @@ public class PersonageFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //删除了好友，则刷新
-                        Common.newFriendOrDeleteFriend = true;
-                        Common.friendListMap.remove(mUserID);
-                        if (Common.friendsRemarkMap!=null){
-                            Common.friendsRemarkMap.remove(mUserID);
+                        xin.banghua.beiyuan.Common.newFriendOrDeleteFriend = true;
+                        xin.banghua.beiyuan.Common.friendListMap.remove(mUserID);
+                        if (xin.banghua.beiyuan.Common.friendsRemarkMap!=null){
+                            xin.banghua.beiyuan.Common.friendsRemarkMap.remove(mUserID);
                         }
 
 
@@ -406,18 +415,22 @@ public class PersonageFragment extends Fragment {
         svip_chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Common.vipTime == null) {
-                    getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
-                }else {
-                    svipChat();
-                }
+//                if (ConstantValue.vipTime == null && !ConstantValue.ifBuySVip) {
+//                    ConstantValue.ifBuySVip = false;
+//                    getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
+//                }else {
+//                    svipChat();
+//                }
+
+                ConstantValue.ifBuySVip = false;
+                getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
             }
         });
 
 
         getDataPersonage(getString(R.string.personage_url));
 
-        addSawMe("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addsawme&m=socialchat");
+        addSawMe("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addsawme&m=socialchat");
 
         ifFriend(getString(R.string.iffriendnew_url));
     }
@@ -529,13 +542,13 @@ public class PersonageFragment extends Fragment {
 
         mUserNickName_tv.setText(jsonObject.getString("nickname"));
         //if (jsonObject.getString("vip").equals("VIP"))  mUserPortrait_iv.isVIP(true,getResources(),false);
-        Glide.with(view)
+        Glide.with(getActivity())
                 .asBitmap()
-                .load(jsonObject.getString("portrait"))
+                .load(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait")))
                 .into(mUserPortrait_iv);
 
         vip_gray.setVisibility(View.VISIBLE);
-        if (jsonObject.getString("svip")!="null") {
+        if (!jsonObject.getString("svip").equals("null") && !jsonObject.getString("svip").equals("")) {
             int svip_time = Integer.parseInt(jsonObject.getString("svip") + "");
             if (svip_time > current_timestamp) {
                 //vipicon分级
@@ -666,7 +679,11 @@ public class PersonageFragment extends Fragment {
                         Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
 
                         JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
-                        initPersonage(mView,jsonObject);
+                        try {
+                            initPersonage(mView,jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -690,10 +707,10 @@ public class PersonageFragment extends Fragment {
                     Log.d(TAG, "handleMessage: 进入好友判断");
                     if (msg.obj.toString().equals("好友人数未超过限制")){
                         Log.d(TAG, "handleMessage: 跳转添加好友");
-                        makeFriend("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addfriend&m=socialchat");
+                        makeFriend("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addfriend&m=socialchat");
                     }else {
                         Log.d(TAG, "handleMessage: 会员数量满");
-                        make_friend.setText("申请失败");
+                        make_friend.setText("今日免费5次已用完，请办理会员或明日再试");
                         //Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
                         final DialogPlus dialog = DialogPlus.newDialog(mContext)
                                 .setAdapter(new BaseAdapter() {
@@ -776,7 +793,7 @@ public class PersonageFragment extends Fragment {
                     Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
                     break;
                 case 8:
-                    Common.vipTime = msg.obj.toString();
+                    xin.banghua.beiyuan.Common.vipTime = msg.obj.toString();
                     moveFriendApply();
                     break;
                 case 9:
@@ -786,7 +803,7 @@ public class PersonageFragment extends Fragment {
                     move_friendapply.setVisibility(View.GONE);
                     break;
                 case 10:
-                    Common.vipTime = msg.obj.toString();
+                    xin.banghua.beiyuan.Common.vipTime = msg.obj.toString();
                     svipChat();
                     break;
                 case 11:
@@ -806,7 +823,7 @@ public class PersonageFragment extends Fragment {
     };
 
     public void moveFriendApply(){
-        if (Common.vipTime.equals("会员已到期")){
+        if (xin.banghua.beiyuan.Common.vipTime.equals("会员已到期")){
             final DialogPlus dialog = DialogPlus.newDialog(mContext)
                     .setAdapter(new BaseAdapter() {
                         @Override
@@ -850,11 +867,11 @@ public class PersonageFragment extends Fragment {
                 }
             });
         }else {
-            deleteFriendNumber(mUserID,"https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
+            deleteFriendNumber(mUserID,"https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
         }
     }
     public void svipChat(){
-        if (!Common.vipTime.contains("svip")){
+        if (!xin.banghua.beiyuan.Common.vipTime.contains("svip") && SharedHelper.getInstance(getActivity()).readTryChat()==1){
             final DialogPlus dialog = DialogPlus.newDialog(mContext)
                     .setAdapter(new BaseAdapter() {
                         @Override
@@ -898,6 +915,11 @@ public class PersonageFragment extends Fragment {
                 }
             });
         }else {
+            SharedHelper.getInstance(getActivity()).saveTryChat(1);
+            if (!xin.banghua.beiyuan.Common.vipTime.contains("svip")){
+                Toast.makeText(getActivity(),"本次为免费试用！",Toast.LENGTH_LONG).show();
+                OkHttpInstance.exhaustSvipTry();
+            }
             new Thread(new Runnable() {
                 @Override
                 public void run(){

@@ -8,9 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +19,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import net.alhazmy13.mediapicker.Image.ImagePicker;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import androidx.navigation.Navigation;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -39,6 +38,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.mediapicker.Image.ImagePicker;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -164,7 +164,7 @@ public class FabudongtaiFragment extends Fragment {
                 Log.d(TAG, "onClick: 分享的选项："+((RadioButton)mView.findViewById(guangchang_rg.getCheckedRadioButtonId())).getText().toString());
                 Log.d(TAG, "onClick: 又分享的谢谢"+(mView.findViewById(guangchang_rg.getCheckedRadioButtonId())).toString());
 
-                postFabudongtai("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabudongtai&m=socialchat");
+                postFabudongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabudongtai&m=socialchat");
 
             }
         });

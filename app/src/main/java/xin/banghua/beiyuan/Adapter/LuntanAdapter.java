@@ -37,6 +37,7 @@ import xin.banghua.beiyuan.Main4Branch.ImagerPagerActivity;
 import xin.banghua.beiyuan.Main4Branch.PostListActivity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder> {
     private static final String TAG = "LuntanAdapter";
@@ -79,7 +80,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         viewHolder.authnickname.setText(currentItem.getAuthnickname());
         Glide.with(mContext)
                 .asBitmap()
-                .load(currentItem.getAuthportrait())
+                .load(ConstantValue.getOssResourceUrl(currentItem.getAuthportrait()))
                 .into(viewHolder.authportrait);
 
 
@@ -245,7 +246,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else if (currentItem.getPostpicture().length==1){
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getPostpicture()[0])
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[0]))
                     .into(viewHolder.postpicture);
             viewHolder.postpicture.setVisibility(View.VISIBLE);
             viewHolder.postpicture.setOnClickListener(new View.OnClickListener() {
@@ -262,7 +263,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getPostpicture()[0])
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[0]))
                     .into(viewHolder.postpicture1);
             viewHolder.postpicture1.setVisibility(View.VISIBLE);
             viewHolder.postpicture1.setOnClickListener(new View.OnClickListener() {
@@ -279,7 +280,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getPostpicture()[1])
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[1]))
                     .into(viewHolder.postpicture2);
             viewHolder.postpicture2.setVisibility(View.VISIBLE);
             viewHolder.postpicture2.setOnClickListener(new View.OnClickListener() {
@@ -296,7 +297,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getPostpicture()[2])
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[2]))
                     .into(viewHolder.postpicture3);
             viewHolder.postpicture3.setVisibility(View.VISIBLE);
             viewHolder.postpicture3.setOnClickListener(new View.OnClickListener() {
@@ -319,7 +320,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                 Log.d(TAG, "onClick: clicked on: " + currentItem.getId());
                 //Toast.makeText(mContext, mUserID.get(i) + mUserNickName.get(i), Toast.LENGTH_LONG).show();
                 viewHolder_btn = viewHolder;
-                like("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntanlike&m=socialchat",currentItem.getId());
+                like("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntanlike&m=socialchat",currentItem.getId());
             }
         });
         viewHolder.favorite.setText(currentItem.getFavorite());

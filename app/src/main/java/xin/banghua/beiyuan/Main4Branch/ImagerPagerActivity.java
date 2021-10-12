@@ -13,6 +13,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import xin.banghua.beiyuan.Adapter.LuntanList;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 
 public class ImagerPagerActivity extends AppCompatActivity {
@@ -21,6 +22,8 @@ public class ImagerPagerActivity extends AppCompatActivity {
     LuntanList luntanList;
 
     TextView back_tv;
+
+    int image_index = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +38,7 @@ public class ImagerPagerActivity extends AppCompatActivity {
         });
 
         luntanList = (LuntanList) getIntent().getSerializableExtra("luntanlist");
+        image_index = getIntent().getIntExtra("image_index",0);
 
         sliderShow = findViewById(R.id.image_pager_slider);
 
@@ -43,7 +47,7 @@ public class ImagerPagerActivity extends AppCompatActivity {
             textSliderView
                     .description("")
                     .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
-                    .image(luntanList.getPostpicture()[i]);
+                    .image(ConstantValue.getOssResourceUrl(luntanList.getPostpicture()[i]));
             sliderShow.addSlider(textSliderView);
         }
         sliderShow.setPresetTransformer(SliderLayout.Transformer.Accordion);
@@ -51,6 +55,7 @@ public class ImagerPagerActivity extends AppCompatActivity {
         sliderShow.setCustomAnimation(new DescriptionAnimation());
         sliderShow.stopAutoCycle();
 
+        sliderShow.setCurrentPosition(image_index);
 
     }
 }

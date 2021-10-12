@@ -1,10 +1,9 @@
 package xin.banghua.beiyuan.RongYunExtension;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 
@@ -29,6 +30,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_UP;
@@ -61,7 +63,7 @@ public class FlashPhotoActivity extends AppCompatActivity {
                 Log.v(TAG, "getAction" + event.getAction());
                 if(event.getAction() == ACTION_DOWN) {// pressed
                     longtouch_btn.setText("");
-                    getFlashPhoto("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getflashphoto&m=socialchat");
+                    getFlashPhoto("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getflashphoto&m=socialchat");
                 }else if (event.getAction() == ACTION_UP){
                     Toast.makeText(getApplicationContext(), "图片已销毁", Toast.LENGTH_LONG).show();
                     finish();
@@ -93,7 +95,7 @@ public class FlashPhotoActivity extends AppCompatActivity {
                         if (jsonObject.get("photostatus").equals("0")){
                             Glide.with(FlashPhotoActivity.this)
                                     .asBitmap()
-                                    .load(jsonObject.get("photourl"))
+                                    .load(ConstantValue.getOssResourceUrl(jsonObject.get("photourl").toString()))
                                     .into(flashphoto_imageview);
                             countDown();
                         }else {

@@ -101,7 +101,7 @@ public class SousuoFragment extends Fragment {
         spCity = view.findViewById(R.id.spinner_city);
         spProvince = view.findViewById(R.id.spinner_province);
         //vip
-        getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+        getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
         //初始化导航按钮
         initNavigateButton(view);
 

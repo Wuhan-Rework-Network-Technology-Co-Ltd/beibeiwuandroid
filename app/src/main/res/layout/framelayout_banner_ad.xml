@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- 使用cloud_code_cc_slot_id 配置广告位ID -->
+    <com.alibaba.sdk.android.cloudcode.BannerAdView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cloud_code_cc_slot_id="649806189722968069"
+        android:visibility="visible"
+        android:id="@+id/bannerAdView"
+        tools:ignore="MissingConstraints" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -56,6 +56,7 @@ public class XiaomiMessageReceiver extends PushMessageReceiver {
         Map<String,String> map = message.getExtra();
         //跳转到Main3再跳转会话页
         Intent intent = new Intent(context, Main3Activity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         intent.putExtra("userid", map.get("userid"));
         intent.putExtra("username",map.get("username"));
         context.startActivity(intent);

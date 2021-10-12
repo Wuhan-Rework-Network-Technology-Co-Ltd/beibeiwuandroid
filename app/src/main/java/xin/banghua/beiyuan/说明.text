@@ -1,4 +1,5 @@
-//
+//加密
+.add("sign", MD5Tool.getSign(myid))
 
 常用：
 textview，替换图片
@@ -9,7 +10,7 @@ viewHolder.userVIP.setForeground(drawable);
 
 
 if (result.get("resultStatus").equals("9000"))//一定要用.equals
-https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=tuijian&m=socialchat
+https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=tuijian&m=socialchat
 <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

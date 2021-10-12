@@ -5,23 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +19,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +60,7 @@ import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class Main3Activity extends AppCompatActivity {
     private static final String TAG = "Main3Activity";
@@ -141,7 +144,7 @@ public class Main3Activity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.navigation_xiaoxi);
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this,handler);
-        badgeBottomNav.getDataFriendsapply("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
+        badgeBottomNav.getDataFriendsapply("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
         //未读信息监听
         iUnReadMessageObserver = new IUnReadMessageObserver() {
             @Override
@@ -196,7 +199,7 @@ public class Main3Activity extends AppCompatActivity {
                                     }
                                 }
 
-                                UserInfo userInfo = new UserInfo(userId, nickname, Uri.parse(jsonObject.getString("portrait")));
+                                UserInfo userInfo = new UserInfo(userId, nickname, Uri.parse(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait"))));
                                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -251,7 +254,7 @@ public class Main3Activity extends AppCompatActivity {
         }else{
             //唯一登录验证
             uniquelogin = new Uniquelogin(this,handler);
-            uniquelogin.compareUniqueLoginToken("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
         }
     }
     @Override
@@ -282,6 +285,8 @@ public class Main3Activity extends AppCompatActivity {
         }
     }
     private void initView() {
+        mFragment.clear();
+
         iv_back_left = (ImageView)findViewById(R.id.iv_back_left);
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mConversationList = initConversationList();//获取融云会话列表的对象
@@ -322,6 +327,7 @@ public class Main3Activity extends AppCompatActivity {
          * appendQueryParameter对具体的会话列表做展示
          */
         if (mConversationFragment == null) {
+            Log.d(TAG, "initConversationList: 不存在");
             ConversationListFragment listFragment = new ConversationListFragment();
             Uri uri = Uri.parse("rong://" + getApplicationInfo().packageName).buildUpon()
                     .appendPath("conversationList")
@@ -335,6 +341,7 @@ public class Main3Activity extends AppCompatActivity {
             listFragment.setUri(uri);
             return listFragment;
         } else {
+            Log.d(TAG, "initConversationList: 已存在");
             return mConversationFragment;
         }
     }
@@ -440,7 +447,7 @@ public class Main3Activity extends AppCompatActivity {
                 friendList.add(filledData(friends));
                 friendListMap.put(jsonObject.getString("id"),filledData(friends));
 
-                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(jsonObject.getString("portrait")));
+                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait"))));
                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                 userInfoList.add(userInfo);
             }
@@ -513,8 +520,8 @@ public class Main3Activity extends AppCompatActivity {
                 }
             });
 
-        SharedPreferences sp = getApplication().getSharedPreferences("firstStarted", Context.MODE_PRIVATE);
-        if (sp.getString("firstStarted", "null").equals("null")) {
+//        SharedPreferences sp = getApplication().getSharedPreferences("firstStarted", Context.MODE_PRIVATE);
+//        if (sp.getString("firstStarted", "null").equals("null")) {
 
 
 
@@ -545,52 +552,51 @@ public class Main3Activity extends AppCompatActivity {
 //                        startActivity(intent);
 //                    }
 //                }).show();
-            }
+
+
+//            SharedPreferences.Editor editor = sp.edit();
+//            editor.putString("firstStarted", "firstStarted");
+//            editor.commit();
+//            }
             //未打开通知
-//            AlertDialog alertDialog = new AlertDialog.Builder(this)
-//                    .setTitle("通知权限")
-//                    .setMessage("为了您能够及时的收到好友消息和系统通知，请在“通知”中打开权限！")
-//                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.cancel();
-//                        }
-//                    })
-//                    .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.cancel();
-//                            Intent intent = new Intent();
-//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                                intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-//                                intent.putExtra("android.provider.extra.APP_PACKAGE", Main3Activity.this.getPackageName());
-//                            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {  //5.0
-//                                intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-//                                intent.putExtra("app_package", Main3Activity.this.getPackageName());
-//                                intent.putExtra("app_uid", Main3Activity.this.getApplicationInfo().uid);
-//                                startActivity(intent);
-//                            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {  //4.4
-//                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                                intent.addCategory(Intent.CATEGORY_DEFAULT);
-//                                intent.setData(Uri.parse("package:" + Main3Activity.this.getPackageName()));
-//                            } else if (Build.VERSION.SDK_INT >= 15) {
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-//                                intent.setData(Uri.fromParts("package", Main3Activity.this.getPackageName(), null));
-//                            }
-//                            startActivity(intent);
-//
-//                        }
-//                    })
-//                    .create();
-//            alertDialog.show();
-//            alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
-//            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
-
-
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString("firstStarted", "firstStarted");
-            editor.commit();
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle("通知权限")
+                    .setMessage("为了您能够及时的收到好友消息和系统通知，请在“通知”中打开权限！")
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            Intent intent = new Intent();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                                intent.putExtra("android.provider.extra.APP_PACKAGE", Main3Activity.this.getPackageName());
+                            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {  //5.0
+                                intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                                intent.putExtra("app_package", Main3Activity.this.getPackageName());
+                                intent.putExtra("app_uid", Main3Activity.this.getApplicationInfo().uid);
+                                startActivity(intent);
+                            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {  //4.4
+                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                intent.setData(Uri.parse("package:" + Main3Activity.this.getPackageName()));
+                            } else if (Build.VERSION.SDK_INT >= 15) {
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                                intent.setData(Uri.fromParts("package", Main3Activity.this.getPackageName(), null));
+                            }
+                            startActivity(intent);
+                        }
+                    })
+                    .create();
+            alertDialog.show();
+            alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
         }
     }
 

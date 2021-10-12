@@ -5,7 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Signin.SigninActivity">
-
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:onClick="onBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/ic_back"
+        />
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
@@ -152,7 +161,7 @@
                     android:id="@+id/privacypolity_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true" />
+                    android:checked="false" />
 
                 <Button
                     android:id="@+id/useragreement_btn"
@@ -205,5 +214,5 @@
         </TableRow>
 
     </TableLayout>
-
+</FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

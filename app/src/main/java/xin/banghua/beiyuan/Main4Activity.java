@@ -7,18 +7,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 import java.util.Map;
@@ -88,7 +90,7 @@ public class Main4Activity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.navigation_dongtai);
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this,handler);
-        badgeBottomNav.getDataFriendsapply("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
+        badgeBottomNav.getDataFriendsapply("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
         //未读信息监听
         iUnReadMessageObserver = new IUnReadMessageObserver() {
             @Override
@@ -106,12 +108,12 @@ public class Main4Activity extends AppCompatActivity {
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
         if(userInfo.get("userID")==""){
-            Intent intentSignin = new Intent(Main4Activity.this, SigninActivity.class);
-            startActivity(intentSignin);
+//            Intent intentSignin = new Intent(Main4Activity.this, SigninActivity.class);
+//            startActivity(intentSignin);
         }else{
             //唯一登录验证
             uniquelogin = new Uniquelogin(this,handler);
-            uniquelogin.compareUniqueLoginToken("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
         }
     }
     @Override

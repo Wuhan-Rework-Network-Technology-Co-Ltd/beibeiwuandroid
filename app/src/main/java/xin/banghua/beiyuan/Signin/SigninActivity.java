@@ -163,7 +163,7 @@ public class SigninActivity extends Activity {
                     }
                     signIn.setClickable(false);
                     Toast.makeText(mContext, "登陆中", Toast.LENGTH_LONG).show();
-                    postSignIn("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signin&m=socialchat",userAccount.getText().toString(),userPassword.getText().toString());
+                    postSignIn("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signin&m=socialchat",userAccount.getText().toString(),userPassword.getText().toString());
                 }
 
             }
@@ -173,6 +173,11 @@ public class SigninActivity extends Activity {
         wxLogin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!(privacypolicy_check.isChecked())){
+                    Toast.makeText(mContext, "勾选小贝乐园用户协议", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 SendAuth.Req req = new SendAuth.Req();
                 req.scope = "snsapi_userinfo";
                 req.state = "wechat_sdk_demo_test";
@@ -204,7 +209,7 @@ public class SigninActivity extends Activity {
                             //更新redis缓存
                             updateRedisCache(object.getString("userID"));
                             //判断token是否存在
-                            postRongyunUserRegister("https://rongyun.banghua.xin/RongCloud/example/User/userregister.php",object.getString("userID"),object.getString("userNickName"),object.getString("userPortrait"));
+                            postRongyunUserRegister("https://console.banghua.xin/otherinterface/rongyun/RongCloudNew/example/User/userregister.php",object.getString("userID"),object.getString("userNickName"),object.getString("userPortrait"));
 
                         }else {
                             signIn.setClickable(true);
@@ -295,7 +300,7 @@ public class SigninActivity extends Activity {
                         .add("frontorback","1")
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
+                        .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
                         .post(formBody)
                         .build();
 
@@ -345,14 +350,15 @@ public class SigninActivity extends Activity {
     }
 
 
-    //禁用返回键
+    //禁用返回键  *取消禁用
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
     }
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK)
-            return false;// return false 或者return true 都不会走onBackPressed了
+            return super.onKeyUp(keyCode,event);// return false 或者return true 都不会走onBackPressed了
         return false;
     }
     @Override
@@ -360,5 +366,10 @@ public class SigninActivity extends Activity {
         if (keyCode == KeyEvent.KEYCODE_BACK)
             return super.onKeyDown(keyCode, event);// 不拦截，如果这里拦截了，也不会走到onBackPressed方法了
         return false;
+    }
+
+
+    public void onBack(View view){
+        onBackPressed();
     }
 }

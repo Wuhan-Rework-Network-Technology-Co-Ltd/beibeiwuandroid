@@ -12,13 +12,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.donkingliang.imageselector.utils.ImageSelector;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -29,6 +33,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.ConversationSettingActivity;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
+import static xin.banghua.beiyuan.FlashPhotoPlugin.conversationType;
+import static xin.banghua.beiyuan.FlashPhotoPlugin.photoPath;
+import static xin.banghua.beiyuan.FlashPhotoPlugin.uniqueID;
 
 
 public class ConversationActivity extends AppCompatActivity {
@@ -53,8 +62,8 @@ public class ConversationActivity extends AppCompatActivity {
 
         Log.d(TAG, "onResume: ConversationActivity");
 
-//        if (!Common.conversationSettingUserName.equals(title)){
-//            title = Common.conversationSettingUserName;
+//        if (!ConstantValue.conversationSettingUserName.equals(title)){
+//            title = ConstantValue.conversationSettingUserName;
 //            getSupportActionBar().setTitle(title);
 //        }
 
@@ -67,7 +76,8 @@ public class ConversationActivity extends AppCompatActivity {
 
         svip_hint_tv = findViewById(R.id.svip_hint_tv);
 
-        CheckPermission.verifyStoragePermission(this);
+        CheckPermission.verifyPermissionAudioAndStorage(this);
+
         Intent intent = getIntent();
         title = intent.getData().getQueryParameter("title") ;
         Log.d(TAG, "onCreate: 人名："+title);
@@ -171,11 +181,36 @@ public class ConversationActivity extends AppCompatActivity {
         Log.d(TAG, "onActivityResult: 进入1");
         if (requestCode == CONVERSATION_SETTING) {
             Log.d(TAG, "onActivityResult: 进入2");
-            title = Common.conversationSettingUserName;
+            title = xin.banghua.beiyuan.Common.conversationSettingUserName;
             getSupportActionBar().setTitle(title);
         }
 
+        switch (requestCode) {
+            //从图片选择器回来
+            case IMAGE_SELECTOR_REQUEST_CODE:
+                if (data != null) {
+                    ArrayList<String> images = data.getStringArrayListExtra(ImageSelector.SELECT_RESULT);
+                    boolean isCameraImage = data.getBooleanExtra(ImageSelector.IS_CAMERA_IMAGE, false);
+                    boolean isFull = data.getBooleanExtra(ImageSelector.IS_FULL, false);
+                    Log.d("isCameraImage", "是否是拍照图片：" + isCameraImage);
+                    if (images == null || images.size() <= 0) {
+                        Toast.makeText(this, "取消设置", Toast.LENGTH_SHORT).show();
+                    }
+                    for (int i=0;i<images.size();i++){
+                        Log.d(TAG, "onActivityResult: 图片地址"+ images.get(i));
+                        //MediaPicker_img.setImageURI(Uri.fromFile(new File(image)));
 
+                        photoPath = images.get(i);
+                        Intent intent1 = new Intent(this, FlashPhotoPreviewActivity.class);
+                        intent1.putExtra("uniqueID",uniqueID);
+                        intent1.putExtra("targetId",targetId);
+                        intent1.putExtra("photoPath",photoPath);
+                        intent1.putExtra("conversationType",conversationType);
+                        startActivity(intent1);
+                    }
+                }
+                break;
+        }
         /**
          * 1.使用getSupportFragmentManager().getFragments()获取到当前Activity中添加的Fragment集合
          * 2.遍历Fragment集合，手动调用在当前Activity中的Fragment中的onActivityResult()方法。

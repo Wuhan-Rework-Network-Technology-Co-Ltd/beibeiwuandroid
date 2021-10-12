@@ -87,7 +87,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             Log.d(TAG, "onResp: "+baseResp.toString());
         }
         finish();
-
     }
 
 
@@ -136,7 +135,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         nickname = jsonObject.getString("nickname");
                         openid = jsonObject.getString("openid");
 
-                        saveUserinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=weinxinregister&m=socialchat",openid,nickname,portrait);
+                        saveUserinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=weinxinregister&m=socialchat",openid,nickname,portrait);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -164,12 +163,12 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                             updateRedisCache(jsonObject.getString("id"));
                             //注册融云
                             //跳转首页
-                            postRongyunUserRegisterExist("https://rongyun.banghua.xin/RongCloud/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
+                            postRongyunUserRegisterExist("https://console.banghua.xin/otherinterface/rongyun/RongCloudNew/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
                         }else if (jsonObject.getString("type").equals("2")){
                             //更新redis缓存
                             updateRedisCache(jsonObject.getString("id"));
                             //不存在，注册融云，然后跳转设置页
-                            postRongyunUserRegister("https://rongyun.banghua.xin/RongCloud/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
+                            postRongyunUserRegister("https://console.banghua.xin/otherinterface/rongyun/RongCloudNew/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
                         }
 
                     } catch (JSONException e) {
@@ -338,7 +337,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         .add("frontorback","1")
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
+                        .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
                         .post(formBody)
                         .build();
 

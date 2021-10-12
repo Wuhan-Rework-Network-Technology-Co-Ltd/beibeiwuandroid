@@ -2,16 +2,17 @@ package xin.banghua.beiyuan.Main5Branch;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +54,7 @@ public class PrivateSettingActivity extends AppCompatActivity {
         switch4 = findViewById(R.id.switch4);
         switch5 = findViewById(R.id.switch5);
 
-        getPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getprivatesetting&m=socialchat");
+        getPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getprivatesetting&m=socialchat");
     }
 
     private void initSwitch() {
@@ -62,10 +63,10 @@ public class PrivateSettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     Toast.makeText(mContext, "开启", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","group");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","group");
                 }else {
                     Toast.makeText(mContext, "关闭", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","group");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","group");
                 }
             }
         });
@@ -74,10 +75,10 @@ public class PrivateSettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     Toast.makeText(mContext, "开启", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","location");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","location");
                 }else {
                     Toast.makeText(mContext, "关闭", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","location");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","location");
                 }
             }
         });
@@ -87,10 +88,10 @@ public class PrivateSettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     Toast.makeText(mContext, "开启", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","status");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","status");
                 }else {
                     Toast.makeText(mContext, "关闭", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","status");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","status");
                 }
             }
         });
@@ -100,10 +101,10 @@ public class PrivateSettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     Toast.makeText(mContext, "开启", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","friend");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","friend");
                 }else {
                     Toast.makeText(mContext, "关闭", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","friend");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","friend");
                 }
             }
         });
@@ -113,10 +114,10 @@ public class PrivateSettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     Toast.makeText(mContext, "开启", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","svip");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","svip");
                 }else {
                     Toast.makeText(mContext, "关闭", Toast.LENGTH_LONG).show();
-                    setPrivateSetting("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","svip");
+                    setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","svip");
                 }
             }
         });

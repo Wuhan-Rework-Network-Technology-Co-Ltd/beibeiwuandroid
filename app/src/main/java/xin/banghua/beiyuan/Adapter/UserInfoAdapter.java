@@ -23,6 +23,8 @@ import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHolder>{
     private static final String TAG = "UserInfoAdapter";
@@ -87,7 +89,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         viewHolder.userID.setText(mUserID.get(i));
         Glide.with(mContext)
                 .asBitmap()
-                .load(mUserPortrait.get(i))
+                .load(ConstantValue.getOssResourceUrl(mUserPortrait.get(i)))
                 .into(viewHolder.userPortrait);
         viewHolder.userNickName.setText(mUserNickName.get(i));
         viewHolder.userAge.setText(mUserAge.get(i));
@@ -179,7 +181,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
                 } else if ((svip_time - current_timestamp) < 3600 * 24 * 180) {
                     Glide.with(mContext)
                             .asBitmap()
-                            .load(R.drawable.ic_svip_gray)
+                            .load(R.drawable.ic_svip_black)
                             .into(viewHolder.vip_gray);
                 } else {
                     Glide.with(mContext)
@@ -237,15 +239,20 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
 
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked on: "+mUserID.get(i));
-                //Toast.makeText(mContext,mUserID.get(i)+mUserNickName.get(i),Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(v.getContext(), PersonageActivity.class);
-                intent.putExtra("userID",mUserID.get(i));
-                //保存选中的用户id
-                //SharedHelper shvalue = new SharedHelper(mContext);
-                //shvalue.saveValue(mUserID.get(i));
-                Log.d(TAG, "onClick: 保存选中的用户id"+mUserID.get(i));
-                v.getContext().startActivity(intent);
+                if (ConstantValue.myId==null){
+                    Intent intentSignin = new Intent(mContext, SigninActivity.class);
+                    mContext.startActivity(intentSignin);
+                }else {
+                    Log.d(TAG, "onClick: clicked on: " + mUserID.get(i));
+                    //Toast.makeText(mContext,mUserID.get(i)+mUserNickName.get(i),Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(v.getContext(), PersonageActivity.class);
+                    intent.putExtra("userID", mUserID.get(i));
+                    //保存选中的用户id
+                    //SharedHelper shvalue = new SharedHelper(mContext);
+                    //shvalue.saveValue(mUserID.get(i));
+                    Log.d(TAG, "onClick: 保存选中的用户id" + mUserID.get(i));
+                    v.getContext().startActivity(intent);
+                }
             }
         });
 

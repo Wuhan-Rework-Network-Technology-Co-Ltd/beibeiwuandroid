@@ -4,16 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
-import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
+import xin.banghua.beiyuan.Main2Branch.NewFriend;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.RongYunExtension.FlashPhotoActivity;
 
@@ -45,6 +41,15 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
                     intent.putExtra("uniqueid",textSplit[3]);
                     view.getContext().startActivity(intent);
                 }
+        }
+        if (message.getObjectName().equals("RC:TxtMsg")){
+            Log.d("新好友","RC:TxtMsg");
+            String[] textSplit = message.getContent().toString().split("'");
+            if (textSplit[1].contains("有人申请您为好友了")){
+                Log.d("新好友","申请您为好友了"+textSplit[3]);
+                Intent intent = new Intent(view.getContext(), NewFriend.class);
+                view.getContext().startActivity(intent);
+            }
         }
         //Log.d("闪图","发送了消息"+message.getContent().getJSONUserInfo()+"|"+message.getContent().getJsonMentionInfo());
         return false;

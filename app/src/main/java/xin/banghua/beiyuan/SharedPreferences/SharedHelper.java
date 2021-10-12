@@ -9,8 +9,21 @@ import java.util.Map;
 
 public class SharedHelper {
     private static final String TAG = "SharedHelper";
+    private static SharedHelper sharedHelper;
+    private static Context mContext;
 
-    private Context mContext;
+    public static SharedHelper newInstance() {
+        SharedHelper sharedHelper = new SharedHelper();
+        return sharedHelper;
+    }
+
+    public static SharedHelper getInstance(Context context) {
+        mContext = context;
+        if (sharedHelper == null){
+            sharedHelper = newInstance();
+        }
+        return sharedHelper;
+    }
 
     public SharedHelper() {
     }
@@ -154,5 +167,43 @@ public class SharedHelper {
     public int readOnestart() {
         SharedPreferences sp = mContext.getSharedPreferences("onestart", Context.MODE_PRIVATE);
         return sp.getInt("onestart", 0);
+    }
+
+
+    //定义一个保存数据的方法   保存用户信息
+    public void saveTryChat(int num) {
+        SharedPreferences sp = mContext.getSharedPreferences("TryChat", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("TryChat", num);
+        editor.commit();
+        //Toast.makeText(mContext, "信息已写入SharedPreference中", Toast.LENGTH_SHORT).show();
+    }
+
+    //定义一个读取SP文件的方法
+    public int readTryChat() {
+        SharedPreferences sp = mContext.getSharedPreferences("TryChat", Context.MODE_PRIVATE);
+        return sp.getInt("TryChat", 0);
+    }
+
+
+    /**
+     * 是否同意隐私协议
+     * @param confirm
+     */
+    public void savePrivateAgreement(Boolean confirm) {
+        SharedPreferences sp = mContext.getSharedPreferences("PrivateAgreement", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("PrivateAgreement", confirm);
+        editor.commit();
+        //Toast.makeText(mContext, "信息已写入SharedPreference中", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 读取隐私协议设置
+     * @return
+     */
+    public Boolean readPrivateAgreement() {
+        SharedPreferences sp = mContext.getSharedPreferences("PrivateAgreement", Context.MODE_PRIVATE);
+        return sp.getBoolean("PrivateAgreement", false);
     }
 }

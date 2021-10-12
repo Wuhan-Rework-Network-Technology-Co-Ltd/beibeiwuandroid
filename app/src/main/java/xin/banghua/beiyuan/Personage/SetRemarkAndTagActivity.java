@@ -29,6 +29,7 @@ import xin.banghua.beiyuan.Adapter.FriendList;
 import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class SetRemarkAndTagActivity extends AppCompatActivity {
     private static final String TAG = "SetRemarkAndTagActivity";
@@ -84,7 +85,7 @@ public class SetRemarkAndTagActivity extends AppCompatActivity {
                     }
 
                     //融云个人信息
-                    UserInfo userInfo = new UserInfo(Common.conversationSettingUserId, remark_et.getText().toString(), Uri.parse(Common.conversationSettingUserPortrait));
+                    UserInfo userInfo = new UserInfo(Common.conversationSettingUserId, remark_et.getText().toString(), Uri.parse(ConstantValue.getOssResourceUrl(Common.conversationSettingUserPortrait)));
                     RongIM.getInstance().refreshUserInfoCache(userInfo);
 
                     //缓存也改了

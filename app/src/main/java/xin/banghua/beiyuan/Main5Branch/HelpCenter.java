@@ -3,14 +3,9 @@ package xin.banghua.beiyuan.Main5Branch;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
@@ -18,6 +13,8 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import xin.banghua.beiyuan.R;
 
@@ -35,12 +32,12 @@ public class HelpCenter extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {//27就是8.1
             //做一些处理  webview打开
-            init("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+            init("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
         } else{
             //在版本低于此的时候，做一些处理   浏览器打开
-            openBrower("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+            openBrower("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
         }
-        //init("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+        //init("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
     }
 
 

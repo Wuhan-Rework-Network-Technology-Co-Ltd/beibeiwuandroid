@@ -14,8 +14,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONException;
-
 import java.io.IOException;
 
 import okhttp3.FormBody;
@@ -23,7 +21,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.MainActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SliderWebViewActivity;
 
@@ -40,7 +37,7 @@ public class SignupActivity extends Activity {
 
     String userAcountString,userPasswordString,verificationCodeString;
 
-    String smscode;
+    String smscode = "0000";
 
     Integer countDown = 60;
 

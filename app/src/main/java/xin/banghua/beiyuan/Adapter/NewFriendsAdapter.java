@@ -36,6 +36,7 @@ import xin.banghua.beiyuan.Main2Activity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.ViewHolder>  {
     private static final String TAG = "NewFriendsAdapter";
@@ -107,7 +108,7 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
         viewHolder.userID.setText(mUserID.get(i));
         Glide.with(mContext)
                 .asBitmap()
-                .load(mUserPortrait.get(i))
+                .load(ConstantValue.getOssResourceUrl(mUserPortrait.get(i)))
                 .into(viewHolder.userPortrait);
 
         //现在vip传过来的是时间
@@ -239,7 +240,7 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        deleteFriendNumber(i,mUserID.get(i),"https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
+                        deleteFriendNumber(i,mUserID.get(i),"https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
                         dialog.dismiss();
                     }
                 });

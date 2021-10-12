@@ -3,15 +3,16 @@ package xin.banghua.beiyuan.Main4Branch;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
@@ -47,7 +48,7 @@ public class InformReasonActivity extends AppCompatActivity {
                     Toast.makeText(context, "请输入账号密码", Toast.LENGTH_LONG).show();
                 }else {
                     String reason = informreason.getText().toString().trim();
-                    addInformer("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addinform&m=socialchat",informparameters,reason);
+                    addInformer("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addinform&m=socialchat",informparameters,reason);
                 }
             }
         });

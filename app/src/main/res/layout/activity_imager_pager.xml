@@ -16,6 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.daimajia.slider.library.SliderLayout
+            android:id="@+id/image_pager_slider"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content">
+
+        </com.daimajia.slider.library.SliderLayout>
+
         <TextView
             android:id="@+id/back_tv"
             android:layout_width="40dp"
@@ -25,14 +33,6 @@
             android:textColor="#FFFFFF"
             android:textSize="36sp"
             android:textStyle="bold" />
-
-        <com.daimajia.slider.library.SliderLayout
-            android:id="@+id/image_pager_slider"
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content">
-
-        </com.daimajia.slider.library.SliderLayout>
 
     </FrameLayout>
 

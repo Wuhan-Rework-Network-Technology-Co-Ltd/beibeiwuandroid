@@ -297,7 +297,11 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton3.setChecked(false);
                 toggleButton4.setChecked(false);
                 toggleButton5.setChecked(false);
-                marqueeTv.setVisibility(View.GONE);
+                try {
+                    marqueeTv.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 getDataSlider(getString(R.string.luntan_url),"自拍");
             }
         });
@@ -310,7 +314,11 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton2.setChecked(false);
                 toggleButton4.setChecked(false);
                 toggleButton5.setChecked(false);
-                marqueeTv.setVisibility(View.GONE);
+                try {
+                    marqueeTv.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 getDataSlider(getString(R.string.luntan_url),"真实");
             }
         });
@@ -323,7 +331,11 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton2.setChecked(false);
                 toggleButton3.setChecked(false);
                 toggleButton5.setChecked(false);
-                marqueeTv.setVisibility(View.GONE);
+                try {
+                    marqueeTv.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 getDataSlider(getString(R.string.luntan_url),"情感");
             }
         });
@@ -336,8 +348,12 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 toggleButton2.setChecked(false);
                 toggleButton3.setChecked(false);
                 toggleButton4.setChecked(false);
-                marqueeTv.setVisibility(View.GONE);
-                getVipinfo("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+                try {
+                    marqueeTv.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
             }
         });
     }
@@ -473,23 +489,43 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 public void onRefresh() {
                     Log.d(TAG, "onLoadMore: start");
 
-                    recyclerView.setPullLoadMoreCompleted();
-
+                    recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
                 }
 
                 @Override
                 public void onLoadMore() {
-
+//                    if (pageindex == 1&& ConstantValue.myId==null){
+//                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity())
+//                                .setTitle("登录以查看更多内容！")
+//                                .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialogInterface, int i) {
+//                                        Intent intent = new Intent(getActivity(), SigninActivity.class);
+//                                        getActivity().startActivity(intent);
+//                                    }
+//                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialogInterface, int i) {
+//                                        dialogInterface.dismiss();
+//                                    }
+//                                });
+//                        builder.create().show();
+//                    }else {
+//                        pageindex = pageindex+1;
+//                        getDataPostlist(getString(R.string.luntan_url),subtitle,pageindex+"");
+//                    }
                     pageindex = pageindex+1;
-
                     getDataPostlist(getString(R.string.luntan_url),subtitle,pageindex+"");
                     Log.d(TAG, "论坛页码："+pageindex);
-                    recyclerView.setPullLoadMoreCompleted();
+                    recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
                 }
 
             });
         }
     }
+
+
+
     //网络数据部分
     //处理返回的数据
     @SuppressLint("HandlerLeak")

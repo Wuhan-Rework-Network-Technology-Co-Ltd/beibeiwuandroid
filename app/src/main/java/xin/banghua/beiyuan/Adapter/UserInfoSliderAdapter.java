@@ -1,6 +1,8 @@
 package xin.banghua.beiyuan.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -34,7 +36,9 @@ import java.util.HashMap;
 import de.hdodenhof.circleimageview.CircleImageView;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.SliderWebViewActivity;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  ViewPagerEx.OnPageChangeListener{
     private static final String TAG = "UserInfoSliderAdapter";
@@ -135,7 +139,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                         // initialize a SliderLayout
                         textSliderView
                                 .description(jsonObject.getString("slidename"))
-                                .image(jsonObject.getString("slidepicture"))
+                                .image(ConstantValue.getOssResourceUrl(jsonObject.getString("slidepicture")))
                                 .setScaleType(BaseSliderView.ScaleType.Fit)
                                 .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                                     @Override
@@ -178,7 +182,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
             ((UserinfoHolder) viewHolder).userID.setText(mUserID.get(i-1));
             Glide.with(mContext)
                     .asBitmap()
-                    .load(mUserPortrait.get(i-1))
+                    .load(ConstantValue.getOssResourceUrl(mUserPortrait.get(i-1)))
                     .into(((UserinfoHolder) viewHolder).userPortrait);
             ((UserinfoHolder) viewHolder).userNickName.setText(mUserNickName.get(i-1));
             ((UserinfoHolder) viewHolder).userAge.setText(mUserAge.get(i-1));
@@ -265,7 +269,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                     } else if ((svip_time - current_timestamp) < 3600 * 24 * 180) {
                         Glide.with(mContext)
                                 .asBitmap()
-                                .load(R.drawable.ic_svip_gray)
+                                .load(R.drawable.ic_svip_black)
                                 .into(((UserinfoHolder) viewHolder).vip_gray);
                     } else {
                         Glide.with(mContext)
@@ -325,15 +329,33 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
 
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "onClick: clicked on: "+mUserID.get(i-1));
-                    //Toast.makeText(mContext,mUserID.get(i)+mUserNickName.get(i),Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(v.getContext(), PersonageActivity.class);
-                    intent.putExtra("userID",mUserID.get(i-1));
-                    //保存选中的用户id
-                    //SharedHelper shvalue = new SharedHelper(mContext);
-                    //shvalue.saveValue(mUserID.get(i));
-                    Log.d(TAG, "onClick: 保存选中的用户id"+mUserID.get(i-1));
-                    v.getContext().startActivity(intent);
+                    if (ConstantValue.myId==null){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                                .setTitle("登录后可以发起聊天！")
+                                .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent intentSignin = new Intent(mContext, SigninActivity.class);
+                                        mContext.startActivity(intentSignin);
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                        builder.create().show();
+                    }else {
+                        Log.d(TAG, "onClick: clicked on: " + mUserID.get(i - 1));
+                        //Toast.makeText(mContext,mUserID.get(i)+mUserNickName.get(i),Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(v.getContext(), PersonageActivity.class);
+                        intent.putExtra("userID", mUserID.get(i - 1));
+                        //保存选中的用户id
+                        //SharedHelper shvalue = new SharedHelper(mContext);
+                        //shvalue.saveValue(mUserID.get(i));
+                        Log.d(TAG, "onClick: 保存选中的用户id" + mUserID.get(i - 1));
+                        v.getContext().startActivity(intent);
+                    }
                 }
             });
         }

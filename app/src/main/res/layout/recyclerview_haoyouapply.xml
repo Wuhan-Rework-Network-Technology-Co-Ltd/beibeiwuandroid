@@ -71,10 +71,12 @@
 
     <TextView
         android:id="@+id/userLeaveWords"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
+        android:maxLines="5"
+        android:textSize="10sp"
         android:layout_toRightOf="@id/authportrait_framelayout"
         android:text="userLeaveWords"
         android:textColor="@color/rc_ext_root_menu_item_text_color" />

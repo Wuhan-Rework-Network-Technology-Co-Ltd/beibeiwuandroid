@@ -316,17 +316,35 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
             public void onRefresh() {
 
                 Log.d(TAG, "onRefresh: start");
-                recyclerView.setPullLoadMoreCompleted();
+                recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
             }
 
             @Override
             public void onLoadMore() {
-
+//                if (pageindex == 1&& ConstantValue.myId==null){
+//                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity())
+//                            .setTitle("登录以查看更多内容！")
+//                            .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    Intent intent = new Intent(getActivity(), SigninActivity.class);
+//                                    getActivity().startActivity(intent);
+//                                }
+//                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    dialogInterface.dismiss();
+//                                }
+//                            });
+//                    builder.create().show();
+//                }else {
+//                    pageindex = pageindex + 1;
+//                    getDataUserinfo(getString(R.string.fujin_url), pageindex + "");
+//                }
                 pageindex = pageindex + 1;
-
                 getDataUserinfo(getString(R.string.fujin_url), pageindex + "");
                 Log.d(TAG, "附近页码：" + pageindex);
-                recyclerView.setPullLoadMoreCompleted();
+                recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
             }
         });
     }
@@ -477,7 +495,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
         new AlertDialog.Builder(getContext())
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle("提示")
-                .setMessage("检测到您还没有开始GPS定位")
+                .setMessage("检测到您还没有开启GPS定位")
                 .setNegativeButton("取消", null)
                 .setPositiveButton("开启定位", new DialogInterface.OnClickListener() {
                     @Override

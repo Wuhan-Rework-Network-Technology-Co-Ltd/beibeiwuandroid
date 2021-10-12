@@ -49,6 +49,7 @@ public class CityAdapter extends BaseAdapter {
         TextView tv = new TextView(context);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tv.setText(cityBeanList.get(position).getCityName());
+        tv.setTextColor(android.graphics.Color.RED);
         return tv;
     }
 }

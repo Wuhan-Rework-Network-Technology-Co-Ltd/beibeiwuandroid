@@ -7,12 +7,15 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.rong.contactcard.ContactCardExtensionModule;
+import xin.banghua.beiyuan.ContactCardExtensionModule;
 import io.rong.contactcard.IContactCardInfoProvider;
 import io.rong.imkit.IExtensionModule;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imlib.model.UserInfo;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
+
+//import xin.banghua.beiyuan.ContactCardExtensionModule;
+//import io.rong.contactcard.IContactCardInfoProvider;
 
 public class MyContactCard {
     private static final String TAG = "MyContactCard";
@@ -34,7 +37,7 @@ public class MyContactCard {
              * @param contactInfoCallback
              */
             @Override
-            public void getContactAllInfoProvider(IContactCardInfoCallback contactInfoCallback) {
+            public void getContactAllInfoProvider(IContactCardInfoProvider.IContactCardInfoCallback contactInfoCallback) {
                 Log.d(TAG, "getContactAllInfoProvider: 呵呵");
                 contactInfoCallback.getContactCardInfoCallback(userInfoList);
             }

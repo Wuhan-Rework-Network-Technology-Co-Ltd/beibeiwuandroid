@@ -3,17 +3,16 @@ package xin.banghua.beiyuan.Main4Branch;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import net.alhazmy13.mediapicker.Image.ImagePicker;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +28,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Main5Branch.SomeonesluntanActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.mediapicker.Image.ImagePicker;
 
 public class FabugentieActivity extends AppCompatActivity {
 
@@ -141,7 +141,7 @@ public class FabugentieActivity extends AppCompatActivity {
 
                 followtext = content_et.getText().toString();
 
-                postFabugentie("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabugentie&m=socialchat");
+                postFabugentie("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabugentie&m=socialchat");
 
             }
         });

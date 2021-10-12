@@ -58,6 +58,7 @@ import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoProvider {
     private static final String TAG = "Main2Activity";
@@ -131,10 +132,10 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        if (Common.newFriendOrDeleteFriend){
-            Common.newFriendOrDeleteFriend = false;
+        if (xin.banghua.beiyuan.Common.newFriendOrDeleteFriend){
+            xin.banghua.beiyuan.Common.newFriendOrDeleteFriend = false;
             friendList.clear();
-            for (Map.Entry<String, FriendList> m : Common.friendListMap.entrySet()) {//通过entrySet
+            for (Map.Entry<String, FriendList> m : xin.banghua.beiyuan.Common.friendListMap.entrySet()) {//通过entrySet
                 friendList.add(m.getValue());
             }
             initRecyclerView(getWindow().getDecorView());
@@ -147,84 +148,92 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         setContentView(R.layout.activity_main2);
 
 
-        Log.d(TAG, "onCreate: Main2Activity");
-        //登录判断
-        ifSignin();
+        try {
+            Log.d(TAG, "onCreate: Main2Activity");
+            //登录判断
+            ifSignin();
 
-        //设置融云当前用户信息
-        SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
-        String myid = shuserinfo.readUserInfo().get("userID");
-        String mynickname = shuserinfo.readUserInfo().get("userNickName");
-        String myportrait = shuserinfo.readUserInfo().get("userPortrait");
-        UserInfo myinfo = new UserInfo(myid, mynickname, Uri.parse(myportrait));
-        RongIM.getInstance().setCurrentUserInfo(myinfo);
+            //设置融云当前用户信息
+            SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
+            String myid = shuserinfo.readUserInfo().get("userID");
+            String mynickname = shuserinfo.readUserInfo().get("userNickName");
+            String myportrait = shuserinfo.readUserInfo().get("userPortrait");
+            UserInfo myinfo = new UserInfo(myid, mynickname, Uri.parse(ConstantValue.getOssResourceUrl(myportrait)));
+            RongIM.getInstance().setCurrentUserInfo(myinfo);
 
-        //底部导航初始化和配置监听，默认选项
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_haoyou);
+            //底部导航初始化和配置监听，默认选项
+            bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+            bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+            bottomNavigationView.setSelectedItemId(R.id.navigation_haoyou);
 
-        //未读信息监听
-        iUnReadMessageObserver = new IUnReadMessageObserver() {
-            @Override
-            public void onCountChanged(int i) {
-                BadgeBottomNav.unreadMessageBadge(bottomNavigationView, i, getApplicationContext());
-                //initUnreadBadge(bottomNavigationView,i);
+            //未读信息监听
+            iUnReadMessageObserver = new IUnReadMessageObserver() {
+                @Override
+                public void onCountChanged(int i) {
+                    BadgeBottomNav.unreadMessageBadge(bottomNavigationView, i, getApplicationContext());
+                    //initUnreadBadge(bottomNavigationView,i);
+                }
+            };
+            RongIM.getInstance().addUnReadMessageCountChangedObserver(iUnReadMessageObserver, Conversation.ConversationType.PRIVATE);
+
+            Log.d(TAG, "onCreate: ConstantValue.friendList"+ Common.friendList);
+
+            //这里用了缓存  *好友列表还是暂时别缓存了，对方同意好友没优化，更改备注也没优化
+            //getDataFriends(getString(R.string.friends_url));
+            if (Common.friendListMap==null) {
+                getDataFriends(getString(R.string.friends_url));
+            }else {
+                for (Map.Entry<String, FriendList> m : Common.friendListMap.entrySet()) {//通过entrySet
+                    friendList.add(m.getValue());
+                }
+                initRecyclerView(getWindow().getDecorView());
             }
-        };
-        RongIM.getInstance().addUnReadMessageCountChangedObserver(iUnReadMessageObserver, Conversation.ConversationType.PRIVATE);
+            //getDataFriends(getString(R.string.friends_url));
+            //好友申请数
+            BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this, handler);
+            badgeBottomNav.getDataFriendsapply(getString(R.string.friendsapplynumber_url));
 
-        Log.d(TAG, "onCreate: Common.friendList"+Common.friendList);
 
-        //这里用了缓存  *好友列表还是暂时别缓存了，对方同意好友没优化，更改备注也没优化
-        //getDataFriends(getString(R.string.friends_url));
-        if (Common.friendListMap==null) {
-            getDataFriends(getString(R.string.friends_url));
-        }else {
-            for (Map.Entry<String, FriendList> m : Common.friendListMap.entrySet()) {//通过entrySet
-                friendList.add(m.getValue());
-            }
-            initRecyclerView(getWindow().getDecorView());
+            Button newFriend = findViewById(R.id.new_friend);
+            newFriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Main2Activity.this, NewFriend.class);
+                    startActivity(intent);
+                }
+            });
+            Button blacklist_friends = findViewById(R.id.blacklist_friends);
+            blacklist_friends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Main2Activity.this, BlackListActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            SearchView searchView = findViewById(R.id.friend_search);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    try {
+                        adapter.getFilter().filter(newText);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+
+
+            RongIM.setUserInfoProvider(this, true);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //getDataFriends(getString(R.string.friends_url));
-        //好友申请数
-        BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this, handler);
-        badgeBottomNav.getDataFriendsapply(getString(R.string.friendsapplynumber_url));
-
-
-        Button newFriend = findViewById(R.id.new_friend);
-        newFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Main2Activity.this, NewFriend.class);
-                startActivity(intent);
-            }
-        });
-        Button blacklist_friends = findViewById(R.id.blacklist_friends);
-        blacklist_friends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Main2Activity.this, BlackListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        SearchView searchView = findViewById(R.id.friend_search);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-
-
-        RongIM.setUserInfoProvider(this, true);
 
 
     }
@@ -283,8 +292,8 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
 
                 //替换备注
                 String nickname = jsonObject.getString("nickname");
-                if (Common.friendsRemarkMap!=null){
-                    for (Map.Entry<String, String> m : Common.friendsRemarkMap.entrySet()) {//通过entrySet
+                if (xin.banghua.beiyuan.Common.friendsRemarkMap!=null){
+                    for (Map.Entry<String, String> m : xin.banghua.beiyuan.Common.friendsRemarkMap.entrySet()) {//通过entrySet
                         System.out.println("key:" + m.getKey() + " value:" + m.getValue());
                         if (m.getKey().equals(jsonObject.getString("id"))){
                             nickname = m.getValue();
@@ -297,7 +306,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
                 friendListMap.put(jsonObject.getString("id"),filledData(friends));
 
                 //融云个人信息
-                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(jsonObject.getString("portrait")));
+                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait"))));
                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                 userInfoList.add(userInfo);
             }
@@ -305,8 +314,8 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
             myContactCard.setUserInfoList(userInfoList);
             myContactCard.initContactCard();
         }
-        Common.friendList = friendList;
-        Common.friendListMap = friendListMap;
+        xin.banghua.beiyuan.Common.friendList = friendList;
+        xin.banghua.beiyuan.Common.friendListMap = friendListMap;
         if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
             adapter.swapData(friendList);//重新赋值并调用notifyDataSetChanged();
         }else {//初次加载
@@ -485,7 +494,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         for (FriendList i : friendList) {
             if (i.getmUserID().equals(s)) {
                 Log.d(TAG, "getUserInfo: 进入" + s);
-                return new UserInfo(i.getmUserID(), i.getmUserNickName(), Uri.parse(i.getmUserPortrait()));
+                return new UserInfo(i.getmUserID(), i.getmUserNickName(), Uri.parse(ConstantValue.getOssResourceUrl(i.getmUserPortrait())));
             }
         }
         Log.d(TAG, "getUserInfo: 没进入" + s);

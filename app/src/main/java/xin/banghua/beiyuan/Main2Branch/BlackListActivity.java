@@ -63,7 +63,11 @@ public class BlackListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                try {
+                    adapter.getFilter().filter(newText);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return false;
             }
         });

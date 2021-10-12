@@ -159,6 +159,7 @@
                 android:paddingTop="15dp"
                 android:text="个人签名"
                 android:textAlignment="center"
+                android:maxLines="5"
                 android:textColor="@color/rc_ad_file_list_no_select_file_text_state"
                 android:textSize="18sp" />
 

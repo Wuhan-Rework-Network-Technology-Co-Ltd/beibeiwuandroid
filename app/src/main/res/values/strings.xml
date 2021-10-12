@@ -23,32 +23,32 @@
     <string name="media_picker_read_Write_external_storage"><![CDATA[读写外部储存器]]></string>
     <string name="title_activity_personage">PersonageActivity</string>
 
-    <string name="tuijian_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=Tuijiannew&amp;m=socialchat</string>
-    <string name="fujin_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=Fujinnew&amp;m=socialchat</string>
-    <string name="friendsapplynumber_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsapplynumber&amp;m=socialchat</string>
-    <string name="friendsapply_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsapplynew&amp;m=socialchat</string>
-    <string name="uniquelogin_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=uniquelogin&amp;m=socialchat</string>
-    <string name="personage_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=personagenew&amp;m=socialchat</string>
-    <string name="someonesluntan_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=someonesluntannew&amp;m=socialchat</string>
-    <string name="luntan_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=luntannew&amp;m=socialchat</string>
-    <string name="sawme_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=sawmenew&amp;m=socialchat</string>
-    <string name="viptimeinsousuo_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=viptimeinsousuo&amp;m=socialchat</string>
-    <string name="directsousuo_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=directsousuonew&amp;m=socialchat</string>
-    <string name="conditionsousuo_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=conditionsousuonew&amp;m=socialchat</string>
-    <string name="updatelocation_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=updatelocation&amp;m=socialchat</string>
-    <string name="getversion_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getversion&amp;m=socialchat</string>
-    <string name="payunifiedorder2svip_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=payunifiedorder2svip&amp;m=socialchat</string>
-    <string name="alipayaddorder2svip_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=alipayaddorder2svip&amp;m=socialchat</string>
-    <string name="setsvipchat_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=setsvipchat&amp;m=socialchat</string>
-    <string name="getsvipchat_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getsvipchat&amp;m=socialchat</string>
+    <string name="tuijian_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=Tuijiannew&amp;m=socialchat</string>
+    <string name="fujin_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=Fujinnew&amp;m=socialchat</string>
+    <string name="friendsapplynumber_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsapplynumber&amp;m=socialchat</string>
+    <string name="friendsapply_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsapplynew&amp;m=socialchat</string>
+    <string name="uniquelogin_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=uniquelogin&amp;m=socialchat</string>
+    <string name="personage_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=personagenew&amp;m=socialchat</string>
+    <string name="someonesluntan_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=someonesluntannew&amp;m=socialchat</string>
+    <string name="luntan_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=luntannew&amp;m=socialchat</string>
+    <string name="sawme_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=sawmenew&amp;m=socialchat</string>
+    <string name="viptimeinsousuo_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=viptimeinsousuo&amp;m=socialchat</string>
+    <string name="directsousuo_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=directsousuonew&amp;m=socialchat</string>
+    <string name="conditionsousuo_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=conditionsousuonew&amp;m=socialchat</string>
+    <string name="updatelocation_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=updatelocation&amp;m=socialchat</string>
+    <string name="getversion_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getversion&amp;m=socialchat</string>
+    <string name="payunifiedorder2svip_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=payunifiedorder2svip&amp;m=socialchat</string>
+    <string name="alipayaddorder2svip_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=alipayaddorder2svip&amp;m=socialchat</string>
+    <string name="setsvipchat_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=setsvipchat&amp;m=socialchat</string>
+    <string name="getsvipchat_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getsvipchat&amp;m=socialchat</string>
     <!-- 好友和黑名单已经改为逗号分隔，苹果也需要修改 -->
-    <string name="friends_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsnewnew&amp;m=socialchat</string>
-    <string name="iffriendnew_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=iffriendnew&amp;m=socialchat</string>
-    <string name="agreefriendnew_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=agreefriendnew&amp;m=socialchat</string>
-    <string name="deletefriendnew_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=deletefriendnew&amp;m=socialchat</string>
-    <string name="blacklist_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getblacklistnew&amp;m=socialchat</string>
+    <string name="friends_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=friendsnewnew&amp;m=socialchat</string>
+    <string name="iffriendnew_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=iffriendnew&amp;m=socialchat</string>
+    <string name="agreefriendnew_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=agreefriendnew&amp;m=socialchat</string>
+    <string name="deletefriendnew_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=deletefriendnew&amp;m=socialchat</string>
+    <string name="blacklist_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=getblacklistnew&amp;m=socialchat</string>
     <!-- 备注和标签 -->
-    <string name="setfriendsremark_url">https://applet.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=setfriendsremark&amp;m=socialchat</string>
+    <string name="setfriendsremark_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=setfriendsremark&amp;m=socialchat</string>
 
     <string-array name="age">
         <!--        <item>15</item>-->

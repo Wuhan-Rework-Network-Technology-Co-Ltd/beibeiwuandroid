@@ -4,10 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.orhanobut.dialogplus.DialogPlus;
 
@@ -41,6 +42,7 @@ import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.util.MD5Tool;
 
 public class CommonSettingActivity extends AppCompatActivity {
     private static final String TAG = "CommonSettingActivity";
@@ -105,7 +107,7 @@ public class CommonSettingActivity extends AppCompatActivity {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setAccountdelete_btn("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Accountdelete&m=socialchat");
+                        setAccountdelete_btn("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Accountdelete&m=socialchat");
                         dialog.dismiss();
                     }
                 });
@@ -212,7 +214,7 @@ public class CommonSettingActivity extends AppCompatActivity {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getDataFriends("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friends&m=socialchat");
+                        getDataFriends("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friends&m=socialchat");
                         Toast.makeText(mContext, "清除聊天记录", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -231,6 +233,7 @@ public class CommonSettingActivity extends AppCompatActivity {
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
+                        .add("sign", MD5Tool.getSign(myid))
                         .build();
                 Request request = new Request.Builder()
                         .url(url)

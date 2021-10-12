@@ -4,17 +4,19 @@ package xin.banghua.beiyuan.Main5Branch;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
+import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.R;
 
 
@@ -41,6 +43,9 @@ public class ResetPersonalInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mContext = getActivity();
+
+
+        CheckPermission.verifyPermissionCameraAndStorage(getActivity());
     }
 
     @Override

@@ -6,7 +6,6 @@ import android.util.Log;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
-import xin.banghua.beiyuan.App;
 
 public class RongyunConnect {
     private static final String TAG = "RongyunConnect";
@@ -16,38 +15,21 @@ public class RongyunConnect {
      * @param token
      */
     public void connect(String token) {
-
-
-            Log.d(TAG, "connect: 进入app的融云链接");
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
 
-                /**
-                 * Token 错误。可以从下面两点检查
-                 * 1.  Token 是否过期，如果过期您需要向 App Server 重新请求一个新的 Token
-                 * 2.  token 对应的 appKey 和工程里设置的 appKey 是否一致
-                 */
                 @Override
-                public void onTokenIncorrect() {
-                    Log.d("RONGCLOUD", "--onTokenIncorrect");
+                public void onSuccess(String s) {
+                    Log.d(TAG, "connect: 进入app的融云链接"+s+"||"+token);
                 }
 
-                /**
-                 * 连接融云成功
-                 * @param userid 当前 token 对应的用户 id
-                 */
                 @Override
-                public void onSuccess(String userid) {
-                    Log.d("RONGCLOUD", "--onSuccess" + userid);
+                public void onError(RongIMClient.ConnectionErrorCode connectionErrorCode) {
 
                 }
 
-                /**
-                 * 连接融云失败
-                 * @param errorCode 错误码，可到官网 查看错误码对应的注释
-                 */
                 @Override
-                public void onError(RongIMClient.ErrorCode errorCode) {
-                    Log.d("RONGCLOUD", "--error" + errorCode.getMessage());
+                public void onDatabaseOpened(RongIMClient.DatabaseOpenStatus databaseOpenStatus) {
+
                 }
             });
 

@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="background">#F4F4F4</color>
+
+    <color name="background_deep">#FFFFFF</color>
+
+    <color name="background_against">#b22B292B</color>
+    <color name="background_against_deep">#B2000000</color>
+
+    <color name="text_color_1">#212121</color>
+    <color name="text_color_2">#FBE7CF</color>
+    <color name="text_color_3">#33424C</color>
+
+    <color name="text_color_4">#FFFFFF</color>
+    <color name="text_color_5">#9E9E9E</color>
+    <color name="text_color_6">#00796B</color>
+
+    <color name="text_color_7">#F46C9E</color>
+
+    <color name="text_color_8">#8A1333</color>
+    <color name="text_color_8_deep">#630E25</color>
+    <color name="text_color_9">#1976D2</color>
+
+    <color name="text_color_10">#ffa726</color>
+
     <color name="colorPrimary">#FDD000</color>
     <color name="colorPrimaryDark">#66173E</color>
     <color name="colorAccent">#FA9898</color>

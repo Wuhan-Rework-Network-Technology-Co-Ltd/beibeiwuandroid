@@ -80,7 +80,7 @@ public class InformBlacklistAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 //拉黑
-                addblacklist("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
+                addblacklist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
             }
         });
 
@@ -90,7 +90,7 @@ public class InformBlacklistAdapter extends BaseAdapter {
             delete_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deletepost("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deletepost&m=socialchat");
+                    deletepost("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deletepost&m=socialchat");
                 }
             });
         }

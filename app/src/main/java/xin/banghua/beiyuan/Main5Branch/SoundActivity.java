@@ -100,7 +100,7 @@ public class SoundActivity extends AppCompatActivity {
                         .add("disturb", disturb)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeidisturb&m=rediscache")
+                        .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeidisturb&m=rediscache")
                         .post(formBody)
                         .build();
 

@@ -3,15 +3,16 @@ package xin.banghua.beiyuan.Signin;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
@@ -21,6 +22,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.util.MD5Tool;
 
 import static io.rong.imkit.fragment.ConversationFragment.TAG;
 
@@ -36,7 +38,7 @@ public class FindPasswordActivity extends AppCompatActivity {
 
     String userAcountString,userPasswordString,verificationCodeString;
 
-    String smscode;
+    String smscode = "0000";
 
     Integer countDown = 60;
     //属性
@@ -122,7 +124,7 @@ public class FindPasswordActivity extends AppCompatActivity {
     //TODO okhttp验证信息
     public void verificationCode(final String verificationCodeString){
         if (smscode.equals(verificationCodeString)){
-            findPassword("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=findpassword&m=socialchat",userAcountString,userPasswordString);
+            findPassword("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=findpassword&m=socialchat",userAcountString,userPasswordString);
         }else {
             Toast.makeText(mContext, "验证码错误", Toast.LENGTH_LONG).show();
         }
@@ -187,6 +189,7 @@ public class FindPasswordActivity extends AppCompatActivity {
             public void run(){
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
+                        .add("sign", MD5Tool.getSign(userPhone))
                         .add("userPhone", userPhone)
                         .add("userPassword", userPassword)
                         .build();

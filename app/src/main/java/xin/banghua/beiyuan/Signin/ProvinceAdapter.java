@@ -52,6 +52,7 @@ public class ProvinceAdapter extends BaseAdapter {
         TextView tv = new TextView(context);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tv.setText(provinceBeanList.get(position).getProvince());
+        tv.setTextColor(android.graphics.Color.RED);
         return tv;
     }
 }

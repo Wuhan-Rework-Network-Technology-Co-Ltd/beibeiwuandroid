@@ -341,7 +341,11 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
             adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
         }else {
             //初次加载
-            initRecyclerView(view,mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
+            try {
+                initRecyclerView(view,mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -361,16 +365,35 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
             public void onRefresh() {
 
                 Log.d(TAG, "onRefresh: start");
-                recyclerView.setPullLoadMoreCompleted();
+                recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
             }
 
             @Override
             public void onLoadMore() {
+//                if (pageindex==1&& ConstantValue.myId==null){
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+//                            .setTitle("登录以查看更多内容！")
+//                            .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    Intent intent = new Intent(getActivity(), SigninActivity.class);
+//                                    getActivity().startActivity(intent);
+//                                }
+//                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    dialogInterface.dismiss();
+//                                }
+//                            });
+//                    builder.create().show();
+//                }else {
+//                    pageindex = pageindex+1;
+//                    getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
+//                }
                 pageindex = pageindex+1;
-
                 getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
                 Log.d(TAG, "推荐页码："+pageindex);
-                recyclerView.setPullLoadMoreCompleted();
+                recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
             }
         });
 
@@ -451,32 +474,36 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            //1是用户数据，2是幻灯片
-            switch (msg.what){
-                case 1:
-                    try {
-                        String resultJson1 = msg.obj.toString();
-                        Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
+            try {
+                super.handleMessage(msg);
+                //1是用户数据，2是幻灯片
+                switch (msg.what){
+                    case 1:
+                        try {
+                            String resultJson1 = msg.obj.toString();
+                            Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
 
-                        JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
-                        initUserInfo(mView,jsonArray);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    try {
-                        String resultJson2 = msg.obj.toString();
-                        Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
-                        JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
-                        sliderJsonArray = jsonArray;
-                        getDataUserinfo(getString(R.string.tuijian_url),"1");
-                        //initSlider(mView,jsonArray);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                            JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
+                            initUserInfo(mView,jsonArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        try {
+                            String resultJson2 = msg.obj.toString();
+                            Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
+                            JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
+                            sliderJsonArray = jsonArray;
+                            getDataUserinfo(getString(R.string.tuijian_url),"1");
+                            //initSlider(mView,jsonArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     };

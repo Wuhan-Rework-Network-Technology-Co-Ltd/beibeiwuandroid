@@ -35,11 +35,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.BuildConfig;
 import xin.banghua.beiyuan.DownloadUtils;
-import xin.banghua.beiyuan.PackageUtils;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.util.MD5Tool;
 
 import static io.rong.imkit.fragment.ConversationListFragment.TAG;
 
@@ -181,18 +183,25 @@ public class SettingFragment extends Fragment {
         logout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d(TAG, "onClick: 退出登录");
+                RongIMClient.getInstance().logout();
                 //注销推送
                 SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
                 updateRedisCache(myid);
 
-                RongIMClient.getInstance().disconnect();
+                ConstantValue.myId = null;
+
                 SharedPreferences sp = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("userID", "");
                 editor.commit();
                 Intent intent = new Intent(mContext, SigninActivity.class);
                 startActivity(intent);
+
+                getActivity().finish();
+
             }
         });
         accountdelete_btn.setOnClickListener(new View.OnClickListener() {
@@ -238,7 +247,7 @@ public class SettingFragment extends Fragment {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setAccountdelete_btn("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Accountdelete&m=socialchat");
+                        setAccountdelete_btn("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Accountdelete&m=socialchat");
                         dialog.dismiss();
                     }
                 });
@@ -259,7 +268,7 @@ public class SettingFragment extends Fragment {
                         .add("myid", myid)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://weiqing.oushelun.cn/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignout&m=rediscache")
+                        .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignout&m=rediscache")
                         .post(formBody)
                         .build();
 
@@ -312,6 +321,7 @@ public class SettingFragment extends Fragment {
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
+                        .add("sign", MD5Tool.getSign(myid))
                         .build();
                 Request request = new Request.Builder()
                         .url(url)
@@ -352,7 +362,7 @@ public class SettingFragment extends Fragment {
                     }
                     break;
                 case 2:
-                    if (Double.parseDouble(msg.obj.toString())>Double.parseDouble(PackageUtils.getVersionName(mContext))){
+                    if (Double.parseDouble(msg.obj.toString())> BuildConfig.VERSION_CODE){
                         final DialogPlus dialog = DialogPlus.newDialog(mContext)
                                 .setAdapter(new BaseAdapter() {
                                     @Override
@@ -381,7 +391,7 @@ public class SettingFragment extends Fragment {
                         dialog.show();
                         View view = dialog.getFooterView();
                         TextView scoreresult = view.findViewById(R.id.scoreresult);
-                        scoreresult.setText("亲，有新版本"+msg.obj.toString()+"可更新喽");
+                        scoreresult.setText("请尽快更新版本"+msg.obj.toString()+",否则部分功能可能无法使用！！！");
                         Button vipconversion_btn = view.findViewById(R.id.newversion_btn);
                         vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -403,7 +413,7 @@ public class SettingFragment extends Fragment {
                             }
                         });
                     }else {
-                        Toast.makeText(mContext, "当前版本："+PackageUtils.getVersionName(mContext), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "当前版本："+BuildConfig.VERSION_CODE, Toast.LENGTH_LONG).show();
                     }
                     break;
             }

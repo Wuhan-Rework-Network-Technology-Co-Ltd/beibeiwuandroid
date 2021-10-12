@@ -4,10 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,16 +18,17 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.gson.GsonBuilder;
+import androidx.appcompat.app.AppCompatActivity;
 
-import net.alhazmy13.mediapicker.Image.ImagePicker;
+import com.donkingliang.imageselector.utils.ImageSelector;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -37,11 +37,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.MainActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.bean.AddrBean;
 
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
+
 public class Userset extends AppCompatActivity {
+    private static final String TAG = "Userset";
     private Context mContext;
     //昵称，年龄，地区
     EditText userNickname_et,userAge_et,userRegion_et,userSignature_et,referral_et;
@@ -68,6 +72,8 @@ public class Userset extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userset);
+
+
 
         if_submited = 0;
 
@@ -135,15 +141,25 @@ public class Userset extends AppCompatActivity {
         userPortrait_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ImagePicker.Builder(Userset.this)
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                        .directory(ImagePicker.Directory.DEFAULT)
-                        .extension(ImagePicker.Extension.PNG)
-                        .scale(600, 600)
-                        .allowMultipleImages(false)
-                        .enableDebuggingMode(true)
-                        .build();
+//                new ImagePicker.Builder(Userset.this)
+//                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+//                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+//                        .directory(ImagePicker.Directory.DEFAULT)
+//                        .extension(ImagePicker.Extension.PNG)
+//                        .scale(600, 600)
+//                        .allowMultipleImages(false)
+//                        .enableDebuggingMode(true)
+//                        .build();
+
+
+                CheckPermission.verifyPermissionCameraAndStorage(Userset.this);
+
+                ImageSelector.builder()
+                        .useCamera(true) // 设置是否使用拍照
+                        .setCrop(true)  // 设置是否使用图片剪切功能。
+                        .setSingle(true)  //设置是否单选
+                        .setViewImage(true) //是否点击放大图片查看,，默认为true
+                        .start(Userset.this, IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
             }
         });
 
@@ -184,9 +200,9 @@ public class Userset extends AppCompatActivity {
                 }
                 if_submited = 1;
                 if (logtype.equals("1")){
-                    postSignUp("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signup&m=socialchat");
+                    postSignUp("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signup&m=socialchat");
                 }else if (logtype.equals("2")){
-                    postWXSignUp("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signupwx&m=socialchat");
+                    postWXSignUp("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signupwx&m=socialchat");
                 }
             }
         });
@@ -369,20 +385,51 @@ public class Userset extends AppCompatActivity {
             }
         }).start();
     }
+
+    private final int  RequestCode = 101;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            List<String> mPaths = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
-            //Your Code
-            ListIterator<String> listIterator = mPaths.listIterator();
-            while (listIterator.hasNext()){
-                String mPath = listIterator.next();
-                Log.d("path", mPath);
-                userPortrait_iv.setImageURI(Uri.parse(mPath));
-                userPortrait = mPath;
-            }
+//        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+//            List<String> mPaths = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
+//            //Your Code
+//            ListIterator<String> listIterator = mPaths.listIterator();
+//            while (listIterator.hasNext()){
+//                String mPath = listIterator.next();
+//                Log.d("path", mPath);
+//
+//                try {
+//                    mPath = URLDecoder.decode(mPath, "UTF-8");
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+//                userPortrait_iv.setImageURI(Uri.parse(mPath));
+//                userPortrait = mPath;
+//            }
+//        }
+
+        switch (requestCode) {
+            //从图片选择器回来
+            case IMAGE_SELECTOR_REQUEST_CODE:
+                if (data != null) {
+                    ArrayList<String> images = data.getStringArrayListExtra(ImageSelector.SELECT_RESULT);
+                    boolean isCameraImage = data.getBooleanExtra(ImageSelector.IS_CAMERA_IMAGE, false);
+                    boolean isFull = data.getBooleanExtra(ImageSelector.IS_FULL, false);
+                    Log.d("isCameraImage", "是否是拍照图片：" + isCameraImage);
+                    if (images == null || images.size() <= 0) {
+                        Toast.makeText(this, "取消设置", Toast.LENGTH_SHORT).show();
+                    }
+                    for (String image : images){
+                        Log.d(TAG, "onActivityResult: 图片地址"+image);
+                        String mPath = image;
+//                        portrait.setImageURI(Uri.fromFile(new File(image)));
+
+                        userPortrait_iv.setImageURI(Uri.parse(mPath));
+                        userPortrait = mPath;
+                    }
+                }
+                break;
         }
     }
 }

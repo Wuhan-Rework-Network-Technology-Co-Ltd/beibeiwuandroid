@@ -5,19 +5,21 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import org.json.JSONArray;
@@ -29,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import androidx.navigation.Navigation;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -75,9 +76,9 @@ public class GuangchangFragment extends Fragment implements BaseSliderView.OnSli
         super.onViewCreated(view, savedInstanceState);
 
         //使用okhttp获取全部用户信息
-        //getDataDongtai("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
+        //getDataDongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
         //使用okhttp获取推荐的幻灯片
-        getDataSlide("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
+        getDataSlide("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
 
         initNavigateButton(view);
 
@@ -308,7 +309,7 @@ public class GuangchangFragment extends Fragment implements BaseSliderView.OnSli
                         Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         sliderJsonArray = jsonArray;
-                        getDataDongtai("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
+                        getDataDongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
                         //initSlider(mView,jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();

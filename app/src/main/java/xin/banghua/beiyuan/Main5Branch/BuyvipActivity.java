@@ -51,7 +51,7 @@ public class BuyvipActivity extends AppCompatActivity {
             }
         });
 
-        getVip("https://applet.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getvip&m=socialchat");
+        getVip("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getvip&m=socialchat");
     }
 
     //TODO 初始化Viprecyclerview

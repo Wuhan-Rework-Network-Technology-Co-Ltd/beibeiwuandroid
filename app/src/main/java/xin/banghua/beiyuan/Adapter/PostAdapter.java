@@ -1,8 +1,6 @@
 package xin.banghua.beiyuan.Adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +10,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.zolad.zoominimageview.ZoomInImageView;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.util.ConstantValue;
 
 public class PostAdapter extends RecyclerView.Adapter{
     private static final String TAG = "PostAdapter";
@@ -76,13 +78,13 @@ public class PostAdapter extends RecyclerView.Adapter{
             ((HeadHolder) viewHolder).authnickname.setText(currentItem.getAuthnickname());
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getAuthportrait())
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getAuthportrait()))
                     .into(((HeadHolder) viewHolder).authportrait);
             ((HeadHolder) viewHolder).posttext.setText(currentItem.getPosttext());
             if (currentItem.getPostpicture1()!=""){
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(currentItem.getPostpicture1())
+                        .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture1()))
                         .into(((HeadHolder) viewHolder).postpicture1);
                 ((HeadHolder) viewHolder).postpicture1.setVisibility(View.VISIBLE);
                 ((HeadHolder) viewHolder).postpicture1.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +120,7 @@ public class PostAdapter extends RecyclerView.Adapter{
                         ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                         Glide.with(mContext)
                                 .asBitmap()
-                                .load(currentItem.getPostpicture1())
+                                .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture1()))
                                 .into(originalImage);
                         Button dismissdialog_btn = view.findViewById(R.id.cancel);
                         dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +137,7 @@ public class PostAdapter extends RecyclerView.Adapter{
             if (currentItem.getPostpicture2()!=""){
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(currentItem.getPostpicture2())
+                        .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture2()))
                         .into(((HeadHolder) viewHolder).postpicture2);
                 ((HeadHolder) viewHolder).postpicture2.setVisibility(View.VISIBLE);
                 ((HeadHolder) viewHolder).postpicture2.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +173,7 @@ public class PostAdapter extends RecyclerView.Adapter{
                         ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                         Glide.with(mContext)
                                 .asBitmap()
-                                .load(currentItem.getPostpicture2())
+                                .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture2()))
                                 .into(originalImage);
                         Button dismissdialog_btn = view.findViewById(R.id.cancel);
                         dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +190,7 @@ public class PostAdapter extends RecyclerView.Adapter{
             if (currentItem.getPostpicture3()!=""){
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(currentItem.getPostpicture3())
+                        .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture3()))
                         .into(((HeadHolder) viewHolder).postpicture3);
                 ((HeadHolder) viewHolder).postpicture3.setVisibility(View.VISIBLE);
                 ((HeadHolder) viewHolder).postpicture3.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +226,7 @@ public class PostAdapter extends RecyclerView.Adapter{
                         ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                         Glide.with(mContext)
                                 .asBitmap()
-                                .load(currentItem.getPostpicture3())
+                                .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture3()))
                                 .into(originalImage);
                         Button dismissdialog_btn = view.findViewById(R.id.cancel);
                         dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
@@ -246,13 +248,13 @@ public class PostAdapter extends RecyclerView.Adapter{
             ((ContentHolder) viewHolder).authnickname.setText(currentItem.getAuthnickname());
             Glide.with(mContext)
                     .asBitmap()
-                    .load(currentItem.getAuthportrait())
+                    .load(ConstantValue.getOssResourceUrl(currentItem.getAuthportrait()))
                     .into(((ContentHolder) viewHolder).authportrait);
             ((ContentHolder) viewHolder).followtext.setText(currentItem.getFollowtext());
             if (currentItem.getFollowpicture1()!=""){
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(currentItem.getFollowpicture1())
+                        .load(ConstantValue.getOssResourceUrl(currentItem.getFollowpicture1()))
                         .into(((ContentHolder) viewHolder).followpicture1);
                 ((ContentHolder) viewHolder).followpicture1.setVisibility(View.VISIBLE);
                 ((ContentHolder) viewHolder).followpicture1.setOnClickListener(new View.OnClickListener() {
@@ -288,7 +290,7 @@ public class PostAdapter extends RecyclerView.Adapter{
                         ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                         Glide.with(mContext)
                                 .asBitmap()
-                                .load(currentItem.getFollowpicture1())
+                                .load(ConstantValue.getOssResourceUrl(currentItem.getFollowpicture1()))
                                 .into(originalImage);
                         Button dismissdialog_btn = view.findViewById(R.id.cancel);
                         dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
@@ -305,7 +307,7 @@ public class PostAdapter extends RecyclerView.Adapter{
             if (currentItem.getFollowpicture2()!=""){
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(currentItem.getFollowpicture2())
+                        .load(ConstantValue.getOssResourceUrl(currentItem.getFollowpicture2()))
                         .into(((ContentHolder) viewHolder).followpicture2);
                 ((ContentHolder) viewHolder).followpicture2.setVisibility(View.VISIBLE);
                 ((ContentHolder) viewHolder).followpicture2.setOnClickListener(new View.OnClickListener() {
@@ -341,7 +343,7 @@ public class PostAdapter extends RecyclerView.Adapter{
                         ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                         Glide.with(mContext)
                                 .asBitmap()
-                                .load(currentItem.getFollowpicture2())
+                                .load(ConstantValue.getOssResourceUrl(currentItem.getFollowpicture2()))
                                 .into(originalImage);
                         Button dismissdialog_btn = view.findViewById(R.id.cancel);
                         dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
@@ -358,7 +360,7 @@ public class PostAdapter extends RecyclerView.Adapter{
             if (currentItem.getFollowpicture3()!=""){
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(currentItem.getFollowpicture3())
+                        .load(ConstantValue.getOssResourceUrl(currentItem.getFollowpicture3()))
                         .into(((ContentHolder) viewHolder).followpicture3);
                 ((ContentHolder) viewHolder).followpicture3.setVisibility(View.VISIBLE);
                 ((ContentHolder) viewHolder).followpicture3.setOnClickListener(new View.OnClickListener() {
@@ -394,7 +396,7 @@ public class PostAdapter extends RecyclerView.Adapter{
                         ZoomInImageView originalImage = view.findViewById(R.id.originalImage);
                         Glide.with(mContext)
                                 .asBitmap()
-                                .load(currentItem.getFollowpicture3())
+                                .load(ConstantValue.getOssResourceUrl(currentItem.getFollowpicture3()))
                                 .into(originalImage);
                         Button dismissdialog_btn = view.findViewById(R.id.cancel);
                         dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
