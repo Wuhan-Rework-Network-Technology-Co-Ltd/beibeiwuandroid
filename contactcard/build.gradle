@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+
+
+    defaultConfig {
+       minSdkVersion 19
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'cn.rongcloud.sdk:im_lib:4.1.1.7' // 即时通讯基础能力库
+    implementation 'cn.rongcloud.sdk:im_kit:4.1.1.7' // 即时通讯 UI 基础组件
+
+    api project(':Sight')
+    implementation 'com.squareup.okhttp3:okhttp:4.0.0'
+}
