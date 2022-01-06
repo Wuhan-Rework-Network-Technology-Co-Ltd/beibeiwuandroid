@@ -36,13 +36,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.Personage.SetRemarkAndTagActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.DO_NOT_DISTURB;
 import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.NOTIFY;
@@ -80,8 +79,8 @@ public class ConversationSettingActivity extends AppCompatActivity {
         targetId = intent.getStringExtra("targetId");
         title = intent.getStringExtra("title");
 
-        Common.conversationSettingUserId = targetId;
-        Common.conversationSettingUserName = title;
+        xin.banghua.beiyuan.Common.conversationSettingUserId = targetId;
+        xin.banghua.beiyuan.Common.conversationSettingUserName = title;
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -395,7 +394,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
         Log.d(TAG, "onActivityResult: 修改备注后改名");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REMARK_TAG_SETTING) {
-            title = Common.conversationSettingUserName;
+            title = xin.banghua.beiyuan.Common.conversationSettingUserName;
             nickname.setText(title);
             getSupportActionBar().setTitle(title);
         }
@@ -404,10 +403,10 @@ public class ConversationSettingActivity extends AppCompatActivity {
     public void initPersonage(JSONObject jsonObject) throws JSONException {
         Glide.with(this)
                 .asBitmap()
-                .load(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait")))
+                .load(Common.getOssResourceUrl(jsonObject.getString("portrait")))
                 .into(portrait);
 
-        Common.conversationSettingUserPortrait = jsonObject.getString("portrait");
+        xin.banghua.beiyuan.Common.conversationSettingUserPortrait = jsonObject.getString("portrait");
     }
     //网络数据部分
     @SuppressLint("HandlerLeak")

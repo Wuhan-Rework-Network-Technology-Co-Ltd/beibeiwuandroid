@@ -370,7 +370,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
 
             @Override
             public void onLoadMore() {
-//                if (pageindex==1&& ConstantValue.myId==null){
+//                if (pageindex==1&& Common.myID==null){
 //                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 //                            .setTitle("登录以查看更多内容！")
 //                            .setPositiveButton("去登录", new DialogInterface.OnClickListener() {

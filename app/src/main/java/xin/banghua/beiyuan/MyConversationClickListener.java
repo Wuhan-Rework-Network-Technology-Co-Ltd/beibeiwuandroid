@@ -12,6 +12,7 @@ import io.rong.imlib.model.UserInfo;
 import xin.banghua.beiyuan.Main2Branch.NewFriend;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.RongYunExtension.FlashPhotoActivity;
+import xin.banghua.beiyuan.comment.CommentListActivity;
 
 public class MyConversationClickListener implements RongIM.ConversationClickListener {
     private static final String TAG = "MyConversationClickList";
@@ -48,6 +49,15 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
             if (textSplit[1].contains("有人申请您为好友了")){
                 Log.d("新好友","申请您为好友了"+textSplit[3]);
                 Intent intent = new Intent(view.getContext(), NewFriend.class);
+                view.getContext().startActivity(intent);
+            }
+        }
+        if (message.getObjectName().equals("RC:TxtMsg")){
+            Log.d("新好友","RC:TxtMsg");
+            String[] textSplit = message.getContent().toString().split("'");
+            if (textSplit[1].contains("回复了你的评论：")||textSplit[1].contains("评论了你的帖子：")){
+                Log.d("评论","回复了你的评论"+textSplit[3]);
+                Intent intent = new Intent(view.getContext(), CommentListActivity.class);
                 view.getContext().startActivity(intent);
             }
         }

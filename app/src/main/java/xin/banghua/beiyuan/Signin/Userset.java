@@ -59,7 +59,7 @@ public class Userset extends AppCompatActivity {
     //
     CircleImageView userPortrait_iv;
 
-    Integer if_submited;
+    Integer if_submited = 0;
 
     //地区选择
     Spinner spProvince, spCity;
@@ -73,7 +73,7 @@ public class Userset extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userset);
 
-
+        CheckPermission.verifyPermissionCameraAndStorage(Userset.this);
 
         if_submited = 0;
 
@@ -152,8 +152,6 @@ public class Userset extends AppCompatActivity {
 //                        .build();
 
 
-                CheckPermission.verifyPermissionCameraAndStorage(Userset.this);
-
                 ImageSelector.builder()
                         .useCamera(true) // 设置是否使用拍照
                         .setCrop(true)  // 设置是否使用图片剪切功能。
@@ -163,14 +161,13 @@ public class Userset extends AppCompatActivity {
             }
         });
 
-
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userPortrait.equals("")&&logtype.equals("1")){
-                    Toast.makeText(mContext, "请设置头像", Toast.LENGTH_LONG).show();
-                    return;
-                }
+//                if (userPortrait.equals("")&&logtype.equals("1")){
+//                    Toast.makeText(mContext, "请设置头像", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
                 userNickname = userNickname_et.getText().toString();
                 if (userNickname.equals("")&&logtype.equals("1")){
                     Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_LONG).show();
@@ -273,6 +270,7 @@ public class Userset extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if_submited = 0;
             switch (msg.what){
                 case 1:
                     Log.d("进入handler", "handler");
@@ -302,12 +300,10 @@ public class Userset extends AppCompatActivity {
             public void run(){
                 //获取文件名
                 Log.d("进入run","run");
-                File tempFile =new File(userPortrait.trim());
-                String fileName = tempFile.getName();
                 //开始网络传输
                 OkHttpClient client = new OkHttpClient();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
-                RequestBody requestBody = new MultipartBody.Builder()
+                MultipartBody.Builder builder = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
                         .addFormDataPart("userAccount", userAccount)
                         .addFormDataPart("userPassword", userPassword)
@@ -317,9 +313,13 @@ public class Userset extends AppCompatActivity {
                         .addFormDataPart("userGender", userGender)
                         .addFormDataPart("userProperty", userProperty)
                         .addFormDataPart("userSignature", userSignature)
-                        .addFormDataPart("userPortrait",fileName,RequestBody.create(new File(userPortrait),MEDIA_TYPE_PNG))
-                        .addFormDataPart("referral",referral)
-                        .build();
+                        .addFormDataPart("referral",referral);
+                if (!userPortrait.equals("")){
+                    File tempFile =new File(userPortrait.trim());
+                    String fileName = tempFile.getName();
+                    builder.addFormDataPart("userPortrait",fileName,RequestBody.create(new File(userPortrait),MEDIA_TYPE_PNG));
+                }
+                RequestBody requestBody = builder.build();
                 Request request = new Request.Builder()
                         .url(url)
                         .post(requestBody)

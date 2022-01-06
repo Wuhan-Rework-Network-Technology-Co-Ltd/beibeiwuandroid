@@ -4,6 +4,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
         maven {
             url 'http://maven.aliyun.com/nexus/content/repositories/releases/'
@@ -15,15 +16,23 @@ buildscript {
         maven {
             url 'https://maven.aliyun.com/repository/public/'
         }
+
+
+        //穿山甲
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:4.1.3'
         classpath 'com.huawei.agconnect:agcp:1.4.1.300'
         //图片选取器
         classpath 'com.novoda:bintray-release:0.8.0'
 //        classpath 'com.aliyun.ams:emas-services:1.0.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
     }
 }
 

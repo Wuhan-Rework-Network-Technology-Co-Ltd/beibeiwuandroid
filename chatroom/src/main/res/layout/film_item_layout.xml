@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/film_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <xin.banghua.pullloadmorerecyclerview.NiceImageView
+        android:id="@+id/film_cover_img"
+        android:layout_margin="10dp"
+        app:corner_radius="14dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="180dp"
+        android:layout_height="90dp"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:layout_marginLeft="15dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/film_cover_img"
+        app:layout_constraintBottom_toTopOf="@id/uploader_name"
+        android:id="@+id/film_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color_1"
+        android:textSize="20sp"
+        android:text="电影名"/>
+
+    <TextView
+        android:layout_marginLeft="15dp"
+        app:layout_constraintTop_toBottomOf="@id/film_name"
+        app:layout_constraintStart_toEndOf="@id/film_cover_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/uploader_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color_5"
+        android:textSize="14sp"
+        android:text="分享者"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,7 @@
 
     </com.daimajia.slider.library.SliderLayout>
 
-<!--    <xin.banghua.beiyuan.custom_ui.BannerAdFrameLayout-->
+<!--    <xin.banghua.beiyuan.custom_ui.ad.BannerAdFrameLayout-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"/>-->
 </LinearLayout>

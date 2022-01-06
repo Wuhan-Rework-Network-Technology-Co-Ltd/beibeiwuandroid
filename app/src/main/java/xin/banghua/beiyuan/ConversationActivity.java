@@ -62,8 +62,8 @@ public class ConversationActivity extends AppCompatActivity {
 
         Log.d(TAG, "onResume: ConversationActivity");
 
-//        if (!ConstantValue.conversationSettingUserName.equals(title)){
-//            title = ConstantValue.conversationSettingUserName;
+//        if (!Common.conversationSettingUserName.equals(title)){
+//            title = Common.conversationSettingUserName;
 //            getSupportActionBar().setTitle(title);
 //        }
 

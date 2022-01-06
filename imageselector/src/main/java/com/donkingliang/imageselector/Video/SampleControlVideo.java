@@ -47,7 +47,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  */
 
 public class SampleControlVideo extends StandardGSYVideoPlayer {
-
+    private static final String TAG = "SampleControlVideo";
     //记住切换数据源类型
     private int mType = 0;
 
@@ -226,7 +226,7 @@ public class SampleControlVideo extends StandardGSYVideoPlayer {
             @Override
             public void onProgressChanged(SeekBar seekBar, int position, boolean b) {
 //                Log.i("ceshiseekBar", String.valueOf(GSYVideoManager.instance().getMediaPlayer().getCurrentPosition()));
-
+                Log.d(TAG, "onProgressChanged: 视频进度"+position);
             }
 
             @Override

@@ -38,7 +38,8 @@ import xin.banghua.beiyuan.CircleImageViewExtension;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.SliderWebViewActivity;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.comment.CommentListActivity;
+import xin.banghua.beiyuan.utils.Common;
 
 
 /**
@@ -55,6 +56,7 @@ public class MeFragment extends Fragment {
     Button openvip_btn;
     Button opensvip_btn;
     Button luntan_btn;
+    Button comment_btn;
     Button jifen_btn;
     Button tuiguangma_btn;
     Button sawme_btn;
@@ -176,7 +178,8 @@ public class MeFragment extends Fragment {
         xiangce_btn = view.findViewById(R.id.xiangce_btn);
         openvip_btn = view.findViewById(R.id.openvip_btn);
         opensvip_btn = view.findViewById(R.id.opensvip_btn);
-        luntan_btn= view.findViewById(R.id.luntan_btn);
+        luntan_btn = view.findViewById(R.id.luntan_btn);
+        comment_btn = view.findViewById(R.id.comment_btn);
         jifen_btn = view.findViewById(R.id.jifen_btn);
         tuiguangma_btn = view.findViewById(R.id.tuiguangma_btn);
         sawme_btn = view.findViewById(R.id.sawme_btn);
@@ -249,6 +252,11 @@ public class MeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        comment_btn.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), CommentListActivity.class);
+            startActivity(intent);
+        });
     }
 
     //网络数据部分
@@ -316,7 +324,7 @@ public class MeFragment extends Fragment {
 //                    if (!(msg.obj.toString().equals("会员已到期")))  userportrait_iv.isVIP(true,getResources(),false);
                     Glide.with(mContext)
                             .asBitmap()
-                            .load(ConstantValue.getOssResourceUrl(myportrait))
+                            .load(Common.getOssResourceUrl(myportrait))
                             .into(userportrait_iv);
                     if (!(msg.obj.toString().equals("会员已到期"))){
                         // 按指定模式在字符串查找

@@ -18,6 +18,12 @@
     <dimen name="sight_text_size_14">14sp</dimen>
     <dimen name="sight_text_view_padding_horizontal">9dp</dimen>
     <dimen name="sight_text_view_padding_vertical">10dp</dimen>
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
     <item name="rc_sight_record_bottom" type="id"/>
     <integer name="rc_sight_max_record_duration">10</integer>
     <string name="rc_plugin_sight">小视频</string>

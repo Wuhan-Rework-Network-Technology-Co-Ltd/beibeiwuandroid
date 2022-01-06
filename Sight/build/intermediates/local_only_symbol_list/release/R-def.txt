@@ -18,6 +18,12 @@ dimen sight_record_top_icon_size
 dimen sight_text_size_14
 dimen sight_text_view_padding_horizontal
 dimen sight_text_view_padding_vertical
+dimen text_size_10
+dimen text_size_12
+dimen text_size_14
+dimen text_size_16
+dimen text_size_18
+dimen text_size_20
 drawable rc_ext_plugin_sight
 drawable rc_ext_plugin_sight_hover
 drawable rc_ext_plugin_sight_selector

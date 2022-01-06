@@ -50,7 +50,7 @@ import xin.banghua.beiyuan.GlobalDialogSingle;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.util.GpsUtil;
+import xin.banghua.beiyuan.utils.GpsUtil;
 
 
 /**
@@ -321,7 +321,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
 
             @Override
             public void onLoadMore() {
-//                if (pageindex == 1&& ConstantValue.myId==null){
+//                if (pageindex == 1&& Common.myID==null){
 //                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity())
 //                            .setTitle("登录以查看更多内容！")
 //                            .setPositiveButton("去登录", new DialogInterface.OnClickListener() {

@@ -20,18 +20,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.PermissionChecker;
 
 import com.baidu.mobads.sdk.api.SplashAd;
 import com.orhanobut.dialogplus.DialogPlus;
 
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.custom_ui.SplashAdFrameLayout;
-import xin.banghua.beiyuan.util.ConstantValue;
-import xin.banghua.beiyuan.util.MD5Tool;
+import xin.banghua.beiyuan.custom_ui.ad.CommonCallBackInterfaceWithSlashAd;
+import xin.banghua.beiyuan.custom_ui.ad.SplashAdFrameLayout;
+import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.utils.MD5Tool;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
-import static xin.banghua.beiyuan.custom_ui.SplashAdFrameLayout.isClickAd;
+import static xin.banghua.beiyuan.custom_ui.ad.SplashAdFrameLayout.isClickAd;
 
 public class LaunchActivity extends Activity {
     private static final String TAG = "LaunchActivity";
@@ -46,7 +46,41 @@ public class LaunchActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!SharedHelper.getInstance(this).readPrivateAgreement()){
+            Log.d(TAG, "onResume: 弹出隐私协议");
+            private_policy_dialog();
+        }else {
+            //初始化第三方SDK
+            App.initThirdSDK();
 
+            OkHttpInstance.isShowAD(responseString -> {
+                if (responseString.equals("no")){
+                    intentMain(2);
+                }else {
+                    //开屏广告
+                    splashAdFrameLayout = findViewById(R.id.splashAdFrameLayout);
+                    splashAdFrameLayout.setParams(LaunchActivity.this,launchImage,intent);
+                    splashAdFrameLayout.ttADShow(new CommonCallBackInterfaceWithSlashAd() {
+                        @Override
+                        public void callBack(SplashAd splashAd) {
+                            intentMain(1);
+                        }
+                    },responseString);
+                }
+            });
+
+            //已同意隐私协议
+//            image_framelayout.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (isClickAd || isLoadedAd){//广告加载成功或点击了广告都不跳转
+//                        return;
+//                    }
+//                    //跳转主页
+//                    intentMain(2);
+//                }
+//            },3000);
+        }
         if (isClickAd) {
             Log.d(TAG, "onStart: 跳转首页");
             // 从广告界面返回的
@@ -89,46 +123,15 @@ public class LaunchActivity extends Activity {
 
         intent = new Intent(LaunchActivity.this, MainActivity.class);
 
-        Log.d(TAG, "onCreate: applet OSS测试"+ ConstantValue.getOssResourceUrl("https://appletattachment.oss-cn-beijing.aliyuncs.com/images/11/2018/10/ASPPPs46NZmnZpYUhp9Y4FES06evuu.jpg"));
-        Log.d(TAG, "onCreate: moyuan OSS测试"+ ConstantValue.getOssResourceUrl("https://moyuanoss.oss-cn-shanghai.aliyuncs.com/images/11/2018/10/ASPPPs46NZmnZpYUhp9Y4FES06evuu.jpg"));
+        Log.d(TAG, "onCreate: applet OSS测试"+ Common.getOssResourceUrl("https://appletattachment.oss-cn-beijing.aliyuncs.com/images/11/2018/10/ASPPPs46NZmnZpYUhp9Y4FES06evuu.jpg"));
+        Log.d(TAG, "onCreate: moyuan OSS测试"+ Common.getOssResourceUrl("https://moyuanoss.oss-cn-shanghai.aliyuncs.com/images/11/2018/10/ASPPPs46NZmnZpYUhp9Y4FES06evuu.jpg"));
 
 
         Log.d(TAG, "onCreate: md5"+ MD5Tool.MD5("123"));
 
 
 
-        if (!SharedHelper.getInstance(this).readPrivateAgreement()){
-            Log.d(TAG, "onResume: 弹出隐私协议");
-            private_policy_dialog();
-        }else {
-            //初始化第三方SDK
-            App.initThirdSDK();
 
-            //开屏广告
-            splashAdFrameLayout = findViewById(R.id.splashAdFrameLayout);
-            splashAdFrameLayout.setLaunchImage(launchImage);
-            splashAdFrameLayout.baiduADShow((splashAd) -> {
-                splashAd.finishAndJump(intent, new SplashAd.OnFinishListener() {
-                    @Override
-                    public void onFinishActivity() {
-                        Log.i(TAG, "onFinishActivity");
-                        finish();
-                    }
-                });
-                splashAd.destroy();
-            });
-            //已同意隐私协议
-//            image_framelayout.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (isClickAd || isLoadedAd){//广告加载成功或点击了广告都不跳转
-//                        return;
-//                    }
-//                    //跳转主页
-//                    intentMain(2);
-//                }
-//            },3000);
-        }
 
     }
 
@@ -200,27 +203,31 @@ public class LaunchActivity extends Activity {
                 //初始化第三方SDK
                 App.initThirdSDK();
 
-                //开屏广告
-                splashAdFrameLayout = findViewById(R.id.splashAdFrameLayout);
-                splashAdFrameLayout.setLaunchImage(launchImage);
-                splashAdFrameLayout.baiduADShow((splashAd) -> {
-                    splashAd.finishAndJump(intent, new SplashAd.OnFinishListener() {
-                        @Override
-                        public void onFinishActivity() {
-                            Log.i(TAG, "onFinishActivity");
-                            finish();
-                        }
-                    });
-                    splashAd.destroy();
+
+                OkHttpInstance.isShowAD(responseString -> {
+                    if (responseString.equals("no")){
+                        intentMain(2);
+                    }else {
+                        //开屏广告
+                        splashAdFrameLayout = findViewById(R.id.splashAdFrameLayout);
+                        splashAdFrameLayout.setParams(LaunchActivity.this,launchImage,intent);
+                        splashAdFrameLayout.ttADShow(new CommonCallBackInterfaceWithSlashAd() {
+                            @Override
+                            public void callBack(SplashAd splashAd) {
+                                intentMain(1);
+                            }
+                        },responseString);
+                    }
                 });
 
+
                 SharedHelper.getInstance(mContext).savePrivateAgreement(true);
-                //1.检测权限
-                int permission = ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
-                if (permission != PermissionChecker.PERMISSION_GRANTED) {
-                    //2.没有权限，弹出对话框申请
-                    ActivityCompat.requestPermissions(LaunchActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1000);
-                }
+//                //1.检测权限
+//                int permission = ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
+//                if (permission != PermissionChecker.PERMISSION_GRANTED) {
+//                    //2.没有权限，弹出对话框申请
+//                    ActivityCompat.requestPermissions(LaunchActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1000);
+//                }
                 dialog.dismiss();
             }
         });

@@ -315,6 +315,25 @@
                 android:visibility="visible" />
 
         </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/join_room_btn"
+                style="@android:style/Widget.DeviceDefault.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rc_btn_voice_hover"
+                android:drawableTop="@drawable/ic_room"
+                android:text="进入房间"
+                android:textColor="@color/callkit_normal_text"
+                android:visibility="visible" />
+
+        </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">

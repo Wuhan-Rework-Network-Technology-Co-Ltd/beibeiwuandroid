@@ -30,6 +30,7 @@ import xin.banghua.beiyuan.Adapter.LuntanList;
 import xin.banghua.beiyuan.Main5Activity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.comment.CommentList;
 
 public class SomeonesluntanActivity extends AppCompatActivity {
     private static final String TAG = "SomeonesluntanActivity";
@@ -40,6 +41,9 @@ public class SomeonesluntanActivity extends AppCompatActivity {
     //页码
     private Integer pageindex = 1;
     private String authid;
+    private CommentList commentList;
+
+    public static CommentList selectedComment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +60,21 @@ public class SomeonesluntanActivity extends AppCompatActivity {
 //        authid = shuserinfo.readUserInfo().get("userID");
         Intent intent = getIntent();
         authid = intent.getStringExtra("authid");
+        commentList = (CommentList) getIntent().getSerializableExtra("comment");
         Log.d(TAG, "onCreate: authid"+authid);
-        getDataPostlist(getString(R.string.someonesluntan_url),authid,"1");
 
+        if (commentList==null){
+            getDataPostlist(getString(R.string.someonesluntan_url),authid,"1");
+        }else {
+            selectedComment = commentList;
+            getSelectedPostlist(commentList.getPostid());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        selectedComment = null;
     }
 
     @Override
@@ -86,7 +102,8 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
+                    posts.setComment_forbid(jsonObject.getString("comment_forbid"));
                     luntanLists.add(posts);
                 }
             }
@@ -103,7 +120,8 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
+                    posts.setComment_forbid(jsonObject.getString("comment_forbid"));
                     luntanLists.add(posts);
                 }
             }
@@ -171,6 +189,38 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                         .build();
                 Request request = new Request.Builder()
                         .url(url)
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    Message message=handler.obtainMessage();
+                    message.obj=response.body().string();
+                    message.what=1;
+                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+                    handler.sendMessageDelayed(message,10);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 获取选中的帖子
+     * @param post_id
+     */
+    public void getSelectedPostlist(final String post_id){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("post_id", post_id)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSelectedPost&m=socialchat")
                         .post(formBody)
                         .build();
 

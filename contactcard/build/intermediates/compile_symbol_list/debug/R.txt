@@ -1741,6 +1741,12 @@ int dimen subtitle_outline_width 0x0
 int dimen subtitle_shadow_offset 0x0
 int dimen subtitle_shadow_radius 0x0
 int dimen test_mtrl_calendar_day_cornerSize 0x0
+int dimen text_size_10 0x0
+int dimen text_size_12 0x0
+int dimen text_size_14 0x0
+int dimen text_size_16 0x0
+int dimen text_size_18 0x0
+int dimen text_size_20 0x0
 int dimen tooltip_corner_radius 0x0
 int dimen tooltip_horizontal_padding 0x0
 int dimen tooltip_margin 0x0

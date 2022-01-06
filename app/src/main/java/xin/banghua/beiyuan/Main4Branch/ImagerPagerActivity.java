@@ -13,7 +13,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import xin.banghua.beiyuan.Adapter.LuntanList;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 
 public class ImagerPagerActivity extends AppCompatActivity {
@@ -47,7 +47,7 @@ public class ImagerPagerActivity extends AppCompatActivity {
             textSliderView
                     .description("")
                     .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
-                    .image(ConstantValue.getOssResourceUrl(luntanList.getPostpicture()[i]));
+                    .image(Common.getOssResourceUrl(luntanList.getPostpicture()[i]));
             sliderShow.addSlider(textSliderView);
         }
         sliderShow.setPresetTransformer(SliderLayout.Transformer.Accordion);

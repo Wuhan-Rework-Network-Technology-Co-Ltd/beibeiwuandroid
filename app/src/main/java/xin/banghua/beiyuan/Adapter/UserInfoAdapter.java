@@ -24,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHolder>{
     private static final String TAG = "UserInfoAdapter";
@@ -89,7 +89,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         viewHolder.userID.setText(mUserID.get(i));
         Glide.with(mContext)
                 .asBitmap()
-                .load(ConstantValue.getOssResourceUrl(mUserPortrait.get(i)))
+                .load(Common.getOssResourceUrl(mUserPortrait.get(i)))
                 .into(viewHolder.userPortrait);
         viewHolder.userNickName.setText(mUserNickName.get(i));
         viewHolder.userAge.setText(mUserAge.get(i));
@@ -239,7 +239,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
 
             @Override
             public void onClick(View v) {
-                if (ConstantValue.myId==null){
+                if (Common.myID ==null){
                     Intent intentSignin = new Intent(mContext, SigninActivity.class);
                     mContext.startActivity(intentSignin);
                 }else {

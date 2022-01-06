@@ -34,7 +34,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "BlackListAdapter";
@@ -80,7 +80,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.View
         viewHolder.userID.setText(currentItem.getmUserID());
         Glide.with(mContext)
                 .asBitmap()
-                .load(ConstantValue.getOssResourceUrl(currentItem.getmUserPortrait()))
+                .load(Common.getOssResourceUrl(currentItem.getmUserPortrait()))
                 .into(viewHolder.userPortrait);
         viewHolder.userNickName.setText(currentItem.getmUserNickName());
         viewHolder.userLeaveWords.setText("");
@@ -114,7 +114,6 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.View
                 }
             }
         });
-
     }
 
     @Override

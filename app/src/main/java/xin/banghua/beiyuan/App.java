@@ -17,12 +17,19 @@ import com.alibaba.sdk.android.logger.LogLevel;
 import com.baidu.mobads.sdk.api.BDAdConfig;
 import com.baidu.mobads.sdk.api.BDDialogParams;
 import com.baidu.mobads.sdk.api.MobadsPermissionSettings;
+import com.bytedance.sdk.openadsdk.TTAdConfig;
+import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.bytedance.sdk.openadsdk.TTAdSdk;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import io.agora.chatroom.ChatRoomApplication;
+import io.agora.chatroom.manager.RtcManager;
+import io.agora.chatroom.manager.RtmManager;
+import io.agora.chatroom.model.Constant;
 import io.rong.contactcard.IContactCardInfoProvider;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
@@ -37,6 +44,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
+import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
@@ -128,6 +136,12 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         frontOrBack();
 
+
+        //聊天室
+        ChatRoomApplication.instance = this;
+        RtcManager.instance(this).init();
+        RtmManager.instance(this).init();
+        Constant.goToPersonalPage =  new Intent(this, PersonageActivity.class);
     }
 
 
@@ -175,7 +189,30 @@ public class App extends Application implements Application.ActivityLifecycleCal
         MobadsPermissionSettings.setPermissionAppList(true);
 
 
-        //腾讯广告
+        //穿山甲广告
+        TTAdSdk.init(getApplication(),
+                new TTAdConfig.Builder()
+                        .appId("5224717")
+                        .useTextureView(true) //默认使用SurfaceView播放视频广告,当有SurfaceView冲突的场景，可以使用TextureView
+                        .appName("小贝乐园")
+                        .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)//落地页主题
+                        .allowShowNotify(true) //是否允许sdk展示通知栏提示,若设置为false则会导致通知栏不显示下载进度
+                        .debug(true) //测试阶段打开，可以通过日志排查问题，上线时去除该调用
+                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI) //允许直接下载的网络状态集合,没有设置的网络下点击下载apk会有二次确认弹窗，弹窗中会披露应用信息
+                        .supportMultiProcess(false) //是否支持多进程，true支持
+                        .asyncInit(true) //是否异步初始化sdk,设置为true可以减少SDK初始化耗时。3450版本开始废弃~~
+                        //.httpStack(new MyOkStack3())//自定义网络库，demo中给出了okhttp3版本的样例，其余请自行开发或者咨询工作人员。
+                        .build(), new TTAdSdk.InitCallback() {
+                    @Override
+                    public void success() {
+                        Log.d(TAG, "success: 穿山甲初始化成功");
+                    }
+
+                    @Override
+                    public void fail(int i, String s) {
+                        Log.d(TAG, "success: 穿山甲初始化失败"+s);
+                    }
+                });
     }
 
     /**

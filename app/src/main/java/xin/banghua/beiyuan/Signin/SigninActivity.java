@@ -193,6 +193,7 @@ public class SigninActivity extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
+                    signIn.setClickable(true);
                     String resultJson = msg.obj.toString();
                     try {
                         JSONObject object = new JSONObject(resultJson);

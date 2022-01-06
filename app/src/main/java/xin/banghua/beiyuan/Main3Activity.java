@@ -60,7 +60,6 @@ import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.util.ConstantValue;
 
 public class Main3Activity extends AppCompatActivity {
     private static final String TAG = "Main3Activity";
@@ -130,10 +129,10 @@ public class Main3Activity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
 
         //getDataFriends(getString(R.string.friends_url));
-        if (Common.friendListMap==null) {
+        if (xin.banghua.beiyuan.Common.friendListMap==null) {
             getDataFriends(getString(R.string.friends_url));
         }else {
-            for (Map.Entry<String, FriendList> m : Common.friendListMap.entrySet()) {//通过entrySet
+            for (Map.Entry<String, FriendList> m : xin.banghua.beiyuan.Common.friendListMap.entrySet()) {//通过entrySet
                 friendList.add(m.getValue());
             }
         }
@@ -190,8 +189,8 @@ public class Main3Activity extends AppCompatActivity {
 
                                 //替换备注
                                 String nickname = jsonObject.getString("nickname");
-                                if (Common.friendsRemarkMap!=null){
-                                    for (Map.Entry<String, String> m : Common.friendsRemarkMap.entrySet()) {//通过entrySet
+                                if (xin.banghua.beiyuan.Common.friendsRemarkMap!=null){
+                                    for (Map.Entry<String, String> m : xin.banghua.beiyuan.Common.friendsRemarkMap.entrySet()) {//通过entrySet
                                         System.out.println("key:" + m.getKey() + " value:" + m.getValue());
                                         if (m.getKey().equals(userId)){
                                             nickname = m.getValue();
@@ -199,7 +198,7 @@ public class Main3Activity extends AppCompatActivity {
                                     }
                                 }
 
-                                UserInfo userInfo = new UserInfo(userId, nickname, Uri.parse(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait"))));
+                                UserInfo userInfo = new UserInfo(userId, nickname, Uri.parse(xin.banghua.beiyuan.utils.Common.getOssResourceUrl(jsonObject.getString("portrait"))));
                                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -433,8 +432,8 @@ public class Main3Activity extends AppCompatActivity {
 
                 String nickname = jsonObject.getString("nickname");
                 //替换备注
-                if (Common.friendsRemarkMap!=null){
-                    for (Map.Entry<String, String> m : Common.friendsRemarkMap.entrySet()) {//通过entrySet
+                if (xin.banghua.beiyuan.Common.friendsRemarkMap!=null){
+                    for (Map.Entry<String, String> m : xin.banghua.beiyuan.Common.friendsRemarkMap.entrySet()) {//通过entrySet
                         System.out.println("key:" + m.getKey() + " value:" + m.getValue());
                         if (m.getKey().equals(jsonObject.getString("id"))){
                             nickname = m.getValue();
@@ -447,7 +446,7 @@ public class Main3Activity extends AppCompatActivity {
                 friendList.add(filledData(friends));
                 friendListMap.put(jsonObject.getString("id"),filledData(friends));
 
-                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait"))));
+                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(xin.banghua.beiyuan.utils.Common.getOssResourceUrl(jsonObject.getString("portrait"))));
                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                 userInfoList.add(userInfo);
             }
@@ -455,8 +454,8 @@ public class Main3Activity extends AppCompatActivity {
             myContactCard.setUserInfoList(userInfoList);
             myContactCard.initContactCard();
         }
-        Common.friendList = friendList;
-        Common.friendListMap = friendListMap;
+        xin.banghua.beiyuan.Common.friendList = friendList;
+        xin.banghua.beiyuan.Common.friendListMap = friendListMap;
     }
 
     /**

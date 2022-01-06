@@ -26,10 +26,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.FriendList;
-import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 public class SetRemarkAndTagActivity extends AppCompatActivity {
     private static final String TAG = "SetRemarkAndTagActivity";
@@ -74,22 +73,22 @@ public class SetRemarkAndTagActivity extends AppCompatActivity {
                     setFriendsRemark(getString(R.string.setfriendsremark_url));
 
                     //同步好友备注  map的replace需要7.0
-                    if (Common.friendsRemarkMap!=null) {
-                        Common.friendsRemarkMap.replace(Common.conversationSettingUserId, Common.conversationSettingUserName, remark_et.getText().toString());
+                    if (xin.banghua.beiyuan.Common.friendsRemarkMap!=null) {
+                        xin.banghua.beiyuan.Common.friendsRemarkMap.replace(xin.banghua.beiyuan.Common.conversationSettingUserId, xin.banghua.beiyuan.Common.conversationSettingUserName, remark_et.getText().toString());
                     }
                     //同步好友List
-                    if (Common.friendListMap!=null) {
-                        FriendList currentFriend = Common.friendListMap.get(Common.conversationSettingUserId);
+                    if (xin.banghua.beiyuan.Common.friendListMap!=null) {
+                        FriendList currentFriend = xin.banghua.beiyuan.Common.friendListMap.get(xin.banghua.beiyuan.Common.conversationSettingUserId);
                         currentFriend.setmUserNickName(remark_et.getText().toString());
-                        Common.friendListMap.replace(Common.conversationSettingUserId, currentFriend);
+                        xin.banghua.beiyuan.Common.friendListMap.replace(xin.banghua.beiyuan.Common.conversationSettingUserId, currentFriend);
                     }
 
                     //融云个人信息
-                    UserInfo userInfo = new UserInfo(Common.conversationSettingUserId, remark_et.getText().toString(), Uri.parse(ConstantValue.getOssResourceUrl(Common.conversationSettingUserPortrait)));
+                    UserInfo userInfo = new UserInfo(xin.banghua.beiyuan.Common.conversationSettingUserId, remark_et.getText().toString(), Uri.parse(Common.getOssResourceUrl(xin.banghua.beiyuan.Common.conversationSettingUserPortrait)));
                     RongIM.getInstance().refreshUserInfoCache(userInfo);
 
                     //缓存也改了
-                    Common.conversationSettingUserName = remark_et.getText().toString();
+                    xin.banghua.beiyuan.Common.conversationSettingUserName = remark_et.getText().toString();
 
                     finish();
                 }
@@ -101,7 +100,7 @@ public class SetRemarkAndTagActivity extends AppCompatActivity {
 
     private void initView(){
         remark_et = findViewById(R.id.remark_et);
-        remark_et.setText(Common.conversationSettingUserName);
+        remark_et.setText(xin.banghua.beiyuan.Common.conversationSettingUserName);
 
         tagcontainerLayout = findViewById(R.id.tagcontainerLayout);
 
@@ -156,7 +155,7 @@ public class SetRemarkAndTagActivity extends AppCompatActivity {
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
-                        .add("friendid", Common.conversationSettingUserId)
+                        .add("friendid", xin.banghua.beiyuan.Common.conversationSettingUserId)
                         .add("newRemark", remark_et.getText().toString())
                         .build();
                 Request request = new Request.Builder()

@@ -29,6 +29,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 
 import java.io.IOException;
 
+import io.agora.chatroom.manager.RtmManager;
 import io.rong.imlib.RongIMClient;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -36,12 +37,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.BuildConfig;
-import xin.banghua.beiyuan.DownloadUtils;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.util.ConstantValue;
-import xin.banghua.beiyuan.util.MD5Tool;
+import xin.banghua.beiyuan.SliderWebViewActivity;
+import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.utils.MD5Tool;
 
 import static io.rong.imkit.fragment.ConversationListFragment.TAG;
 
@@ -191,7 +192,7 @@ public class SettingFragment extends Fragment {
                 String myid = shuserinfo.readUserInfo().get("userID");
                 updateRedisCache(myid);
 
-                ConstantValue.myId = null;
+                Common.myID = null;
 
                 SharedPreferences sp = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
@@ -200,7 +201,14 @@ public class SettingFragment extends Fragment {
                 Intent intent = new Intent(mContext, SigninActivity.class);
                 startActivity(intent);
 
+                RtmManager.instance(mContext).logout();
+
+
+
                 getActivity().finish();
+
+
+
 
             }
         });
@@ -396,12 +404,12 @@ public class SettingFragment extends Fragment {
                         vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-//                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-//                                intent.putExtra("slidername","新版本");
-//                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
-//                                mContext.startActivity(intent);
-                                new DownloadUtils(getActivity(), "https://www.banghua.xin/beibeiwu.apk", "beibeiwu.apk");
-                                Toast.makeText(getActivity(), "正在下载中......", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+                                intent.putExtra("slidername","新版本");
+                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
+                                mContext.startActivity(intent);
+//                                new DownloadUtils(getActivity(), "https://oss.banghua.xin/attachement/beibeiwu.apk", "beibeiwu.apk");
+//                                Toast.makeText(getActivity(), "正在下载中......", Toast.LENGTH_LONG).show();
                                 dialog.dismiss();
                             }
                         });

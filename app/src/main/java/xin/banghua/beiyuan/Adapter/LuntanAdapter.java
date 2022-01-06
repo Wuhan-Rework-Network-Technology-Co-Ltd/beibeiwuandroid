@@ -2,6 +2,7 @@ package xin.banghua.beiyuan.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -35,9 +36,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Main4Branch.ImagerPagerActivity;
 import xin.banghua.beiyuan.Main4Branch.PostListActivity;
+import xin.banghua.beiyuan.Main5Branch.SomeonesluntanActivity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.comment.CommentDialog;
+import xin.banghua.beiyuan.utils.Common;
 
 public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder> {
     private static final String TAG = "LuntanAdapter";
@@ -80,7 +84,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         viewHolder.authnickname.setText(currentItem.getAuthnickname());
         Glide.with(mContext)
                 .asBitmap()
-                .load(ConstantValue.getOssResourceUrl(currentItem.getAuthportrait()))
+                .load(Common.getOssResourceUrl(currentItem.getAuthportrait()))
                 .into(viewHolder.authportrait);
 
 
@@ -246,7 +250,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else if (currentItem.getPostpicture().length==1){
             Glide.with(mContext)
                     .asBitmap()
-                    .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[0]))
+                    .load(Common.getOssResourceUrl(currentItem.getPostpicture()[0]))
                     .into(viewHolder.postpicture);
             viewHolder.postpicture.setVisibility(View.VISIBLE);
             viewHolder.postpicture.setOnClickListener(new View.OnClickListener() {
@@ -263,7 +267,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[0]))
+                    .load(Common.getOssResourceUrl(currentItem.getPostpicture()[0]))
                     .into(viewHolder.postpicture1);
             viewHolder.postpicture1.setVisibility(View.VISIBLE);
             viewHolder.postpicture1.setOnClickListener(new View.OnClickListener() {
@@ -280,7 +284,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[1]))
+                    .load(Common.getOssResourceUrl(currentItem.getPostpicture()[1]))
                     .into(viewHolder.postpicture2);
             viewHolder.postpicture2.setVisibility(View.VISIBLE);
             viewHolder.postpicture2.setOnClickListener(new View.OnClickListener() {
@@ -297,7 +301,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[2]))
+                    .load(Common.getOssResourceUrl(currentItem.getPostpicture()[2]))
                     .into(viewHolder.postpicture3);
             viewHolder.postpicture3.setVisibility(View.VISIBLE);
             viewHolder.postpicture3.setOnClickListener(new View.OnClickListener() {
@@ -390,6 +394,35 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
             }
         });
 
+        CommentDialog commentDialog = new CommentDialog(mContext);
+        viewHolder.comment_tv.setText("评"+currentItem.getComment_sum());
+        viewHolder.comment_tv.setOnClickListener(view -> {
+            if (Common.myID==null){
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
+                        .setTitle("登录以查看更多内容！")
+                        .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(mContext, SigninActivity.class);
+                                mContext.startActivity(intent);
+                            }
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                builder.create().show();
+            }else {
+                commentDialog.loadComment(currentItem);
+                commentDialog.startLoadComment();
+            }
+        });
+
+        if (SomeonesluntanActivity.selectedComment!=null){
+            commentDialog.loadComment(currentItem);
+            commentDialog.loadSelectedComment(SomeonesluntanActivity.selectedComment.getId());
+        }
     }
     public void intentPostlist(View v,LuntanList currentItem){
         Intent intent = new Intent(v.getContext(), PostListActivity.class);
@@ -430,6 +463,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         ZoomInImageView postpicture2;
         ZoomInImageView postpicture3;
         TextView like;
+        TextView comment_tv;
         TextView favorite;
         TextView time;
 
@@ -461,6 +495,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
             postpicture2 = itemView.findViewById(R.id.postpicture2);
             postpicture3 = itemView.findViewById(R.id.postpicture3);
             like = itemView.findViewById(R.id.like);
+            comment_tv = itemView.findViewById(R.id.comment_tv);
             favorite = itemView.findViewById(R.id.favorite);
             time = itemView.findViewById(R.id.time);
 

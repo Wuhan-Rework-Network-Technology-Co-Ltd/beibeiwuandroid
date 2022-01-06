@@ -1,34 +1,64 @@
 package xin.banghua.beiyuan.Adapter;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 
 public class LuntanList  implements Serializable {
+    public LuntanList() {
+    }
+
+    @JSONField(name = "id")
     String id;
+    @JSONField(name = "plateid")
     String plateid;
+    @JSONField(name = "platename")
     String platename;
+    @JSONField(name = "authid")
     String authid;
+    @JSONField(name = "authnickname")
     String authnickname;
+    @JSONField(name = "authportrait")
     String authportrait;
+    @JSONField(name = "posttip")
     String posttip;
+    @JSONField(name = "posttitle")
     String posttitle;
+    @JSONField(name = "posttext")
     String posttext;
+    @JSONField(name = "postpicture")
+    String postpictureString;
+
     String[] postpicture;
+
+    @JSONField(name = "like")
     String like;
+    @JSONField(name = "favorite")
     String favorite;
+    @JSONField(name = "time")
     String time;
-
+    @JSONField(name = "authage")
     String authage;
+    @JSONField(name = "authgender")
     String authgender;
+    @JSONField(name = "authregion")
     String authregion;
+    @JSONField(name = "authproperty")
     String authproperty;
-
-
+    @JSONField(name = "authvip")
     String authvip;
-
+    @JSONField(name = "authsvip")
     String authsvip;
+    @JSONField(name = "comment_sum")
+    String comment_sum;
+    @JSONField(name = "comment_forbid")
+    String comment_forbid;
 
 
-    public LuntanList(String authage, String authgender, String authregion, String authproperty, String id, String plateid, String platename, String authid, String authnickname, String authportrait, String posttip, String posttitle, String posttext, String[] postpicture, String like, String favorite, String time, String authvip,String authsvip) {
+    public LuntanList(String authage, String authgender, String authregion, String authproperty, String id, String plateid,
+                      String platename, String authid, String authnickname, String authportrait, String posttip,
+                      String posttitle, String posttext, String[] postpicture, String like, String favorite, String time,
+                      String authvip,String authsvip,String comment_sum) {
         this.authage = authage;
         this.authgender = authgender;
         this.authregion = authregion;
@@ -49,6 +79,32 @@ public class LuntanList  implements Serializable {
 
         this.authvip = authvip;
         this.authsvip = authsvip;
+
+        this.comment_sum = comment_sum;
+    }
+
+    public String getPostpictureString() {
+        return postpictureString;
+    }
+
+    public void setPostpictureString(String postpictureString) {
+        this.postpictureString = postpictureString;
+    }
+
+    public String getComment_forbid() {
+        return comment_forbid;
+    }
+
+    public void setComment_forbid(String comment_forbid) {
+        this.comment_forbid = comment_forbid;
+    }
+
+    public String getComment_sum() {
+        return comment_sum;
+    }
+
+    public void setComment_sum(String comment_sum) {
+        this.comment_sum = comment_sum;
     }
 
     public String getAuthsvip() {

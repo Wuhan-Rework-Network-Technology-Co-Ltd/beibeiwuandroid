@@ -25,11 +25,10 @@
             android:visibility="visible"
             android:layout_weight="1">
             <!-- 使用cloud_code_cc_slot_id 配置广告位ID -->
-            <xin.banghua.beiyuan.custom_ui.SplashAdFrameLayout
+            <xin.banghua.beiyuan.custom_ui.ad.SplashAdFrameLayout
                 android:id="@+id/splashAdFrameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:visibility="visible" />
 
 
@@ -55,7 +54,7 @@
             android:background="@color/background"
             android:visibility="gone">
 
-            <xin.banghua.beiyuan.custom_ui.NiceImageView
+            <xin.banghua.pullloadmorerecyclerview.NiceImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/logo"

@@ -42,7 +42,7 @@ import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.util.MD5Tool;
+import xin.banghua.beiyuan.utils.MD5Tool;
 
 public class CommonSettingActivity extends AppCompatActivity {
     private static final String TAG = "CommonSettingActivity";

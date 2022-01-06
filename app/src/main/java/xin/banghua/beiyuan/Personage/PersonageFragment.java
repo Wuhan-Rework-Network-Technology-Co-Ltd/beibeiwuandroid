@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
 
@@ -33,6 +34,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Date;
 
+import io.agora.chatroom.activity.ChatRoomActivity;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
@@ -41,14 +43,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.CircleImageViewExtension;
 import xin.banghua.beiyuan.Main5Branch.BuysvipActivity;
 import xin.banghua.beiyuan.Main5Branch.BuyvipActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.util.ConstantValue;
-import xin.banghua.beiyuan.util.OkHttpInstance;
+import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 /**
@@ -56,6 +59,9 @@ import xin.banghua.beiyuan.util.OkHttpInstance;
  */
 public class PersonageFragment extends Fragment {
     private static final String TAG = "PersonageFragment";
+
+
+    UserInfoList userInfoList;
 
     public String mUserID;
     private View mView;
@@ -81,6 +87,7 @@ public class PersonageFragment extends Fragment {
     private Button deletefriend_btn;
     private Button startconversation_btn;
     private Button svip_chat_btn;
+    private Button join_room_btn;
 
     private Context mContext;
 
@@ -209,14 +216,14 @@ public class PersonageFragment extends Fragment {
         move_friendapply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (ConstantValue.vipTime == null && !ConstantValue.ifBuySVip) {
-//                    ConstantValue.ifBuySVip = false;
+//                if (Common.vipTime == null && !Common.ifBuySVip) {
+//                    Common.ifBuySVip = false;
 //                    getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
 //                }else {
 //                    moveFriendApply();
 //                }
 
-                ConstantValue.ifBuySVip = false;
+                Common.ifBuySVip = false;
                 getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
             }
         });
@@ -277,6 +284,7 @@ public class PersonageFragment extends Fragment {
 
                             balcklist_btn.setText("移除黑名单");
                             Toast.makeText(mContext,"已加入黑名单",Toast.LENGTH_LONG).show();
+
 
                             addBlacklist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
                             dialog.dismiss();
@@ -415,15 +423,28 @@ public class PersonageFragment extends Fragment {
         svip_chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (ConstantValue.vipTime == null && !ConstantValue.ifBuySVip) {
-//                    ConstantValue.ifBuySVip = false;
+//                if (Common.vipTime == null && !Common.ifBuySVip) {
+//                    Common.ifBuySVip = false;
 //                    getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
 //                }else {
 //                    svipChat();
 //                }
 
-                ConstantValue.ifBuySVip = false;
+                Common.ifBuySVip = false;
                 getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
+            }
+        });
+
+        join_room_btn = view.findViewById(R.id.join_room_btn);
+        join_room_btn.setOnClickListener(view1 -> {
+            if (userInfoList!=null){
+                Log.d(TAG, "onViewCreated: 进入房间");
+                Intent intent = new Intent(mContext, ChatRoomActivity.class);
+                intent.putExtra(ChatRoomActivity.BUNDLE_KEY_CHANNEL_ID, mUserID);
+                intent.putExtra(ChatRoomActivity.BUNDLE_KEY_CHANNEL_TYPE, userInfoList.getAudioroomtype());
+                intent.putExtra(ChatRoomActivity.BUNDLE_KEY_BACKGROUND_RES, io.agora.chatroom.R.mipmap.bg_channel_0);
+                //intent.putExtra(ChatRoomActivity.BUNDLE_KEY_BACKGROUND_RES, Constant.sRoomBG);
+                startActivity(intent);
             }
         });
 
@@ -542,9 +563,9 @@ public class PersonageFragment extends Fragment {
 
         mUserNickName_tv.setText(jsonObject.getString("nickname"));
         //if (jsonObject.getString("vip").equals("VIP"))  mUserPortrait_iv.isVIP(true,getResources(),false);
-        Glide.with(getActivity())
+        Glide.with(view.getContext())
                 .asBitmap()
-                .load(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait")))
+                .load(Common.getOssResourceUrl(jsonObject.getString("portrait")))
                 .into(mUserPortrait_iv);
 
         vip_gray.setVisibility(View.VISIBLE);
@@ -677,6 +698,8 @@ public class PersonageFragment extends Fragment {
                     try {
                         String resultJson1 = msg.obj.toString();
                         Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
+
+                        userInfoList = JSON.parseObject(resultJson1,UserInfoList.class);
 
                         JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
                         try {

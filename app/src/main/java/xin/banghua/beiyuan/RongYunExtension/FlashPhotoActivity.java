@@ -30,7 +30,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_UP;
@@ -95,7 +95,7 @@ public class FlashPhotoActivity extends AppCompatActivity {
                         if (jsonObject.get("photostatus").equals("0")){
                             Glide.with(FlashPhotoActivity.this)
                                     .asBitmap()
-                                    .load(ConstantValue.getOssResourceUrl(jsonObject.get("photourl").toString()))
+                                    .load(Common.getOssResourceUrl(jsonObject.get("photourl").toString()))
                                     .into(flashphoto_imageview);
                             countDown();
                         }else {

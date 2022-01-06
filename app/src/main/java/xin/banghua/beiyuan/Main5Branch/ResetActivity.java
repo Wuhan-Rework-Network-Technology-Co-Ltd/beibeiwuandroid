@@ -56,8 +56,8 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.CityAdapter;
 import xin.banghua.beiyuan.Signin.ProvinceAdapter;
 import xin.banghua.beiyuan.bean.AddrBean;
-import xin.banghua.beiyuan.util.ConstantValue;
-import xin.banghua.beiyuan.util.MD5Tool;
+import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.utils.MD5Tool;
 
 import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
 
@@ -131,7 +131,7 @@ public class ResetActivity extends AppCompatActivity {
     //TODO okhttp验证信息
     public void verificationCode(final String verificationCodeString){
         if (smscode.equals(verificationCodeString)){
-            submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=feedback&m=socialchat","其他");
+            submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","手机绑定");
         }else {
             Toast.makeText(ResetActivity.this, "验证码错误", Toast.LENGTH_LONG).show();
         }
@@ -257,7 +257,7 @@ public class ResetActivity extends AppCompatActivity {
             }else {
                 Glide.with(this)
                         .asBitmap()
-                        .load(ConstantValue.getOssResourceUrl(myportrait))
+                        .load(Common.getOssResourceUrl(myportrait))
                         .into(portrait);
             }
 
@@ -395,7 +395,7 @@ public class ResetActivity extends AppCompatActivity {
                         String myid = shuserinfo.readUserInfo().get("userID");
                         String mynickname = shuserinfo.readUserInfo().get("userNickName");
                         String myportrait = shuserinfo.readUserInfo().get("userPortrait");
-                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(myid, mynickname, Uri.parse(ConstantValue.getOssResourceUrl(myportrait))));
+                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(myid, mynickname, Uri.parse(Common.getOssResourceUrl(myportrait))));
                     }
 
                     startActivity(intent);
@@ -411,7 +411,7 @@ public class ResetActivity extends AppCompatActivity {
                     String myid = shuserinfo.readUserInfo().get("userID");
                     String mynickname = shuserinfo.readUserInfo().get("userNickName");
                     String myportrait = shuserinfo.readUserInfo().get("userPortrait");
-                    RongIM.getInstance().refreshUserInfoCache(new UserInfo(myid, mynickname, Uri.parse(ConstantValue.getOssResourceUrl(myportrait))));
+                    RongIM.getInstance().refreshUserInfoCache(new UserInfo(myid, mynickname, Uri.parse(Common.getOssResourceUrl(myportrait))));
 
                     startActivity(intent);
                     break;

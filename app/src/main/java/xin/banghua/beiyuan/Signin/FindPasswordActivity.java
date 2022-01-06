@@ -22,7 +22,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.util.MD5Tool;
+import xin.banghua.beiyuan.utils.MD5Tool;
 
 import static io.rong.imkit.fragment.ConversationFragment.TAG;
 

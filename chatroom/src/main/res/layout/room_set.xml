@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/close_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_close"/>
+
+    <TextView
+        android:id="@+id/room_set_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="房间设置"/>
+
+
+    <xin.banghua.pullloadmorerecyclerview.NiceImageView
+        android:id="@+id/room_cover_img"
+        app:layout_constraintTop_toBottomOf="@id/room_set_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        app:corner_radius="14sp"
+        android:src="@mipmap/create_room_film"/>
+    <TextView
+        app:layout_constraintBottom_toBottomOf="@id/room_cover_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="添加封面"
+        android:textAlignment="center"/>
+
+    <xin.banghua.pullloadmorerecyclerview.NiceImageView
+        android:id="@+id/room_bg_img"
+        app:layout_constraintTop_toBottomOf="@id/room_cover_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        app:corner_radius="14sp"
+        android:visibility="gone"
+        android:src="@mipmap/create_room_film"/>
+    <TextView
+        app:layout_constraintBottom_toBottomOf="@id/room_bg_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="添加背景"
+        android:visibility="gone"
+        android:textAlignment="center"/>
+
+
+    <LinearLayout
+        android:id="@+id/room_name_linear"
+        app:layout_constraintTop_toBottomOf="@id/room_bg_img"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置标题"
+            android:textSize="16sp"/>
+        <EditText
+            android:id="@+id/room_name_et"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="输入标题更吸引粉丝"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -84,7 +84,8 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
+                    posts.setComment_forbid(jsonObject.getString("comment_forbid"));
                     luntanLists.add(posts);
                 }
                 adapter.swapData(luntanLists);
@@ -101,7 +102,8 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
+                    posts.setComment_forbid(jsonObject.getString("comment_forbid"));
                     luntanLists.add(posts);
                 }
             }

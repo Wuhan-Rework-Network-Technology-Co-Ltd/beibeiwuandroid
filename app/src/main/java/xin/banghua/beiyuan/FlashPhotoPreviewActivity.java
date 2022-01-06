@@ -32,7 +32,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 public class FlashPhotoPreviewActivity extends RongBaseNoActionbarActivity {
     Button cancel_btn,confirm_btn;
@@ -72,7 +72,7 @@ public class FlashPhotoPreviewActivity extends RongBaseNoActionbarActivity {
 
 //        flashphoto_preview_img.setImageURI(Uri.parse(photoPath));
         //flashphoto_preview_img.setImageURI(Uri.fromFile(new File(photoPath)));
-        Glide.with(this).load(ConstantValue.getOssResourceUrl(photoPath)).into(flashphoto_preview_img);
+        Glide.with(this).load(Common.getOssResourceUrl(photoPath)).into(flashphoto_preview_img);
         //flashphoto_preview_img.setImageBitmap(getLoacalBitmap(photoPath));
 
         cancel_btn.setOnClickListener(new View.OnClickListener() {

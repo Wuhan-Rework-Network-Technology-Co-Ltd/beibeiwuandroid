@@ -21,13 +21,13 @@ import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.alibaba.fastjson.JSON;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.agora.chatroom.activity.ChannelGridActivity;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.model.Conversation;
@@ -49,11 +50,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.MainBranch.LocationService;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 //import android.support.design.widget.BottomNavigationView;
 
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     //startActivity(intent1);
                     return true;
                 case R.id.navigation_haoyou:
-                    if (ConstantValue.myId==null){
+                    if (Common.myID ==null){
                         Intent intentSignin = new Intent(mContext, SigninActivity.class);
                         mContext.startActivity(intentSignin);
                     }else {
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     //Intent intent3 = new Intent(MainActivity.this, Main3Activity.class);
                     //startActivity(intent3);
                     //启动会话列表
-                    if (ConstantValue.myId==null){
+                    if (Common.myID ==null){
                         Intent intentSignin = new Intent(mContext, SigninActivity.class);
                         mContext.startActivity(intentSignin);
                     }else {
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent4);
                     return true;
                 case R.id.navigation_wode:
-                    if (ConstantValue.myId==null){
+                    if (Common.myID ==null){
                         Intent intentSignin = new Intent(mContext, SigninActivity.class);
                         mContext.startActivity(intentSignin);
                     }else {
@@ -220,12 +222,13 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
         if(userInfo.get("userID")==""){
 
-            ConstantValue.myId = null;
+            Common.myID = null;
 //            Intent intentSignin = new Intent(MainActivity.this, SigninActivity.class);
 //            startActivity(intentSignin);
         }else{
             //唯一登录验证
-            ConstantValue.myId = userInfo.get("userID");
+            Common.myID = userInfo.get("userID");
+            io.agora.chatroom.model.Constant.sUserId = Integer.parseInt(Common.myID);
             uniquelogin = new Uniquelogin(this,handler);
             uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
             //登录后，更新定位信息，包括经纬度和更新时间
@@ -445,12 +448,12 @@ public class MainActivity extends AppCompatActivity {
                         vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-//                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-//                                intent.putExtra("slidername","新版本");
-//                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
-//                                mContext.startActivity(intent);
-                                new DownloadUtils(MainActivity.this, "https://www.banghua.xin/beibeiwu.apk", "beibeiwu.apk");
-                                Toast.makeText(MainActivity.this, "正在下载中......", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+                                intent.putExtra("slidername","新版本");
+                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
+                                mContext.startActivity(intent);
+//                                new DownloadUtils(MainActivity.this, "https://www.banghua.xin/beibeiwu.apk", "beibeiwu.apk");
+//                                Toast.makeText(MainActivity.this, "正在下载中......", Toast.LENGTH_LONG).show();
                                 dialog.dismiss();
                             }
                         });
@@ -465,6 +468,25 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 2:
                     xin.banghua.beiyuan.Common.myInfo = msg.obj.toString();
+                    Log.d(TAG, "handleMessage: 自己信息"+xin.banghua.beiyuan.Common.myInfo);
+                    Common.userInfoList = JSON.parseObject(xin.banghua.beiyuan.Common.myInfo, UserInfoList.class);
+                    Log.d(TAG, "handleMessage: 1自己信息"+Common.userInfoList.getId());
+                    //聊天室用户信息
+                    try {
+                        io.agora.chatroom.model.Constant.sName = Common.userInfoList.getNickname();
+                        io.agora.chatroom.model.Constant.sPortrait = Common.userInfoList.getPortrait();
+                        io.agora.chatroom.model.Constant.sGender = Common.userInfoList.getGender();
+                        io.agora.chatroom.model.Constant.sProperty = Common.userInfoList.getProperty();
+                        io.agora.chatroom.model.Constant.sRoomName = Common.userInfoList.getAudioroomname();
+                        io.agora.chatroom.model.Constant.sRoomCover = Common.userInfoList.getAudioroomcover();
+                        io.agora.chatroom.model.Constant.sRoomBG = Common.userInfoList.getAudioroombackground();
+                        io.agora.chatroom.model.Constant.vip = Common.userInfoList.getVip();
+                        io.agora.chatroom.model.Constant.svip = Common.userInfoList.getSvip();
+                    } catch (NumberFormatException e) {
+                        Log.d(TAG, "handleMessage: 抛出自己信息异常");
+                        e.printStackTrace();
+                    }
+
                     try {
                         //缓存好友备注
                         JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
@@ -489,4 +511,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
+
+    public void testChatRoom(View view){
+        if (Common.myID ==null){
+            Intent intentSignin = new Intent(mContext, SigninActivity.class);
+            mContext.startActivity(intentSignin);
+        }else {
+            Intent intent = new Intent(MainActivity.this, ChannelGridActivity.class);
+            startActivity(intent);
+        }
+    }
 }

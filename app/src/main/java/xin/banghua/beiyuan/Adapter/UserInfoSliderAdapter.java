@@ -38,7 +38,7 @@ import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.SliderWebViewActivity;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  ViewPagerEx.OnPageChangeListener{
     private static final String TAG = "UserInfoSliderAdapter";
@@ -139,7 +139,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                         // initialize a SliderLayout
                         textSliderView
                                 .description(jsonObject.getString("slidename"))
-                                .image(ConstantValue.getOssResourceUrl(jsonObject.getString("slidepicture")))
+                                .image(Common.getOssResourceUrl(jsonObject.getString("slidepicture")))
                                 .setScaleType(BaseSliderView.ScaleType.Fit)
                                 .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                                     @Override
@@ -182,7 +182,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
             ((UserinfoHolder) viewHolder).userID.setText(mUserID.get(i-1));
             Glide.with(mContext)
                     .asBitmap()
-                    .load(ConstantValue.getOssResourceUrl(mUserPortrait.get(i-1)))
+                    .load(Common.getOssResourceUrl(mUserPortrait.get(i-1)))
                     .into(((UserinfoHolder) viewHolder).userPortrait);
             ((UserinfoHolder) viewHolder).userNickName.setText(mUserNickName.get(i-1));
             ((UserinfoHolder) viewHolder).userAge.setText(mUserAge.get(i-1));
@@ -329,7 +329,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
 
                 @Override
                 public void onClick(View v) {
-                    if (ConstantValue.myId==null){
+                    if (Common.myID ==null){
                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                                 .setTitle("登录后可以发起聊天！")
                                 .setPositiveButton("去登录", new DialogInterface.OnClickListener() {

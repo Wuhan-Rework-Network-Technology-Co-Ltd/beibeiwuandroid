@@ -26,7 +26,7 @@ import io.rong.imkit.RongIM;
 import xin.banghua.beiyuan.CircleImageViewExtension;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "FriendAdapter";
@@ -174,7 +174,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
         Glide.with(mContext)
                 .asBitmap()
-                .load(ConstantValue.getOssResourceUrl(currentItem.getmUserPortrait()))
+                .load(Common.getOssResourceUrl(currentItem.getmUserPortrait()))
                 .into(viewHolder.userPortrait);
         viewHolder.userNickName.setText(currentItem.getmUserNickName());
         viewHolder.userLeaveWords.setText("");

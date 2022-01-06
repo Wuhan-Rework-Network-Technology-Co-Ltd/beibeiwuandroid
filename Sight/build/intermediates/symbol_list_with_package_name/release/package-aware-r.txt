@@ -836,6 +836,12 @@ dimen subtitle_corner_radius
 dimen subtitle_outline_width
 dimen subtitle_shadow_offset
 dimen subtitle_shadow_radius
+dimen text_size_10
+dimen text_size_12
+dimen text_size_14
+dimen text_size_16
+dimen text_size_18
+dimen text_size_20
 dimen tooltip_corner_radius
 dimen tooltip_horizontal_padding
 dimen tooltip_margin

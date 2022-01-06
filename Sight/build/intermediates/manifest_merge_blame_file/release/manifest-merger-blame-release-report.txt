@@ -6,52 +6,52 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="19"
-8-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml
+8-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="30" />
-9-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml
+9-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml
 10
 11    <application>
-11-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:5:5-25:19
+11-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:5:5-25:19
 12        <activity
-12-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:6:9-18:20
+12-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:6:9-18:20
 13            android:name="io.rong.sight.player.SightPlayerActivity"
-13-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:7:13-68
+13-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:7:13-68
 14            android:hardwareAccelerated="true"
-14-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:8:13-47
+14-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:8:13-47
 15            android:screenOrientation="portrait" >
-15-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:9:13-49
+15-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:9:13-49
 16            <intent-filter>
-16-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:10:13-17:29
+16-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:10:13-17:29
 17                <action android:name="android.intent.action.VIEW" />
-17-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:11:17-69
-17-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:11:25-66
+17-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:11:17-69
+17-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:11:25-66
 18
 19                <category android:name="android.intent.category.DEFAULT" />
-19-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:12:17-76
-19-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:12:27-73
+19-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:12:17-76
+19-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:12:27-73
 20
 21                <data
-21-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:13:17-16:45
+21-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:13:17-16:45
 22                    android:host="${applicationId}"
-22-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:14:21-52
+22-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:14:21-52
 23                    android:pathPrefix="/sight/player"
-23-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:15:21-55
+23-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:15:21-55
 24                    android:scheme="rong" />
-24-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:16:21-42
+24-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:16:21-42
 25            </intent-filter>
 26        </activity>
 27        <activity
-27-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:19:9-21:52
+27-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:19:9-21:52
 28            android:name="io.rong.sight.player.SightListActivity"
-28-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:20:13-66
+28-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:20:13-66
 29            android:screenOrientation="portrait" />
-29-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:21:13-49
+29-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:21:13-49
 30        <activity
-30-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:22:9-24:52
+30-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:22:9-24:52
 31            android:name="io.rong.sight.record.SightRecordActivity"
-31-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:23:13-68
+31-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:23:13-68
 32            android:screenOrientation="portrait" />
-32-->I:\Android\androidapp_copy\Sight\src\main\AndroidManifest.xml:24:13-49
+32-->I:\Android\androidapp\Sight\src\main\AndroidManifest.xml:24:13-49
 33    </application>
 34
 35</manifest>

@@ -451,13 +451,15 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
             if (jsonArray.length()>0){
                 for (int i=0;i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
+
                     String[] postPicture = jsonObject.getString("postpicture").split(",");
                     LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
                             jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
+                    posts.setComment_forbid(jsonObject.getString("comment_forbid"));
                     luntanLists.add(posts);
                 }
                 adapter.swapData(luntanLists);
@@ -475,7 +477,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                             jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
                             jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"));
+                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
+                    posts.setComment_forbid(jsonObject.getString("comment_forbid"));
                     luntanLists.add(posts);
                 }
             }
@@ -494,7 +497,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
 
                 @Override
                 public void onLoadMore() {
-//                    if (pageindex == 1&& ConstantValue.myId==null){
+//                    if (pageindex == 1&& Common.myID==null){
 //                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity())
 //                                .setTitle("登录以查看更多内容！")
 //                                .setPositiveButton("去登录", new DialogInterface.OnClickListener() {

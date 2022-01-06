@@ -58,7 +58,7 @@ import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoProvider {
     private static final String TAG = "Main2Activity";
@@ -158,7 +158,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
             String myid = shuserinfo.readUserInfo().get("userID");
             String mynickname = shuserinfo.readUserInfo().get("userNickName");
             String myportrait = shuserinfo.readUserInfo().get("userPortrait");
-            UserInfo myinfo = new UserInfo(myid, mynickname, Uri.parse(ConstantValue.getOssResourceUrl(myportrait)));
+            UserInfo myinfo = new UserInfo(myid, mynickname, Uri.parse(Common.getOssResourceUrl(myportrait)));
             RongIM.getInstance().setCurrentUserInfo(myinfo);
 
             //底部导航初始化和配置监听，默认选项
@@ -176,14 +176,14 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
             };
             RongIM.getInstance().addUnReadMessageCountChangedObserver(iUnReadMessageObserver, Conversation.ConversationType.PRIVATE);
 
-            Log.d(TAG, "onCreate: ConstantValue.friendList"+ Common.friendList);
+            Log.d(TAG, "onCreate: Common.friendList"+ xin.banghua.beiyuan.Common.friendList);
 
             //这里用了缓存  *好友列表还是暂时别缓存了，对方同意好友没优化，更改备注也没优化
             //getDataFriends(getString(R.string.friends_url));
-            if (Common.friendListMap==null) {
+            if (xin.banghua.beiyuan.Common.friendListMap==null) {
                 getDataFriends(getString(R.string.friends_url));
             }else {
-                for (Map.Entry<String, FriendList> m : Common.friendListMap.entrySet()) {//通过entrySet
+                for (Map.Entry<String, FriendList> m : xin.banghua.beiyuan.Common.friendListMap.entrySet()) {//通过entrySet
                     friendList.add(m.getValue());
                 }
                 initRecyclerView(getWindow().getDecorView());
@@ -306,7 +306,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
                 friendListMap.put(jsonObject.getString("id"),filledData(friends));
 
                 //融云个人信息
-                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(ConstantValue.getOssResourceUrl(jsonObject.getString("portrait"))));
+                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(Common.getOssResourceUrl(jsonObject.getString("portrait"))));
                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                 userInfoList.add(userInfo);
             }
@@ -494,7 +494,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         for (FriendList i : friendList) {
             if (i.getmUserID().equals(s)) {
                 Log.d(TAG, "getUserInfo: 进入" + s);
-                return new UserInfo(i.getmUserID(), i.getmUserNickName(), Uri.parse(ConstantValue.getOssResourceUrl(i.getmUserPortrait())));
+                return new UserInfo(i.getmUserID(), i.getmUserNickName(), Uri.parse(Common.getOssResourceUrl(i.getmUserPortrait())));
             }
         }
         Log.d(TAG, "getUserInfo: 没进入" + s);

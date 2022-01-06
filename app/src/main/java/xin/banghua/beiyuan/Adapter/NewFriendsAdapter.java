@@ -31,12 +31,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main2Activity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.utils.Common;
 
 public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.ViewHolder>  {
     private static final String TAG = "NewFriendsAdapter";
@@ -108,7 +107,7 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
         viewHolder.userID.setText(mUserID.get(i));
         Glide.with(mContext)
                 .asBitmap()
-                .load(ConstantValue.getOssResourceUrl(mUserPortrait.get(i)))
+                .load(Common.getOssResourceUrl(mUserPortrait.get(i)))
                 .into(viewHolder.userPortrait);
 
         //现在vip传过来的是时间
@@ -171,9 +170,9 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                         agreeFriend(mContext.getString(R.string.agreefriendnew_url),mUserID.get(i),mUserPortrait.get(i),mUserNickName.get(i));
 
                         //同意了好友，则刷新
-                        Common.newFriendOrDeleteFriend = true;
+                        xin.banghua.beiyuan.Common.newFriendOrDeleteFriend = true;
                         FriendList friends = new FriendList(mUserID.get(i), mUserPortrait.get(i), mUserNickName.get(i), mUserAge.get(i), mUserGender.get(i), mUserRegion.get(i), mUserProperty.get(i), mUserVIP.get(i),mUserVIP.get(i));
-                        Common.friendListMap.put(mUserID.get(i), Main2Activity.filledData(friends));
+                        xin.banghua.beiyuan.Common.friendListMap.put(mUserID.get(i), Main2Activity.filledData(friends));
                     }
                 }
             });

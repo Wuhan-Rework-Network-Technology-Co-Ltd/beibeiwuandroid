@@ -13,10 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +41,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.util.MD5Tool;
+import xin.banghua.beiyuan.utils.MD5Tool;
 
 import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
 
@@ -53,6 +55,8 @@ public class FabutieziFragment extends Fragment {
     RadioButton zipai_rb,zhenshi_rb,qinggan_rb,daquan_rb;
     ImageView imageView1,imageView2,imageView3;
     Button release_btn;
+    Switch switch_comment;
+    String comment_forbid = "0";
 
     String posttitle = "";
     String posttext = "";
@@ -60,6 +64,7 @@ public class FabutieziFragment extends Fragment {
     String postpicture2 = "";
     String postpicture3 = "";
     String platename = "";
+
 
     int imageView_state;
 
@@ -105,6 +110,17 @@ public class FabutieziFragment extends Fragment {
         imageView2 = view.findViewById(R.id.imageView2);
         imageView3 = view.findViewById(R.id.imageView3);
         release_btn = view.findViewById(R.id.release_btn);
+        switch_comment = view.findViewById(R.id.switch_comment);
+        switch_comment.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    comment_forbid = "0";
+                }else {
+                    comment_forbid = "1";
+                }
+            }
+        });
 
         imageView1.setImageResource(R.drawable.plus);
         imageView2.setImageResource(R.drawable.plus);
@@ -280,6 +296,7 @@ public class FabutieziFragment extends Fragment {
                 multipartBody.addFormDataPart("posttitle", posttitle);
                 multipartBody.addFormDataPart("posttext", posttext);
                 multipartBody.addFormDataPart("platename", platename);
+                multipartBody.addFormDataPart("comment_forbid", comment_forbid);
                 if (!postpicture1.isEmpty())multipartBody.addFormDataPart("postpicture1",fileName,RequestBody.create(new File(postpicture1),MEDIA_TYPE_PNG));
                 if (!postpicture2.isEmpty())multipartBody.addFormDataPart("postpicture2",fileName,RequestBody.create(new File(postpicture2),MEDIA_TYPE_PNG));
                 if (!postpicture3.isEmpty())multipartBody.addFormDataPart("postpicture3",fileName,RequestBody.create(new File(postpicture3),MEDIA_TYPE_PNG));

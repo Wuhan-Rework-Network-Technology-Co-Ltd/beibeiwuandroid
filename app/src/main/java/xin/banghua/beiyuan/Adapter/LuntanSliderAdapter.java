@@ -51,7 +51,8 @@ import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.SliderWebViewActivity;
-import xin.banghua.beiyuan.util.ConstantValue;
+import xin.banghua.beiyuan.comment.CommentDialog;
+import xin.banghua.beiyuan.utils.Common;
 
 public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewPagerEx.OnPageChangeListener {
     private static final String TAG = "LuntanAdapter";
@@ -117,7 +118,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                         // initialize a SliderLayout
                         textSliderView
                                 .description(jsonObject.getString("slidename"))
-                                .image(ConstantValue.getOssResourceUrl(jsonObject.getString("slidepicture")))
+                                .image(Common.getOssResourceUrl(jsonObject.getString("slidepicture")))
                                 .setScaleType(BaseSliderView.ScaleType.Fit)
                                 .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                                     @Override
@@ -171,7 +172,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
 
             Glide.with(mContext)
                     .asBitmap()
-                    .load(ConstantValue.getOssResourceUrl(currentItem.getAuthportrait()))
+                    .load(Common.getOssResourceUrl(currentItem.getAuthportrait()))
                     .into(((ViewHolder) viewHolder).authportrait);
 
 
@@ -325,7 +326,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             }else if (currentItem.getPostpicture().length==1){
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[0]))
+                        .load(Common.getOssResourceUrl(currentItem.getPostpicture()[0]))
                         .into(((ViewHolder) viewHolder).postpicture);
                 ((ViewHolder) viewHolder).postpicture.setVisibility(View.VISIBLE);
                 ((ViewHolder) viewHolder).postpicture.setOnClickListener(new View.OnClickListener() {
@@ -343,7 +344,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             }else {
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[0]))
+                        .load(Common.getOssResourceUrl(currentItem.getPostpicture()[0]))
                         .into(((ViewHolder) viewHolder).postpicture1);
                 ((ViewHolder) viewHolder).postpicture1.setVisibility(View.VISIBLE);
                 ((ViewHolder) viewHolder).postpicture1.setOnClickListener(new View.OnClickListener() {
@@ -361,7 +362,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             }else {
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[1]))
+                        .load(Common.getOssResourceUrl(currentItem.getPostpicture()[1]))
                         .into(((ViewHolder) viewHolder).postpicture2);
                 ((ViewHolder) viewHolder).postpicture2.setVisibility(View.VISIBLE);
                 ((ViewHolder) viewHolder).postpicture2.setOnClickListener(new View.OnClickListener() {
@@ -379,7 +380,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             }else {
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(ConstantValue.getOssResourceUrl(currentItem.getPostpicture()[2]))
+                        .load(Common.getOssResourceUrl(currentItem.getPostpicture()[2]))
                         .into(((ViewHolder) viewHolder).postpicture3);
                 ((ViewHolder) viewHolder).postpicture3.setVisibility(View.VISIBLE);
                 ((ViewHolder) viewHolder).postpicture3.setOnClickListener(new View.OnClickListener() {
@@ -421,26 +422,26 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 }
             });
 
-//            ((ViewHolder) viewHolder).posttitle.setOnClickListener(new View.OnClickListener() {
+//            ((MainViewHolder) viewHolder).posttitle.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
 //                    intentPostlist(v,currentItem);
 //                }
 //            });
-//            ((ViewHolder) viewHolder).posttext.setOnClickListener(new View.OnClickListener() {
+//            ((MainViewHolder) viewHolder).posttext.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
 //                    intentPostlist(v,currentItem);
 //                }
 //            });
-//            ((ViewHolder) viewHolder).postpicture.setOnClickListener(new View.OnClickListener() {
+//            ((MainViewHolder) viewHolder).postpicture.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
 //                    intentPostlist(v,currentItem);
 //                }
 //            });
 //
-//            ((ViewHolder) viewHolder).luntanLayout.setOnClickListener(new View.OnClickListener() {
+//            ((MainViewHolder) viewHolder).luntanLayout.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
 //                    intentPostlist(v,currentItem);
@@ -468,11 +469,37 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 }
             });
 
+
+            CommentDialog commentDialog = new CommentDialog(mContext);
+            ((ViewHolder) viewHolder).comment_tv.setText("评"+currentItem.getComment_sum());
+            ((ViewHolder) viewHolder).comment_tv.setOnClickListener(view -> {
+                if (Common.myID==null){
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
+                            .setTitle("登录以查看更多内容！")
+                            .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent = new Intent(mContext, SigninActivity.class);
+                                    mContext.startActivity(intent);
+                                }
+                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                    builder.create().show();
+                }else {
+                    commentDialog.loadComment(currentItem);
+                    commentDialog.startLoadComment();
+                }
+            });
+
         }
     }
 
     private void goToPersonage(String userId){
-        if (ConstantValue.myId==null){
+        if (Common.myID ==null){
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
                     .setTitle("登录后可以发起聊天！")
                     .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
@@ -561,6 +588,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         ZoomInImageView postpicture2;
         ZoomInImageView postpicture3;
         TextView like;
+        TextView comment_tv;
         TextView favorite;
         TextView time;
         Button detail_content;
@@ -591,6 +619,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             postpicture2 = itemView.findViewById(R.id.postpicture2);
             postpicture3 = itemView.findViewById(R.id.postpicture3);
             like = itemView.findViewById(R.id.like);
+            comment_tv = itemView.findViewById(R.id.comment_tv);
             favorite = itemView.findViewById(R.id.favorite);
             time = itemView.findViewById(R.id.time);
 
