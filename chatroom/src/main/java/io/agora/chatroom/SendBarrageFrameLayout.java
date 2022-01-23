@@ -183,6 +183,7 @@ public class SendBarrageFrameLayout extends FrameLayout {
             no_film.setVisibility(GONE);
 
             VideoView mVideoView = getVideoViewManager().get(Tag.PIP);
+//            mVideoView.setPlayerFactory(ExoMediaPlayerFactory.create());
             StandardVideoController controller = new StandardVideoController(mContext);
 
             controller.addDefaultControlComponent(mCurrentFilm.getName(), false, new SeekBar.OnSeekBarChangeListener() {
@@ -491,7 +492,7 @@ public class SendBarrageFrameLayout extends FrameLayout {
 
         @Override
         public void onMessageReceived(RtmMessage rtmMessage, String s) {
-            Log.d(TAG, "onMessageReceived: 同步视频信息"+rtmMessage.getText());
+            Log.d(TAG, "onMessageReceived: 同步视频信息"+getVideoViewManager().get(Tag.PIP).getCurrentPosition());
             if (rtmMessage.getText().contains("syn_anchor_film")){
                 if (mCurrentFilm ==null){
                     return;
@@ -502,10 +503,11 @@ public class SendBarrageFrameLayout extends FrameLayout {
                 RtmManager.instance(mContext).getRtmClient().sendMessageToPeer(s, message, RtmManager.instance(mContext).getSendMessageOptions(), new ResultCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: 同步视频信息");
+                        Log.d(TAG, "onSuccess: 同步视频信息成功");
                     }
                     @Override
                     public void onFailure(ErrorInfo errorInfo) {
+                        Log.d(TAG, "onFailure: 同步视频信息失败"+errorInfo.toString());
                     }
                 });
             }else if (rtmMessage.getText().contains("filmCurrentPosition")){

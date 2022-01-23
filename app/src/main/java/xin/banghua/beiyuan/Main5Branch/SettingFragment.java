@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -40,7 +41,6 @@ import xin.banghua.beiyuan.BuildConfig;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.SliderWebViewActivity;
 import xin.banghua.beiyuan.utils.Common;
 import xin.banghua.beiyuan.utils.MD5Tool;
 
@@ -404,12 +404,17 @@ public class SettingFragment extends Fragment {
                         vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-                                intent.putExtra("slidername","新版本");
-                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
-                                mContext.startActivity(intent);
-//                                new DownloadUtils(getActivity(), "https://oss.banghua.xin/attachement/beibeiwu.apk", "beibeiwu.apk");
+//                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+//                                intent.putExtra("slidername","新版本");
+//                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
+//                                mContext.startActivity(intent);
+                                //new DownloadUtils(getActivity(), "https://oss.banghua.xin/attachment/beibeiwu.apk", "beibeiwu.apk");
 //                                Toast.makeText(getActivity(), "正在下载中......", Toast.LENGTH_LONG).show();
+                                Intent intent =  new  Intent();
+                                intent.setAction( "android.intent.action.VIEW" );
+                                Uri content_url = Uri.parse( "https://beibeiwu.banghua.xin");
+                                intent.setData(content_url);
+                                startActivity(intent);
                                 dialog.dismiss();
                             }
                         });

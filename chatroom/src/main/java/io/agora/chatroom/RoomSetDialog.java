@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 import io.agora.chatroom.model.Constant;
 
 public class RoomSetDialog {
-    private static final String TAG = "DialogExample";
+    private static final String TAG = "MusicSettingDialog";
 
     /**  */
     public static final int DIALOG_EXAMPLE = 1;

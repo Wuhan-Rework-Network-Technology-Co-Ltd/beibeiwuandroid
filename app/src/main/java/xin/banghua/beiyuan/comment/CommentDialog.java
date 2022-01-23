@@ -188,12 +188,12 @@ public class CommentDialog {
         subID_comment = "0";
         pageIndex = 1;
         this.luntanList = luntanList;
-        ifauthreply = "0";
-        if (myID!=null){
-            if (myID.equals(luntanList.getAuthid())){
-                ifauthreply = "1";
-            }
+        if (luntanList.getAuthid().equals(myID)){
+            ifauthreply = "1";
+        }else {
+            ifauthreply = "0";
         }
+        Log.d(TAG, "loadComment: 是不是帖子作者"+ifauthreply);
 
         dataLists.clear();
         pageIndex = 1;
@@ -269,7 +269,7 @@ public class CommentDialog {
             }else if (comment_et.getText().length()==0){
                 Toast.makeText(mContext,"字数不能为空",Toast.LENGTH_LONG).show();
             }else {
-                OkHttpInstance.getUserAttributes(luntanList.getAuthid(), new io.agora.chatroom.OkHttpResponseCallBack() {
+                OkHttpInstance.getUserAttributes(luntanList.getAuthid(), new OkHttpResponseCallBack() {
                     @Override
                     public void getResponseString(String responseString) {
                         if (!responseString.equals("false")){
@@ -328,7 +328,8 @@ public class CommentDialog {
                                                     return true;
                                                 }
                                             });
-                                            sub_comment_layout.addView(subCommentView,0);
+                                            if (sub_comment_layout!=null)
+                                                sub_comment_layout.addView(subCommentView,0);
 
                                             pullLoadMoreRecyclerView.getRecyclerView().scrollToPosition(currentPosition);
                                         }
@@ -547,6 +548,9 @@ public class CommentDialog {
 
             holder.tv_content.setOnLongClickListener(longClickListener);
             holder.comment_relative_layout.setOnLongClickListener(longClickListener);
+
+            //subRecyclerAdapterAdapter_inner.setDataLists(sub_dataLists_inner);
+            holder.sub_comment_layout.removeAllViews();
         }
 
         @Override
@@ -567,6 +571,7 @@ public class CommentDialog {
                 @Override
                 public void getResponseString(String responseString) {
                     if (!responseString.equals("false")){
+                        sub_dataLists_inner.clear();
                         sub_dataLists_inner.addAll(JSON.parseArray(responseString,CommentList.class));
                         //subRecyclerAdapterAdapter_inner.setDataLists(sub_dataLists_inner);
                         for (CommentList item: sub_dataLists_inner) {
@@ -598,7 +603,7 @@ public class CommentDialog {
     }
     public void collapseClose(TextView collapse_tv,CommentList currentItem,AtomicInteger pageIndex,List<CommentList> sub_dataLists_inner,
                               LinearLayout sub_comment_layout,int currentPosition){
-        if (Integer.parseInt(currentItem.getSubcomment_num())==sub_dataLists_inner.size()){
+        if (Integer.parseInt(currentItem.getSubcomment_num())==sub_comment_layout.getChildCount()){
             collapse_tv.setText("--收起");
             collapse_tv.setOnClickListener(view1 -> {
                 sub_dataLists_inner.clear();

@@ -40,12 +40,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import io.agora.chatroom.adapter.NpaLinearLayoutManager;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
+import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.GlobalDialogSingle;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
@@ -309,7 +311,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
 
         adapter = new UserInfoSliderAdapter(view.getContext(), sliderJsonArray, mUserID, mUserPortrait, mUserNickName, mUserAge, mUserGender, mUserProperty, mUserLocation, mUserRegion, mUserVIP, mUserSVIP,mAllowLocation);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLinearLayout();
+        recyclerView.getRecyclerView().setLayoutManager(new NpaLinearLayoutManager(mView.getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
@@ -445,7 +447,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                         Log.d(TAG, "handleMessage: 幻灯片接收的值" + msg.obj.toString());
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         sliderJsonArray = jsonArray;
-                        getDataUserinfo(getString(R.string.fujin_url), "1");
+                        getDataUserinfo(App.getApplication().getString(R.string.fujin_url), "1");
                         //initSlider(mView,jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();

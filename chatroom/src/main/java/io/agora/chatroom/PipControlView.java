@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import io.agora.chatroom.activity.ChatRoomActivity;
 import xyz.doikki.videoplayer.controller.ControlWrapper;
 import xyz.doikki.videoplayer.controller.IControlComponent;
 import xyz.doikki.videoplayer.player.VideoView;
@@ -52,6 +53,8 @@ public class PipControlView extends FrameLayout implements IControlComponent, Vi
         if (id == R.id.btn_close) {
             PIPManager.getInstance().stopFloatWindow();
             PIPManager.getInstance().reset();
+            if (ChatRoomActivity.mManager!=null)
+                ChatRoomActivity.mManager.leaveChannel();
         } else if (id == R.id.start_play) {
             mControlWrapper.togglePlay();
         } else if (id == R.id.btn_skip) {

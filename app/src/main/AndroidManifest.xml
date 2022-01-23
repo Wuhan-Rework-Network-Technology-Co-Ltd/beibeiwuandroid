@@ -4,6 +4,7 @@
     package="xin.banghua.beiyuan">
     <!-- 指定微信包名 -->
     <application
+        android:requestLegacyExternalStorage="true"
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -78,7 +79,8 @@
         <activity
             android:name=".Personage.PersonageActivity"
             android:theme="@style/AppTheme.ActionBar.Show" />
-        <activity android:name=".LaunchActivity">
+        <activity android:name=".LaunchActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -96,7 +98,8 @@
             android:label="@string/title_activity_main4" />
         <activity
             android:name=".Main3Activity"
-            android:label="@string/title_activity_main3">
+            android:label="@string/title_activity_main3"
+            android:exported="false">
             <intent-filter>
                 <action android:name="xin.banghua.beiyuan.Main3Activity" />
 
@@ -220,7 +223,8 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".PushPackage.Meizu.MeizuMessageReceiver">
+        <receiver android:name=".PushPackage.Meizu.MeizuMessageReceiver"
+            android:exported="true">
             <intent-filter>
 
                 <!-- 接收 push 消息 -->
@@ -237,7 +241,8 @@
             </intent-filter>
         </receiver> <!-- 新小米 配置结束 < -->
         <!-- 新魅族 配置开始 < -->
-        <receiver android:name=".PushPackage.Vivo.PushMessageReceiverImpl">
+        <receiver android:name=".PushPackage.Vivo.PushMessageReceiverImpl"
+            android:exported="true">
             <intent-filter>
 
                 <!-- 接收push消息 -->
@@ -274,14 +279,18 @@
             android:enabled="true" />
         <service
             android:name="com.heytap.msp.push.service.CompatibleDataMessageCallbackService"
-            android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE">
+            android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
         </service> <!-- 穿山甲 -->
         <service
             android:name="com.heytap.msp.push.service.DataMessageCallbackService"
-            android:permission="com.heytap.mcs.permission.SEND_PUSH_MESSAGE">
+            android:permission="com.heytap.mcs.permission.SEND_PUSH_MESSAGE"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.heytap.mcs.action.RECEIVE_MCS_MESSAGE" />
                 <action android:name="com.heytap.msp.push.RECEIVE_MCS_MESSAGE" />
@@ -332,6 +341,7 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" /> <!-- 官方推送权限相关 -->
     <!-- 魅族的权限  配置开始 -->
     <!-- 兼容 Flyme5 的权限配置 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 兼容 Flyme3 的权限配置 -->

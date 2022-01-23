@@ -44,6 +44,7 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.utils.MD5Tool;
 
 import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
+import static io.agora.chatroom.ThreadUtils.runOnUiThread;
 
 
 public class FabutieziFragment extends Fragment {
@@ -270,7 +271,7 @@ public class FabutieziFragment extends Fragment {
             Toast.makeText(mContext, "已发布成功，等待审核", Toast.LENGTH_LONG).show();
             if (msg.arg1==1) {
                 Log.d("跳转", "Navigation");
-                Navigation.findNavController(mView).navigate(R.id.fabutiezi_luntan_action);
+
             }
 
         }
@@ -321,5 +322,10 @@ public class FabutieziFragment extends Fragment {
                 }
             }
         }).start();
+
+        runOnUiThread(()-> {
+            Navigation.findNavController(mView).navigate(R.id.fabutiezi_luntan_action);
+            Toast.makeText(mContext, "已发布成功，等待审核", Toast.LENGTH_LONG).show();
+        });
     }
 }

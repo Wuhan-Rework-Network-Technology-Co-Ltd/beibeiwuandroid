@@ -449,4 +449,261 @@ public class OkHttpInstance {
             }
         }).start();
     }
+
+
+
+
+    /**
+     * 获取ktv音乐列表
+     * getKtvMusicList
+     * @param key_word
+     * @param pageIndex
+     * @param okHttpResponseCallBack
+     */
+    public static void getKtvMusicList(String key_word,String pageIndex,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("key_word", key_word)
+                        .add("pageIndex", pageIndex)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getKtvMusicList&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    Log.d(TAG, " 音乐列表"+ resultString);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+
+    /**
+     * 获取房间被点歌曲
+     *
+     * @param roomId
+     * @param okHttpResponseCallBack
+     */
+    public static void getSongList(String roomId,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("roomId", roomId)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSongList&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    Log.d(TAG, " 获取房间被点歌曲"+ roomId +resultString);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 点播一首歌曲
+     *
+     * @param roomId
+     * @param musicId
+     */
+    public static void addSong(String roomId,String musicId,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("userId", Constant.sUserId+"")
+                        .add("roomId", roomId)
+                        .add("musicId", musicId)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addSong&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    Log.d(TAG, " 点播一首歌曲"+ resultString);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 删除一首歌曲
+     *
+     * @param songId
+     */
+    public static void deleteSong(String songId,String roomId,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("songId", songId)
+                        .add("roomId", roomId)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteSong&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    Log.d(TAG, " 删除一首歌曲"+ songId + resultString);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 删除用户歌曲
+     *
+     * @param userId
+     * @param okHttpResponseCallBack
+     */
+    public static void deleteSongUser(String userId,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("userId", userId)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteSongUser&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    Log.d(TAG, "删除用户歌曲"+ resultString);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 清空房间歌曲
+     * @param okHttpResponseCallBack
+     */
+    public static void deleteSongRoom(OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("userId", Constant.sUserId+"")
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteSongRoom&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    Log.d(TAG, "清空房间歌曲"+ resultString);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 从点歌id获取音乐
+     *
+     * @param roomId
+     * @param songId
+     * @param okHttpResponseCallBack
+     */
+    public static void getSongFromSongId(String roomId, String songId, OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("roomId", roomId)
+                        .add("songId", songId)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSongFromSongId&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    Log.d(TAG, "从音乐id获取音乐"+ resultString);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+
+    /**
+     * 是否点歌
+     */
+    public static void isOpenOrderSong(OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://redis.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=isOpenOrderSong&m=rediscache")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 }

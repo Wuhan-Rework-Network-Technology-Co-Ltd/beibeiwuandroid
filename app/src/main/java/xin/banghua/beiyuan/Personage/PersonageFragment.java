@@ -44,6 +44,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
+import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.CircleImageViewExtension;
 import xin.banghua.beiyuan.Main5Branch.BuysvipActivity;
 import xin.banghua.beiyuan.Main5Branch.BuyvipActivity;
@@ -563,7 +564,7 @@ public class PersonageFragment extends Fragment {
 
         mUserNickName_tv.setText(jsonObject.getString("nickname"));
         //if (jsonObject.getString("vip").equals("VIP"))  mUserPortrait_iv.isVIP(true,getResources(),false);
-        Glide.with(view.getContext())
+        Glide.with(App.getApplication())
                 .asBitmap()
                 .load(Common.getOssResourceUrl(jsonObject.getString("portrait")))
                 .into(mUserPortrait_iv);
@@ -575,17 +576,17 @@ public class PersonageFragment extends Fragment {
                 //vipicon分级
                 Log.d("会员时长", ((svip_time - current_timestamp) + ""));
                 if ((svip_time - current_timestamp) < 3600 * 24 * 30) {
-                    Glide.with(mContext)
+                    Glide.with(App.getApplication())
                             .asBitmap()
                             .load(R.drawable.ic_svip_diamond)
                             .into(vip_gray);
                 } else if ((svip_time - current_timestamp) < 3600 * 24 * 180) {
-                    Glide.with(mContext)
+                    Glide.with(App.getApplication())
                             .asBitmap()
                             .load(R.drawable.ic_svip_black)
                             .into(vip_gray);
                 } else {
-                    Glide.with(mContext)
+                    Glide.with(App.getApplication())
                             .asBitmap()
                             .load(R.drawable.ic_svip_white)
                             .into(vip_gray);
@@ -597,29 +598,29 @@ public class PersonageFragment extends Fragment {
                         //vipicon分级
                         Log.d("会员时长", ((vip_time - current_timestamp) + ""));
                         if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
-                            Glide.with(mContext)
+                            Glide.with(App.getApplication())
                                     .asBitmap()
                                     .load(R.drawable.ic_vip_diamond)
                                     .into(vip_gray);
                         } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
-                            Glide.with(mContext)
+                            Glide.with(App.getApplication())
                                     .asBitmap()
                                     .load(R.drawable.ic_vip_black)
                                     .into(vip_gray);
                         } else {
-                            Glide.with(mContext)
+                            Glide.with(App.getApplication())
                                     .asBitmap()
                                     .load(R.drawable.ic_vip_white)
                                     .into(vip_gray);
                         }
                     } else {
-                        Glide.with(mContext)
+                        Glide.with(App.getApplication())
                                 .asBitmap()
                                 .load(R.drawable.ic_vip_gray)
                                 .into(vip_gray);
                     }
                 }else {
-                    Glide.with(mContext)
+                    Glide.with(App.getApplication())
                             .asBitmap()
                             .load(R.drawable.ic_vip_gray)
                             .into(vip_gray);
@@ -631,29 +632,29 @@ public class PersonageFragment extends Fragment {
                 //vipicon分级
                 Log.d("会员时长", ((vip_time - current_timestamp) + ""));
                 if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
-                    Glide.with(mContext)
+                    Glide.with(App.getApplication())
                             .asBitmap()
                             .load(R.drawable.ic_vip_diamond)
                             .into(vip_gray);
                 } else if ((vip_time - current_timestamp) < 3600 * 24 * 180) {
-                    Glide.with(mContext)
+                    Glide.with(App.getApplication())
                             .asBitmap()
                             .load(R.drawable.ic_vip_black)
                             .into(vip_gray);
                 } else {
-                    Glide.with(mContext)
+                    Glide.with(App.getApplication())
                             .asBitmap()
                             .load(R.drawable.ic_vip_white)
                             .into(vip_gray);
                 }
             } else {
-                Glide.with(mContext)
+                Glide.with(App.getApplication())
                         .asBitmap()
                         .load(R.drawable.ic_vip_gray)
                         .into(vip_gray);
             }
         }else {
-            Glide.with(mContext)
+            Glide.with(App.getApplication())
                     .asBitmap()
                     .load(R.drawable.ic_vip_gray)
                     .into(vip_gray);

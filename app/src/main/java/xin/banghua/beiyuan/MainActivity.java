@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -229,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
             //唯一登录验证
             Common.myID = userInfo.get("userID");
             io.agora.chatroom.model.Constant.sUserId = Integer.parseInt(Common.myID);
+            Log.d(TAG, "ifSignin: 聊天室我的id"+io.agora.chatroom.model.Constant.sUserId);
             uniquelogin = new Uniquelogin(this,handler);
             uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
             //登录后，更新定位信息，包括经纬度和更新时间
@@ -241,9 +243,7 @@ public class MainActivity extends AppCompatActivity {
             startService(startIntent);
 
             //获取自己信息，储存在Common类中
-            if (xin.banghua.beiyuan.Common.myInfo == null) {
-                getDataMyInfo(getString(R.string.personage_url),userInfo.get("userID"));
-            }
+            getDataMyInfo(getString(R.string.personage_url),userInfo.get("userID"));
         }
     }
 
@@ -448,12 +448,17 @@ public class MainActivity extends AppCompatActivity {
                         vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-                                intent.putExtra("slidername","新版本");
-                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
-                                mContext.startActivity(intent);
-//                                new DownloadUtils(MainActivity.this, "https://www.banghua.xin/beibeiwu.apk", "beibeiwu.apk");
+//                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+//                                intent.putExtra("slidername","新版本");
+//                                intent.putExtra("sliderurl","https://a.app.qq.com/o/simple.jsp?pkgname=xin.banghua.beiyuan");
+//                                mContext.startActivity(intent);
+                                //new DownloadUtils(MainActivity.this, "https://oss.banghua.xin/attachment/beibeiwu.apk", "beibeiwu.apk");
 //                                Toast.makeText(MainActivity.this, "正在下载中......", Toast.LENGTH_LONG).show();
+                                Intent intent =  new  Intent();
+                                intent.setAction( "android.intent.action.VIEW" );
+                                Uri content_url = Uri.parse( "https://beibeiwu.banghua.xin" );
+                                intent.setData(content_url);
+                                startActivity(intent);
                                 dialog.dismiss();
                             }
                         });

@@ -22,6 +22,7 @@ import static io.agora.chatroom.RoomSetDialog.IMAGE_ROOM_COVER;
 import static io.agora.chatroom.activity.ChatRoomActivity.COUPLE_TYPE;
 import static io.agora.chatroom.activity.ChatRoomActivity.DRAW_GUESS_TYPE;
 import static io.agora.chatroom.activity.ChatRoomActivity.FIVE_CHESS_TYPE;
+import static io.agora.chatroom.activity.ChatRoomActivity.KTV_TYPE;
 import static io.agora.chatroom.activity.ChatRoomActivity.WATCH_FILM_TYPE;
 
 public class SwitchRoomActivity extends AppCompatActivity {
@@ -63,6 +64,20 @@ public class SwitchRoomActivity extends AppCompatActivity {
         create_room_cp.setOnClickListener(view1 -> {
             Toast.makeText(SwitchRoomActivity.this,"正在创建房间...",Toast.LENGTH_SHORT).show();
             OkHttpInstance.createRoom(COUPLE_TYPE, responseString -> {
+                if (responseString.equals("ok")){
+                    create_room_draw_guess.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isSwitchRoom = true;
+                            finish();
+                        }
+                    },1500);
+                }
+            });
+        });
+        create_room_ktv.setOnClickListener(view1 -> {
+            Toast.makeText(SwitchRoomActivity.this,"正在创建房间...",Toast.LENGTH_LONG).show();
+            OkHttpInstance.createRoom(KTV_TYPE, responseString -> {
                 if (responseString.equals("ok")){
                     create_room_draw_guess.postDelayed(new Runnable() {
                         @Override

@@ -24,6 +24,8 @@
 
     <color name="text_color_10">#ffa726</color>
 
+    <color name="text_color_11">#EC693C</color>
+
     <color name="colorPrimary">#FDD000</color>
     <color name="colorPrimaryDark">#66173E</color>
     <color name="colorAccent">#FA9898</color>

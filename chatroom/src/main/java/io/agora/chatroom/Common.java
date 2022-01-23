@@ -1,14 +1,32 @@
 package io.agora.chatroom;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import io.agora.chatroom.activity.ChatRoomService;
 
 public class Common {
+
+
+    static Intent intentChatRoomService;//聊天室
+    public static void instanceChatRoomService(Context context){
+        intentChatRoomService = new Intent(context, ChatRoomService.class);
+    }
+    public static Intent getInstanceChatRoomService(){
+        return intentChatRoomService;
+    }
 
     public static String OSS_PREFIX = "https://oss.banghua.xin/";
     /**
@@ -141,5 +159,28 @@ public class Common {
         }
 
         return date;
+    }
+
+
+    /**
+     * 判断服务是否已运行
+     * @param context
+     * @param className
+     * @return
+     */
+    public static boolean isServiceExisted(AppCompatActivity context, String className) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> serviceList = activityManager.getRunningServices(Integer.MAX_VALUE);
+        if(!(serviceList.size() > 0)) {
+            return false;
+        }
+        for(int i = 0; i < serviceList.size(); i++) {
+            ActivityManager.RunningServiceInfo serviceInfo = serviceList.get(i);
+            ComponentName serviceName = serviceInfo.service;
+            if(serviceName.getClassName().equals(className)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -2,6 +2,7 @@ package xin.banghua.beiyuan;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 
@@ -12,6 +13,7 @@ import io.rong.imlib.model.UserInfo;
 import xin.banghua.beiyuan.Main2Branch.NewFriend;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.RongYunExtension.FlashPhotoActivity;
+import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.comment.CommentListActivity;
 
 public class MyConversationClickListener implements RongIM.ConversationClickListener {
@@ -59,6 +61,18 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
                 Log.d("评论","回复了你的评论"+textSplit[3]);
                 Intent intent = new Intent(view.getContext(), CommentListActivity.class);
                 view.getContext().startActivity(intent);
+            }
+        }
+        if (message.getObjectName().equals("RC:TxtMsg")){
+            String[] textSplit = message.getContent().toString().split("'");
+            if (textSplit[1].equals("你因为违规，已被封禁。forbid")){
+                SharedPreferences sp = view.getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("userID", "");
+                editor.commit();
+                Intent intent = new Intent(view.getContext(), SigninActivity.class);
+                view.getContext().startActivity(intent);
+                System.exit(0);
             }
         }
         //Log.d("闪图","发送了消息"+message.getContent().getJSONUserInfo()+"|"+message.getContent().getJsonMentionInfo());

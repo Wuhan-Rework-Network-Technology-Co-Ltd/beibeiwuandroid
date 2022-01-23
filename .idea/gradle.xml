@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/PullLoadMoreRecyclerView" />
             <option value="$PROJECT_DIR$/Sight" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/baselibrary" />
             <option value="$PROJECT_DIR$/bottomsheetpicker" />
             <option value="$PROJECT_DIR$/chatroom" />
             <option value="$PROJECT_DIR$/contactcard" />
@@ -23,6 +24,7 @@
             <option value="$PROJECT_DIR$/dkplayer-players/exo" />
             <option value="$PROJECT_DIR$/dkplayer-ui" />
             <option value="$PROJECT_DIR$/imageselector" />
+            <option value="$PROJECT_DIR$/lrcview" />
             <option value="$PROJECT_DIR$/popmenu" />
             <option value="$PROJECT_DIR$/wave_loading" />
             <option value="$PROJECT_DIR$/wavesidebar" />

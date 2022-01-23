@@ -22,7 +22,7 @@ import io.agora.chatroom.model.Constant;
 import xin.banghua.pullloadmorerecyclerview.NiceImageView;
 
 public class UserInfoDialog {
-    private static final String TAG = "DialogExample";
+    private static final String TAG = "MusicSettingDialog";
 
     /**  */
     public static final int DIALOG_EXAMPLE = 1;

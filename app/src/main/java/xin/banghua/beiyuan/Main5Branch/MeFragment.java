@@ -34,6 +34,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.CircleImageViewExtension;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
@@ -322,7 +323,7 @@ public class MeFragment extends Fragment {
                     String resultJson1 = msg.obj.toString();
                     Log.d(TAG, "handleMessage: 会员时长信息"+msg.obj.toString());
 //                    if (!(msg.obj.toString().equals("会员已到期")))  userportrait_iv.isVIP(true,getResources(),false);
-                    Glide.with(mContext)
+                    Glide.with(App.getApplication())
                             .asBitmap()
                             .load(Common.getOssResourceUrl(myportrait))
                             .into(userportrait_iv);

@@ -161,6 +161,9 @@ public class FilmTypeFragment extends Fragment {
 
         OkHttpInstance.getFilmTopic(pageindex,filter,type, responseString -> {
             if (!responseString.equals("false")){
+                if (customRecyclerAdapterAdapter == null){
+                    customRecyclerAdapterAdapter = new CustomRecyclerAdapterAdapter(dataLists);
+                }
                 dataLists = JSON.parseArray(responseString,FilmList.class);
                 customRecyclerAdapterAdapter.setDataLists(dataLists);
 

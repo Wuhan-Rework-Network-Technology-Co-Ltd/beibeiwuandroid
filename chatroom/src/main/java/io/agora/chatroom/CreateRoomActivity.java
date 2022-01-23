@@ -24,6 +24,7 @@ import static io.agora.chatroom.RoomSetDialog.IMAGE_ROOM_COVER;
 import static io.agora.chatroom.activity.ChatRoomActivity.COUPLE_TYPE;
 import static io.agora.chatroom.activity.ChatRoomActivity.DRAW_GUESS_TYPE;
 import static io.agora.chatroom.activity.ChatRoomActivity.FIVE_CHESS_TYPE;
+import static io.agora.chatroom.activity.ChatRoomActivity.KTV_TYPE;
 import static io.agora.chatroom.activity.ChatRoomActivity.WATCH_FILM_TYPE;
 
 public class CreateRoomActivity extends AppCompatActivity {
@@ -78,6 +79,25 @@ public class CreateRoomActivity extends AppCompatActivity {
                 }
             });
         });
+        create_room_ktv.setOnClickListener(view1 -> {
+            Toast.makeText(CreateRoomActivity.this,"正在创建房间...",Toast.LENGTH_LONG).show();
+            OkHttpInstance.createRoom(KTV_TYPE, responseString -> {
+                if (responseString.equals("ok")){
+                    create_room_draw_guess.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(CreateRoomActivity.this, ChatRoomActivity.class);
+                            intent.putExtra(ChatRoomActivity.BUNDLE_KEY_CHANNEL_ID, Constant.sUserId+"");
+                            intent.putExtra(ChatRoomActivity.BUNDLE_KEY_CHANNEL_TYPE, KTV_TYPE);
+                            intent.putExtra(ChatRoomActivity.BUNDLE_KEY_BACKGROUND_RES, R.mipmap.bg_channel_0);
+                            //intent.putExtra(ChatRoomActivity.BUNDLE_KEY_BACKGROUND_RES, Constant.sRoomBG);
+                            startActivity(intent);
+                        }
+                    },1500);
+                }
+            });
+        });
+
         create_room_film.setOnClickListener(view1 -> {
             Toast.makeText(CreateRoomActivity.this,"正在创建房间...",Toast.LENGTH_LONG).show();
             OkHttpInstance.createRoom(WATCH_FILM_TYPE, responseString -> {

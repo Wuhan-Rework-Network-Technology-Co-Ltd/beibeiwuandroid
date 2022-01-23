@@ -34,7 +34,7 @@ import xin.banghua.beiyuan.utils.OkHttpInstance;
 import static xin.banghua.beiyuan.custom_ui.ad.SplashAdFrameLayout.isClickAd;
 
 public class LaunchActivity extends Activity {
-    private static final String TAG = "LaunchActivity";
+    private static final String TAG = "SplashScreenSampleActivity";
 
     ImageView launchImage;
 
@@ -112,6 +112,9 @@ public class LaunchActivity extends Activity {
 
 
         super.onCreate(savedInstanceState);
+
+        // Handle the splash screen transition.
+        //SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         setContentView(R.layout.activity_launch);
 
         mContext = this;
@@ -128,10 +131,6 @@ public class LaunchActivity extends Activity {
 
 
         Log.d(TAG, "onCreate: md5"+ MD5Tool.MD5("123"));
-
-
-
-
 
     }
 
@@ -226,7 +225,7 @@ public class LaunchActivity extends Activity {
 //                int permission = ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
 //                if (permission != PermissionChecker.PERMISSION_GRANTED) {
 //                    //2.没有权限，弹出对话框申请
-//                    ActivityCompat.requestPermissions(LaunchActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1000);
+//                    ActivityCompat.requestPermissions(SplashScreenSampleActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1000);
 //                }
                 dialog.dismiss();
             }
@@ -273,7 +272,7 @@ public class LaunchActivity extends Activity {
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
-//                Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
+//                Intent intent = new Intent(SplashScreenSampleActivity.this, MainActivity.class);
 //                startActivity(intent);
 //                finish();
 //            }

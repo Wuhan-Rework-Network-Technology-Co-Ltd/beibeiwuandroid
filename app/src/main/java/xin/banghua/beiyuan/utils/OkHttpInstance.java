@@ -106,12 +106,12 @@ public class OkHttpInstance {
 
 
     //TOOD 获取用户属性
-    public static void getUserAttributes(String userId,@Nullable io.agora.chatroom.OkHttpResponseCallBack okHttpResponseCallBack){
+    public static void getUserAttributes(String userId,@Nullable OkHttpResponseCallBack okHttpResponseCallBack){
         try {
             new Thread(new Runnable() {
                 @Override
                 public void run(){
-                    OkHttpClient client = io.agora.chatroom.OkHttpInstance.getInstance();
+                    OkHttpClient client = OkHttpInstance.getInstance();
                     RequestBody formBody = new FormBody.Builder()
                             .add("userId", userId)
                             .build();
@@ -129,7 +129,7 @@ public class OkHttpInstance {
                                 return;
                             }
 
-                            io.agora.chatroom.ThreadUtils.runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                            ThreadUtils.runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
                         }
                     }catch (Exception e) {
                         e.printStackTrace();

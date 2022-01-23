@@ -137,11 +137,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
         frontOrBack();
 
 
-        //聊天室
-        ChatRoomApplication.instance = this;
-        RtcManager.instance(this).init();
-        RtmManager.instance(this).init();
-        Constant.goToPersonalPage =  new Intent(this, PersonageActivity.class);
+
     }
 
 
@@ -150,6 +146,13 @@ public class App extends Application implements Application.ActivityLifecycleCal
         Log.d(TAG, "initThirdSDK: 启动第三方sdk");
         initHa();
         adInit();
+
+
+        //聊天室
+        ChatRoomApplication.instance = getApplication();
+        RtcManager.instance(getApplication()).init();
+        RtmManager.instance(getApplication()).init();
+        Constant.goToPersonalPage =  new Intent(getApplication(), PersonageActivity.class);
     }
 
     /**

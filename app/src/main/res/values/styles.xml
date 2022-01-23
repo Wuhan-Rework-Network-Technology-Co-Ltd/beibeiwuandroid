@@ -68,4 +68,15 @@
         <item name="android:windowExitAnimation">@anim/exit_bottom_menu</item>
 
     </style>
+
+
+    <!-- android12启动页 -->
+<!--    <style name="Theme.App.Starting" parent="Theme.SplashScreen">-->
+<!--        <item name="windowSplashScreenBackground">@android:color/transparent</item>-->
+
+<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/launch</item>-->
+<!--        <item name="windowSplashScreenAnimationDuration">2000</item>-->
+
+<!--        <item name="postSplashScreenTheme">@style/AppTheme</item>-->
+<!--    </style>-->
 </resources>
