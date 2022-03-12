@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="回复"
                 android:textAlignment="center"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorPrimary" />
         </TableRow>
 
         <TableRow

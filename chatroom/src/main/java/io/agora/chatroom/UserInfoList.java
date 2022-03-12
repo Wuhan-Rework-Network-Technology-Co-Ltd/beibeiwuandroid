@@ -8,6 +8,46 @@ public class UserInfoList implements Serializable {
     public UserInfoList() {
     }
 
+    //头像框和坐骑
+    @JSONField(name="portraitframe")
+    String portraitframe = "";//礼物清单
+    @JSONField(name="veilcel")
+    String veilcel = "";//申请好友留言
+
+    //添加好友
+    @JSONField(name="gift_string")
+    String gift_string = "";//礼物清单
+    @JSONField(name="yourleavewords")
+    String yourleavewords = "";//申请好友留言
+
+
+    @JSONField(name = "alilogonid")
+    String alilogonid = "";
+    @JSONField(name = "aliname")
+    String aliname = "";
+
+    @JSONField(name = "vitality")
+    String vitality = "0";
+    @JSONField(name = "post")
+    String post = "0";
+    @JSONField(name = "comment")
+    String comment = "0";
+
+    @JSONField(name = "follow")
+    String follow = "0";
+    @JSONField(name = "fans")
+    String fans = "0";
+
+    @JSONField(name = "all_money")
+    String all_money = "0.00";
+    @JSONField(name = "all_income")
+    String all_income = "0.00";
+
+    @JSONField(name = "money")
+    String money = "0.00";
+    @JSONField(name = "income")
+    String income = "0.00";
+
     @JSONField(name = "id")
     String id = "";
     @JSONField(name = "openid")
@@ -128,6 +168,125 @@ public class UserInfoList implements Serializable {
     @JSONField(name="audioroom_online")
     String audioroom_online = "";//语音房间发布时间
 
+    public String getPortraitframe() {
+        return Common.getOssResourceUrl(portraitframe);
+    }
+
+    public void setPortraitframe(String portraitframe) {
+        this.portraitframe = portraitframe;
+    }
+
+    public String getVeilcel() {
+        return Common.getOssResourceUrl(veilcel);
+    }
+
+    public void setVeilcel(String veilcel) {
+        this.veilcel = veilcel;
+    }
+
+    public String getGift_string() {
+        return gift_string;
+    }
+
+    public void setGift_string(String gift_string) {
+        this.gift_string = gift_string;
+    }
+
+    public String getYourleavewords() {
+        return yourleavewords;
+    }
+
+    public void setYourleavewords(String yourleavewords) {
+        this.yourleavewords = yourleavewords;
+    }
+
+    public String getAlilogonid() {
+        return alilogonid;
+    }
+
+    public void setAlilogonid(String alilogonid) {
+        this.alilogonid = alilogonid;
+    }
+
+    public String getAliname() {
+        return aliname;
+    }
+
+    public void setAliname(String aliname) {
+        this.aliname = aliname;
+    }
+
+    public String getVitality() {
+        return vitality;
+    }
+
+    public void setVitality(String vitality) {
+        this.vitality = vitality;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getFollow() {
+        return follow;
+    }
+
+    public void setFollow(String follow) {
+        this.follow = follow;
+    }
+
+    public String getFans() {
+        return fans;
+    }
+
+    public void setFans(String fans) {
+        this.fans = fans;
+    }
+
+    public String getAll_money() {
+        return all_money;
+    }
+
+    public void setAll_money(String all_money) {
+        this.all_money = all_money;
+    }
+
+    public String getAll_income() {
+        return all_income;
+    }
+
+    public void setAll_income(String all_income) {
+        this.all_income = all_income;
+    }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money;
+    }
+
+    public String getIncome() {
+        return income;
+    }
+
+    public void setIncome(String income) {
+        this.income = income;
+    }
 
     public String getId() {
         return id;

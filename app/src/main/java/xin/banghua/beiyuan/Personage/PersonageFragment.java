@@ -2,13 +2,14 @@ package xin.banghua.beiyuan.Personage;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.alibaba.fastjson.JSON;
@@ -43,6 +46,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Adapter.FollowList;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.CircleImageViewExtension;
@@ -51,7 +55,7 @@ import xin.banghua.beiyuan.Main5Branch.BuyvipActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
@@ -81,16 +85,19 @@ public class PersonageFragment extends Fragment {
     private EditText mLeaveWords_et;
 
     private Button make_friend;
+    private Button make_friend_gift;
+    private Button make_follow;
     private Button move_friendapply;
-    private Button user_tiezi;
+    private LinearLayout user_tiezi;
 
-    private Button balcklist_btn;
+    private LinearLayout balcklist_btn;
+    private TextView add_blacklist_tv;
     private Button deletefriend_btn;
     private Button startconversation_btn;
     private Button svip_chat_btn;
-    private Button join_room_btn;
+    private LinearLayout join_room_btn;
 
-    private Context mContext;
+    private Activity mContext;
 
     ImageView vip_gray;
     ImageView vip_diamond;
@@ -98,6 +105,10 @@ public class PersonageFragment extends Fragment {
     ImageView vip_white;
     Integer current_timestamp = Math.round(new Date().getTime()/1000);
 
+    TextView online_tv;
+    ImageView online_img;
+
+    TextView follow_tv,fans_tv;
     public PersonageFragment() {
         // Required empty public constructor
     }
@@ -112,20 +123,26 @@ public class PersonageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView =  inflater.inflate(R.layout.fragment_personage, container, false);
+        mView =  inflater.inflate(R.layout.activity_singleperson, container, false);
         return mView;
     }
 
+    ConstraintLayout container;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        container = view.findViewById(R.id.container);
         Log.d(TAG, "onViewCreated: 进入person");
+        follow_tv = view.findViewById(R.id.follow_tv);
+        fans_tv = view.findViewById(R.id.fans_tv);
         //取出选中的用户id
-        //SharedHelper shvalue = new SharedHelper(getActivity().getApplicationContext());
+        //SharedHelper shvalue = new SharedHelper(App.getApplication().getApplicationContext());
         //mUserID = shvalue.readValue().get("value");
-
-        String result = getActivity().getIntent().getStringExtra("userID");
+        String result = "1";
+        if (getActivity()!=null){
+            result = getActivity().getIntent().getStringExtra("userID");
+        }
         mUserID = result;
 
         vip_gray = view.findViewById(R.id.vip_gray);
@@ -133,11 +150,15 @@ public class PersonageFragment extends Fragment {
         vip_black = view.findViewById(R.id.vip_black);
         vip_white = view.findViewById(R.id.vip_white);
 
+        online_tv =  view.findViewById(R.id.online_tv);
+
+        online_img =  view.findViewById(R.id.online_img);
+
         mUserNickName_tv=view.findViewById(R.id.user_nickname);
         mUserPortrait_iv=view.findViewById(R.id.user_portrait);
         mUserAge_tv=view.findViewById(R.id.user_age);
         mUserRegion_tv=view.findViewById(R.id.user_region);
-        mUserGender_tv=view.findViewById(R.id.user_gender);
+        //mUserGender_tv=view.findViewById(R.id.user_gender);
         mUserProperty_tv=view.findViewById(R.id.user_property);
         mUserSignature_tv=view.findViewById(R.id.user_signature);
         mLeaveWords_et=view.findViewById(R.id.leave_words);
@@ -145,7 +166,7 @@ public class PersonageFragment extends Fragment {
         user_tiezi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Someonesluntan1Activity.class);
+                Intent intent = new Intent(App.getApplication(), Someonesluntan1Activity.class);
                 intent.putExtra("authid",mUserID);
                 startActivity(intent);
             }
@@ -160,6 +181,39 @@ public class PersonageFragment extends Fragment {
                 }
             }
         });
+
+        make_follow = view.findViewById(R.id.make_follow);
+        for (int i = 0;i < Common.followList.size();i++){
+            if (Common.followList.get(i).getUserId().equals(mUserID)){
+                make_follow.setText("取消关注");
+                make_follow.setBackgroundResource(R.drawable.tjhy_10);
+                make_follow.setTextColor(getResources().getColor(R.color.text_color_8_deep));
+            }
+        }
+
+        make_follow.setOnClickListener(v -> {
+            Log.d(TAG, "关注onViewCreated: "+make_follow.getText().toString());
+            if (make_follow.getText().toString().equals("关注（互关自动成为好友）")){
+                make_follow.setText("取消关注");
+                make_follow.setBackgroundResource(R.drawable.tjhy_10);
+                make_follow.setTextColor(getResources().getColor(R.color.text_color_8_deep));
+                OkHttpInstance.follow(mUserID,responseString -> {
+                    Common.followList.add(new FollowList(mUserID));
+                });
+            }else {
+                make_follow.setText("关注（互关自动成为好友）");
+                make_follow.setBackgroundResource(R.drawable.red_10);
+                make_follow.setTextColor(getResources().getColor(R.color.text_color_4));
+                OkHttpInstance.unfollow(mUserID,responseString -> {
+                    for (int i = 0;i < Common.followList.size();i++){
+                        if (Common.followList.get(i).getUserId().equals(mUserID)){
+                            Common.followList.remove(i);
+                        }
+                    }
+                });
+            }
+        });
+
         make_friend = view.findViewById(R.id.make_friend);
         make_friend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,10 +284,11 @@ public class PersonageFragment extends Fragment {
         });
 
         balcklist_btn = view.findViewById(R.id.add_blacklist);
+        add_blacklist_tv = view.findViewById(R.id.add_blacklist_tv);
         balcklist_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (balcklist_btn.getText().toString().equals("加入黑名单")) {
+                if (add_blacklist_tv.getText().toString().equals("加入黑名单")) {
                     final DialogPlus dialog = DialogPlus.newDialog(mContext)
                             .setAdapter(new BaseAdapter() {
                                 @Override
@@ -283,7 +338,7 @@ public class PersonageFragment extends Fragment {
                             }
 
 
-                            balcklist_btn.setText("移除黑名单");
+                            add_blacklist_tv.setText("移除黑名单");
                             Toast.makeText(mContext,"已加入黑名单",Toast.LENGTH_LONG).show();
 
 
@@ -332,7 +387,7 @@ public class PersonageFragment extends Fragment {
                     confirm_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            balcklist_btn.setText("加入黑名单");
+                            add_blacklist_tv.setText("加入黑名单");
                             Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
                             deleteBlackList("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteblacklist&m=socialchat");
                             dialog.dismiss();
@@ -529,7 +584,7 @@ public class PersonageFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                SharedHelper shuserinfo = new SharedHelper(getActivity());
+                SharedHelper shuserinfo = new SharedHelper(App.getApplication());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
                 OkHttpClient client = new OkHttpClient();
@@ -558,8 +613,30 @@ public class PersonageFragment extends Fragment {
     }
     public void initPersonage(View view,JSONObject jsonObject) throws JSONException {
 
+        follow_tv.setText("关注："+jsonObject.getString("follow"));
+        follow_tv.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(),FollowAndFansActivity.class);
+            intent.putExtra("userId",mUserID);
+            intent.putExtra("type",0);
+            getActivity().startActivity(intent);
+        });
+        fans_tv.setText("粉丝："+jsonObject.getString("fans"));
+        fans_tv.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(),FollowAndFansActivity.class);
+            intent.putExtra("userId",mUserID);
+            intent.putExtra("type",1);
+            getActivity().startActivity(intent);
+        });
+
         mUserNickName=jsonObject.getString("nickname");
         mUserPortrait=jsonObject.getString("portrait");
+
+        online_tv.setText(userInfoList.getOnline());
+        if (userInfoList.getOnline().equals("在线")){
+            Glide.with(App.getApplication()).load(R.mipmap.green_point).into(online_img);
+        }else {
+            Glide.with(App.getApplication()).load(R.mipmap.gray_point).into(online_img);
+        }
 
 
         mUserNickName_tv.setText(jsonObject.getString("nickname"));
@@ -570,7 +647,7 @@ public class PersonageFragment extends Fragment {
                 .into(mUserPortrait_iv);
 
         vip_gray.setVisibility(View.VISIBLE);
-        if (!jsonObject.getString("svip").equals("null") && !jsonObject.getString("svip").equals("")) {
+        if (!TextUtils.isEmpty(jsonObject.getString("svip"))) {
             int svip_time = Integer.parseInt(jsonObject.getString("svip") + "");
             if (svip_time > current_timestamp) {
                 //vipicon分级
@@ -592,7 +669,7 @@ public class PersonageFragment extends Fragment {
                             .into(vip_gray);
                 }
             } else {
-                if (jsonObject.getString("vip")!="null") {
+                if (!TextUtils.isEmpty(jsonObject.getString("vip"))) {
                     int vip_time = Integer.parseInt(jsonObject.getString("vip") + "");
                     if (vip_time > current_timestamp) {
                         //vipicon分级
@@ -662,19 +739,36 @@ public class PersonageFragment extends Fragment {
 
 
 
-        mUserAge_tv.setText(jsonObject.getString("age"));
+        mUserAge_tv.setText(" "+jsonObject.getString("age"));
         mUserRegion_tv.setText(jsonObject.getString("region"));
         mUserProperty_tv.setText(jsonObject.getString("property"));
-        mUserGender_tv.setText(jsonObject.getString("gender"));
+        //mUserGender_tv.setText(jsonObject.getString("gender"));
         if (jsonObject.getString("gender").equals("男")){
             Resources resources = mContext.getResources();
             Drawable drawable = resources.getDrawable(R.drawable.male,null);
-            mUserGender_tv.setForeground(drawable);
+            //mUserGender_tv.setForeground(drawable);
         }else {
             Resources resources = mContext.getResources();
             Drawable drawable = resources.getDrawable(R.drawable.female,null);
-            mUserGender_tv.setForeground(drawable);
+            //mUserGender_tv.setForeground(drawable);
         }
+        if (jsonObject.getString("gender").equals("男")){
+            Resources resources = mContext.getResources();
+            Drawable drawable = resources.getDrawable(R.mipmap.bboy,null);
+            //((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mUserAge_tv.setCompoundDrawables(drawable, null, null, null);
+            mUserAge_tv.setBackgroundResource(R.drawable.yuan_sex_nan);
+        }else {
+            Resources resources = mContext.getResources();
+            Drawable drawable = resources.getDrawable(R.mipmap.ggirl,null);
+            //((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mUserAge_tv.setCompoundDrawables(drawable, null, null, null);
+            mUserAge_tv.setBackgroundResource(R.drawable.yuan_sex_nv);
+        }
+
+
         mUserSignature_tv.setText(jsonObject.getString("signature"));
         if (jsonObject.getString("allowfriend").equals("0")){
             make_friend.setEnabled(false);
@@ -685,7 +779,6 @@ public class PersonageFragment extends Fragment {
             svip_chat_btn.setEnabled(false);
             svip_chat_btn.setText("拒绝直接聊天");
         }
-
     }
     //网络数据部分
     @SuppressLint("HandlerLeak")
@@ -694,146 +787,147 @@ public class PersonageFragment extends Fragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             //1是用户数据，2是幻灯片
-            switch (msg.what){
-                case 1:
-                    try {
-                        String resultJson1 = msg.obj.toString();
-                        Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
-
-                        userInfoList = JSON.parseObject(resultJson1,UserInfoList.class);
-
-                        JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
+            try {
+                switch (msg.what){
+                    case 1:
                         try {
-                            initPersonage(mView,jsonObject);
+                            String resultJson1 = msg.obj.toString();
+                            Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
+
+                            userInfoList = JSON.parseObject(resultJson1,UserInfoList.class);
+
+                            JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
+                            try {
+                                initPersonage(mView,jsonObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        make_friend.setEnabled(false);
+                        make_friend.setText(msg.obj.toString());
+                        if (!msg.obj.toString().equals("对方已将您加入黑名单")){
+                            move_friendapply.setVisibility(View.VISIBLE);
+                            svip_chat_btn.setVisibility(View.VISIBLE);
+                        }
+                        Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(mContext, MainActivity.class);
+//                    startActivity(intent);
+                        break;
+                    case 3:
+                        add_blacklist_tv.setText("移除黑名单");
+                        Toast.makeText(mContext,"已加入黑名单",Toast.LENGTH_LONG).show();
+                        break;
+                    case 4:
+                        Log.d(TAG, "handleMessage: 进入好友判断");
+                        if (msg.obj.toString().equals("好友人数未超过限制")){
+                            Log.d(TAG, "handleMessage: 跳转添加好友");
+                            makeFriend("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addfriend&m=socialchat");
+                        }else {
+                            Log.d(TAG, "handleMessage: 会员数量满");
+                            make_friend.setText("今日免费5次已用完，请办理会员或明日再试");
+                            //Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
+                            final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                                    .setAdapter(new BaseAdapter() {
+                                        @Override
+                                        public int getCount() {
+                                            return 0;
+                                        }
+
+                                        @Override
+                                        public Object getItem(int position) {
+                                            return null;
+                                        }
+
+                                        @Override
+                                        public long getItemId(int position) {
+                                            return 0;
+                                        }
+
+                                        @Override
+                                        public View getView(int position, View convertView, ViewGroup parent) {
+                                            return null;
+                                        }
+                                    })
+                                    .setFooter(R.layout.dialog_foot_needvip)
+                                    .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                                    .create();
+                            dialog.show();
+                            View view = dialog.getFooterView();
+                            TextView buyvip_tv = view.findViewById(R.id.buyvip_tv);
+                            buyvip_tv.setText("非会员每日可发起5次添加好友请求，请明日再试，也可开通会员，享受无限制添加好友和7大特权");
+                            Button buvip = view.findViewById(R.id.buyvip_btn);
+                            buvip.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(mContext, BuyvipActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                            Button cancel = view.findViewById(R.id.goback_btn);
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                        break;
+                    case 5:
+                        JSONObject jsonObject = null;//原生的
+                        try {
+                            jsonObject = new JSONObject(msg.obj.toString());
+                            String blacklistinfo = jsonObject.getString("blacklistinfo");
+                            String friendinfo = jsonObject.getString("friendinfo");
+                            if (blacklistinfo.equals("已加入黑名单")){
+                                add_blacklist_tv.setText("移除黑名单");
+                                Toast.makeText(mContext,blacklistinfo,Toast.LENGTH_LONG).show();
+                            }
+                            if (friendinfo.equals("已经是好友")){
+                                make_friend.setVisibility(View.GONE);
+                                deletefriend_btn.setVisibility(View.VISIBLE);
+                                startconversation_btn.setVisibility(View.VISIBLE);
+                                Toast.makeText(mContext,friendinfo,Toast.LENGTH_LONG).show();
+                            }else if (friendinfo.equals("已申请，等待对方同意")){
+                                move_friendapply.setVisibility(View.VISIBLE);
+                                make_friend.setEnabled(false);
+                                make_friend.setText(friendinfo);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    make_friend.setEnabled(false);
-                    make_friend.setText(msg.obj.toString());
-                    if (!msg.obj.toString().equals("对方已将您加入黑名单")){
-                        move_friendapply.setVisibility(View.VISIBLE);
-                        svip_chat_btn.setVisibility(View.VISIBLE);
-                    }
-                    Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(mContext, MainActivity.class);
-//                    startActivity(intent);
-                    break;
-                case 3:
-                    balcklist_btn.setText("移除黑名单");
-                    Toast.makeText(mContext,"已加入黑名单",Toast.LENGTH_LONG).show();
-                    break;
-                case 4:
-                    Log.d(TAG, "handleMessage: 进入好友判断");
-                    if (msg.obj.toString().equals("好友人数未超过限制")){
-                        Log.d(TAG, "handleMessage: 跳转添加好友");
-                        makeFriend("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addfriend&m=socialchat");
-                    }else {
-                        Log.d(TAG, "handleMessage: 会员数量满");
-                        make_friend.setText("今日免费5次已用完，请办理会员或明日再试");
-                        //Toast.makeText(mContext,msg.obj.toString(),Toast.LENGTH_LONG).show();
-                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
-                                .setAdapter(new BaseAdapter() {
-                                    @Override
-                                    public int getCount() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public Object getItem(int position) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public long getItemId(int position) {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public View getView(int position, View convertView, ViewGroup parent) {
-                                        return null;
-                                    }
-                                })
-                                .setFooter(R.layout.dialog_foot_needvip)
-                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
-                                .create();
-                        dialog.show();
-                        View view = dialog.getFooterView();
-                        TextView buyvip_tv = view.findViewById(R.id.buyvip_tv);
-                        buyvip_tv.setText("非会员每日可发起5次添加好友请求，请明日再试，也可开通会员，享受无限制添加好友和7大特权");
-                        Button buvip = view.findViewById(R.id.buyvip_btn);
-                        buvip.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(mContext, BuyvipActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        Button cancel = view.findViewById(R.id.goback_btn);
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
-                    }
-                    break;
-                case 5:
-                    JSONObject jsonObject = null;//原生的
-                    try {
-                        jsonObject = new JSONObject(msg.obj.toString());
-                        String blacklistinfo = jsonObject.getString("blacklistinfo");
-                        String friendinfo = jsonObject.getString("friendinfo");
-                        if (blacklistinfo.equals("已加入黑名单")){
-                            balcklist_btn.setText("移除黑名单");
-                            Toast.makeText(mContext,blacklistinfo,Toast.LENGTH_LONG).show();
+                        break;
+                    case 6:
+                        Toast.makeText(mContext,"已删除好友",Toast.LENGTH_LONG).show();
+                        deletefriend_btn.setVisibility(View.INVISIBLE);
+                        make_friend.setVisibility(View.VISIBLE);
+                        startconversation_btn.setVisibility(View.GONE);
+                        break;
+                    case 7:
+                        add_blacklist_tv.setText("加入黑名单");
+                        Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
+                        break;
+                    case 8:
+                        xin.banghua.beiyuan.Common.vipTime = msg.obj.toString();
+                        moveFriendApply();
+                        break;
+                    case 9:
+                        Toast.makeText(mContext,"撤销成功",Toast.LENGTH_LONG).show();
+                        make_friend.setText("申请好友");
+                        make_friend.setEnabled(true);
+                        move_friendapply.setVisibility(View.GONE);
+                        break;
+                    case 10:
+                        xin.banghua.beiyuan.Common.vipTime = msg.obj.toString();
+                        svipChat();
+                        break;
+                    case 11:
+                        if (RongIM.getInstance() != null) {
+                            RongIM.getInstance().startPrivateChat(mContext, mUserID, mUserNickName_tv.getText().toString());
                         }
-                        if (friendinfo.equals("已经是好友")){
-                            make_friend.setVisibility(View.GONE);
-                            deletefriend_btn.setVisibility(View.VISIBLE);
-                            startconversation_btn.setVisibility(View.VISIBLE);
-                            Toast.makeText(mContext,friendinfo,Toast.LENGTH_LONG).show();
-                        }else if (friendinfo.equals("已申请，等待对方同意")){
-                            move_friendapply.setVisibility(View.VISIBLE);
-                            make_friend.setEnabled(false);
-                            make_friend.setText(friendinfo);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 6:
-                    Toast.makeText(mContext,"已删除好友",Toast.LENGTH_LONG).show();
-                    deletefriend_btn.setVisibility(View.INVISIBLE);
-                    make_friend.setVisibility(View.VISIBLE);
-                    startconversation_btn.setVisibility(View.GONE);
-                    break;
-                case 7:
-                    balcklist_btn.setText("加入黑名单");
-                    Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
-                    break;
-                case 8:
-                    xin.banghua.beiyuan.Common.vipTime = msg.obj.toString();
-                    moveFriendApply();
-                    break;
-                case 9:
-                    Toast.makeText(mContext,"撤销成功",Toast.LENGTH_LONG).show();
-                    make_friend.setText("申请好友");
-                    make_friend.setEnabled(true);
-                    move_friendapply.setVisibility(View.GONE);
-                    break;
-                case 10:
-                    xin.banghua.beiyuan.Common.vipTime = msg.obj.toString();
-                    svipChat();
-                    break;
-                case 11:
-                    if (RongIM.getInstance() != null) {
-                        RongIM.getInstance().startPrivateChat(mContext, mUserID, mUserNickName_tv.getText().toString());
-                    }
 //                    if (msg.obj.toString().equals("1")) {
 //                        if (RongIM.getInstance() != null) {
 //                            RongIM.getInstance().startPrivateChat(mContext, mUserID, mUserNickName_tv.getText().toString());
@@ -841,7 +935,10 @@ public class PersonageFragment extends Fragment {
 //                    }else {
 //                        Toast.makeText(mContext,"对方不允许SVIP直接发起聊天",Toast.LENGTH_LONG).show();
 //                    }
-                    break;
+                        break;
+                }
+            }catch (Exception e){
+                Log.e(TAG, "onBindViewHolder: 异常"+ e.toString());
             }
         }
     };
@@ -895,7 +992,7 @@ public class PersonageFragment extends Fragment {
         }
     }
     public void svipChat(){
-        if (!xin.banghua.beiyuan.Common.vipTime.contains("svip") && SharedHelper.getInstance(getActivity()).readTryChat()==1){
+        if (!xin.banghua.beiyuan.Common.vipTime.contains("svip") && SharedHelper.getInstance(App.getApplication()).readTryChat()==1){
             final DialogPlus dialog = DialogPlus.newDialog(mContext)
                     .setAdapter(new BaseAdapter() {
                         @Override
@@ -939,9 +1036,9 @@ public class PersonageFragment extends Fragment {
                 }
             });
         }else {
-            SharedHelper.getInstance(getActivity()).saveTryChat(1);
+            SharedHelper.getInstance(App.getApplication()).saveTryChat(1);
             if (!xin.banghua.beiyuan.Common.vipTime.contains("svip")){
-                Toast.makeText(getActivity(),"本次为免费试用！",Toast.LENGTH_LONG).show();
+                Toast.makeText(App.getApplication(),"本次为免费试用！",Toast.LENGTH_LONG).show();
                 OkHttpInstance.exhaustSvipTry();
             }
             new Thread(new Runnable() {
@@ -1039,7 +1136,7 @@ public class PersonageFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+                SharedHelper shuserinfo = new SharedHelper(App.getApplication().getApplicationContext());
                 String yourid = shuserinfo.readUserInfo().get("userID");
                 String yournickname = shuserinfo.readUserInfo().get("userNickName");
                 String yourportrait = shuserinfo.readUserInfo().get("userPortrait");
@@ -1077,7 +1174,7 @@ public class PersonageFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+                SharedHelper shuserinfo = new SharedHelper(App.getApplication().getApplicationContext());
                 String yourid = shuserinfo.readUserInfo().get("userID");
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
@@ -1108,7 +1205,7 @@ public class PersonageFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+                SharedHelper shuserinfo = new SharedHelper(App.getApplication().getApplicationContext());
                 String yourid = shuserinfo.readUserInfo().get("userID");
                 String yournickname = shuserinfo.readUserInfo().get("userNickName");
                 String yourportrait = shuserinfo.readUserInfo().get("userPortrait");
@@ -1142,7 +1239,7 @@ public class PersonageFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+                SharedHelper shuserinfo = new SharedHelper(App.getApplication().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
                 OkHttpClient client = new OkHttpClient();
@@ -1175,7 +1272,7 @@ public class PersonageFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+                SharedHelper shuserinfo = new SharedHelper(App.getApplication().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
                 OkHttpClient client = new OkHttpClient();

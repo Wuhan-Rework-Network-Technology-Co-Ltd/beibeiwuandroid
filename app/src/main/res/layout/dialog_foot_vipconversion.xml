@@ -17,9 +17,9 @@
         android:id="@+id/scoreresult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="亲，可用积分兑换会员哦！"
+        android:text="在线，发帖，评论都可以获取积分哦！"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/text_color_9"
         android:textStyle="bold" />
 
     <LinearLayout

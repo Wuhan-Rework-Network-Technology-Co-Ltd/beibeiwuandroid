@@ -62,11 +62,10 @@
         android:id="@+id/userNickName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginLeft="30dp"
         android:layout_toRightOf="@id/authportrait_framelayout"
         android:text="userNickName"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp" />
 
     <TextView
@@ -75,18 +74,17 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
-        android:maxLines="5"
-        android:textSize="10sp"
         android:layout_toRightOf="@id/authportrait_framelayout"
+        android:maxLines="5"
         android:text="userLeaveWords"
-        android:textColor="@color/rc_ext_root_menu_item_text_color" />
+        android:textColor="@color/rc_ext_root_menu_item_text_color"
+        android:textSize="10sp" />
 
     <Button
         android:id="@+id/agree_btn"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_marginLeft="280dp"
         android:background="@drawable/rc_cs_button_bg"
         android:text="同意"

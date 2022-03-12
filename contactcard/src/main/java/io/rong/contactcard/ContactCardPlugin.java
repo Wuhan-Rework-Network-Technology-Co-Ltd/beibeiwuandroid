@@ -67,7 +67,7 @@ public class ContactCardPlugin implements IPluginModule {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CONTACT && resultCode == Activity.RESULT_OK) {
             Intent intent = new Intent(context, ContactDetailActivity.class);
-            intent.putExtra("contact", data.getParcelableExtra("contact"));
+            intent.putExtra("contact", data.getParcelableExtra("contact")+"");
             intent.putExtra("conversationType", conversationType);
             intent.putExtra("targetId", targetId);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

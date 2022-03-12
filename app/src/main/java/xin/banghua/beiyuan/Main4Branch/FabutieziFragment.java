@@ -1,8 +1,13 @@
 package xin.banghua.beiyuan.Main4Branch;
 
 
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
+import static io.agora.chatroom.ThreadUtils.runOnUiThread;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,19 +37,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.agora.chatroom.Common;
+import io.agora.chatroom.activity.ChatRoomActivity;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.utils.MD5Tool;
-
-import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
-import static io.agora.chatroom.ThreadUtils.runOnUiThread;
 
 
 public class FabutieziFragment extends Fragment {
@@ -53,7 +58,7 @@ public class FabutieziFragment extends Fragment {
     //var
     EditText title_et,content_et;
     RadioGroup bankuai_rg;
-    RadioButton zipai_rb,zhenshi_rb,qinggan_rb,daquan_rb;
+    RadioButton zipai_rb,zhenshi_rb,qinggan_rb,daquan_rb,dongtai_rb,zhaomuling_rb;
     ImageView imageView1,imageView2,imageView3;
     Button release_btn;
     Switch switch_comment;
@@ -70,6 +75,12 @@ public class FabutieziFragment extends Fragment {
     int imageView_state;
 
     View mView;
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
 
     private Context mContext;
     @Override
@@ -132,13 +143,30 @@ public class FabutieziFragment extends Fragment {
             public void onClick(View v) {
                 CheckPermission.verifyPermissionCameraAndStorage(getActivity());
 
-                ImageSelector.builder()
-                        .onlyImage(true)
-                        .useCamera(true) // 设置是否使用拍照
-                        .setSingle(true)  //设置是否单选
-                        .setViewImage(true) //是否点击放大图片查看,，默认为true
-                        .start(getActivity(), IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
-                imageView_state = 1;
+                new AlertDialog.Builder(mContext)
+                        .setTitle(io.agora.chatroom.R.string.ktv_room_change_music_title)
+                        .setMessage(io.agora.chatroom.R.string.ktv_room_change_music_msg)
+                        .setNegativeButton("图片", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ImageSelector.builder()
+                                        .onlyImage(true)
+                                        .useCamera(true) // 设置是否使用拍照
+                                        .setSingle(true)  //设置是否单选
+                                        .setViewImage(true) //是否点击放大图片查看,，默认为true
+                                        .start(getActivity(), IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
+                                imageView_state = 1;
+                            }
+                        })
+                        .setPositiveButton("视频", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+
+
             }
         });
         imageView2.setOnClickListener(new View.OnClickListener() {
@@ -268,7 +296,7 @@ public class FabutieziFragment extends Fragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Log.d("进入handler", "handler");
-            Toast.makeText(mContext, "已发布成功，等待审核", Toast.LENGTH_LONG).show();
+
             if (msg.arg1==1) {
                 Log.d("跳转", "Navigation");
 
@@ -285,7 +313,7 @@ public class FabutieziFragment extends Fragment {
                 //获取文件名
                 Log.d("进入run","run");
                 String fileName = "postpicture.png";
-                SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+                SharedHelper shuserinfo = SharedHelper.getInstance(App.getApplication());
                 String myid = shuserinfo.readUserInfo().get("userID");
                 //开始网络传输
                 OkHttpClient client = new OkHttpClient();
@@ -311,11 +339,14 @@ public class FabutieziFragment extends Fragment {
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                    //Log.d("form形式的post",response.body().string());
+
+                    String result = response.body().string();
+                    runOnUiThread(() -> {
+                        Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
+                    });
                     //格式：{"error":"0","info":"登陆成功"}
                     Message message=handler.obtainMessage();
                     message.arg1=1;
-                    Log.d("帖子","");
                     handler.sendMessageDelayed(message,10);
                 }catch (Exception e) {
                     e.printStackTrace();
@@ -324,8 +355,18 @@ public class FabutieziFragment extends Fragment {
         }).start();
 
         runOnUiThread(()-> {
-            Navigation.findNavController(mView).navigate(R.id.fabutiezi_luntan_action);
-            Toast.makeText(mContext, "已发布成功，等待审核", Toast.LENGTH_LONG).show();
+            if (platename.equals("招募令")){
+                Navigation.findNavController(mView).navigate(R.id.fabutiezi_luntan_action);
+                Log.d(TAG, "postFabutiezi: 招募令"+Common.myUserInfoList.getId());
+                Intent intent = new Intent(mContext, ChatRoomActivity.class);
+                intent.putExtra(ChatRoomActivity.BUNDLE_KEY_CHANNEL_ID, xin.banghua.beiyuan.Common.userInfoList.getId());
+                intent.putExtra(ChatRoomActivity.BUNDLE_KEY_CHANNEL_TYPE, "处CP");
+                intent.putExtra(ChatRoomActivity.BUNDLE_KEY_BACKGROUND_RES, io.agora.chatroom.R.mipmap.bg_channel_0);
+                //intent.putExtra(ChatRoomActivity.BUNDLE_KEY_BACKGROUND_RES, Constant.sRoomBG);
+                startActivity(intent);
+            }else {
+                Navigation.findNavController(mView).navigate(R.id.fabutiezi_luntan_action);
+            }
         });
     }
 }

@@ -1,5 +1,13 @@
 package io.agora.chatroom;
 
+import static io.agora.chatroom.RoomSetDialog.IMAGE_ROOM_BG;
+import static io.agora.chatroom.RoomSetDialog.IMAGE_ROOM_COVER;
+import static io.agora.chatroom.activity.ChatRoomActivity.COUPLE_TYPE;
+import static io.agora.chatroom.activity.ChatRoomActivity.DRAW_GUESS_TYPE;
+import static io.agora.chatroom.activity.ChatRoomActivity.FIVE_CHESS_TYPE;
+import static io.agora.chatroom.activity.ChatRoomActivity.KTV_TYPE;
+import static io.agora.chatroom.activity.ChatRoomActivity.WATCH_FILM_TYPE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,15 +25,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.agora.chatroom.activity.ChatRoomActivity;
+import io.agora.chatroom.activity.PublishPostActivity;
 import io.agora.chatroom.model.Constant;
-
-import static io.agora.chatroom.RoomSetDialog.IMAGE_ROOM_BG;
-import static io.agora.chatroom.RoomSetDialog.IMAGE_ROOM_COVER;
-import static io.agora.chatroom.activity.ChatRoomActivity.COUPLE_TYPE;
-import static io.agora.chatroom.activity.ChatRoomActivity.DRAW_GUESS_TYPE;
-import static io.agora.chatroom.activity.ChatRoomActivity.FIVE_CHESS_TYPE;
-import static io.agora.chatroom.activity.ChatRoomActivity.KTV_TYPE;
-import static io.agora.chatroom.activity.ChatRoomActivity.WATCH_FILM_TYPE;
 
 public class CreateRoomActivity extends AppCompatActivity {
     private static final String TAG = "CreateRoomActivity";
@@ -45,11 +46,15 @@ public class CreateRoomActivity extends AppCompatActivity {
 
     @BindView(R2.id.room_set_btn)
     Button room_set_btn;
+    @BindView(R2.id.recruitment_btn)
+    Button recruitment_btn;
+
 
     @BindView(R2.id.back_img)
     ImageView back_img;
 
     RoomSetDialog roomSetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,11 @@ public class CreateRoomActivity extends AppCompatActivity {
             onBackPressed();
         });
 
+        recruitment_btn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PublishPostActivity.class);
+            intent.putExtra("recruitment","recruitment");
+            startActivity(intent);
+        });
         create_room_cp.setOnClickListener(view1 -> {
             Toast.makeText(CreateRoomActivity.this,"正在创建房间...",Toast.LENGTH_SHORT).show();
             OkHttpInstance.createRoom(COUPLE_TYPE, responseString -> {

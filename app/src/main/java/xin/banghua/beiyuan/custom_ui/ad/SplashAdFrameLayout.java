@@ -1,5 +1,9 @@
 package xin.banghua.beiyuan.custom_ui.ad;
 
+import static com.bytedance.sdk.openadsdk.TTAdConstant.DOWNLOAD_TYPE_NO_POPUP;
+import static com.bytedance.sdk.openadsdk.TTAdConstant.SPLASH_BUTTON_TYPE_DOWNLOAD_BAR;
+import static com.bytedance.sdk.openadsdk.TTAdConstant.SPLASH_BUTTON_TYPE_FULL_SCREEN;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,10 +37,6 @@ import java.lang.ref.SoftReference;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.utils.CommonCallBackInterface;
 import xin.banghua.beiyuan.utils.LogUtil;
-
-import static com.bytedance.sdk.openadsdk.TTAdConstant.DOWNLOAD_TYPE_NO_POPUP;
-import static com.bytedance.sdk.openadsdk.TTAdConstant.SPLASH_BUTTON_TYPE_DOWNLOAD_BAR;
-import static com.bytedance.sdk.openadsdk.TTAdConstant.SPLASH_BUTTON_TYPE_FULL_SCREEN;
 
 
 public class SplashAdFrameLayout extends FrameLayout {

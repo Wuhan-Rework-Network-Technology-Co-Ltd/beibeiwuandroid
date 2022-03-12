@@ -89,7 +89,7 @@ public class DataRepositroyImpl implements IDataRepositroy {
         });
 
         while (!isFinish[0]){
-            Log.d(TAG, "getMusic: 加载歌曲中");
+            Log.d(TAG, "1getMusic: 加载歌曲中");
         }
 
         if (resultString[0].equals("false")){
@@ -144,7 +144,7 @@ public class DataRepositroyImpl implements IDataRepositroy {
         });
 
         while (!isFinish[0]){
-            Log.d(TAG, "getMusic: 加载歌曲中");
+            Log.d(TAG, "2getMusic: 加载歌曲中");
         }
         return Observable.just(mGson.fromJson(resultString[0], MemberMusicModel.class));
     }

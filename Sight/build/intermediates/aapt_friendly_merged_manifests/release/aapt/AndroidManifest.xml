@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.rong.sight"
-    android:versionCode="20210803"
-    android:versionName="4.1.1.7_hotfix/4.1.1" >
+    package="io.rong.sight" >
 
     <uses-sdk
         android:minSdkVersion="19"

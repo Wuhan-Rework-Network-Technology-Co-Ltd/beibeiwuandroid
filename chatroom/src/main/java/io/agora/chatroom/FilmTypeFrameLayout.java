@@ -1,5 +1,7 @@
 package io.agora.chatroom;
 
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,8 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class FilmTypeFrameLayout extends FrameLayout {
     private static final String TAG = "FrameLayoutExample";

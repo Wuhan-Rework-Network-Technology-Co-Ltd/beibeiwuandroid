@@ -8,7 +8,8 @@
     <com.daimajia.slider.library.SliderLayout
         android:id="@+id/recyclerview_slider"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:visibility="gone">
 
     </com.daimajia.slider.library.SliderLayout>
 

@@ -32,7 +32,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.utils.Common;
 
 public class FlashPhotoPreviewActivity extends RongBaseNoActionbarActivity {
     Button cancel_btn,confirm_btn;

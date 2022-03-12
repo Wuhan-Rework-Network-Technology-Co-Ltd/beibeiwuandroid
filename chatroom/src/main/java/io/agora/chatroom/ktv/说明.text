@@ -22,3 +22,4 @@ KtvFrameLayout.onMusicChanged()->preperMusic()->getMusic()->mMusicPlayer.open()
 一人点歌，切歌后歌单清空，再次点歌，对面不同步歌词
 
 点两首歌，切歌后一直加载歌曲
+

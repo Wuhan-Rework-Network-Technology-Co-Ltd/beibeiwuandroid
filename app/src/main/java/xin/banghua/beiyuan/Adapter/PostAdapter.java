@@ -21,7 +21,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 
 public class PostAdapter extends RecyclerView.Adapter{
     private static final String TAG = "PostAdapter";

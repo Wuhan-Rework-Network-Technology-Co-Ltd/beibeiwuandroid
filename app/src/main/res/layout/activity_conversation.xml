@@ -1,43 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ConversationActivity">
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <fragment
-            android:id="@+id/conversation"
-            android:name="io.rong.imkit.fragment.ConversationFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:ignore="Instantiatable" />
-
-        <TextView
-            android:id="@+id/svip_hint_tv"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SVIP会员发起，如不希望被直接发起聊天，可到设置隐私中关闭SVIP直接发起，如只是不希望被此用户打扰可拉黑此用户"
-            android:textAlignment="center"
-            android:visibility="gone" />
-    </FrameLayout>
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-</LinearLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <fragment
+                android:id="@+id/conversation"
+                android:name="io.rong.imkit.fragment.ConversationFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="Instantiatable" />
+
+            <TextView
+                android:id="@+id/svip_hint_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SVIP会员发起，如不希望被直接发起聊天，可到设置隐私中关闭SVIP直接发起，如只是不希望被此用户打扰可拉黑此用户"
+                android:textAlignment="center"
+                android:visibility="gone" />
+        </FrameLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

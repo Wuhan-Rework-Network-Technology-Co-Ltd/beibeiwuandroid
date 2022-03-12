@@ -1,5 +1,7 @@
 package io.agora.chatroom.ktv;
 
+import static io.agora.chatroom.ktv.KtvFrameLayout.ktvView;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -266,11 +268,10 @@ public class KtvMusicListFragment extends Fragment {
                 OkHttpInstance.addSong(currentChannel.getId(), currentItem.getId(), new OkHttpResponseCallBack() {
                     @Override
                     public void getResponseString(String responseString) {
-                        if (ChatRoomActivity.ktvView.mMusicPlayer!=null){
-                            Log.d(TAG, "getResponseString: 2剩余歌曲"+ChatRoomActivity.ktvView.memberMusicModels.size());
-                            if (ChatRoomActivity.ktvView.memberMusicModels.size()==0){
+                        if (ktvView.mMusicPlayer!=null){
+                            if (ktvView.memberMusicModels.size()==0){
                                 Log.d(TAG, "onMessageAdded: 播放新歌5");
-                                ChatRoomActivity.ktvView.playNewSong();
+                                ktvView.playNewSong();
                             }
                         }
                     }

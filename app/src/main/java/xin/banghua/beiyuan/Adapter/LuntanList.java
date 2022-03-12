@@ -4,6 +4,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.io.Serializable;
 
+import io.agora.chatroom.Common;
+
 public class LuntanList  implements Serializable {
     public LuntanList() {
     }
@@ -20,6 +22,8 @@ public class LuntanList  implements Serializable {
     String authnickname;
     @JSONField(name = "authportrait")
     String authportrait;
+    @JSONField(name = "portraitframe")
+    String portraitframe;
     @JSONField(name = "posttip")
     String posttip;
     @JSONField(name = "posttitle")
@@ -30,6 +34,8 @@ public class LuntanList  implements Serializable {
     String postpictureString;
 
     String[] postpicture;
+
+
 
     @JSONField(name = "like")
     String like;
@@ -53,6 +59,22 @@ public class LuntanList  implements Serializable {
     String comment_sum;
     @JSONField(name = "comment_forbid")
     String comment_forbid;
+
+
+
+    @JSONField(name = "postvideo")
+    String postvideo;
+    @JSONField(name = "width")
+    String width;
+    @JSONField(name = "height")
+    String height;
+    @JSONField(name = "cover")
+    String cover;
+
+    Boolean isStartVideo = false;
+
+    @JSONField(name = "online")
+    String online = "0";
 
 
     public LuntanList(String authage, String authgender, String authregion, String authproperty, String id, String plateid,
@@ -81,6 +103,62 @@ public class LuntanList  implements Serializable {
         this.authsvip = authsvip;
 
         this.comment_sum = comment_sum;
+    }
+
+    public String getPortraitframe() {
+        return Common.getOssResourceUrl(portraitframe);
+    }
+
+    public void setPortraitframe(String portraitframe) {
+        this.portraitframe = portraitframe;
+    }
+
+    public String getOnline() {
+        return xin.banghua.beiyuan.Common.getOnlineState(Long.parseLong(online));
+    }
+
+    public void setOnline(String online) {
+        this.online = online;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getCover() {
+        return Common.getOssResourceUrl(cover);
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public Boolean getStartVideo() {
+        return isStartVideo;
+    }
+
+    public void setStartVideo(Boolean startVideo) {
+        isStartVideo = startVideo;
+    }
+
+    public String getPostvideo() {
+        return Common.getOssResourceUrl(postvideo);
+    }
+
+    public void setPostvideo(String postvideo) {
+        this.postvideo = postvideo;
     }
 
     public String getPostpictureString() {
@@ -248,7 +326,11 @@ public class LuntanList  implements Serializable {
     }
 
     public String getTime() {
-        return time;
+        if (time.contains("前")){
+            return time;
+        }else {
+            return Common.getShortTime(Long.parseLong(time));
+        }
     }
 
     public String getAuthvip() {

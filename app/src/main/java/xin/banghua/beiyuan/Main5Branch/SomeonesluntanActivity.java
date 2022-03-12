@@ -104,6 +104,7 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
                             jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
                     posts.setComment_forbid(jsonObject.getString("comment_forbid"));
+                    posts.setPostvideo(jsonObject.getString("postvideo"));
                     luntanLists.add(posts);
                 }
             }
@@ -122,6 +123,7 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
                             jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
                     posts.setComment_forbid(jsonObject.getString("comment_forbid"));
+                    posts.setPostvideo(jsonObject.getString("postvideo"));
                     luntanLists.add(posts);
                 }
             }

@@ -6,6 +6,7 @@ drawable rc_contact_group_arrow
 drawable rc_contact_plugin_icon
 drawable rc_contact_plugin_icon_hover
 drawable rc_contact_plugin_icon_unpressed
+drawable rc_gift_plugin_icon_unpressed
 drawable rc_search
 id cancel
 id contact_name

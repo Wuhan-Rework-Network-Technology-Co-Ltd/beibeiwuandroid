@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan;
 
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -19,8 +21,6 @@ import io.rong.imkit.plugin.IPluginModule;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.message.TextMessage;
-
-import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
 
 public class FlashPhotoPlugin implements IPluginModule {
 

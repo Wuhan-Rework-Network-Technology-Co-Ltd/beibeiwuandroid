@@ -26,7 +26,7 @@
                 android:paddingBottom="50dp"
                 android:text="个人信息"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="30sp" />
         </TableRow>
 
@@ -121,7 +121,7 @@
                             android:layout_marginLeft="5dp"
                             android:padding="15dp"
                             android:text="地区"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorPrimary" />
 
                         <TextView
                             android:id="@+id/user_gender"
@@ -140,7 +140,7 @@
                             android:layout_marginLeft="5dp"
                             android:padding="15dp"
                             android:text="年龄"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:textColor="@color/colorPrimary" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -206,7 +206,7 @@
                 android:background="@drawable/rc_btn_voice_hover"
                 android:drawableTop="@drawable/ic_post"
                 android:text="他(她)的帖子"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimary" />
         </TableRow>
 
         <TableRow
@@ -261,7 +261,7 @@
                 android:background="@drawable/rc_btn_voice_hover"
                 android:drawableTop="@drawable/ic_makefriend"
                 android:text="申请好友"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimary" />
 
         </TableRow>
 
@@ -277,7 +277,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/rc_btn_voice_hover"
                 android:text="撤销申请（会员功能）"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:visibility="gone" />
         </TableRow>
 

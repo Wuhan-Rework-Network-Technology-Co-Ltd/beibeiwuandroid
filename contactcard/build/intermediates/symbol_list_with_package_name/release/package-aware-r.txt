@@ -2108,6 +2108,7 @@ drawable rc_fire_receiver_album
 drawable rc_fire_sender_album
 drawable rc_fr_file_list_ad_icon_file
 drawable rc_fr_file_list_ad_icon_folder
+drawable rc_gift_plugin_icon_unpressed
 drawable rc_grid_camera
 drawable rc_grid_image_default
 drawable rc_hq_loading

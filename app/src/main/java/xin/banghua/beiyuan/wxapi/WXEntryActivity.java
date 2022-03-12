@@ -23,13 +23,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import io.agora.chatroom.Common;
+import io.agora.chatroom.gift.GiftDialog;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.LaunchActivity;
 import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
-import xin.banghua.beiyuan.MainActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.R;
@@ -85,6 +87,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         if(baseResp.getType()==ConstantsAPI.COMMAND_PAY_BY_WX){
             Log.d(TAG,"onPayFinish,errCode="+baseResp.errCode);
             Log.d(TAG, "onResp: "+baseResp.toString());
+            if (baseResp.errCode==0){
+                Toast.makeText(mContext,"支付成功",Toast.LENGTH_SHORT).show();
+                if (GiftDialog.uniqueInstance!=null){
+                    Common.myUserInfoList.setMoney((Integer.parseInt(Common.myUserInfoList.getMoney())+GiftDialog.selected_pay)+"");
+                    GiftDialog.uniqueInstance.remainder_money_tv.setText("余额："+Common.myUserInfoList.getMoney());
+                }
+            }
         }
         finish();
     }
@@ -100,134 +109,136 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             //1是用户数据，2是幻灯片
-            switch (msg.what){
-                case 1:
-                    try {
-                        Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
-                        JSONObject jsonObject = new JSONObject(msg.obj.toString());
-                        Log.d(TAG, "handleMessage: access_token"+jsonObject.getString("access_token"));
-                        Log.d(TAG, "handleMessage:expires_in "+jsonObject.getString("expires_in"));
-                        Log.d(TAG, "handleMessage: refresh_token"+jsonObject.getString("refresh_token"));
-                        Log.d(TAG, "handleMessage: openid"+jsonObject.getString("openid"));
-                        Log.d(TAG, "handleMessage: scope"+jsonObject.getString("scope"));
-                        Log.d(TAG, "handleMessage: unionid"+jsonObject.getString("unionid"));
-                        getDataUserinfo(String.format("https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s",jsonObject.getString("access_token"),jsonObject.getString("openid")));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    try {
-                        Log.d(TAG, "handleMessage: 微信用户信息"+msg.obj.toString());
-                        JSONObject jsonObject = new JSONObject(msg.obj.toString());
-                        Log.d(TAG, "handleMessage: nickname："+jsonObject.getString("nickname"));
-                        Log.d(TAG, "handleMessage: headimgurl： "+jsonObject.getString("headimgurl"));
-                        Log.d(TAG, "handleMessage: openid："+jsonObject.getString("openid"));
-                        //微信已获取到用户信息，现在需要保存到数据库
-                        portrait = jsonObject.getString("headimgurl");
-                        //
-                        if (!portrait.startsWith("https")){
-                            StringBuilder strBuilder = new StringBuilder(portrait);
-                            strBuilder.insert(4, 's');
-                            portrait=strBuilder.toString();
+            try {
+                switch (msg.what){
+                    case 1:
+                        try {
+                            Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
+                            JSONObject jsonObject = new JSONObject(msg.obj.toString());
+                            Log.d(TAG, "handleMessage: access_token"+jsonObject.getString("access_token"));
+                            Log.d(TAG, "handleMessage:expires_in "+jsonObject.getString("expires_in"));
+                            Log.d(TAG, "handleMessage: refresh_token"+jsonObject.getString("refresh_token"));
+                            Log.d(TAG, "handleMessage: openid"+jsonObject.getString("openid"));
+                            Log.d(TAG, "handleMessage: scope"+jsonObject.getString("scope"));
+                            Log.d(TAG, "handleMessage: unionid"+jsonObject.getString("unionid"));
+                            getDataUserinfo(String.format("https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s",jsonObject.getString("access_token"),jsonObject.getString("openid")));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                        break;
+                    case 2:
+                        try {
+                            Log.d(TAG, "handleMessage: 微信用户信息"+msg.obj.toString());
+                            JSONObject jsonObject = new JSONObject(msg.obj.toString());
+                            //微信已获取到用户信息，现在需要保存到数据库
+                            portrait = jsonObject.getString("headimgurl");
+                            //
+                            if (!portrait.startsWith("https")){
+                                StringBuilder strBuilder = new StringBuilder(portrait);
+                                strBuilder.insert(4, 's');
+                                portrait=strBuilder.toString();
+                            }
 
-                        nickname = jsonObject.getString("nickname");
-                        openid = jsonObject.getString("openid");
+                            nickname = jsonObject.getString("nickname");
+                            openid = jsonObject.getString("openid");
 
-                        saveUserinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=weinxinregister&m=socialchat",openid,nickname,portrait);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 3:
-                    //不跳转个人设置，直接保存用户数据，然后跳转MainActivity   2019/8/24 需要调整个人设置,保存后跳转个人设置
-                    mContext = getApplicationContext();
-                    JSONObject jsonObject = null;//自定义的
-                    try {
-                        jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
-
-                        if (jsonObject.getString("type").equals("3")){
-                            //被禁用，跳转登录页
-                            Log.d(TAG, "handleMessage: forbidtime"+jsonObject.get("forbidtime"));
-                            Intent intent1 = new Intent(WXEntryActivity.this, SigninActivity.class);
-                            intent1.putExtra("forbidtime",jsonObject.get("forbidtime")+"");
-                            intent1.putExtra("forbidreason",jsonObject.get("forbidreason")+"");
-                            startActivity(intent1);
+                            saveUserinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=weinxinregister&m=socialchat",openid,nickname,portrait);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        //不管登陆过没有，都保存本地数据
-                        SharedHelper sh = new SharedHelper(mContext);
-                        sh.saveUserInfo(jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"),"20","男","z","中国");
-                        if (jsonObject.getString("type").equals("1")){
-                            //更新redis缓存
-                            updateRedisCache(jsonObject.getString("id"));
-                            //注册融云
-                            //跳转首页
-                            postRongyunUserRegisterExist("https://console.banghua.xin/otherinterface/rongyun/RongCloudNew/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
-                        }else if (jsonObject.getString("type").equals("2")){
-                            //更新redis缓存
-                            updateRedisCache(jsonObject.getString("id"));
-                            //不存在，注册融云，然后跳转设置页
-                            postRongyunUserRegister("https://console.banghua.xin/otherinterface/rongyun/RongCloudNew/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
-                        }
+                        break;
+                    case 3:
+                        //不跳转个人设置，直接保存用户数据，然后跳转MainActivity   2019/8/24 需要调整个人设置,保存后跳转个人设置
+                        mContext = getApplicationContext();
+                        JSONObject jsonObject = null;//自定义的
+                        try {
+                            jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 4:
-                    Log.d(TAG, "handleMessage: 4");
-                    try {
-                        JSONObject object1 = new JSONObject(msg.obj.toString());
-                        Log.d("融云token获取",object1.getString("code"));
-                        if (object1.getString("code").equals("200")){
+                            if (jsonObject.getString("type").equals("3")){
+                                //被禁用，跳转登录页
+                                Log.d(TAG, "handleMessage: forbidtime"+jsonObject.get("forbidtime"));
+                                Intent intent1 = new Intent(WXEntryActivity.this, SigninActivity.class);
+                                intent1.putExtra("forbidtime",jsonObject.get("forbidtime")+"");
+                                intent1.putExtra("forbidreason",jsonObject.get("forbidreason")+"");
+                                startActivity(intent1);
+                            }
+                            //不管登陆过没有，都保存本地数据
+                            SharedHelper sh = new SharedHelper(mContext);
+                            sh.saveUserInfo(jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"),"20","男","z","中国");
+                            if (jsonObject.getString("type").equals("1")){
+                                //更新redis缓存
+                                updateRedisCache(jsonObject.getString("id"));
+                                //注册融云
+                                //跳转首页
+                                postRongyunUserRegisterExist("https://console.banghua.xin/otherinterface/rongyun/RongCloudNew/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
+                            }else if (jsonObject.getString("type").equals("2")){
+                                //更新redis缓存
+                                updateRedisCache(jsonObject.getString("id"));
+                                //不存在，注册融云，然后跳转设置页
+                                postRongyunUserRegister("https://console.banghua.xin/otherinterface/rongyun/RongCloudNew/example/User/userregister.php",jsonObject.getString("id"),jsonObject.getString("nickname"),jsonObject.getString("portrait"));
+                            }
 
-                            //保存融云token
-                            Log.d("融云token",object1.getString("token"));
-                            mContext = getApplicationContext();
-                            SharedHelper sh1 = new SharedHelper(mContext);
-                            sh1.saveRongtoken(object1.getString("token"));
-                            //链接融云
-                            RongyunConnect rongyunConnect = new RongyunConnect();
-                            rongyunConnect.connect(object1.getString("token"));
-                            //跳转首页
-                            //Log.d("跳转首页",object1.getString("userNickName"));
-                            //Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
-                            //startActivity(intent);
-                            //跳转设置页
-                            Intent intent1 = new Intent(WXEntryActivity.this, Userset.class);
-                            intent1.putExtra("logtype","2");
-                            intent1.putExtra("openid",openid);
-                            startActivity(intent1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 5:
-                    Log.d(TAG, "handleMessage: 5");
-                    try {
-                        JSONObject object2 = new JSONObject(msg.obj.toString());
-                        Log.d("融云token获取",object2.getString("code"));
-                        if (object2.getString("code").equals("200")){
+                        break;
+                    case 4:
+                        Log.d(TAG, "handleMessage: 4");
+                        try {
+                            JSONObject object1 = new JSONObject(msg.obj.toString());
+                            Log.d("融云token获取",object1.getString("code"));
+                            if (object1.getString("code").equals("200")){
 
-                            //保存融云token
-                            Log.d("融云token",object2.getString("token"));
-                            mContext = getApplicationContext();
-                            SharedHelper sh1 = new SharedHelper(mContext);
-                            sh1.saveRongtoken(object2.getString("token"));
-                            //链接融云
-                            RongyunConnect rongyunConnect = new RongyunConnect();
-                            rongyunConnect.connect(object2.getString("token"));
-                            //跳转首页
-                            Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
-                            startActivity(intent);
+                                //保存融云token
+                                Log.d("融云token",object1.getString("token"));
+                                mContext = getApplicationContext();
+                                SharedHelper sh1 = new SharedHelper(mContext);
+                                sh1.saveRongtoken(object1.getString("token"));
+                                //链接融云
+                                RongyunConnect rongyunConnect = new RongyunConnect();
+                                rongyunConnect.connect(object1.getString("token"));
+                                //跳转首页
+                                //Log.d("跳转首页",object1.getString("userNickName"));
+                                //Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
+                                //startActivity(intent);
+                                //跳转设置页
+                                Intent intent1 = new Intent(WXEntryActivity.this, Userset.class);
+                                intent1.putExtra("logtype","2");
+                                intent1.putExtra("openid",openid);
+                                startActivity(intent1);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                        break;
+                    case 5:
+                        Log.d(TAG, "handleMessage: 5");
+                        try {
+                            JSONObject object2 = new JSONObject(msg.obj.toString());
+                            Log.d("融云token获取",object2.getString("code"));
+                            if (object2.getString("code").equals("200")){
+
+                                //保存融云token
+                                Log.d("融云token",object2.getString("token"));
+                                mContext = getApplicationContext();
+                                SharedHelper sh1 = new SharedHelper(mContext);
+                                sh1.saveRongtoken(object2.getString("token"));
+                                //链接融云
+                                RongyunConnect rongyunConnect = new RongyunConnect();
+                                rongyunConnect.connect(object2.getString("token"));
+                                //跳转首页
+                                Intent intent = new Intent(WXEntryActivity.this, LaunchActivity.class);
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            }catch (Exception e){
+                Log.e(TAG, "handleMessage: 异常"+e.toString());
             }
+
         }
     };
     //TODO okhttp获取用户信息

@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.PushPackage.Vivo;
 
+import static xin.banghua.beiyuan.PushPackage.PushClass.pushRegID;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -8,8 +10,6 @@ import com.vivo.push.model.UPSNotificationMessage;
 import com.vivo.push.sdk.OpenClientPushMessageReceiver;
 
 import xin.banghua.beiyuan.Main3Activity;
-
-import static xin.banghua.beiyuan.PushPackage.PushClass.pushRegID;
 
 public class PushMessageReceiverImpl  extends OpenClientPushMessageReceiver {
 

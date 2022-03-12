@@ -263,7 +263,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rc_btn_voice_hover"
                     android:text="提交"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/rc_conversation_item_data_size" />
             </TableRow>
         </TableLayout>

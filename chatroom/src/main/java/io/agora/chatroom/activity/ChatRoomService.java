@@ -64,6 +64,7 @@ public class ChatRoomService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("服务","onStartCommand");
+        Log.d(TAG, "onCreate: 进入聊天室服务");
 
 //        CommonKtv.audioroom = 1;
 //        Log.d(TAG, "run:CommonKtv.audioroom:"+CommonKtv.audioroom);

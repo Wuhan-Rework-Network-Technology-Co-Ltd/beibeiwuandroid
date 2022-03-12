@@ -41,6 +41,7 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
                 if (textSplit[1].equals("<点击查看5秒闪图>")){
                     Log.d("闪图","发送了闪图"+textSplit[3]);
                     Intent intent = new Intent(view.getContext(), FlashPhotoActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     intent.putExtra("uniqueid",textSplit[3]);
                     view.getContext().startActivity(intent);
                 }
@@ -51,6 +52,7 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
             if (textSplit[1].contains("有人申请您为好友了")){
                 Log.d("新好友","申请您为好友了"+textSplit[3]);
                 Intent intent = new Intent(view.getContext(), NewFriend.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 view.getContext().startActivity(intent);
             }
         }
@@ -60,6 +62,28 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
             if (textSplit[1].contains("回复了你的评论：")||textSplit[1].contains("评论了你的帖子：")){
                 Log.d("评论","回复了你的评论"+textSplit[3]);
                 Intent intent = new Intent(view.getContext(), CommentListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                view.getContext().startActivity(intent);
+            }
+        }
+        if (message.getObjectName().equals("RC:TxtMsg")){
+            Log.d("新动态","RC:TxtMsg");
+            String[] textSplit = message.getContent().toString().split("'");
+            if (textSplit[1].contains("您关注的用户")){
+                Intent intent = new Intent(view.getContext(), Main4Activity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                intent.putExtra("menu","关注");
+                view.getContext().startActivity(intent);
+            }
+        }
+        if (message.getObjectName().equals("RC:TxtMsg")){
+            Log.d("新好友","RC:TxtMsg");
+            String[] textSplit = message.getContent().toString().split("'");
+            if (textSplit[1].contains("审核员，又有新帖了，快去审核吧！") && message.getSenderUserId().equals("1")){
+                Intent intent = new Intent(view.getContext(), SliderWebViewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                intent.putExtra("slidername","审核");
+                intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=99999&c=entry&do=post_censorship&m=socialchat&page=1&id="+Common.myID);
                 view.getContext().startActivity(intent);
             }
         }
@@ -71,6 +95,7 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
                 editor.putString("userID", "");
                 editor.commit();
                 Intent intent = new Intent(view.getContext(), SigninActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 view.getContext().startActivity(intent);
                 System.exit(0);
             }

@@ -1,5 +1,7 @@
 package io.agora.chatroom;
 
+import static io.agora.chatroom.ThreadUtils.runOnUiThread;
+
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -17,8 +19,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static io.agora.chatroom.ThreadUtils.runOnUiThread;
 
 public class OkHttpInstance {
     private static final String TAG = "OkHttpInstance";
@@ -700,6 +700,281 @@ public class OkHttpInstance {
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                     String resultString = response.body().string();
                     runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+
+    /**
+     * 礼物
+     */
+    public static void getGiftList(OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getGiftList&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 礼物列表"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 送礼物
+     * @param giftId
+     * @param receiverId
+     * @param okHttpResponseCallBack
+     */
+    public static void sendGift(String giftId,String receiverId,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("userId", Constant.sUserId+"")
+                        .add("giftId", giftId)
+                        .add("receiverId",  receiverId)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sendGift&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "送礼物"+ resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+
+    /**
+     * 微信虚拟币下单
+     * @param coinId
+     */
+    public static void buyCoinWechat(String coinId,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("userid", Constant.sUserId+"")
+                        .add("coinId", coinId)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=buyCoinWechat&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "微信虚拟币下单"+ resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    /**
+     * 支付宝虚拟币下单
+     * @param coinId
+     */
+    public static void buyCoinAlipay(String coinId,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("userid", Constant.sUserId+"")
+                        .add("coinId", coinId)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=buyCoinAlipay&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "支付宝虚拟币下单"+ resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    //TODO 撤销招募令
+    public static void deleteRecruitment(OkHttpResponseCallBack okHttpResponseCallBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("userId", Constant.sUserId+"")
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteRecruitment&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (okHttpResponseCallBack!=null){
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run:撤销招募令" + resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+
+    //TODO 开始播放
+    public static void playOnce(String post_id,OkHttpResponseCallBack okHttpResponseCallBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("authid", Constant.sUserId+"")
+                        .add("post_id", post_id)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=playOnce&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (okHttpResponseCallBack!=null){
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run:开始播放" + resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //TODO 播放超过5秒
+    public static void moreThanFiveSeconds(String post_id,OkHttpResponseCallBack okHttpResponseCallBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("authid", Constant.sUserId+"")
+                        .add("post_id", post_id)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=moreThanFiveSeconds&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (okHttpResponseCallBack!=null){
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run:播放超过5秒" + resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    //TODO 播放完成
+    public static void playCompleted(String post_id,String play_time,OkHttpResponseCallBack okHttpResponseCallBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("authid", Constant.sUserId+"")
+                        .add("post_id", post_id)
+                        .add("play_time", play_time)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=playCompleted&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (okHttpResponseCallBack!=null){
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run:播放完成" + resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    //TODO 播放时长
+    public static void playTime(String post_id,String play_time,OkHttpResponseCallBack okHttpResponseCallBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("authid", Constant.sUserId+"")
+                        .add("post_id", post_id)
+                        .add("play_time", play_time)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=playTime&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (okHttpResponseCallBack!=null){
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run:播放时长" + resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }
                 }catch (Exception e) {
                     e.printStackTrace();
                 }

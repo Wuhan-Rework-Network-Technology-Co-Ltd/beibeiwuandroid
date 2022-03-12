@@ -1,12 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="gray_light">#ABAEB1</color>
+    <!--新ui-->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+
+    <color name="color333">#333333</color>
+    <color name="color8a">#8A8A8A</color>
+    <color name="color_sex_nv">#FE6591</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_type">#8B6BF7</color>
+    <color name="color_level">#FDCF00</color>
+    <color name="color_site">#999999</color>
+    <color name="color_bg_sousuo">#5C2975</color>
+    <color name="color_999">#999999</color>
+    <color name="color_d6">#D6D6D6</color>
+    <color name="color_sex_nan">#2AC2FF</color>
+    <color name="color_msg_bg">#5336A7</color>
+    <color name="color_yinsi">#FDCF00</color>
+    <color name="color_line">#6636A7</color>
+    <color name="color_bg_mine">#F4F5F6</color>
+    <color name="color_py_sousuo">#F5F6F7</color>
+    <color name="color_zjlt">#FDCF00</color>
+    <color name="color_tjhy">#FAF6E1</color>
+    <color name="color_huakuai">#EDEFF3</color>
+    <color name="color_et_shixin">#F8F9FA</color>
+    <!--新ui-->
+
     <color name="background">#F4F4F4</color>
 
     <color name="background_deep">#FFFFFF</color>
 
     <color name="background_against">#b22B292B</color>
     <color name="background_against_deep">#B2000000</color>
+
+    <color name="background_gray">#F8F9FA</color>
+
 
     <color name="text_color_1">#212121</color>
     <color name="text_color_2">#FBE7CF</color>
@@ -27,8 +61,8 @@
     <color name="text_color_11">#EC693C</color>
 
     <color name="colorPrimary">#FDD000</color>
-    <color name="colorPrimaryDark">#66173E</color>
-    <color name="colorAccent">#FA9898</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#FDD000</color>
     <color name="colorBackground">#EDF0F5</color>
 
 

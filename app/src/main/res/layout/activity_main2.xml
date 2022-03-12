@@ -47,7 +47,7 @@
                 android:paddingLeft="8dp"
                 android:text="新朋友"
                 android:textAlignment="textStart"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
         </TableRow>
 
@@ -65,7 +65,7 @@
                 android:paddingLeft="8dp"
                 android:text="黑名单"
                 android:textAlignment="textStart"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
         </TableRow>
 

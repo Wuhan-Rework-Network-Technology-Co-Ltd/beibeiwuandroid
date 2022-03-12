@@ -17,6 +17,7 @@ import io.rong.imkit.emoticon.IEmoticonTab;
 import io.rong.imkit.plugin.IPluginModule;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
+import xin.banghua.beiyuan.Main3Branch.GiftPlugin;
 
 /**
  * Created by Beyond on 2017/4/14.
@@ -76,6 +77,7 @@ public class ContactCardExtensionModule implements IExtensionModule {
                 || conversationType.equals(Conversation.ConversationType.GROUP)) {
             pluginModules.add(new ContactCardPlugin());
             pluginModules.add(new FlashPhotoPlugin());
+            pluginModules.add(new GiftPlugin());
         }
         return pluginModules;
     }

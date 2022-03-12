@@ -1,5 +1,10 @@
 package xin.banghua.beiyuan;
 
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
+import static xin.banghua.beiyuan.FlashPhotoPlugin.conversationType;
+import static xin.banghua.beiyuan.FlashPhotoPlugin.photoPath;
+import static xin.banghua.beiyuan.FlashPhotoPlugin.uniqueID;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.donkingliang.imageselector.utils.ImageSelector;
@@ -26,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.agora.chatroom.gift.GiftDialog;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -33,11 +40,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.ConversationSettingActivity;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-
-import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
-import static xin.banghua.beiyuan.FlashPhotoPlugin.conversationType;
-import static xin.banghua.beiyuan.FlashPhotoPlugin.photoPath;
-import static xin.banghua.beiyuan.FlashPhotoPlugin.uniqueID;
 
 
 public class ConversationActivity extends AppCompatActivity {
@@ -69,10 +71,17 @@ public class ConversationActivity extends AppCompatActivity {
 
     }
 
+    public static ConstraintLayout container;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
+
+
+        container = findViewById(R.id.container);
+
+
+        GiftDialog.getInstance(this,false,container,null);
 
         svip_hint_tv = findViewById(R.id.svip_hint_tv);
 
@@ -181,7 +190,7 @@ public class ConversationActivity extends AppCompatActivity {
         Log.d(TAG, "onActivityResult: 进入1");
         if (requestCode == CONVERSATION_SETTING) {
             Log.d(TAG, "onActivityResult: 进入2");
-            title = xin.banghua.beiyuan.Common.conversationSettingUserName;
+            title = Common.conversationSettingUserName;
             getSupportActionBar().setTitle(title);
         }
 
@@ -228,4 +237,6 @@ public class ConversationActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

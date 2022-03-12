@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="推荐"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/text_color_1"
                 android:textSize="18sp" />
 
             <Button
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="附近"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/text_color_1"
                 android:textSize="18sp" />
 
             <Button
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:text="搜索"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/text_color_1"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

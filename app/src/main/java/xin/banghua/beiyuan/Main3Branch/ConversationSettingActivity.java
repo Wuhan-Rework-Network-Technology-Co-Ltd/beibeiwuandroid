@@ -1,5 +1,8 @@
 package xin.banghua.beiyuan.Main3Branch;
 
+import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.DO_NOT_DISTURB;
+import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.NOTIFY;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,10 +44,7 @@ import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.Personage.SetRemarkAndTagActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.utils.Common;
-
-import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.DO_NOT_DISTURB;
-import static io.rong.imlib.model.Conversation.ConversationNotificationStatus.NOTIFY;
+import xin.banghua.beiyuan.Common;
 
 public class ConversationSettingActivity extends AppCompatActivity {
     private static final String TAG = "ConversationSettingActi";

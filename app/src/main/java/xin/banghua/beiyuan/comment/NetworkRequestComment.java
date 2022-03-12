@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.comment;
 
+import static xin.banghua.beiyuan.utils.ThreadUtils.runOnUiThread;
+
 import android.util.Log;
 
 import java.io.IOException;
@@ -9,11 +11,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
-
-import static xin.banghua.beiyuan.utils.ThreadUtils.runOnUiThread;
 
 public class NetworkRequestComment {
     private static final String TAG = "NetworkRequestComment";

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+        <com.opensource.svgaplayer.SVGAImageView
+            android:id="@+id/portrait_frame_svga_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            app:antiAlias="true"
+            app:autoPlay="true"
+            app:loopCount="0"
+            android:visibility="gone"
+            android:clickable="false"/>
+        <ImageView
+            android:id="@+id/portrait_frame_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            android:clickable="false">
+        </ImageView>
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

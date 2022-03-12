@@ -1,9 +1,11 @@
 package xin.banghua.beiyuan.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +21,14 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.agora.chatroom.util.PortraitFrameView;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.utils.Common;
 
 public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHolder>{
     private static final String TAG = "UserInfoAdapter";
@@ -44,6 +48,21 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
     private Context mContext;
 
     Integer current_timestamp = Math.round(new Date().getTime()/1000);
+
+
+    List<UserInfoList> userInfoLists = new ArrayList<>();
+    public UserInfoAdapter(List<UserInfoList> userInfoLists) {
+        this.userInfoLists = userInfoLists;
+    }
+    public void setUserInfoLists(List<UserInfoList> userInfoLists){
+        this.userInfoLists = userInfoLists;
+    }
+    public void swapData(List<UserInfoList> userInfoLists){
+        int oldSize = this.userInfoLists.size();
+        int newSize = userInfoLists.size();
+        this.userInfoLists = userInfoLists;
+        notifyItemRangeInserted(oldSize , newSize);
+    }
 
     public UserInfoAdapter(Context mContext,ArrayList<String> userID, ArrayList<String> userPortrait, ArrayList<String> userNickName,ArrayList<String> userAge,ArrayList<String> userGender,ArrayList<String> userProperty,ArrayList<String> userLocation,ArrayList<String> userRegion,ArrayList<String> userVIP,ArrayList<String> mUserSVIP,ArrayList<String> allowLocation) {
         this.mUserID = userID;
@@ -82,11 +101,18 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         return viewHolder;
     }
 
+
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        //holder.portraitFrameView.setPortraitFrame(holder.portraitFrameView.getTag().toString());
+    }
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
         Log.d(TAG, "onBindViewHolder: Called");
 
         viewHolder.userID.setText(mUserID.get(i));
+
         Glide.with(mContext)
                 .asBitmap()
                 .load(Common.getOssResourceUrl(mUserPortrait.get(i)))
@@ -105,9 +131,9 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         }
         viewHolder.userProperty.setText(mUserProperty.get(i));
         if (mAllowLocation.get(i).equals("1")){
-            viewHolder.userLocation.setText(mUserLocation.get(i)+"km");
+            viewHolder.userLocation.setText("  "+mUserLocation.get(i)+"km");
         }else {
-            viewHolder.userLocation.setText("? km");
+            viewHolder.userLocation.setText(" ? km");
         }
         viewHolder.userRegion.setText(mUserRegion.get(i));
         viewHolder.userVIP.setText(mUserVIP.get(i));
@@ -125,8 +151,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         //GOTO  会员标识
         //现在vip传过来的是时间
         viewHolder.vip_gray.setVisibility(View.VISIBLE);
-        if (mUserSVIP.get(i).isEmpty()||mUserSVIP.get(i)=="null"){
-            if (mUserVIP.get(i).isEmpty()||mUserVIP.get(i)=="null"){
+        if (TextUtils.isEmpty(mUserSVIP.get(i))){
+            if (TextUtils.isEmpty(mUserVIP.get(i))){
                 Resources resources = mContext.getResources();
                 Drawable drawable = resources.getDrawable(R.drawable.nonmember,null);
                 viewHolder.userVIP.setForeground(drawable);
@@ -190,7 +216,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
                             .into(viewHolder.vip_gray);
                 }
             } else {
-                if (mUserVIP.get(i).isEmpty()||mUserVIP.get(i)=="null"){
+                if (TextUtils.isEmpty(mUserVIP.get(i))){
                     Resources resources = mContext.getResources();
                     Drawable drawable = resources.getDrawable(R.drawable.nonmember,null);
                     viewHolder.userVIP.setForeground(drawable);
@@ -280,8 +306,13 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         ImageView vip_diamond;
         ImageView vip_black;
         ImageView vip_white;
+
+        PortraitFrameView portraitFrameView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            portraitFrameView = itemView.findViewById(R.id.portraitFrameView);
+
             userID = itemView.findViewById(R.id.userID);
             userPortrait = itemView.findViewById(R.id.authportrait);
             userNickName = itemView.findViewById(R.id.userNickName);

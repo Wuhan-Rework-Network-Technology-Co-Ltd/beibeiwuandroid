@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import xin.banghua.beiyuan.Main5Branch.SomeonesluntanActivity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.pullloadmorerecyclerview.CusPullLoadMoreRecyclerView;
 import xin.banghua.pullloadmorerecyclerview.NiceImageView;
 

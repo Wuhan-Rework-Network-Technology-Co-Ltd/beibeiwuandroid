@@ -1,44 +1,47 @@
 package xin.banghua.beiyuan.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.agora.chatroom.gift.GiftList;
+import io.agora.chatroom.gift.GiftSentAdapter;
+import io.agora.chatroom.util.PortraitFrameView;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.SliderWebViewActivity;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.utils.MapDistance;
 
 public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  ViewPagerEx.OnPageChangeListener{
     private static final String TAG = "UserInfoSliderAdapter";
@@ -61,7 +64,30 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
     private ArrayList<String> mUserVIP = new ArrayList<>();
     private ArrayList<String> mUserSVIP = new ArrayList<>();
     private ArrayList<String> mAllowLocation = new ArrayList<>();
+    private ArrayList<String> online = new ArrayList<>();
     private Context mContext;
+
+
+    //设置按钮监听
+    UserInfoCallBack userInfoCallBack;
+    public void setBtnListen(UserInfoCallBack userInfoCallBack){
+        this.userInfoCallBack = userInfoCallBack;
+    }
+
+    List<UserInfoList> userInfoLists = new ArrayList<>();
+    public UserInfoSliderAdapter(Context context,List<UserInfoList> userInfoLists) {
+        mContext = context;
+        this.userInfoLists = userInfoLists;
+    }
+    public void setUserInfoLists(List<UserInfoList> userInfoLists){
+        this.userInfoLists = userInfoLists;
+    }
+    public void swapData(List<UserInfoList> userInfoLists){
+        int oldSize = this.userInfoLists.size();
+        int newSize = userInfoLists.size();
+        this.userInfoLists = userInfoLists;
+        notifyItemRangeInserted(oldSize , newSize);
+    }
 
     //替换数据，并更新
     public void swapData(ArrayList<String> mUserID,ArrayList<String> mUserPortrait,ArrayList<String> mUserNickName,ArrayList<String> mUserAge,ArrayList<String> mUserGender,ArrayList<String> mUserProperty,ArrayList<String> mUserLocation,ArrayList<String> mUserRegion,ArrayList<String> mUserVIP,ArrayList<String> mUserSVIP,ArrayList<String> mAllowLocation){
@@ -100,112 +126,134 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
     @Override
     public int getItemViewType(int position) {
         Log.d(TAG, "getItemViewType: position"+position);
-        if ( position == 0){ // 头部
-            Log.d(TAG, "getItemViewType: 头");
-            return TYPE_HEAD;
-        }else{
-            Log.d(TAG, "getItemViewType: 身");
-            return TYPE_CONTENT;
-        }
+//        if ( position == 0){ // 头部
+//            Log.d(TAG, "getItemViewType: 头");
+//            return TYPE_HEAD;
+//        }else{
+//            Log.d(TAG, "getItemViewType: 身");
+//            return TYPE_CONTENT;
+//        }
+        return TYPE_CONTENT;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        Log.d(TAG, "onCreateViewHolder: 进入");
         if (i == TYPE_HEAD){
             View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_slider,viewGroup,false);
             UserInfoSliderAdapter.SliderHolder viewHolder = new UserInfoSliderAdapter.SliderHolder(view);
             return viewHolder;
         }else if(i == TYPE_CONTENT){
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_userinfo,viewGroup,false);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.home_fragment_adapter,viewGroup,false);
             UserInfoSliderAdapter.UserinfoHolder viewHolder = new UserInfoSliderAdapter.UserinfoHolder(view);
             return viewHolder;
         }
         return null;
     }
 
+
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder,final int i) {
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        if (holder instanceof UserinfoHolder){
+            ((UserinfoHolder) holder).portraitFrameView.setPortraitFrame(((UserinfoHolder) holder).portraitFrameView.getTag().toString());
+        }
+
+    }
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
         Log.d(TAG, "onBindViewHolder: 进入");
         if (viewHolder instanceof SliderHolder){
-            HashMap<String,String> url_maps = new HashMap<String, String>();
-            if (jsonArray.length()>0){
-                for (int j=0;j<jsonArray.length();j++){
-                    try {
-                      final JSONObject jsonObject = jsonArray.getJSONObject(j);
-                        //url_maps.put(jsonObject.getString("slidename"), jsonObject.getString("slidepicture"));
-                        TextSliderView textSliderView = new TextSliderView(mContext);
-                        // initialize a SliderLayout
-                        textSliderView
-                                .description(jsonObject.getString("slidename"))
-                                .image(Common.getOssResourceUrl(jsonObject.getString("slidepicture")))
-                                .setScaleType(BaseSliderView.ScaleType.Fit)
-                                .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-                                    @Override
-                                    public void onSliderClick(BaseSliderView slider) {
-                                        try {
-                                            if (!jsonObject.getString("slideurl").isEmpty()){
-                                                Log.d(TAG, "onSliderClick: 链接是"+jsonObject.getString("slideurl"));
-                                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-                                                intent.putExtra("slidername",jsonObject.getString("slidename"));
-                                                intent.putExtra("sliderurl",jsonObject.getString("slideurl"));
-                                                mContext.startActivity(intent);
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-
-                        //add your extra information
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra",jsonObject.getString("slidename"));
-
-                        mDemoSlider.addSlider(textSliderView);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
+//            HashMap<String,String> url_maps = new HashMap<String, String>();
+//            if (jsonArray.length()>0){
+//                for (int j=0;j<jsonArray.length();j++){
+//                    try {
+//                      final JSONObject jsonObject = jsonArray.getJSONObject(j);
+//                        //url_maps.put(jsonObject.getString("slidename"), jsonObject.getString("slidepicture"));
+//                        TextSliderView textSliderView = new TextSliderView(mContext);
+//                        // initialize a SliderLayout
+//                        textSliderView
+//                                .description(jsonObject.getString("slidename"))
+//                                .image(Common.getOssResourceUrl(jsonObject.getString("slidepicture")))
+//                                .setScaleType(BaseSliderView.ScaleType.Fit)
+//                                .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+//                                    @Override
+//                                    public void onSliderClick(BaseSliderView slider) {
+//                                        try {
+//                                            if (!jsonObject.getString("slideurl").isEmpty()){
+//                                                Log.d(TAG, "onSliderClick: 链接是"+jsonObject.getString("slideurl"));
+//                                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+//                                                intent.putExtra("slidername",jsonObject.getString("slidename"));
+//                                                intent.putExtra("sliderurl",jsonObject.getString("slideurl"));
+//                                                mContext.startActivity(intent);
+//                                            }
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                });
+//
+//                        //add your extra information
+//                        textSliderView.bundle(new Bundle());
+//                        textSliderView.getBundle()
+//                                .putString("extra",jsonObject.getString("slidename"));
+//
+//                        mDemoSlider.addSlider(textSliderView);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+//
+//
+//            mDemoSlider.setMinimumHeight(100);
+//            mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+//            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+//            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+//            mDemoSlider.setDuration(4000);
+//            mDemoSlider.addOnPageChangeListener(this);
+//
+//            mDemoSlider.setVisibility(View.GONE);
+        }else if (viewHolder instanceof UserinfoHolder){
+            UserInfoList currentItem = userInfoLists.get(i);
+            ((UserinfoHolder) viewHolder).online_tv.setText(currentItem.getOnline());
+            if (currentItem.getOnline().equals("在线")){
+                Glide.with(mContext).load(R.mipmap.green_point).into( ((UserinfoHolder) viewHolder).online_img);
+            }else {
+                Glide.with(mContext).load(R.mipmap.gray_point).into( ((UserinfoHolder) viewHolder).online_img);
             }
 
-
-            mDemoSlider.setMinimumHeight(100);
-            mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
-            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-            mDemoSlider.setDuration(4000);
-            mDemoSlider.addOnPageChangeListener(this);
-        }else if (viewHolder instanceof UserinfoHolder){
-            ((UserinfoHolder) viewHolder).userID.setText(mUserID.get(i-1));
+            ((UserinfoHolder) viewHolder).portraitFrameView.setPortraitFrame(currentItem.getPortraitframe());
+            ((UserinfoHolder) viewHolder).portraitFrameView.setTag(currentItem.getPortraitframe());
             Glide.with(mContext)
                     .asBitmap()
-                    .load(Common.getOssResourceUrl(mUserPortrait.get(i-1)))
+                    .load(Common.getOssResourceUrl(currentItem.getPortrait()))
                     .into(((UserinfoHolder) viewHolder).userPortrait);
-            ((UserinfoHolder) viewHolder).userNickName.setText(mUserNickName.get(i-1));
-            ((UserinfoHolder) viewHolder).userAge.setText(mUserAge.get(i-1));
-            ((UserinfoHolder) viewHolder).userGender.setText(mUserGender.get(i-1));
-            if (mUserGender.get(i-1).equals("男")){
+            ((UserinfoHolder) viewHolder).userNickName.setText(currentItem.getNickname());
+            ((UserinfoHolder) viewHolder).userAge.setText(" "+currentItem.getAge());
+            if (currentItem.getGender().equals("男")){
                 Resources resources = mContext.getResources();
-                Drawable drawable = resources.getDrawable(R.drawable.male,null);
-                ((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+                Drawable drawable = resources.getDrawable(R.mipmap.bboy,null);
+                //((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                ((UserinfoHolder) viewHolder).userAge.setCompoundDrawables(drawable, null, null, null);
+                ((UserinfoHolder) viewHolder).userAge.setBackgroundResource(R.mipmap.h_sex_male);
             }else {
                 Resources resources = mContext.getResources();
-                Drawable drawable = resources.getDrawable(R.drawable.female,null);
-                ((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+                Drawable drawable = resources.getDrawable(R.mipmap.ggirl,null);
+                //((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                ((UserinfoHolder) viewHolder).userAge.setCompoundDrawables(drawable, null, null, null);
+                ((UserinfoHolder) viewHolder).userAge.setBackgroundResource(R.mipmap.h_sex);
             }
-            ((UserinfoHolder) viewHolder).userProperty.setText(mUserProperty.get(i-1));
-            if (mAllowLocation.get(i-1).equals("1")){
-                ((UserinfoHolder) viewHolder).userLocation.setText(mUserLocation.get(i-1)+"km");
+            ((UserinfoHolder) viewHolder).userProperty.setText(currentItem.getProperty());
+            if (currentItem.getAllowlocation().equals("1")){
+                ((UserinfoHolder) viewHolder).userLocation.setText("  "+ MapDistance.getDistance(Common.latitude,Common.longitude,currentItem.getLatitude(),currentItem.getLongitude())+"km");
             }else {
-                ((UserinfoHolder) viewHolder).userLocation.setText("? km");
+                ((UserinfoHolder) viewHolder).userLocation.setText("   ? km");
             }
-            ((UserinfoHolder) viewHolder).userRegion.setText(mUserRegion.get(i-1));
-            ((UserinfoHolder) viewHolder).userVIP.setText(mUserVIP.get(i-1));
-
-
+            ((UserinfoHolder) viewHolder).userRegion.setText(currentItem.getRegion());
 
 
 
@@ -213,10 +261,10 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
             //GOTO  会员标识
             //现在vip传过来的是时间
             ((UserinfoHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
-            if (mUserSVIP.get(i-1).isEmpty()||mUserSVIP.get(i-1)=="null"){
-                if (mUserVIP.get(i-1).isEmpty()||mUserVIP.get(i-1)=="null"){
+            if (TextUtils.isEmpty(currentItem.getSvip())){
+                if (TextUtils.isEmpty(currentItem.getSvip())){
                     Resources resources = mContext.getResources();
-                    Drawable drawable = resources.getDrawable(R.drawable.nonmember,null);
+                    Drawable drawable = resources.getDrawable(R.mipmap.huizhang,null);
                     ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
 
 
@@ -225,7 +273,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                             .load(R.drawable.ic_vip_gray)
                             .into(((UserinfoHolder) viewHolder).vip_gray);
                 }else {
-                    int vip_time = Integer.parseInt(mUserVIP.get(i - 1)+"");
+                    int vip_time = Integer.parseInt(currentItem.getSvip()+"");
                     if (vip_time > current_timestamp) {
                         //vipicon分级
                         Log.d("会员时长", ((vip_time - current_timestamp) + ""));
@@ -247,7 +295,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                         }
                     } else {
                         Resources resources = mContext.getResources();
-                        Drawable drawable = resources.getDrawable(R.drawable.nonmember, null);
+                        Drawable drawable = resources.getDrawable(R.mipmap.huizhang, null);
                         ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
 
                         Glide.with(mContext)
@@ -257,7 +305,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                     }
                 }
             }else {
-                int svip_time = Integer.parseInt(mUserSVIP.get(i - 1)+"");
+                int svip_time = Integer.parseInt(currentItem.getSvip()+"");
                 if (svip_time > current_timestamp) {
                     //vipicon分级
                     Log.d("会员时长", ((svip_time - current_timestamp) + ""));
@@ -278,9 +326,9 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                                 .into(((UserinfoHolder) viewHolder).vip_gray);
                     }
                 } else {
-                    if (mUserVIP.get(i-1).isEmpty()||mUserVIP.get(i-1)=="null"){
+                    if (TextUtils.isEmpty(currentItem.getVip())){
                         Resources resources = mContext.getResources();
-                        Drawable drawable = resources.getDrawable(R.drawable.nonmember,null);
+                        Drawable drawable = resources.getDrawable(R.mipmap.huizhang,null);
                         ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
 
                         ((UserinfoHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
@@ -289,7 +337,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                                 .load(R.drawable.ic_vip_gray)
                                 .into(((UserinfoHolder) viewHolder).vip_gray);
                     }else {
-                        int vip_time = Integer.parseInt(mUserVIP.get(i - 1)+"");
+                        int vip_time = Integer.parseInt(currentItem.getVip()+"");
                         if (vip_time > current_timestamp) {
                             //vipicon分级
                             Log.d("会员时长", ((vip_time - current_timestamp) + ""));
@@ -311,7 +359,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                             }
                         } else {
                             Resources resources = mContext.getResources();
-                            Drawable drawable = resources.getDrawable(R.drawable.nonmember, null);
+                            Drawable drawable = resources.getDrawable(R.mipmap.huizhang, null);
                             ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
 
                             Glide.with(mContext)
@@ -326,7 +374,6 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
 
 
             ((UserinfoHolder) viewHolder).userinfoLayout.setOnClickListener(new View.OnClickListener(){
-
                 @Override
                 public void onClick(View v) {
                     if (Common.myID ==null){
@@ -346,25 +393,48 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                                 });
                         builder.create().show();
                     }else {
-                        Log.d(TAG, "onClick: clicked on: " + mUserID.get(i - 1));
-                        //Toast.makeText(mContext,mUserID.get(i)+mUserNickName.get(i),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(v.getContext(), PersonageActivity.class);
-                        intent.putExtra("userID", mUserID.get(i - 1));
-                        //保存选中的用户id
-                        //SharedHelper shvalue = new SharedHelper(mContext);
-                        //shvalue.saveValue(mUserID.get(i));
-                        Log.d(TAG, "onClick: 保存选中的用户id" + mUserID.get(i - 1));
+                        intent.putExtra("userID", currentItem.getId());
                         v.getContext().startActivity(intent);
                     }
                 }
             });
+
+
+            if(userInfoCallBack!=null){
+                ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.VISIBLE);
+                ((UserinfoHolder) viewHolder).custom_btn.setOnClickListener(v -> {
+                    ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.GONE);
+                    userInfoCallBack.getUserInfo(currentItem);
+                    Toast.makeText(mContext,"已同意好友申请！",Toast.LENGTH_SHORT).show();
+                });
+            }else {
+                ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.GONE);
+            }
+            if (!TextUtils.isEmpty(currentItem.getGift_string())){
+                if (currentItem.getGift_string().contains("gift")){
+                    ((UserinfoHolder) viewHolder).sent_gift_recyclerview.setAdapter(new GiftSentAdapter(mContext, JSON.parseArray(currentItem.getGift_string(), GiftList.class)));
+                    ((UserinfoHolder) viewHolder).sent_gift_recyclerview.setLayoutManager(new GridLayoutManager(mContext,4));
+                    ((UserinfoHolder) viewHolder).gift_layout.setVisibility(View.VISIBLE);
+                }else {
+                    ((UserinfoHolder) viewHolder).gift_layout.setVisibility(View.GONE);
+                }
+            }else {
+                ((UserinfoHolder) viewHolder).gift_layout.setVisibility(View.GONE);
+            }
+            if (!TextUtils.isEmpty(currentItem.getYourleavewords())){
+                ((UserinfoHolder) viewHolder).remaindwords_layout.setVisibility(View.VISIBLE);
+                ((UserinfoHolder) viewHolder).remaindwords_tv.setText("  "+currentItem.getYourleavewords());
+            }else {
+                ((UserinfoHolder) viewHolder).remaindwords_layout.setVisibility(View.GONE);
+            }
         }
     }
 
 
     @Override
     public int getItemCount() {
-        return mUserID.size()+1;
+        return userInfoLists.size();
     }
 
 
@@ -407,19 +477,37 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
         TextView userLocation;
         TextView userRegion;
         TextView userVIP;
-        RelativeLayout userinfoLayout;
+        LinearLayout userinfoLayout;
 
         ImageView vip_gray;
         ImageView vip_diamond;
         ImageView vip_black;
         ImageView vip_white;
+
+        TextView online_tv;
+        ImageView online_img;
+
+        Button custom_btn;
+        RecyclerView sent_gift_recyclerview;
+        LinearLayout gift_layout;
+
+        LinearLayout remaindwords_layout;
+        TextView remaindwords_tv;
+
+        PortraitFrameView portraitFrameView;
         public UserinfoHolder(@NonNull View itemView) {
             super(itemView);
+
+            portraitFrameView = itemView.findViewById(R.id.portraitFrameView);
+
+            remaindwords_layout = itemView.findViewById(R.id.remaindwords_layout);
+            remaindwords_tv = itemView.findViewById(R.id.remaindwords_tv);
+
             userID = itemView.findViewById(R.id.userID);
             userPortrait = itemView.findViewById(R.id.authportrait);
             userNickName = itemView.findViewById(R.id.userNickName);
             userAge = itemView.findViewById(R.id.userAge);
-            userGender = itemView.findViewById(R.id.userGender);
+            //userGender = itemView.findViewById(R.id.userGender);
             userProperty = itemView.findViewById(R.id.userProperty);
             userLocation = itemView.findViewById(R.id.userLocation);
             userRegion = itemView.findViewById(R.id.userRegion);
@@ -431,7 +519,15 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
             vip_white = itemView.findViewById(R.id.vip_white);
 
             userinfoLayout = itemView.findViewById(R.id.userinfo_layout);
+
+            online_tv = itemView.findViewById(R.id.online_tv);
+            online_img = itemView.findViewById(R.id.online_img);
             Log.d(TAG, "UserinfoHolder: 进入");
+
+
+            custom_btn = itemView.findViewById(R.id.custom_btn);
+            sent_gift_recyclerview = itemView.findViewById(R.id.sent_gift_recyclerview);
+            gift_layout = itemView.findViewById(R.id.gift_layout);
         }
     }
 }

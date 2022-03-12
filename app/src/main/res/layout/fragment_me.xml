@@ -83,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:text="TextView"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -100,7 +100,7 @@
                             android:layout_height="wrap_content"
                             android:drawableTop="@drawable/ic_beiyuanhao"
                             android:text="乐园号"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:textColor="@color/colorPrimary" />
 
                         <Button
                             android:id="@+id/personalinfo_btn"
@@ -109,7 +109,7 @@
                             android:layout_height="wrap_content"
                             android:drawableTop="@drawable/ic_person"
                             android:text="个人资料"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:textColor="@color/colorPrimary" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

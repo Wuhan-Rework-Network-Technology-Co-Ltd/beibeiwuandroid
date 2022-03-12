@@ -25,7 +25,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('C:\\Users\\30999\\Pictures\\banghuajks\\banghua.jks')
+            storeFile file('/Users/jiangdong/Desktop/banghuajks')
             storePassword 'j12321456'
             keyAlias = 'banghuaxx'
             keyPassword 'j12321456'
@@ -41,8 +41,8 @@ android {
         applicationId "xin.banghua.beiyuan"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 52
-        versionName "52.0"
+        versionCode 68
+        versionName "68"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -68,13 +68,13 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-
-}
-repositories {
-    flatDir {
-        dirs 'libs'
+    repositories {
+        flatDir {
+            dirs '/Users/jiangdong/Desktop/androidapp/chatroom/libs','libs'
+        }
     }
 }
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
@@ -133,11 +133,10 @@ dependencies {
 //    implementation('com.amap.api:location:5.2.0')
     //支付宝sdk
 //    implementation(name: 'alipaySdk-15.6.5-20190718211148', ext: 'aar')
-    //支付宝sdk 剥离UTDID的支付宝SDK
-    implementation(name: 'alipaysdk-noutdid-15.8.03.210428205839', ext: 'aar')
-    //微信sdk
+//    //支付宝sdk 剥离UTDID的支付宝SDK
+    //implementation(name: 'alipaysdk-noutdid-15.8.03.210428205839', ext: 'aar')
+//    //微信sdk
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
-
     //推送
     implementation 'com.meizu.flyme.internet:push-internal:4.0.2'  //魅族
     implementation(name: 'vivo_pushsdk-v2.9.0.0', ext: 'aar')   //vivo
@@ -209,4 +208,17 @@ dependencies {
 //    implementation 'androidx.core:core-splashscreen:1.0.0-alpha02'
 
 
+    //礼物svga
+    implementation 'com.github.svga:SVGAPlayer-Android:2.5.12'
+
+
+    //xlog
+    implementation 'com.elvishew:xlog:1.6.1'
+
+
+    //重新启用dk播放器
+    implementation project(':dkplayer-java')
+    implementation project(':dkplayer-ui')
+    //implementation project(path: ':dkplayer-players:ijk')
+    implementation project(path: ':dkplayer-players:exo')
 }

@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="2"
                 android:text="广场"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
             <Button
@@ -44,7 +44,7 @@
                 android:layout_span="2"
                 android:background="@drawable/rc_btn_voice_hover"
                 android:text="论坛"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </TableRow>
@@ -60,7 +60,7 @@
                 android:checked="true"
                 android:text="ToggleButton"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/text_color_1"
                 android:textOff="首页"
                 android:textOn="首页" />
 
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ToggleButton"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/text_color_1"
                 android:textOff="自拍"
                 android:textOn="自拍" />
 
@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ToggleButton"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/text_color_1"
                 android:textOff="真实"
                 android:textOn="真实" />
 
@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ToggleButton"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/text_color_1"
                 android:textOff="情感"
                 android:textOn="情感" />
 
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ToggleButton"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/text_color_1"
                 android:textOff="精华"
                 android:textOn="精华" />
 
@@ -111,9 +111,7 @@
                 android:id="@+id/marquee"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_span="5">
-
-            </xin.banghua.beiyuan.MarqueeTextView>
+                android:layout_span="5"/>
         </TableRow>
 
         <TableRow

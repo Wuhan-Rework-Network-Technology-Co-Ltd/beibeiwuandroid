@@ -85,7 +85,7 @@ public final class MusicResourceManager {
             musicModel.setFileMusic(fileMusic);
             musicModel.setFileLrc(fileLrc);
 
-            mLogger.i("prepareMusic down %s", musicModel);
+            mLogger.i("prepareMusic down %s", onlyLrc);
             if (onlyLrc) {
                 Completable mCompletable = DataRepositroy.Instance(mContext).download(fileLrc, musicModel.getLrc());
                 if (musicModel.getLrc().endsWith("zip")) {

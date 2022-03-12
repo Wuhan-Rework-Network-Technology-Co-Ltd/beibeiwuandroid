@@ -13,7 +13,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import xin.banghua.beiyuan.Adapter.LuntanList;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 
 
 public class ImagerPagerActivity extends AppCompatActivity {

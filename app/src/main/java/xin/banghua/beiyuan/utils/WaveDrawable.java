@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.utils;
 
+import static android.content.ContentValues.TAG;
+
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,8 +22,6 @@ import android.os.Build;
 import android.util.Log;
 import android.view.Choreographer;
 import android.view.animation.DecelerateInterpolator;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by jing on 16-12-6.

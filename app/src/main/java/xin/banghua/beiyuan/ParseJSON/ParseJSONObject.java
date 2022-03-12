@@ -3,8 +3,6 @@ package xin.banghua.beiyuan.ParseJSON;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.PortUnreachableException;
-
 public class ParseJSONObject {
     String rawJSON;
     JSONObject jsonObject;

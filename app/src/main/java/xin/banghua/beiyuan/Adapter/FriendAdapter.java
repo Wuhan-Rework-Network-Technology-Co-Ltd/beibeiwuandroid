@@ -2,6 +2,7 @@ package xin.banghua.beiyuan.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +23,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.agora.chatroom.util.PortraitFrameView;
 import io.rong.imkit.RongIM;
 import xin.banghua.beiyuan.CircleImageViewExtension;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.utils.Common;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "FriendAdapter";
@@ -63,20 +65,26 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
-
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder viewHolder) {
+        super.onViewAttachedToWindow(viewHolder);
+        viewHolder.portraitFrameView.setPortraitFrame(viewHolder.portraitFrameView.getTag().toString());
+    }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder,final int i) {
         final FriendList currentItem = friendList.get(i);
 
         viewHolder.userID.setText(currentItem.getmUserID());
 
+
+
 //        if (currentItem.getmVip().equals("VIP")) {
 //            viewHolder.userPortrait.isVIP(true,mContext.getResources(),true);
 //        }
         //现在vip传过来的是时间
         viewHolder.vip_gray.setVisibility(View.VISIBLE);
-        if (currentItem.getmSVip().isEmpty()||currentItem.getmSVip()=="null"){
-            if (currentItem.getmVip().isEmpty()||currentItem.getmVip()=="null"){
+        if (TextUtils.isEmpty(currentItem.getmSVip())){
+            if (TextUtils.isEmpty(currentItem.getmVip())){
                 viewHolder.vip_gray.setVisibility(View.VISIBLE);
                 Glide.with(mContext)
                         .asBitmap()
@@ -132,7 +140,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                             .into(viewHolder.vip_gray);
                 }
             } else {
-                if (currentItem.getmVip().isEmpty()||currentItem.getmVip()=="null"){
+                if (TextUtils.isEmpty(currentItem.getmVip())){
                     Glide.with(mContext)
                             .asBitmap()
                             .load(R.drawable.ic_vip_gray)
@@ -169,9 +177,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         }
 
 
-
-
-
+        Log.d(TAG, "onBindViewHolder: 加载好友头像框"+currentItem.getPortraitframe());
+        viewHolder.portraitFrameView.setPortraitFrame(currentItem.getPortraitframe());
+        viewHolder.portraitFrameView.setTag(currentItem.getPortraitframe());
         Glide.with(mContext)
                 .asBitmap()
                 .load(Common.getOssResourceUrl(currentItem.getmUserPortrait()))
@@ -262,8 +270,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         ImageView vip_diamond;
         ImageView vip_black;
         ImageView vip_white;
+
+        PortraitFrameView portraitFrameView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            portraitFrameView = itemView.findViewById(R.id.portraitFrameView);
+
             userID = itemView.findViewById(R.id.userID);
             userPortrait = itemView.findViewById(R.id.authportrait);
             userNickName = itemView.findViewById(R.id.userNickName);

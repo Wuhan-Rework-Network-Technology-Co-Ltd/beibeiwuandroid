@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
+import com.alibaba.fastjson.JSON;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import org.json.JSONArray;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.rong.imkit.manager.IUnReadMessageObserver;
 import okhttp3.FormBody;
@@ -30,19 +32,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.Adapter.NewFriendsAdapter;
+import xin.banghua.beiyuan.Adapter.UserInfoCallBack;
+import xin.banghua.beiyuan.Adapter.UserInfoList;
+import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
 import xin.banghua.beiyuan.BadgeBottomNav;
 import xin.banghua.beiyuan.Main2Activity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class NewFriend extends AppCompatActivity {
 
     private static final String TAG = "NewFriend";
 
     private Integer pageindex = 1;
-    NewFriendsAdapter adapter;
+    UserInfoSliderAdapter adapter;
     //vars
     private ArrayList<String> mUserID = new ArrayList<>();
     private ArrayList<String> mUserPortrait = new ArrayList<>();
@@ -60,6 +66,9 @@ public class NewFriend extends AppCompatActivity {
 
     //在此界面获取好友数量，并保存本地
     private IUnReadMessageObserver iUnReadMessageObserver;
+
+    List<UserInfoList> userInfoLists = new ArrayList<>();
+    PullLoadMoreRecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,12 +79,68 @@ public class NewFriend extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getDataFriends(getString(R.string.friendsapply_url));
+        //getDataFriends(getString(R.string.friendsapply_url));
 
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this,handler);
         badgeBottomNav.getDataFriendsapply(getString(R.string.friendsapplynumber_url));
 
+
+        recyclerView = findViewById(R.id.newfriend_RecyclerView);
+        //adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP,mUserAge,mUserGender,mUserRegion,mUserProperty);
+        adapter = new UserInfoSliderAdapter(this,userInfoLists);
+        adapter.setBtnListen(new UserInfoCallBack() {
+            @Override
+            public void getUserInfo(UserInfoList userInfoList) {
+                OkHttpInstance.agreefriendnew(userInfoList.getId(), new OkHttpResponseCallBack() {
+                    @Override
+                    public void getResponseString(String responseString) {
+
+                    }
+                });
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLinearLayout();
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+            @Override
+            public void onRefresh() {
+
+                Log.d(TAG, "onRefresh: start");
+                recyclerView.postDelayed(() -> {
+                    recyclerView.setPullLoadMoreCompleted();
+                },500);
+            }
+
+            @Override
+            public void onLoadMore() {
+
+                pageindex = pageindex+1;//页数加一
+                //getDataFriends(getString(R.string.friendsapply_url));//重新加载
+                OkHttpInstance.friendsapplynewnew(pageindex + "", new OkHttpResponseCallBack() {
+                    @Override
+                    public void getResponseString(String responseString) {
+                        userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
+                        adapter.swapData(userInfoLists);
+                    }
+                });
+
+                Log.d(TAG, "onLoadMore: start");
+                recyclerView.postDelayed(() -> {
+                    recyclerView.setPullLoadMoreCompleted();
+                },500);
+            }
+        });
+
+
+        OkHttpInstance.friendsapplynewnew(pageindex + "", new OkHttpResponseCallBack() {
+            @Override
+            public void getResponseString(String responseString) {
+                userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
+                adapter.swapData(userInfoLists);
+            }
+        });
     }
 
     @Override
@@ -121,7 +186,7 @@ public class NewFriend extends AppCompatActivity {
         }
 
         if (pageindex>1){//第二页以上，只加载刷新，不新建recyclerView
-            adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP,mUserAge,mUserGender,mUserRegion,mUserProperty);//重新赋值并调用notifyDataSetChanged();
+            //adapter.swapData(mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP,mUserAge,mUserGender,mUserRegion,mUserProperty);//重新赋值并调用notifyDataSetChanged();
         }else {//初次加载
             initRecyclerView(view);
         }
@@ -133,7 +198,7 @@ public class NewFriend extends AppCompatActivity {
         Log.d(TAG, "initRecyclerView: init recyclerview");
 
         final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.newfriend_RecyclerView);
-        adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP,mUserAge,mUserGender,mUserRegion,mUserProperty);
+        //adapter = new NewFriendsAdapter(mView.getContext(),mUserID,mUserPortrait,mUserNickName,mUserLeaveWords,mUserAgree,mUserVIP,mUserAge,mUserGender,mUserRegion,mUserProperty);
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.agora.chatroom.util.PortraitFrameView;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,11 +38,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.CircleImageViewExtension;
+import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.Personage.FollowAndFansActivity;
+import xin.banghua.beiyuan.Personage.Someonesluntan1Activity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.SliderWebViewActivity;
 import xin.banghua.beiyuan.comment.CommentListActivity;
-import xin.banghua.beiyuan.utils.Common;
 
 
 /**
@@ -51,21 +55,25 @@ public class MeFragment extends Fragment {
     private static final String TAG = "MeFragment";
     CircleImageViewExtension userportrait_iv;
     TextView usernickname_tv;
-    Button beiyuanid_btn;
-    Button personalinfo_btn;
-    Button xiangce_btn;
-    Button openvip_btn;
-    Button opensvip_btn;
-    Button luntan_btn;
-    Button comment_btn;
-    Button jifen_btn;
-    Button tuiguangma_btn;
-    Button sawme_btn;
-    Button setting_btn;
+    TextView beiyuanid_btn;
+    TextView personalinfo_btn;
+    TextView user_signature;
+    LinearLayout xiangce_btn;
+    LinearLayout openvip_btn;
+    LinearLayout opensvip_btn;
+    LinearLayout luntan_btn;
+    LinearLayout comment_btn;
+    LinearLayout jifen_btn;
+    LinearLayout tuiguangma_btn;
+    LinearLayout sawme_btn;
+    LinearLayout setting_btn;
+
+    LinearLayout wallet_btn;
+    LinearLayout store_btn;
 
     String myportrait;
 
-    private Button privacypolity_btn,useragreement_btn;
+    private TextView privacypolity_btn,useragreement_btn;
     private Context mContext;
 
     ImageView vip_gray;
@@ -73,8 +81,18 @@ public class MeFragment extends Fragment {
     ImageView vip_black;
     ImageView vip_white;
 
+    PortraitFrameView portraitFrameView;
+    TextView follow_tv,fans_tv;
     public MeFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Common.userInfoList!=null){
+            portraitFrameView.setPortraitFrame(Common.userInfoList.getPortraitframe());
+        }
     }
 
     @Override
@@ -87,16 +105,38 @@ public class MeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_me, container, false);
+        return inflater.inflate(R.layout.fragment_mine, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initData(view);
+
+        portraitFrameView = view.findViewById(R.id.portraitFrameView);
+        follow_tv = view.findViewById(R.id.follow_tv);
+        fans_tv = view.findViewById(R.id.fans_tv);
         //vip
         getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
 
+        initData(view);
+
+        store_btn = view.findViewById(R.id.store_btn);
+        store_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, StoreActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
+
+        wallet_btn = view.findViewById(R.id.wallet_btn);
+        wallet_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, WalletActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
 
         useragreement_btn = view.findViewById(R.id.useragreement_btn);
         useragreement_btn.setOnClickListener(new View.OnClickListener() {
@@ -152,9 +192,28 @@ public class MeFragment extends Fragment {
     }
     private void initData(View view) {
         vip_gray = view.findViewById(R.id.vip_gray);
-        vip_diamond = view.findViewById(R.id.vip_diamond);
-        vip_black = view.findViewById(R.id.vip_black);
-        vip_white = view.findViewById(R.id.vip_white);
+//        vip_diamond = view.findViewById(R.id.vip_diamond);
+//        vip_black = view.findViewById(R.id.vip_black);
+//        vip_white = view.findViewById(R.id.vip_white);
+
+        user_signature = view.findViewById(R.id.user_signature);
+        if (Common.userInfoList != null){
+            user_signature.setText(Common.userInfoList.getSignature());
+            follow_tv.setText("关注："+Common.userInfoList.getFollow());
+            follow_tv.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), FollowAndFansActivity.class);
+                intent.putExtra("userId",Common.userInfoList.getId());
+                intent.putExtra("type",0);
+                getActivity().startActivity(intent);
+            });
+            fans_tv.setText("粉丝："+Common.userInfoList.getFans());
+            fans_tv.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(),FollowAndFansActivity.class);
+                intent.putExtra("userId",Common.userInfoList.getId());
+                intent.putExtra("type",1);
+                getActivity().startActivity(intent);
+            });
+        }
 
         userportrait_iv = view.findViewById(R.id.userportrait_iv);
         userportrait_iv.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +235,8 @@ public class MeFragment extends Fragment {
         });
         beiyuanid_btn = view.findViewById(R.id.beiyuanid_btn);
         personalinfo_btn = view.findViewById(R.id.personalinfo_btn);
-        xiangce_btn = view.findViewById(R.id.xiangce_btn);
+        user_signature = view.findViewById(R.id.user_signature);
+        //xiangce_btn = view.findViewById(R.id.xiangce_btn);
         openvip_btn = view.findViewById(R.id.openvip_btn);
         opensvip_btn = view.findViewById(R.id.opensvip_btn);
         luntan_btn = view.findViewById(R.id.luntan_btn);
@@ -198,13 +258,13 @@ public class MeFragment extends Fragment {
         beiyuanid_btn.setText("乐园号："+myid);
         personalinfo_btn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.me_reset_action));
         setting_btn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.me_setting_action));
-        xiangce_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),CircleActivity.class);
-                startActivity(intent);
-            }
-        });
+//        xiangce_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(),CircleActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         sawme_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -248,7 +308,7 @@ public class MeFragment extends Fragment {
             public void onClick(View v) {
                 SharedHelper shuserinfo = new SharedHelper(getActivity());
                 String mUserID = shuserinfo.readUserInfo().get("userID");
-                Intent intent = new Intent(getActivity(),SomeonesluntanActivity.class);
+                Intent intent = new Intent(getActivity(), Someonesluntan1Activity.class);
                 intent.putExtra("authid",mUserID);
                 startActivity(intent);
             }

@@ -24,7 +24,7 @@
                 android:layout_span="3"
                 android:background="@drawable/rc_cs_group_cancel_pressed"
                 android:text="推荐"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="3"
                 android:text="附近"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
             <Button
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="3"
                 android:text="搜索"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
             <Button
@@ -65,7 +65,7 @@
             android:id="@+id/seewho_tablerow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <Button
                 android:id="@+id/seeall_btn"
@@ -75,7 +75,7 @@
                 android:layout_span="4"
                 android:drawableTop="@drawable/ic_person"
                 android:text="看全部"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:textSize="14sp" />
 
             <Button
@@ -86,7 +86,7 @@
                 android:layout_span="4"
                 android:drawableTop="@drawable/ic_female"
                 android:text="只看女"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:textSize="14sp" />
 
             <Button
@@ -97,7 +97,7 @@
                 android:layout_span="4"
                 android:drawableTop="@drawable/ic_male"
                 android:text="只看男"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorPrimary" />
         </TableRow>
 
         <TableRow

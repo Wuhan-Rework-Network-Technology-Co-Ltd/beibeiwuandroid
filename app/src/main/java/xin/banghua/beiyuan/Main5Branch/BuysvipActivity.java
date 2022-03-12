@@ -29,7 +29,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 
 public class BuysvipActivity extends AppCompatActivity {
     private static final String TAG = "BuysvipActivity";
@@ -105,7 +105,6 @@ public class BuysvipActivity extends AppCompatActivity {
 
     //支付宝接口调用
     Runnable payRunnable = new Runnable() {
-
         @Override
         public void run() {
             Log.d(TAG, "run: 进入支付");

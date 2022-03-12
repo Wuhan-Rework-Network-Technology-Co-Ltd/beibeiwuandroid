@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.Signin;
 
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -38,11 +40,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.CheckPermission;
-import xin.banghua.beiyuan.MainActivity;
+import xin.banghua.beiyuan.LaunchActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.bean.AddrBean;
-
-import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
 
 public class Userset extends AppCompatActivity {
     private static final String TAG = "Userset";
@@ -279,14 +279,14 @@ public class Userset extends AppCompatActivity {
                     }else {
                         Log.d("跳转", "intent");
                         Toast.makeText(mContext, "手机注册成功", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Userset.this, MainActivity.class);
+                        Intent intent = new Intent(Userset.this, LaunchActivity.class);
                         startActivity(intent);
                     }
                     break;
                 case 2:
                     Log.d("跳转", "intent");
                     Toast.makeText(mContext, "微信注册成功", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(Userset.this, MainActivity.class);
+                    Intent intent = new Intent(Userset.this, LaunchActivity.class);
                     startActivity(intent);
             }
 

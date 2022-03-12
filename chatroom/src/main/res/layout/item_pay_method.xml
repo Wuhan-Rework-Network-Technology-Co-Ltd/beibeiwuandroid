@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pay_method_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:visibility="gone"
+    android:background="@color/background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="支付方式"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <RadioGroup
+        android:id="@+id/pay_radio"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <RadioButton
+            android:id="@+id/wechatpay_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:text="微信"
+            android:checked="true"/>
+        <RadioButton
+            android:id="@+id/alipay_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="支付宝"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/submit_order_btn"
+        app:layout_constraintTop_toBottomOf="@id/pay_radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="提交订单"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

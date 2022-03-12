@@ -1,5 +1,12 @@
 package xin.banghua.beiyuan.comment;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+import static android.view.inputmethod.InputMethod.SHOW_FORCED;
+import static android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY;
+import static xin.banghua.beiyuan.Common.myID;
+import static xin.banghua.beiyuan.Common.userInfoList;
+
+import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,18 +51,12 @@ import xin.banghua.beiyuan.Main5Branch.SomeonesluntanActivity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.custom_ui.ad.UIUtils;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.CommonCallBackInterface;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 import xin.banghua.pullloadmorerecyclerview.CusPullLoadMoreRecyclerView;
 import xin.banghua.pullloadmorerecyclerview.NiceImageView;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static android.view.inputmethod.InputMethod.SHOW_FORCED;
-import static android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY;
-import static xin.banghua.beiyuan.utils.Common.myID;
-import static xin.banghua.beiyuan.utils.Common.userInfoList;
 
 
 public class CommentDialog {
@@ -205,7 +205,6 @@ public class CommentDialog {
         pullLoadMoreRecyclerView.setAdapter(mainRecyclerAdapterAdapter);
         pullLoadMoreRecyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(mContext));
         pullLoadMoreRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));//增加分割线
-
         pullLoadMoreRecyclerView.setLinearLayout();
         pullLoadMoreRecyclerView.setPullRefreshEnable(false);
         pullLoadMoreRecyclerView.setHasMore(true);
@@ -274,7 +273,11 @@ public class CommentDialog {
                     public void getResponseString(String responseString) {
                         if (!responseString.equals("false")){
                             UserInfoList post_auth = JSON.parseObject(responseString,UserInfoList.class);
-                            ArrayList blacklist = new ArrayList<String>(Arrays.asList(post_auth.getMyblacklist().split(",")));
+                            ArrayList blacklist = new ArrayList();
+                            if (post_auth.getMyblacklist()!=null){
+                                blacklist = new ArrayList<String>(Arrays.asList(post_auth.getMyblacklist().split(",")));
+                            }
+
                             if (blacklist.contains(myID)){
                                 Toast.makeText(mContext,"你已被作者加入黑名单",Toast.LENGTH_LONG).show();
                             }else {
@@ -364,11 +367,13 @@ public class CommentDialog {
                             public void run() {
                                 SubCommentView subCommentView_one = new SubCommentView(mContext);
                                 subCommentView_one.initShow(selectedComments.get(1),CommentDialog.this,currentPosition);
-                                sub_comment_layout.addView(subCommentView_one);
+                                if (sub_comment_layout != null)
+                                    sub_comment_layout.addView(subCommentView_one);
 
                                 SubCommentView subCommentView = new SubCommentView(mContext);
                                 subCommentView.initShow(selectedComments.get(2),CommentDialog.this,currentPosition);
-                                sub_comment_layout.addView(subCommentView);
+                                if (sub_comment_layout != null)
+                                    sub_comment_layout.addView(subCommentView);
                             }
                         },500);
                     }else if(selectedComments.size()==2){//回复1级评论
@@ -381,7 +386,8 @@ public class CommentDialog {
                             public void run() {
                                 SubCommentView subCommentView = new SubCommentView(mContext);
                                 subCommentView.initShow(selectedComments.get(1),CommentDialog.this,currentPosition);
-                                sub_comment_layout.addView(subCommentView);
+                                if (sub_comment_layout != null)
+                                    sub_comment_layout.addView(subCommentView);
                             }
                         },500);
 
@@ -413,7 +419,8 @@ public class CommentDialog {
     }
 
     List<CommentList> dataLists = new ArrayList<>();
-    public class MainRecyclerAdapterAdapter extends RecyclerView.Adapter<MainViewHolder>{
+    public class MainRecyclerAdapterAdapter extends RecyclerView.Adapter<MainViewHolder> {
+        
         List<CommentList> dataLists = new ArrayList<>();
 
         public MainRecyclerAdapterAdapter(List<CommentList> dataLists) {
@@ -440,8 +447,9 @@ public class CommentDialog {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull MainViewHolder holder, @SuppressLint("RecyclerView") int position) {
             Log.d(TAG, "onBindViewHolder: 刷新");
+
 
             CommentList currentItem = this.dataLists.get(position);
 
@@ -472,12 +480,10 @@ public class CommentDialog {
 
             holder.tv_time.setText(currentItem.getTime());
 
-
-
             if (SomeonesluntanActivity.selectedComment!=null && position==0){
                 sub_comment_layout = holder.sub_comment_layout;
             }
-            holder.tv_reply.setOnClickListener(view1 -> {
+            holder.main_comment_layout.setOnClickListener(view1 -> {
                 mainID = currentItem.getId();
                 mainID_user = currentItem.getAuthid();
                 Log.d(TAG, "onBindViewHolder: 回复1级评论"+mainID+currentItem.getId());
@@ -546,8 +552,9 @@ public class CommentDialog {
                 }
             };
 
-            holder.tv_content.setOnLongClickListener(longClickListener);
-            holder.comment_relative_layout.setOnLongClickListener(longClickListener);
+            //holder.tv_content.setOnLongClickListener(longClickListener);
+            holder.main_comment_layout.setOnLongClickListener(longClickListener);
+
 
             //subRecyclerAdapterAdapter_inner.setDataLists(sub_dataLists_inner);
             holder.sub_comment_layout.removeAllViews();
@@ -592,7 +599,8 @@ public class CommentDialog {
                                     return true;
                                 }
                             });
-                            sub_comment_layout.addView(subCommentView);
+                            if (sub_comment_layout != null)
+                                sub_comment_layout.addView(subCommentView);
                         }
 
                         collapseClose(collapse_tv,currentItem,pageIndex,sub_dataLists_inner,sub_comment_layout,currentPosition);
@@ -619,8 +627,8 @@ public class CommentDialog {
 
 
     public class MainViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.comment_relative_layout)
-        RelativeLayout comment_relative_layout;
+        @BindView(R.id.main_comment_layout)
+        View main_comment_layout;
         @BindView(R.id.iv_header)
         NiceImageView iv_header;
         @BindView(R.id.ll_like)
@@ -714,7 +722,7 @@ public class CommentDialog {
 
             holder.tv_time.setText(currentItem.getTime());
 
-            holder.tv_reply.setOnClickListener(view1 -> {
+            holder.sub_comment_layout.setOnClickListener(view1 -> {
                 subID = currentItem.getAuthid();
                 subID_comment = currentItem.getId();
                 Log.d(TAG, "onBindViewHolder: 回复2级评论"+subID+currentItem.getAuthid());
@@ -762,6 +770,8 @@ public class CommentDialog {
     }
 
     public class SubViewHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.sub_comment_layout)
+        View sub_comment_layout;
         @BindView(R.id.iv_header)
         NiceImageView iv_header;
         @BindView(R.id.ll_like)
@@ -837,11 +847,15 @@ public class CommentDialog {
             NetworkRequestComment.deleteComment(deleteCommentList.id, new OkHttpResponseCallBack() {
                 @Override
                 public void getResponseString(String responseString) {
-                    if (position>=0){//1级评论
-                        dataLists.remove(position);
-                        commonCallBackInterface.callBack();
-                    }else {
-                        UIUtils.removeFromParent(deleteSubCommentView);
+                    try {
+                        if (position>=0){//1级评论
+                            dataLists.remove(position);
+                            commonCallBackInterface.callBack();
+                        }else {
+                            UIUtils.removeFromParent(deleteSubCommentView);
+                        }
+                    }catch (Exception e){
+                        Log.e(TAG, "onBindViewHolder: 异常"+ e.toString());
                     }
                 }
             });

@@ -12,12 +12,17 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import io.agora.chatroom.activity.ChatRoomActivity;
+import io.agora.chatroom.manager.ChatRoomManager;
 import xyz.doikki.videoplayer.controller.ControlWrapper;
 import xyz.doikki.videoplayer.controller.IControlComponent;
 import xyz.doikki.videoplayer.player.VideoView;
 
 public class PipControlView extends FrameLayout implements IControlComponent, View.OnClickListener {
+    Context mContext;
+
+    public void setmContext(Context mContext) {
+        this.mContext = mContext;
+    }
 
     private ControlWrapper mControlWrapper;
 
@@ -27,6 +32,7 @@ public class PipControlView extends FrameLayout implements IControlComponent, Vi
 
     public PipControlView(@NonNull Context context) {
         super(context);
+        setmContext(context);
     }
 
     public PipControlView(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -53,8 +59,8 @@ public class PipControlView extends FrameLayout implements IControlComponent, Vi
         if (id == R.id.btn_close) {
             PIPManager.getInstance().stopFloatWindow();
             PIPManager.getInstance().reset();
-            if (ChatRoomActivity.mManager!=null)
-                ChatRoomActivity.mManager.leaveChannel();
+            if (ChatRoomManager.instance(mContext)!=null)
+                ChatRoomManager.instance(mContext).leaveChannel();
         } else if (id == R.id.start_play) {
             mControlWrapper.togglePlay();
         } else if (id == R.id.btn_skip) {

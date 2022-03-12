@@ -33,7 +33,7 @@
         android:layout_marginLeft="30dp"
         android:layout_toRightOf="@id/authportrait_framelayout"
         android:text="18"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
         android:textSize="15sp" />
 
     <TextView
@@ -102,11 +102,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/authportrait"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/ic_launcher" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/authportrait"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_launcher" />
+
+            <io.agora.chatroom.util.PortraitFrameView
+                android:id="@+id/portraitFrameView"
+                android:layout_width="77dp"
+                android:layout_height="77dp" />
+        </FrameLayout>
+
 
         <ImageView
             android:id="@+id/vip_gray"

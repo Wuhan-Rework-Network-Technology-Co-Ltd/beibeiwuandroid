@@ -1,5 +1,7 @@
 package io.agora.chatroom.ktv;
 
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
+
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -27,8 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.agora.chatroom.R;
 import io.agora.chatroom.R2;
-
-import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class KtvMusicListFrameLayout extends FrameLayout {
     private static final String TAG = "FrameLayoutExample";

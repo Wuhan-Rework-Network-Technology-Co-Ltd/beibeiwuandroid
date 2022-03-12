@@ -28,7 +28,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.FriendList;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 
 public class SetRemarkAndTagActivity extends AppCompatActivity {
     private static final String TAG = "SetRemarkAndTagActivity";
@@ -79,7 +79,9 @@ public class SetRemarkAndTagActivity extends AppCompatActivity {
                     //同步好友List
                     if (xin.banghua.beiyuan.Common.friendListMap!=null) {
                         FriendList currentFriend = xin.banghua.beiyuan.Common.friendListMap.get(xin.banghua.beiyuan.Common.conversationSettingUserId);
-                        currentFriend.setmUserNickName(remark_et.getText().toString());
+                        if (currentFriend!=null){
+                            currentFriend.setmUserNickName(remark_et.getText().toString());
+                        }
                         xin.banghua.beiyuan.Common.friendListMap.replace(xin.banghua.beiyuan.Common.conversationSettingUserId, currentFriend);
                     }
 

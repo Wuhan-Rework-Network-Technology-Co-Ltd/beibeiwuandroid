@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="发布"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorPrimary" />
         </TableRow>
 
         <TableRow
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="3"
                 android:gravity="top"
-                android:hint="内容（发帖审核通过后才会显示，超12小时未显示请看乐园公约，通过后的帖子可在“我的”帖子中管理或删除自己的帖子）"
+                android:hint="内容（发布招募令，可以召集小伙伴来你的语音房间互动交流哦。招募令显示在动态页，小伙伴可以由此进入你的房间，你离开房间会撤销招募令，发布结束后请在房间内耐心等待一会吧！）"
                 android:inputType="textMultiLine|textPersonName"
                 android:minLines="10" />
         </TableRow>
@@ -73,36 +73,54 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_span="3"
-                android:checkedButton="@+id/zipai_rb"
+                android:checkedButton="@+id/dongtai_rb"
                 android:orientation="horizontal">
+
+
+                <RadioButton
+                    android:id="@+id/dongtai_rb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="动态"/>
+                <RadioButton
+                    android:id="@+id/zhaomuling_rb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="招募令" />
 
                 <RadioButton
                     android:id="@+id/zipai_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="自拍" />
+                    android:text="自拍"
+                    android:visibility="gone"/>
 
                 <RadioButton
                     android:id="@+id/zhenshi_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="真实" />
+                    android:text="真实"
+                    android:visibility="gone"/>
 
                 <RadioButton
                     android:id="@+id/qinggan_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="情感" />
+                    android:text="情感"
+                    android:visibility="gone"/>
 
                 <RadioButton
                     android:id="@+id/daquan_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="精华" />
+                    android:text="精华"
+                    android:visibility="gone"/>
             </RadioGroup>
         </TableRow>
 
@@ -147,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="是否允许评论"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 android:checked="true"/>
 

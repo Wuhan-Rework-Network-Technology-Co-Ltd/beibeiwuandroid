@@ -3,9 +3,9 @@ package xin.banghua.beiyuan.MainBranch;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import androidx.annotation.Nullable;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -22,6 +22,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.Common;
 
 public class LocationService extends Service implements AMapLocationListener {
     private final static String TAG = "LocationService";
@@ -109,6 +110,8 @@ public class LocationService extends Service implements AMapLocationListener {
         if (aMapLocation.getLatitude()!=0.0) {
             BigDecimal latitude = new BigDecimal(aMapLocation.getLatitude() + "").setScale(6, BigDecimal.ROUND_DOWN);
             BigDecimal longitude = new BigDecimal(aMapLocation.getLongitude() + "").setScale(6, BigDecimal.ROUND_DOWN);
+            Common.latitude = latitude + "";
+            Common.longitude = longitude + "";
             Log.d(TAG, "定位地址：纬度" + latitude + "|经度：" + longitude);
             SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
             String myid = shuserinfo.readUserInfo().get("userID");

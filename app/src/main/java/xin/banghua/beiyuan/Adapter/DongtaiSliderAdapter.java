@@ -43,7 +43,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SliderWebViewActivity;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 
 public class DongtaiSliderAdapter extends RecyclerView.Adapter implements ViewPagerEx.OnPageChangeListener{
     private static final String TAG = "DongtaiAdapter";

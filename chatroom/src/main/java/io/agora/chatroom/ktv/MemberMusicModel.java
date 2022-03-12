@@ -36,6 +36,12 @@ public class MemberMusicModel implements Serializable {
     @JSONField(name = "songId")
     String songId = "";
 
+
+    private File fileMusic;
+    private File fileLrc;
+
+    private Type type = Type.MiGu;
+
     public String getSongId() {
         return songId;
     }
@@ -63,10 +69,7 @@ public class MemberMusicModel implements Serializable {
     public enum Type implements Serializable {
         Default, MiGu;
     }
-    private File fileMusic;
-    private File fileLrc;
 
-    private Type type = Type.MiGu;
 
     public Type getType() {
         return type;

@@ -2,9 +2,11 @@ package xin.banghua.beiyuan.Main4Branch;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,21 +15,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.GsonBuilder;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -39,8 +42,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import io.agora.chatroom.activity.PublishPostActivity;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -48,6 +54,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.LuntanList;
 import xin.banghua.beiyuan.Adapter.LuntanSliderAdapter;
+import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.MarqueeTextView;
 import xin.banghua.beiyuan.MarqueeTextViewClickListener;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
@@ -55,7 +62,11 @@ import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.CityAdapter;
 import xin.banghua.beiyuan.Signin.ProvinceAdapter;
+import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.bean.AddrBean;
+import xin.banghua.beiyuan.custom_ui.CustomVideoView;
+import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.utils.ScreenUtils;
 
 
 /**
@@ -75,11 +86,11 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
     //页码
     private Integer pageindex = 1;
     //二级菜单
-    ToggleButton toggleButton1,toggleButton2,toggleButton3,toggleButton4,toggleButton5;
+    TextView toggleButton11,toggleButton12,toggleButton13,toggleButton14,toggleButton15,toggleButton1,toggleButton2,toggleButton3,toggleButton4,toggleButton5;
 
     private View mView;
 
-    private String subtitle;
+    private String subtitle = "首页";
 
     Spinner spProvince, spCity;
     private AddrBean addrBean;
@@ -102,34 +113,56 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
     int checkedItem = 0;
 
 
-    FloatingActionButton search_btn;
+    Button search_btn;
     public LuntanFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        CustomVideoView.getInstance(getActivity());
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        CustomVideoView.getInstance(getActivity());
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView =  inflater.inflate(R.layout.fragment_luntan, container, false);
+        mView =  inflater.inflate(R.layout.fragment_guang_chang, container, false);
         return mView;
     }
+
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        marqueeTv =  view.findViewById(R.id.marquee);
+        look_just_btn = view.findViewById(R.id.look_just_btn);
         //首页初始化
-        getDataGonggao(getString(R.string.luntan_url));
-        getDataSlider(getString(R.string.luntan_url),"首页");
+//        getDataGonggao(getString(R.string.luntan_url));
+//        getDataSlider(getString(R.string.luntan_url),"首页");
+
+        subtitle = "首页";
+        getDataPostlist(getString(R.string.luntan_url_new),"首页","1");
+        if (lookJust.get(subtitle)!=null){
+            if (!lookJust.get(subtitle).equals("1")){
+                look_just_btn.setVisibility(View.VISIBLE);
+            }
+        }
+
 
         initNavigateButton(view);
         initSubnavigationButton(view);
         initTieziRelease(view);
-
 
         search_btn = view.findViewById(R.id.search_btn);
         search_btn.setOnClickListener(new View.OnClickListener() {
@@ -201,12 +234,36 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         filter_search = editText.getText().toString();
                         filter_region = userRegion_et.getText().toString();
                         pageindex = 1;
-                        getDataPostlist(getString(R.string.luntan_url),subtitle,pageindex+"");
+                        getDataPostlist(getString(R.string.luntan_url_new),subtitle,pageindex+"");
                         dialog.dismiss();
                     }
                 });
             }
         });
+
+
+        String menu = getActivity().getIntent().getStringExtra("menu");
+        if (!TextUtils.isEmpty(menu)){
+            if (menu.equals("关注")){
+                subtitle = "关注";
+                filter_region = "不限";
+                pageindex = 1;
+                toggleButton11.setTextSize(15);
+                toggleButton12.setTextSize(15);
+                toggleButton13.setTextSize(15);
+                toggleButton14.setTextSize(15);
+                toggleButton15.setTextSize(22);
+                //getDataGonggao(getString(R.string.luntan_url));
+                //getDataSlider(getString(R.string.luntan_url),"首页");
+                getDataPostlist(getString(R.string.luntan_url_new),subtitle,"1");
+
+                if (lookJust.get(subtitle)!=null){
+                    if (!lookJust.get(subtitle).equals("1")){
+                        look_just_btn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }
     }
     private void loadAddressData() {
         adpProvince = new ProvinceAdapter(getActivity());
@@ -263,107 +320,268 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
     }
     //三个按钮初始化
     private void initNavigateButton(View view){
-        Button guangchang = view.findViewById(R.id.guangchang_btn);
-        //Button guanzhu = view.findViewById(R.id.guanzhu_btn);
-        //Button luntan = view.findViewById(R.id.luntan_btn);
-
-        guangchang.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.luntan_guangchang_action));
+//        Button guangchang = view.findViewById(R.id.guangchang_btn);
+//        //Button guanzhu = view.findViewById(R.id.guanzhu_btn);
+//        //Button luntan = view.findViewById(R.id.luntan_btn);
+//
+//        guangchang.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.luntan_guangchang_action));
         //guanzhu.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.guangchang_guanzhu_action));
         //luntan.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.guangchang_luntan_action));
 
     }
 
+
+    //刚刚看过
+    Button look_just_btn;
+    public static Map<String,String> lookJust = new HashMap<>();
     //二级菜单
     private void initSubnavigationButton(View view){
+
+        look_just_btn.setOnClickListener(v -> {
+            pageindex = 1;
+            getDataPostlist(getString(R.string.luntan_url_new),subtitle,lookJust.get(subtitle));
+
+            look_just_btn.setVisibility(View.GONE);
+        });
+
+        toggleButton11 = view.findViewById(R.id.toggleButton11);
+        toggleButton11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subtitle = "首页";
+                filter_region = "不限";
+                pageindex = 1;
+                toggleButton11.setTextSize(22);
+                toggleButton12.setTextSize(15);
+                toggleButton13.setTextSize(15);
+                toggleButton14.setTextSize(15);
+                toggleButton15.setTextSize(15);
+                //getDataGonggao(getString(R.string.luntan_url));
+                //getDataSlider(getString(R.string.luntan_url),"首页");
+                getDataPostlist(getString(R.string.luntan_url_new),subtitle,"1");
+
+                if (lookJust.get(subtitle)!=null){
+                    if (!lookJust.get(subtitle).equals("1")){
+                        look_just_btn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+        toggleButton12 = view.findViewById(R.id.toggleButton12);
+        toggleButton12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Common.myID==null){
+                    Intent intent = new Intent(getActivity(), SigninActivity.class);
+                    getActivity().startActivity(intent);
+                    return;
+                }
+                subtitle = "同城";
+                if (Common.userInfoList!=null){
+                    filter_region = Common.userInfoList.getRegion();
+                }else {
+                    filter_region = "北京-北京";
+                }
+
+                pageindex = 1;
+                toggleButton11.setTextSize(15);
+                toggleButton12.setTextSize(22);
+                toggleButton13.setTextSize(15);
+                toggleButton14.setTextSize(15);
+                toggleButton15.setTextSize(15);
+                //getDataGonggao(getString(R.string.luntan_url));
+                //getDataSlider(getString(R.string.luntan_url),"首页");
+                getDataPostlist(getString(R.string.luntan_url_new),subtitle,"1");
+
+                if (lookJust.get(subtitle)!=null){
+                    if (!lookJust.get(subtitle).equals("1")){
+                        look_just_btn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+        toggleButton13 = view.findViewById(R.id.toggleButton13);
+        toggleButton13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subtitle = "精华";
+                filter_region = "不限";
+                pageindex = 1;
+                toggleButton11.setTextSize(15);
+                toggleButton12.setTextSize(15);
+                toggleButton13.setTextSize(22);
+                toggleButton14.setTextSize(15);
+                toggleButton15.setTextSize(15);
+                //getDataGonggao(getString(R.string.luntan_url));
+                //getDataSlider(getString(R.string.luntan_url),"首页");
+                getDataPostlist(getString(R.string.luntan_url_new),subtitle,"1");
+
+                if (lookJust.get(subtitle)!=null){
+                    if (!lookJust.get(subtitle).equals("1")){
+                        look_just_btn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+        toggleButton14 = view.findViewById(R.id.toggleButton14);
+        toggleButton14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subtitle = "招募令";
+                filter_region = "不限";
+                pageindex = 1;
+                toggleButton11.setTextSize(15);
+                toggleButton12.setTextSize(15);
+                toggleButton13.setTextSize(15);
+                toggleButton14.setTextSize(22);
+                toggleButton15.setTextSize(15);
+                //getDataGonggao(getString(R.string.luntan_url));
+                //getDataSlider(getString(R.string.luntan_url),"首页");
+                getDataPostlist(getString(R.string.luntan_url_new),subtitle,"1");
+
+                if (lookJust.get(subtitle)!=null){
+                    if (!lookJust.get(subtitle).equals("1")){
+                        look_just_btn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+        toggleButton15 = view.findViewById(R.id.toggleButton15);
+        toggleButton15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subtitle = "关注";
+                filter_region = "不限";
+                pageindex = 1;
+                toggleButton11.setTextSize(15);
+                toggleButton12.setTextSize(15);
+                toggleButton13.setTextSize(15);
+                toggleButton14.setTextSize(15);
+                toggleButton15.setTextSize(22);
+                //getDataGonggao(getString(R.string.luntan_url));
+                //getDataSlider(getString(R.string.luntan_url),"首页");
+                getDataPostlist(getString(R.string.luntan_url_new),subtitle,"1");
+
+                if (lookJust.get(subtitle)!=null){
+                    if (!lookJust.get(subtitle).equals("1")){
+                        look_just_btn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
         toggleButton1 = view.findViewById(R.id.toggleButton1);
         toggleButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                subtitle = "首页";
                 pageindex = 1;
-                toggleButton2.setChecked(false);
-                toggleButton3.setChecked(false);
-                toggleButton4.setChecked(false);
-                toggleButton5.setChecked(false);
-                getDataGonggao(getString(R.string.luntan_url));
-                getDataSlider(getString(R.string.luntan_url),"首页");
+                toggleButton1.setTextSize(22);
+                toggleButton2.setTextSize(15);
+                toggleButton3.setTextSize(15);
+                toggleButton4.setTextSize(15);
+                toggleButton5.setTextSize(15);
+                //getDataGonggao(getString(R.string.luntan_url));
+                //getDataSlider(getString(R.string.luntan_url),"首页");
+                getDataPostlist(getString(R.string.luntan_url),"首页","1");
             }
         });
         toggleButton2 = view.findViewById(R.id.toggleButton2);
         toggleButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                subtitle = "自拍";
                 pageindex = 1;
-                toggleButton1.setChecked(false);
-                toggleButton3.setChecked(false);
-                toggleButton4.setChecked(false);
-                toggleButton5.setChecked(false);
+                toggleButton1.setTextSize(15);
+                toggleButton2.setTextSize(22);
+                toggleButton3.setTextSize(15);
+                toggleButton4.setTextSize(15);
+                toggleButton5.setTextSize(15);
                 try {
                     marqueeTv.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                getDataSlider(getString(R.string.luntan_url),"自拍");
+                //getDataSlider(getString(R.string.luntan_url),"自拍");
+                getDataPostlist(getString(R.string.luntan_url),"自拍","1");
             }
         });
         toggleButton3 = view.findViewById(R.id.toggleButton3);
         toggleButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                subtitle = "真实";
                 pageindex = 1;
-                toggleButton1.setChecked(false);
-                toggleButton2.setChecked(false);
-                toggleButton4.setChecked(false);
-                toggleButton5.setChecked(false);
+                toggleButton1.setTextSize(15);
+                toggleButton2.setTextSize(15);
+                toggleButton3.setTextSize(22);
+                toggleButton4.setTextSize(15);
+                toggleButton5.setTextSize(15);
                 try {
                     marqueeTv.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                getDataSlider(getString(R.string.luntan_url),"真实");
+                //getDataSlider(getString(R.string.luntan_url),"真实");
+                getDataPostlist(getString(R.string.luntan_url),"真实","1");
             }
         });
         toggleButton4 = view.findViewById(R.id.toggleButton4);
         toggleButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                subtitle = "情感";
                 pageindex = 1;
-                toggleButton1.setChecked(false);
-                toggleButton2.setChecked(false);
-                toggleButton3.setChecked(false);
-                toggleButton5.setChecked(false);
+                toggleButton1.setTextSize(15);
+                toggleButton2.setTextSize(15);
+                toggleButton3.setTextSize(15);
+                toggleButton4.setTextSize(22);
+                toggleButton5.setTextSize(15);
                 try {
                     marqueeTv.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                getDataSlider(getString(R.string.luntan_url),"情感");
+                //getDataSlider(getString(R.string.luntan_url),"情感");
+                getDataPostlist(getString(R.string.luntan_url),"情感","1");
             }
         });
         toggleButton5 = view.findViewById(R.id.toggleButton5);
         toggleButton5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                subtitle = "精华";
                 pageindex = 1;
-                toggleButton1.setChecked(false);
-                toggleButton2.setChecked(false);
-                toggleButton3.setChecked(false);
-                toggleButton4.setChecked(false);
+                toggleButton1.setTextSize(15);
+                toggleButton2.setTextSize(15);
+                toggleButton3.setTextSize(15);
+                toggleButton4.setTextSize(15);
+                toggleButton5.setTextSize(22);
                 try {
                     marqueeTv.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+                //getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+                getDataPostlist(getString(R.string.luntan_url),"精华","1");
             }
         });
     }
     //发布帖子
     private void initTieziRelease(View view) {
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.luntanRelease);
+        RelativeLayout floatingActionButton = view.findViewById(R.id.luntanRelease);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.luntan_fabutiezi_action);
+                //Navigation.findNavController(v).navigate(R.id.luntan_fabutiezi_action);
+                if (Common.myID==null){
+                    Intent intent = new Intent(getActivity(), SigninActivity.class);
+                    getActivity().startActivity(intent);
+                }else {
+                    Intent intent = new Intent(getActivity(), PublishPostActivity.class);
+                    getActivity().startActivity(intent);
+                }
+
             }
         });
     }
@@ -375,7 +593,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 strs[i]=jsonObject.getString("noticeinfo");
             }
         }
-        marqueeTv =  view.findViewById(R.id.marquee);
+
         marqueeTv.setTextArraysAndClickListener(strs, new MarqueeTextViewClickListener() {
             @Override
             public void onClick(View view) {
@@ -443,7 +661,17 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
 
     }
 
+    //用户手动点击播放后，自动播放开始，
+    // 除非用户手动点击停止，或者视频播放完毕，停止自动播放，
+    private boolean isLooper = true;
+    private int looperFlag = 1;//0,无自动播放，1.自动播放上一个，2自动播放下一个
+    private int position_play = -1;//播放的位置
+    int currentRecyclerPosition = 0;
     @SuppressLint("ClickableViewAccessibility")
+
+
+
+
     private void initPostList(View view, JSONArray jsonArray) throws JSONException {
         Log.d(TAG, "initPostList: start");
         if (pageindex>1){
@@ -460,14 +688,22 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
                             jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
                     posts.setComment_forbid(jsonObject.getString("comment_forbid"));
+                    posts.setPostvideo(jsonObject.getString("postvideo"));
+                    posts.setWidth(jsonObject.getString("width"));
+                    posts.setHeight(jsonObject.getString("height"));
+                    posts.setCover(jsonObject.getString("cover"));
+                    posts.setOnline(jsonObject.getString("online"));
+                    posts.setPortraitframe(jsonObject.getString("portraitframe"));
                     luntanLists.add(posts);
                 }
                 adapter.swapData(luntanLists);
             }
-
         }else {
             //不同板块，需要先清零
             luntanLists.clear();
+            isLooper = true;
+            looperFlag = 1;//0,无自动播放，1.自动播放上一个，2自动播放下一个
+            position_play = -1;//播放的位置
             if (jsonArray.length()>0){
                 for (int i=0;i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -479,19 +715,158 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                             jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
                             jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
                     posts.setComment_forbid(jsonObject.getString("comment_forbid"));
+                    posts.setPostvideo(jsonObject.getString("postvideo"));
+                    posts.setWidth(jsonObject.getString("width"));
+                    posts.setHeight(jsonObject.getString("height"));
+                    posts.setCover(jsonObject.getString("cover"));
+                    posts.setOnline(jsonObject.getString("online"));
+                    posts.setPortraitframe(jsonObject.getString("portraitframe"));
+
+//                    if (i%3==0){
+//                        posts.setCover("https://oss.banghua.xin/audios/99999/2022/02/D98TNR5jJ98gZG88Xcimc83P.jpeg");
+//                        posts.setPostvideo("https://oss.banghua.xin/audios/99999/2022/02/xwVrBZVReI4QMwsgMi4QqrWRwgbQmq.mp4");
+//                        posts.setWidth("1280");
+//                        posts.setHeight("720");
+//                    }else if (i%4==0){
+//                        posts.setCover("https://oss.banghua.xin/audios/99999/2022/02/bzgWsbAgGaw8HW8g8J8sTt8U.jpeg");
+//                        posts.setPostvideo("https://oss.banghua.xin/audios/99999/2022/02/RVXIuSxnEESdVuOS6uu6NCsXeevOHn.mp4");
+//                        posts.setWidth("720");
+//                        posts.setHeight("1280");
+//                    }else if (i%5==0){
+//                        posts.setCover("https://oss.banghua.xin/audios/99999/2022/02/yqqdC422bd12D02JVJMZ7M4b.jpeg");
+//                        posts.setPostvideo("https://oss.banghua.xin/audios/99999/2022/02/Odc8dmMo081tZeaY0TMJz0tg8g4cv8.mp4");
+//                        posts.setWidth("720");
+//                        posts.setHeight("760");
+//                    }
+
                     luntanLists.add(posts);
                 }
             }
 
             final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.luntan_RecyclerView);
-            adapter = new LuntanSliderAdapter(luntanLists,sliderJsonArray,view.getContext());
+            adapter = new LuntanSliderAdapter(luntanLists,view.getContext(),subtitle);
             recyclerView.setAdapter(adapter);
+            recyclerView.addItemDecoration(new DividerItemDecoration(App.getApplication(), DividerItemDecoration.VERTICAL));
             recyclerView.setLinearLayout();
+            recyclerView.getRecyclerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    Log.d(TAG, "onScrollStateChanged: "+newState);
+                    //滑动停止后，
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && isLooper && looperFlag != 0) {
+
+                        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                        //刚刚看过
+                        try {
+                            lookJust.put(subtitle,luntanLists.get(layoutManager.findFirstVisibleItemPosition()).getId());
+                            Log.d(TAG, "onScrollStateChanged: 停止滚蛋"+lookJust.get(subtitle));
+                        }catch (Exception e){
+                            Log.e(TAG, "onBindViewHolder: 异常"+ e.toString());
+                        }
+
+
+
+
+                        switch (looperFlag) {
+                            case 1:
+                                int position_lastVisible=layoutManager.findLastVisibleItemPosition();
+                                if (position_lastVisible==position_play){
+                                    //自动播放上一个
+                                    position_play-=1;
+                                }else {
+                                    //最后一个可见的item和滑出去的上次播放的view隔了N(N>=1)个Item,所以自动播放倒数第2个可见的item
+                                    position_play=position_lastVisible-1;
+                                }
+
+                                break;
+                            case 2:
+                                int position_firstVisible=layoutManager.findFirstVisibleItemPosition();
+                                if (position_firstVisible==position_play){
+                                    //自动播放下一个
+
+                                    position_play+=1;
+                                }else {
+                                    //第一个可见的item和滑出去的上次播放的view隔了N(N>=1)个Item,所以自动播放第2个可见的item
+                                    position_play=position_firstVisible+1;
+                                }
+                                break;
+                        }
+
+
+
+                        if (SharedHelper.getInstance(getActivity()).readAutoPlay()){
+                            try {
+                                if (!luntanLists.get(position_play-1).getPostvideo().equals("https://oss.banghua.xin/0") && (position_play-layoutManager.findFirstVisibleItemPosition())>=0){
+                                    View view = recyclerView.getChildAt(position_play-layoutManager.findFirstVisibleItemPosition());
+                                    if (null != recyclerView.getChildViewHolder(view)){
+                                        LuntanSliderAdapter.ViewHolder viewHolder = (LuntanSliderAdapter.ViewHolder)recyclerView.getChildViewHolder(view);
+                                        viewHolder.video_layout.addView(CustomVideoView.getInstance(mView.getContext(),luntanLists.get(position_play-1)),2);
+                                    }
+                                }
+                            }catch (Exception e){
+                                Log.e(TAG, "onBindViewHolder: 异常"+ e.toString());
+                            }
+                        }
+
+
+                        //adapter.notifyItemChanged(position_play);
+
+                        //注意
+                        looperFlag=0;
+                    }
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    if (!isLooper) return;
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    View view = layoutManager.findViewByPosition(position_play);
+                    //说明播放的view还未完全消失
+                    if (view != null) {
+
+                        int y_t_rv = ScreenUtils.getViewScreenLocation(recyclerView)[1];//RV顶部Y坐标
+                        int y_b_rv = y_t_rv + recyclerView.getHeight();//RV底部Y坐标
+
+                        int y_t_view = ScreenUtils.getViewScreenLocation(view)[1];//播放的View顶部Y坐标
+                        int height_view = view.getHeight();
+                        int y_b_view = y_t_view + height_view;//播放的View底部Y坐标
+
+                        //上滑
+                        if (dy > 0) {
+                            //播放的View上滑，消失了一半了,停止播放，
+                            if ((y_t_rv > y_t_view) && ((y_t_rv - y_t_view) > height_view * 1f / 2)) {
+
+                                CustomVideoView.getInstance(getActivity());
+                                //adapter.notifyItemChanged(position_play);
+                                looperFlag = 2;//自动播放下一个
+                            }
+
+                        } else if (dy < 0) {
+                            //下滑
+
+//                        LogUtils.log("y_t_rv", y_t_rv);
+//                        LogUtils.log("y_b_rv", y_b_rv);
+                            //播放的View下滑，消失了一半了,停止播放
+                            if ((y_b_view > y_b_rv) && ((y_b_view - y_b_rv) > height_view * 1f / 2)) {
+
+                                CustomVideoView.getInstance(getActivity());
+                                //adapter.notifyItemChanged(position_play);
+                                looperFlag = 1;//自动播放上一个
+                            }
+                        }
+                    }
+                }
+            });
             recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
                 @Override
                 public void onRefresh() {
                     Log.d(TAG, "onLoadMore: start");
-
+                    pageindex = 1;
+                    getDataPostlist(getString(R.string.luntan_url_new),subtitle,pageindex+"");
                     recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
                 }
 
@@ -517,12 +892,11 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
 //                        pageindex = pageindex+1;
 //                        getDataPostlist(getString(R.string.luntan_url),subtitle,pageindex+"");
 //                    }
-                    pageindex = pageindex+1;
-                    getDataPostlist(getString(R.string.luntan_url),subtitle,pageindex+"");
+                    pageindex = pageindex + 1;
+                    getDataPostlist(getString(R.string.luntan_url_new),subtitle,luntanLists.get(luntanLists.size()-1).getId());
                     Log.d(TAG, "论坛页码："+pageindex);
                     recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
                 }
-
             });
         }
     }
@@ -553,22 +927,28 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         sliderJsonArray = jsonArray;
                         Log.d(TAG, "handleMessage: subtitle"+subtitle);
-                        getDataPostlist(getString(R.string.luntan_url),subtitle,"1");
+                        getDataPostlist(getString(R.string.luntan_url_new),subtitle,"1");
                         //initSlider(mView,jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
                 case 3:
-                    try {
-
-                        Log.d(TAG, "handleMessage: 帖子接收的值"+msg.obj.toString());
-
-                        JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
-                        initPostList(mView,jsonArray);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    String data = msg.obj.toString();
+                    if (data.equals("false")){
+//                        luntanLists.clear();
+//                        adapter.swapData(luntanLists);
+                        Toast.makeText(getActivity(),"没有更多内容了，先去其他地方看看吧！",Toast.LENGTH_LONG).show();
+                    }else {
+                        try {
+                            Log.d(TAG, "handleMessage: 帖子接收的值"+subtitle+"|"+data);
+                            JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
+                            initPostList(mView,jsonArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                     break;
                 case 4:
                     if (msg.obj.toString().equals("会员已到期")){
@@ -643,7 +1023,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 SharedHelper sh = new SharedHelper(getActivity());
                 String myid = sh.readUserInfo().get("userID");
 
-                Log.d(TAG, "run: 搜索帖子地址："+filter_region);
+                Log.d(TAG, "run: 搜索帖子地址："+subNav);
 
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
@@ -667,7 +1047,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                     Message message=handler.obtainMessage();
                     message.obj=response.body().string();
                     message.what=3;
-                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+                    Log.d(TAG, "run: getDataPostlist发送的值"+message.obj.toString());
                     handler.sendMessageDelayed(message,10);
                 }catch (Exception e) {
                     e.printStackTrace();

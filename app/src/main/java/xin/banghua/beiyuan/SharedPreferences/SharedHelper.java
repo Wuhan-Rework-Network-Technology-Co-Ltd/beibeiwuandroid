@@ -7,6 +7,8 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+import xin.banghua.beiyuan.App;
+
 public class SharedHelper {
     private static final String TAG = "SharedHelper";
     private static SharedHelper sharedHelper;
@@ -35,7 +37,7 @@ public class SharedHelper {
 
     //定义一个保存数据的方法   保存用户信息
     public void saveUserInfo(String userID, String userNickName,String userPortrait,String userAge,String userGender,String userProperty,String userRegion) {
-        SharedPreferences sp = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        SharedPreferences sp = App.getApplication().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("userID", userID);
         editor.putString("userNickName", userNickName);
@@ -52,7 +54,7 @@ public class SharedHelper {
     //定义一个读取SP文件的方法
     public Map<String, String> readUserInfo() {
         Map<String, String> data = new HashMap<String, String>();
-        SharedPreferences sp = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        SharedPreferences sp = App.getApplication().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         data.put("userID", sp.getString("userID", ""));
         data.put("userNickName", sp.getString("userNickName", ""));
         data.put("userPortrait", sp.getString("userPortrait", ""));
@@ -205,5 +207,27 @@ public class SharedHelper {
     public Boolean readPrivateAgreement() {
         SharedPreferences sp = mContext.getSharedPreferences("PrivateAgreement", Context.MODE_PRIVATE);
         return sp.getBoolean("PrivateAgreement", false);
+    }
+
+
+    /**
+     * 是否自动播放视频
+     * @param confirm
+     */
+    public void saveAutoPlay(Boolean confirm) {
+        SharedPreferences sp = mContext.getSharedPreferences("AutoPlay", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("AutoPlay", confirm);
+        editor.commit();
+        //Toast.makeText(mContext, "信息已写入SharedPreference中", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 是否自动播放视频
+     * @return
+     */
+    public Boolean readAutoPlay() {
+        SharedPreferences sp = mContext.getSharedPreferences("AutoPlay", Context.MODE_PRIVATE);
+        return sp.getBoolean("AutoPlay", true);
     }
 }

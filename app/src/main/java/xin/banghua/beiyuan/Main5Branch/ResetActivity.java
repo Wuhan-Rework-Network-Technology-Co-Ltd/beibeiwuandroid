@@ -56,7 +56,7 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.CityAdapter;
 import xin.banghua.beiyuan.Signin.ProvinceAdapter;
 import xin.banghua.beiyuan.bean.AddrBean;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.MD5Tool;
 
 import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;

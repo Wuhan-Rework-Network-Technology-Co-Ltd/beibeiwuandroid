@@ -198,7 +198,7 @@ public class Main3Activity extends AppCompatActivity {
                                     }
                                 }
 
-                                UserInfo userInfo = new UserInfo(userId, nickname, Uri.parse(xin.banghua.beiyuan.utils.Common.getOssResourceUrl(jsonObject.getString("portrait"))));
+                                UserInfo userInfo = new UserInfo(userId, nickname, Uri.parse(Common.getOssResourceUrl(jsonObject.getString("portrait"))));
                                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -295,8 +295,14 @@ public class Main3Activity extends AppCompatActivity {
                 finish();
             }
         });
-        mFragment.add(mConversationList);//加入会话列表
-        mFragment.add(FriendFragment.getInstance());
+
+        try {
+            mFragment.add(mConversationList);//加入会话列表
+            mFragment.add(FriendFragment.getInstance());
+        }catch (Exception e){
+
+        }
+
         //配置ViewPager的适配器
         mFragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -442,11 +448,11 @@ public class Main3Activity extends AppCompatActivity {
                 }
 
                 //好友信息
-                FriendList friends = new FriendList(jsonObject.getString("id"), jsonObject.getString("portrait"), nickname, jsonObject.getString("age"), jsonObject.getString("gender"), jsonObject.getString("region"), jsonObject.getString("property"), jsonObject.getString("vip"),jsonObject.getString("svip"));
+                FriendList friends = new FriendList(jsonObject.getString("id"), jsonObject.getString("portrait"), nickname, jsonObject.getString("age"), jsonObject.getString("gender"), jsonObject.getString("region"), jsonObject.getString("property"), jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("portraitframe"));
                 friendList.add(filledData(friends));
                 friendListMap.put(jsonObject.getString("id"),filledData(friends));
 
-                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(xin.banghua.beiyuan.utils.Common.getOssResourceUrl(jsonObject.getString("portrait"))));
+                UserInfo userInfo = new UserInfo(jsonObject.getString("id"), nickname, Uri.parse(Common.getOssResourceUrl(jsonObject.getString("portrait"))));
                 RongIM.getInstance().refreshUserInfoCache(userInfo);
                 userInfoList.add(userInfo);
             }

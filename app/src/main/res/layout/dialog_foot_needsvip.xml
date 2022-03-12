@@ -20,7 +20,7 @@
         android:layout_margin="20dp"
         android:text="仅需128 元／月即可开启“免加好友直接发起聊天”的尊贵特权，并且能查看对方是否已经阅读自己消息，有效提高交友效率！是否升级为 svip 会员，享受众多特权？"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp" />
 
     <LinearLayout

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:weightSum="2"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/leyuan_convention"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:layout_height="match_parent"
+            android:src="@mipmap/leyuangongyue" />
+        <ImageView
+            android:id="@+id/precaution_fraud"
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:layout_height="match_parent"
+            android:src="@mipmap/jinfangdianxinzhapian" />
+    </LinearLayout>
+
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/recyclerview_slider"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone">
+
+    </com.daimajia.slider.library.SliderLayout>
+
+<!--    <xin.banghua.beiyuan.custom_ui.ad.BannerAdFrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
+</LinearLayout>

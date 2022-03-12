@@ -32,7 +32,7 @@ public class PrivateSettingActivity extends AppCompatActivity {
 
     private static final String TAG = "PrivateSettingActivity";
 
-    Switch switch1,switch2,switch3,switch4,switch5;
+    Switch switch1,switch2,switch3,switch4,switch5,switch6;
 
     Context mContext;
     @Override
@@ -53,6 +53,7 @@ public class PrivateSettingActivity extends AppCompatActivity {
         switch3 = findViewById(R.id.switch3);
         switch4 = findViewById(R.id.switch4);
         switch5 = findViewById(R.id.switch5);
+        switch6 = findViewById(R.id.switch6);
 
         getPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getprivatesetting&m=socialchat");
     }
@@ -118,6 +119,21 @@ public class PrivateSettingActivity extends AppCompatActivity {
                 }else {
                     Toast.makeText(mContext, "关闭", Toast.LENGTH_LONG).show();
                     setPrivateSetting("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=setprivatesetting&m=socialchat","svip");
+                }
+            }
+        });
+
+        Boolean isAutoPlay = SharedHelper.getInstance(mContext).readAutoPlay();
+        switch6.setChecked(isAutoPlay);
+        switch6.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(mContext, "开启", Toast.LENGTH_LONG).show();
+                    SharedHelper.getInstance(mContext).saveAutoPlay(true);
+                }else {
+                    Toast.makeText(mContext, "关闭", Toast.LENGTH_LONG).show();
+                    SharedHelper.getInstance(mContext).saveAutoPlay(false);
                 }
             }
         });

@@ -6,53 +6,61 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.orhanobut.dialogplus.DialogPlus;
-import com.zolad.zoominimageview.ZoomInImageView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.agora.chatroom.activity.ChatRoomActivity;
+import io.agora.chatroom.util.PortraitFrameView;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.App;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main4Branch.ImagerPagerActivity;
 import xin.banghua.beiyuan.Main4Branch.PostListActivity;
+import xin.banghua.beiyuan.Main4Branch.VideoPlayActivity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.SliderWebViewActivity;
 import xin.banghua.beiyuan.comment.CommentDialog;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.custom_ui.CustomVideoView;
+import xin.banghua.beiyuan.custom_ui.NiceImageView;
+import xin.banghua.beiyuan.custom_ui.NiceZoomImageView;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewPagerEx.OnPageChangeListener {
     private static final String TAG = "LuntanAdapter";
@@ -62,15 +70,18 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
     SliderLayout mDemoSlider;
     JSONArray jsonArray;
     ViewHolder viewHolder_btn;
-    private List<LuntanList> luntanLists;
+    public List<LuntanList> luntanLists;
     private Context mContext;
     private final static int TYPE_HEAD = 0;
     private final static int TYPE_CONTENT = 1;
-    public LuntanSliderAdapter(List<LuntanList> luntanLists,JSONArray jsonArray, Context mContext) {
-        this.jsonArray = jsonArray;
+
+
+    String slidesort = "首页";
+    public LuntanSliderAdapter(List<LuntanList> luntanLists,Context mContext,String slidesort) {
         Log.d(TAG, "LuntanAdapter: start");
         this.luntanLists = luntanLists;
         this.mContext = mContext;
+        this.slidesort = slidesort;
     }
     //替换数据，并更新
     public void swapData(List<LuntanList> luntanLists){
@@ -93,11 +104,11 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup,final int i) {
         Log.d(TAG, "onCreateViewHolder: 进入");
         if (i == TYPE_HEAD){
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_slider,viewGroup,false);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.slider_bar,viewGroup,false);
             LuntanSliderAdapter.SliderHolder viewHolder = new LuntanSliderAdapter.SliderHolder(view);
             return viewHolder;
         }else if(i == TYPE_CONTENT){
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_luntan,viewGroup,false);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.guangchang_fragment_adapter,viewGroup,false);
             LuntanSliderAdapter.ViewHolder viewHolder = new LuntanSliderAdapter.ViewHolder(view);
             return viewHolder;
         }
@@ -106,70 +117,120 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
     }
 
     @Override
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder viewHolder) {
+        super.onViewAttachedToWindow(viewHolder);
+        if (viewHolder instanceof LuntanSliderAdapter.ViewHolder){
+            ((ViewHolder) viewHolder).portraitFrameView.setPortraitFrame(((ViewHolder) viewHolder).portraitFrameView.getTag().toString());
+        }
+
+    }
+    HashMap<Integer,ViewHolder> viewHolders = new HashMap<Integer,ViewHolder>();
+    public ViewHolder getViewHolder(int position){
+        return viewHolders.get(position);
+    }
+    @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder,final int i) {
+        int currentPosition = i;
         if (viewHolder instanceof LuntanSliderAdapter.SliderHolder){
-            HashMap<String,String> url_maps = new HashMap<String, String>();
-            if (jsonArray.length()>0){
-                for (int j=0;j<jsonArray.length();j++){
+            OkHttpInstance.getSlide(slidesort, new OkHttpResponseCallBack() {
+                @Override
+                public void getResponseString(String responseString) {
                     try {
-                       final JSONObject jsonObject = jsonArray.getJSONObject(j);
-                        //url_maps.put(jsonObject.getString("slidename"), jsonObject.getString("slidepicture"));
-                        TextSliderView textSliderView = new TextSliderView(mContext);
-                        // initialize a SliderLayout
-                        textSliderView
-                                .description(jsonObject.getString("slidename"))
-                                .image(Common.getOssResourceUrl(jsonObject.getString("slidepicture")))
-                                .setScaleType(BaseSliderView.ScaleType.Fit)
-                                .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-                                    @Override
-                                    public void onSliderClick(BaseSliderView slider) {
-                                        try {
-                                            if (!jsonObject.getString("slideurl").isEmpty()){
-                                                Log.d(TAG, "onSliderClick: 链接是"+jsonObject.getString("slideurl"));
-                                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-                                                intent.putExtra("slidername",jsonObject.getString("slidename"));
-                                                intent.putExtra("sliderurl",jsonObject.getString("slideurl"));
-                                                mContext.startActivity(intent);
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
+                        List<SlideList> slideLists = JSON.parseArray(responseString,SlideList.class);
 
-                        //add your extra information
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra",jsonObject.getString("slidename"));
+                        Glide.with(App.getApplication()).load(slideLists.get(0).getSlidepicture()).into(((SliderHolder) viewHolder).leyuan_convention);
+                        ((SliderHolder) viewHolder).leyuan_convention.setOnClickListener(v -> {
+                            Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+                            intent.putExtra("slidername",slideLists.get(0).getSlidename());
+                            intent.putExtra("sliderurl",slideLists.get(0).getSlideurl());
+                            mContext.startActivity(intent);
+                        });
 
-                        mDemoSlider.addSlider(textSliderView);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        Glide.with(App.getApplication()).load(slideLists.get(1).getSlidepicture()).into(((SliderHolder) viewHolder).precaution_fraud);
+                        ((SliderHolder) viewHolder).precaution_fraud.setOnClickListener(v -> {
+                            Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+                            intent.putExtra("slidername",slideLists.get(1).getSlidename());
+                            intent.putExtra("sliderurl",slideLists.get(1).getSlideurl());
+                            mContext.startActivity(intent);
+                        });
+                    }catch (Exception e){
+                        Log.e(TAG, "getResponseString: 抛出异常");
                     }
-
                 }
-            }
+            });
 
 
-            mDemoSlider.setMinimumHeight(100);
-            mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
-            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-            mDemoSlider.setDuration(4000);
-            mDemoSlider.addOnPageChangeListener(this);
+
+//            HashMap<String,String> url_maps = new HashMap<String, String>();
+//            if (jsonArray.length()>0){
+//                for (int j=0;j<jsonArray.length();j++){
+//                    try {
+//                       final JSONObject jsonObject = jsonArray.getJSONObject(j);
+//                        //url_maps.put(jsonObject.getString("slidename"), jsonObject.getString("slidepicture"));
+//                        TextSliderView textSliderView = new TextSliderView(mContext);
+//                        // initialize a SliderLayout
+//                        textSliderView
+//                                .description(jsonObject.getString("slidename"))
+//                                .image(Common.getOssResourceUrl(jsonObject.getString("slidepicture")))
+//                                .setScaleType(BaseSliderView.ScaleType.Fit)
+//                                .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+//                                    @Override
+//                                    public void onSliderClick(BaseSliderView slider) {
+//                                        try {
+//                                            if (!jsonObject.getString("slideurl").isEmpty()){
+//                                                Log.d(TAG, "onSliderClick: 链接是"+jsonObject.getString("slideurl"));
+//                                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+//                                                intent.putExtra("slidername",jsonObject.getString("slidename"));
+//                                                intent.putExtra("sliderurl",jsonObject.getString("slideurl"));
+//                                                mContext.startActivity(intent);
+//                                            }
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                });
+//
+//                        //add your extra information
+//                        textSliderView.bundle(new Bundle());
+//                        textSliderView.getBundle()
+//                                .putString("extra",jsonObject.getString("slidename"));
+//
+//                        mDemoSlider.addSlider(textSliderView);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//
+//            mDemoSlider.setMinimumHeight(100);
+//            mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+//            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+//            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+//            mDemoSlider.setDuration(4000);
+//            mDemoSlider.addOnPageChangeListener(this);
         }else if (viewHolder instanceof LuntanSliderAdapter.ViewHolder){
-            final LuntanList currentItem = luntanLists.get(i-1);
-
+            final LuntanList currentItem = luntanLists.get(currentPosition-1);
+            viewHolders.put(i,((ViewHolder) viewHolder));
             String authattributes_string = currentItem.getAuthage()+"岁 | "+currentItem.getAuthgender()+" | "+currentItem.getAuthregion()+" | "+currentItem.getAuthproperty();
-            ((ViewHolder) viewHolder).authattributes.setText(authattributes_string);
+            //((ViewHolder) viewHolder).authattributes.setText(authattributes_string);
 
-            ((ViewHolder) viewHolder).id.setText(currentItem.getId());
-            ((ViewHolder) viewHolder).plateid.setText(currentItem.getPlateid());
-            ((ViewHolder) viewHolder).platename.setText(currentItem.getPlatename());
-            ((ViewHolder) viewHolder).authid.setText(currentItem.getAuthid());
+            //((ViewHolder) viewHolder).id.setText(currentItem.getId());
+            //((ViewHolder) viewHolder).plateid.setText(currentItem.getPlateid());
+            //((ViewHolder) viewHolder).platename.setText(currentItem.getPlatename());
+            //((ViewHolder) viewHolder).authid.setText(currentItem.getAuthid());
             ((ViewHolder) viewHolder).authnickname.setText(currentItem.getAuthnickname());
 
 
+            ((ViewHolder) viewHolder).online_tv.setText(currentItem.getOnline());
+            if (currentItem.getOnline().equals("在线")){
+                Glide.with(mContext).load(R.mipmap.green_point).into( ((ViewHolder) viewHolder).online_img);
+            }else {
+                Glide.with(mContext).load(R.mipmap.gray_point).into( ((ViewHolder) viewHolder).online_img);
+            }
+
+            ((ViewHolder) viewHolder).portraitFrameView.setPortraitFrame(currentItem.getPortraitframe());
+            ((ViewHolder) viewHolder).portraitFrameView.setTag(currentItem.getPortraitframe());
             Glide.with(mContext)
                     .asBitmap()
                     .load(Common.getOssResourceUrl(currentItem.getAuthportrait()))
@@ -177,13 +238,26 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
 
 
 
-
+            if (currentItem.platename.equals("招募令")){
+                ((ViewHolder) viewHolder).goToRoomBtn.setVisibility(View.VISIBLE);
+                ((ViewHolder) viewHolder).goToRoomBtn.setOnClickListener(v -> {
+                    Intent intent = new Intent(mContext, ChatRoomActivity.class);
+                    intent.putExtra(ChatRoomActivity.BUNDLE_KEY_CHANNEL_ID, currentItem.getAuthid());
+                    intent.putExtra(ChatRoomActivity.BUNDLE_KEY_CHANNEL_TYPE, "处CP");
+                    intent.putExtra(ChatRoomActivity.BUNDLE_KEY_BACKGROUND_RES, io.agora.chatroom.R.mipmap.bg_channel_0);
+                    //intent.putExtra(ChatRoomActivity.BUNDLE_KEY_BACKGROUND_RES, Constant.sRoomBG);
+                    mContext.startActivity(intent);
+                });
+            }else {
+                ((ViewHolder) viewHolder).goToRoomBtn.setVisibility(View.GONE);
+            }
 
             //GOTO  会员标识
             //现在vip传过来的是时间
             ((ViewHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
-            if (currentItem.getAuthsvip().isEmpty()||currentItem.getAuthsvip()=="null"){
-                if (currentItem.getAuthvip().isEmpty()||currentItem.getAuthvip()=="null"){
+
+            if (TextUtils.isEmpty(currentItem.getAuthsvip())){
+                if (TextUtils.isEmpty(currentItem.getAuthvip())){
 
                     Glide.with(mContext)
                             .asBitmap()
@@ -241,7 +315,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                                 .into(((ViewHolder) viewHolder).vip_gray);
                     }
                 } else {
-                    if (currentItem.getAuthvip().isEmpty()||currentItem.getAuthvip()=="null"){
+                    if (TextUtils.isEmpty(currentItem.getAuthvip())){
                         ((ViewHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
                         Glide.with(mContext)
                                 .asBitmap()
@@ -283,29 +357,45 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
 
 
 
-            ((ViewHolder) viewHolder).posttip.setText(currentItem.getPosttip().isEmpty()?"":currentItem.getPosttip());
+            //((ViewHolder) viewHolder).posttip.setText(currentItem.getPosttip().isEmpty()?"":currentItem.getPosttip());
+            ((ViewHolder) viewHolder).posttip.setText("加精");
             if (currentItem.getPosttip().equals("加精")){
-                Resources resources = mContext.getResources();
-                Drawable drawable = resources.getDrawable(R.drawable.ic_essence,null);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                ((ViewHolder) viewHolder).posttip.setCompoundDrawables(drawable,null,null,null);
+//                Resources resources = mContext.getResources();
+//                Drawable drawable = resources.getDrawable(R.drawable.ic_essence,null);
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                ((ViewHolder) viewHolder).posttip.setCompoundDrawables(drawable,null,null,null);
+                ((ViewHolder) viewHolder).posttip.setVisibility(View.VISIBLE);
+                ((ViewHolder) viewHolder).posttop.setVisibility(View.GONE);
             }else if(currentItem.getPosttip().equals("置顶")){
-                Resources resources = mContext.getResources();
-                Drawable drawable = resources.getDrawable(R.drawable.ic_ontop,null);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                ((ViewHolder) viewHolder).posttip.setCompoundDrawables(drawable,null,null,null);
+//                Resources resources = mContext.getResources();
+//                Drawable drawable = resources.getDrawable(R.drawable.ic_ontop,null);
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                ((ViewHolder) viewHolder).posttip.setCompoundDrawables(drawable,null,null,null);
+                ((ViewHolder) viewHolder).posttip.setVisibility(View.GONE);
+                ((ViewHolder) viewHolder).posttop.setVisibility(View.VISIBLE);
             }else if (currentItem.getPosttip().equals("置顶,加精")){
-                Resources resources = mContext.getResources();
-                Drawable drawable1 = resources.getDrawable(R.drawable.ic_essence,null);
-                drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
-                Drawable drawable2 = resources.getDrawable(R.drawable.ic_ontop,null);
-                drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
-                ((ViewHolder) viewHolder).posttip.setCompoundDrawables(drawable1,null,drawable2,null);
+//                Resources resources = mContext.getResources();
+//                Drawable drawable1 = resources.getDrawable(R.drawable.ic_essence,null);
+//                drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
+//                Drawable drawable2 = resources.getDrawable(R.drawable.ic_ontop,null);
+//                drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
+//                ((ViewHolder) viewHolder).posttip.setCompoundDrawables(drawable1,null,drawable2,null);
+                ((ViewHolder) viewHolder).posttip.setVisibility(View.VISIBLE);
+                ((ViewHolder) viewHolder).posttop.setVisibility(View.VISIBLE);
             }else {
                 //必须加上，否则会错乱
-                ((ViewHolder) viewHolder).posttip.setCompoundDrawables(null,null,null,null);
+//                ((ViewHolder) viewHolder).posttip.setCompoundDrawables(null,null,null,null);
+                ((ViewHolder) viewHolder).posttip.setVisibility(View.GONE);
+                ((ViewHolder) viewHolder).posttop.setVisibility(View.GONE);
             }
-            ((ViewHolder) viewHolder).posttitle.setText(currentItem.getPosttitle());
+
+            if (TextUtils.isEmpty(currentItem.getPosttitle())){
+                ((ViewHolder) viewHolder).posttitle.setVisibility(View.GONE);
+            }else {
+                ((ViewHolder) viewHolder).posttitle.setVisibility(View.VISIBLE);
+                ((ViewHolder) viewHolder).posttitle.setText(currentItem.getPosttitle());
+            }
+
             if (currentItem.getPosttext().length()>50) {
                 ((ViewHolder) viewHolder).posttext.setText(currentItem.getPosttext().substring(0, 50)+"......");
                 ((ViewHolder) viewHolder).detail_content.setVisibility(View.VISIBLE);
@@ -394,18 +484,18 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 });
             }
 
-            ((ViewHolder) viewHolder).like.setText("赞"+currentItem.getLike());
-            ((ViewHolder) viewHolder).like.setOnClickListener(new View.OnClickListener() {
-
+            ((ViewHolder) viewHolder).like.setText(""+currentItem.getLike());
+            ((ViewHolder) viewHolder).like_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ((ViewHolder) viewHolder).like.setTextColor(mContext.getResources().getColor(R.color.red));
                     Log.d(TAG, "onClick: clicked on: " + currentItem.getId());
                     //Toast.makeText(mContext, mUserID.get(i) + mUserNickName.get(i), Toast.LENGTH_LONG).show();
                     viewHolder_btn = (ViewHolder) viewHolder;
                     like("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntanlike&m=socialchat",currentItem.getId());
                 }
             });
-            ((ViewHolder) viewHolder).favorite.setText(currentItem.getFavorite());
+//            ((ViewHolder) viewHolder).favorite.setText(currentItem.getFavorite());
             ((ViewHolder) viewHolder).time.setText(currentItem.getTime());
 
 
@@ -471,8 +561,8 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
 
 
             CommentDialog commentDialog = new CommentDialog(mContext);
-            ((ViewHolder) viewHolder).comment_tv.setText("评"+currentItem.getComment_sum());
-            ((ViewHolder) viewHolder).comment_tv.setOnClickListener(view -> {
+            ((ViewHolder) viewHolder).comment_tv.setText(""+currentItem.getComment_sum());
+            ((ViewHolder) viewHolder).comment_layout.setOnClickListener(view -> {
                 if (Common.myID==null){
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
                             .setTitle("登录以查看更多内容！")
@@ -490,11 +580,82 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                             });
                     builder.create().show();
                 }else {
+                    ((ViewHolder) viewHolder).comment_tv.setTextColor(mContext.getResources().getColor(R.color.red));
                     commentDialog.loadComment(currentItem);
                     commentDialog.startLoadComment();
                 }
             });
 
+            ((ViewHolder) viewHolder).userAge.setText(" "+currentItem.getAuthage());
+            ((ViewHolder) viewHolder).userRegion.setText(currentItem.getAuthregion());
+            ((ViewHolder) viewHolder).userProperty.setText(currentItem.getAuthproperty());
+            if (currentItem.getAuthgender().equals("男")){
+                Resources resources = mContext.getResources();
+                Drawable drawable = resources.getDrawable(R.mipmap.bboy,null);
+                //((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                ((ViewHolder) viewHolder).userAge.setCompoundDrawables(drawable, null, null, null);
+                ((ViewHolder) viewHolder).userAge.setBackgroundResource(R.mipmap.h_sex_male);
+            }else {
+                Resources resources = mContext.getResources();
+                Drawable drawable = resources.getDrawable(R.mipmap.ggirl,null);
+                //((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                ((ViewHolder) viewHolder).userAge.setCompoundDrawables(drawable, null, null, null);
+                ((ViewHolder) viewHolder).userAge.setBackgroundResource(R.mipmap.h_sex);
+            }
+
+            Log.d(TAG, "onBindViewHolder: 帖子视频"+currentItem.getPostvideo());
+            if (!currentItem.getPostvideo().equals("https://oss.banghua.xin/0")){
+                if (Integer.parseInt(currentItem.getHeight())>=Integer.parseInt(currentItem.getWidth())){
+                    ((ViewHolder) viewHolder).video_layout.getLayoutParams().height = 700;
+                    int width = Math.round(700*((Float.parseFloat(currentItem.getWidth())/Float.parseFloat(currentItem.getHeight()))));
+                    ((ViewHolder) viewHolder).video_layout.getLayoutParams().width = width;
+
+                    ((ViewHolder) viewHolder).cover_view.getLayoutParams().height = 700;
+                    ((ViewHolder) viewHolder).cover_view.getLayoutParams().width = width;
+                }else {
+                    ((ViewHolder) viewHolder).video_layout.getLayoutParams().width = 700;
+                    int height = Math.round(700*((Float.parseFloat(currentItem.getHeight())/Float.parseFloat(currentItem.getWidth()))));
+                    ((ViewHolder) viewHolder).video_layout.getLayoutParams().height = height;
+
+                    ((ViewHolder) viewHolder).cover_view.getLayoutParams().width = 700;
+                    ((ViewHolder) viewHolder).cover_view.getLayoutParams().height = height;
+                }
+                Glide.with(mContext).load(currentItem.getCover()).into(((ViewHolder) viewHolder).cover_view);
+
+                ((ViewHolder) viewHolder).video_layout.setOnClickListener(v -> {
+                    Intent intent = new Intent(mContext, VideoPlayActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("luntanList", (Serializable) currentItem);
+                    mContext.startActivity(intent);
+                });
+                ((ViewHolder) viewHolder).video_layout.setVisibility(View.VISIBLE);
+                if (currentItem.getStartVideo()){
+                    ((ViewHolder) viewHolder).video_layout.addView(CustomVideoView.getInstance(mContext,currentItem),2);
+                }
+            }else {
+                ((ViewHolder) viewHolder).video_layout.setVisibility(View.GONE);
+            }
+
+
+            ((ViewHolder) viewHolder).follow_img.setVisibility(View.VISIBLE);
+            Log.d(TAG, "onBindViewHolder: 关注的人"+Common.followList.size());
+            for (int j = 0;j < Common.followList.size();j++){
+                Log.d(TAG, "onBindViewHolder: 关注的人"+Common.followList.get(j));
+                if (Common.followList.get(j).getUserId().equals(currentItem.getAuthid())){
+                    ((ViewHolder) viewHolder).follow_img.setVisibility(View.GONE);
+                }
+            }
+
+            ((ViewHolder) viewHolder).follow_img.setOnClickListener(v -> {
+                ((ViewHolder) viewHolder).follow_img.setVisibility(View.GONE);
+                Toast.makeText(mContext,"关注成功",Toast.LENGTH_SHORT).show();
+                OkHttpInstance.follow(currentItem.getAuthid(), responseString -> {
+                    Common.followList.add(new FollowList(currentItem.getAuthid()));
+                    notifyDataSetChanged();
+                });
+            });
         }
     }
 
@@ -567,10 +728,15 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
     private class SliderHolder extends RecyclerView.ViewHolder{
         private static final String TAG = "SliderHolder";
 
+        ImageView leyuan_convention;
+        ImageView precaution_fraud;
         public SliderHolder(View itemView) {
             super(itemView);
             Log.d(TAG, "SliderHolder: 进入");
             mDemoSlider = itemView.findViewById(R.id.recyclerview_slider);
+
+            leyuan_convention = itemView.findViewById(R.id.leyuan_convention);
+            precaution_fraud = itemView.findViewById(R.id.precaution_fraud);
         }
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -581,14 +747,17 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         TextView authnickname;
         CircleImageView authportrait;
         TextView posttip;
+        LinearLayout posttop;
         TextView posttitle;
         TextView posttext;
-        ZoomInImageView postpicture;
-        ZoomInImageView postpicture1;
-        ZoomInImageView postpicture2;
-        ZoomInImageView postpicture3;
+        NiceZoomImageView postpicture;
+        NiceZoomImageView postpicture1;
+        NiceZoomImageView postpicture2;
+        NiceZoomImageView postpicture3;
         TextView like;
+        ImageView like_img;
         TextView comment_tv;
+        ImageView comment_tv_img;
         TextView favorite;
         TextView time;
         Button detail_content;
@@ -603,15 +772,43 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         ImageView vip_black;
         ImageView vip_white;
 
+
+        TextView userAge;
+        TextView userProperty;
+        TextView userRegion;
+
+        Button goToRoomBtn;
+
+        LinearLayout comment_layout,like_layout;
+
+        public CustomVideoView videoView;
+
+        public FrameLayout video_layout;
+
+
+        NiceImageView cover_view;
+        ImageView film_cover_img;
+        ImageView cover_img;
+
+        TextView online_tv;
+        ImageView online_img;
+        ImageView follow_img;
+
+        PortraitFrameView portraitFrameView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            id = itemView.findViewById(R.id.id);
-            plateid = itemView.findViewById(R.id.plateid);
-            platename = itemView.findViewById(R.id.platename);
-            authid = itemView.findViewById(R.id.authid);
+
+            portraitFrameView = itemView.findViewById(R.id.portraitFrameView);
+            //id = itemView.findViewById(R.id.id);
+            //plateid = itemView.findViewById(R.id.plateid);
+            //platename = itemView.findViewById(R.id.platename);
+            //authid = itemView.findViewById(R.id.authid);
+            comment_layout = itemView.findViewById(R.id.comment_layout);
+            like_layout = itemView.findViewById(R.id.like_layout);
             authnickname = itemView.findViewById(R.id.authnickname);
             authportrait = itemView.findViewById(R.id.authportrait);
             posttip = itemView.findViewById(R.id.posttip);
+            posttop = itemView.findViewById(R.id.posttop);
             posttitle = itemView.findViewById(R.id.posttitle);
             posttext = itemView.findViewById(R.id.posttext);
             postpicture = itemView.findViewById(R.id.postpicture);
@@ -619,22 +816,44 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             postpicture2 = itemView.findViewById(R.id.postpicture2);
             postpicture3 = itemView.findViewById(R.id.postpicture3);
             like = itemView.findViewById(R.id.like);
+            like_img = itemView.findViewById(R.id.like_img);
             comment_tv = itemView.findViewById(R.id.comment_tv);
-            favorite = itemView.findViewById(R.id.favorite);
+            comment_tv_img = itemView.findViewById(R.id.comment_tv_img);
+            like = itemView.findViewById(R.id.like);
+            //favorite = itemView.findViewById(R.id.favorite);
             time = itemView.findViewById(R.id.time);
 
             luntanLayout = itemView.findViewById(R.id.luntanLayout);
 
-            authattributes = itemView.findViewById(R.id.authattributes);
+            //authattributes = itemView.findViewById(R.id.authattributes);
             menu_btn = itemView.findViewById(R.id.menu_btn);
 
             detail_content = itemView.findViewById(R.id.detail_content);
 
 
             vip_gray = itemView.findViewById(R.id.vip_gray);
-            vip_diamond = itemView.findViewById(R.id.vip_diamond);
-            vip_black = itemView.findViewById(R.id.vip_black);
-            vip_white = itemView.findViewById(R.id.vip_white);
+//            vip_diamond = itemView.findViewById(R.id.vip_diamond);
+//            vip_black = itemView.findViewById(R.id.vip_black);
+//            vip_white = itemView.findViewById(R.id.vip_white);
+
+
+            userAge = itemView.findViewById(R.id.userAge);
+            userProperty = itemView.findViewById(R.id.userProperty);
+            userRegion = itemView.findViewById(R.id.userRegion);
+
+            goToRoomBtn = itemView.findViewById(R.id.goToRoomBtn);
+
+
+            videoView = itemView.findViewById(R.id.player);
+
+            video_layout = itemView.findViewById(R.id.video_layout);
+            cover_view = itemView.findViewById(R.id.cover_view);
+            film_cover_img = itemView.findViewById(R.id.film_cover_img);
+            cover_img = itemView.findViewById(R.id.cover_img);
+
+            online_tv = itemView.findViewById(R.id.online_tv);
+            online_img = itemView.findViewById(R.id.online_img);
+            follow_img = itemView.findViewById(R.id.follow_img);
         }
     }
 
@@ -649,7 +868,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             //1是用户数据，2是幻灯片
             switch (msg.what){
                 case 1:
-                    viewHolder_btn.like.setText("赞"+msg.obj.toString());
+                    viewHolder_btn.like.setText(""+msg.obj.toString());
                     break;
             }
         }

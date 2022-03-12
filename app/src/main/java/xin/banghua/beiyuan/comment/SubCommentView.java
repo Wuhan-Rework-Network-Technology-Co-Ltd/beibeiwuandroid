@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,11 +22,12 @@ import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
-import xin.banghua.pullloadmorerecyclerview.NiceImageView;
 import xin.banghua.beiyuan.custom_ui.ad.UIUtils;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
+import xin.banghua.pullloadmorerecyclerview.NiceImageView;
 
 
 public class SubCommentView extends FrameLayout {
@@ -67,7 +67,7 @@ public class SubCommentView extends FrameLayout {
 
 
     @BindView(R.id.comment_relative_layout)
-    RelativeLayout comment_relative_layout;
+    View comment_relative_layout;
 
     @BindView(R.id.iv_header)
     NiceImageView iv_header;
@@ -93,7 +93,7 @@ public class SubCommentView extends FrameLayout {
     TextView tv_reply;
     public void initShow(CommentList currentItem, CommentDialog commentDialog,int currentPosition){
         //自定义部分
-        Glide.with(mContext).load(currentItem.getPortrait()).into(iv_header);
+        Glide.with(App.getApplication()).load(currentItem.getPortrait()).into(iv_header);
         iv_header.setOnClickListener(view1 -> {
             Intent intent = new Intent(mContext, PersonageActivity.class);
             intent.putExtra("userID",currentItem.getAuthid());
@@ -115,7 +115,7 @@ public class SubCommentView extends FrameLayout {
 
         tv_time.setText(currentItem.getTime());
 
-        tv_reply.setOnClickListener(view1 -> {
+        comment_relative_layout.setOnClickListener(view1 -> {
             commentDialog.mainID = currentItem.getMainID();
             commentDialog.mainID_user = currentItem.getMainID_user();
             commentDialog.subID = currentItem.getAuthid();

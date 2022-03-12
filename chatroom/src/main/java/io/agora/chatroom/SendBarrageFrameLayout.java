@@ -1,5 +1,8 @@
 package io.agora.chatroom;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static io.agora.chatroom.ThreadUtils.runOnUiThread;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -36,6 +39,9 @@ import io.agora.chatroom.manager.RtmManager;
 import io.agora.chatroom.model.Constant;
 import io.agora.rtm.ErrorInfo;
 import io.agora.rtm.ResultCallback;
+import io.agora.rtm.RtmChannelAttribute;
+import io.agora.rtm.RtmChannelListener;
+import io.agora.rtm.RtmChannelMember;
 import io.agora.rtm.RtmClientListener;
 import io.agora.rtm.RtmFileMessage;
 import io.agora.rtm.RtmImageMessage;
@@ -44,9 +50,6 @@ import io.agora.rtm.RtmMessage;
 import xyz.doikki.videocontroller.StandardVideoController;
 import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.player.VideoViewManager;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static io.agora.chatroom.ThreadUtils.runOnUiThread;
 
 public class SendBarrageFrameLayout extends FrameLayout {
     private static final String TAG = "SendBarrageFrameLayout";
@@ -80,8 +83,14 @@ public class SendBarrageFrameLayout extends FrameLayout {
         this.appCompatActivity = appCompatActivity;
     }
 
+
+
+    public static SendBarrageFrameLayout videoView;
     private void init(Context context) {
         mContext = context;
+
+        videoView = this;
+
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.send_barrage_framelayout, this, true);
 
@@ -117,7 +126,8 @@ public class SendBarrageFrameLayout extends FrameLayout {
 
 
     private RtmManager mRtmManager;
-    private RtmClientListener mClientListener;
+    public static RtmClientListener mClientListener;
+    public static RtmChannelListener mChannelListener;
 
 
     FilmTypeFrameLayout film_type_framelayout;
@@ -153,8 +163,22 @@ public class SendBarrageFrameLayout extends FrameLayout {
 
         mRtmManager = RtmManager.instance(mContext);
         mClientListener = new MyRtmClientListenerService();
-        mRtmManager.registerListener(mClientListener);
+        mChannelListener = new MyRtmChannelListenerService();
+        //mRtmManager.registerRtmClientListener(mClientListener);
+        if (!RtmManager.rtmClientListenerList.contains(mClientListener)){
+            RtmManager.rtmClientListenerList.add(mClientListener);
+            Log.d(TAG, "GiftDialog: 个人监听"+RtmManager.rtmClientListenerList.size());
+        }
+        if (!RtmManager.rtmChannelListenerList.contains(mChannelListener)){
+            RtmManager.rtmChannelListenerList.add(mChannelListener);
+            Log.d(TAG, "GiftDialog: 个人监听"+RtmManager.rtmChannelListenerList.size());
+        }
 
+        if (Common.myUserInfoList!=null){
+            if (channel_id.equals(Common.myUserInfoList.getId())){
+                syn_anchor.setText("同步全房");
+            }
+        }
         syn_anchor.setOnClickListener(view -> {
             syn_anchor.setAlpha(0.5f);
             syn_anchor.postDelayed(new Runnable() {
@@ -163,17 +187,35 @@ public class SendBarrageFrameLayout extends FrameLayout {
                     syn_anchor.setAlpha(1f);
                 }
             },500);
-            RtmMessage message = RtmManager.instance(mContext).getRtmClient().createMessage();
-            message.setText("syn_anchor_film");
-            RtmManager.instance(mContext).getRtmClient().sendMessageToPeer(channel_id, message, RtmManager.instance(mContext).getSendMessageOptions(), new ResultCallback<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "onSuccess: 通过声网消息通知对面更新声网用户属性");
+            if (Common.myUserInfoList!=null){
+                if (channel_id.equals(Common.myUserInfoList.getId())){
+                    mCurrentFilm.setFilmCurrentPosition(getVideoViewManager().get(Tag.PIP).getCurrentPosition()+2000);
+                    RtmMessage message = RtmManager.instance(mContext).getRtmClient().createMessage();
+                    message.setText(new Gson().toJson(mCurrentFilm));
+                    RtmManager.instance(mContext).getmRtmChannel().sendMessage(message, RtmManager.instance(mContext).getSendMessageOptions(), new ResultCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "onSuccess: 同步视频信息成功");
+                        }
+                        @Override
+                        public void onFailure(ErrorInfo errorInfo) {
+                            Log.d(TAG, "onFailure: 同步视频信息失败"+errorInfo.toString());
+                        }
+                    });
+                }else {
+                    RtmMessage message = RtmManager.instance(mContext).getRtmClient().createMessage();
+                    message.setText("syn_anchor_film");
+                    RtmManager.instance(mContext).getRtmClient().sendMessageToPeer(channel_id, message, RtmManager.instance(mContext).getSendMessageOptions(), new ResultCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "onSuccess: 通过声网消息通知对面更新声网用户属性");
+                        }
+                        @Override
+                        public void onFailure(ErrorInfo errorInfo) {
+                        }
+                    });
                 }
-                @Override
-                public void onFailure(ErrorInfo errorInfo) {
-                }
-            });
+            }
         });
 
         PIPManager mPIPManager = PIPManager.getInstance();
@@ -461,7 +503,8 @@ public class SendBarrageFrameLayout extends FrameLayout {
 
     public void unregisteredRtmClientListenerService(){
         if (mClientListener!=null)
-           mRtmManager.unregisterListener(mClientListener);
+            RtmManager.rtmClientListenerList.remove(mClientListener);
+           //mRtmManager.unregisterRtmClientListener(mClientListener);
     }
 
     public void floatingStart(){
@@ -545,4 +588,48 @@ public class SendBarrageFrameLayout extends FrameLayout {
 
         }
     }
+
+
+
+
+
+    class MyRtmChannelListenerService implements RtmChannelListener {
+        @Override
+        public void onMemberCountUpdated(int i) {
+
+        }
+
+        @Override
+        public void onAttributesUpdated(List<RtmChannelAttribute> list) {
+
+        }
+
+        @Override
+        public void onMessageReceived(RtmMessage rtmMessage, RtmChannelMember rtmChannelMember) {
+            Log.d(TAG, "onMessageReceived: 收到频道礼物消息"+rtmMessage.getText());
+            if (rtmMessage.getText().contains("filmCurrentPosition")){
+                runOnUiThread(()->initShow(JSON.parseObject(rtmMessage.getText(),FilmList.class)));
+            }
+        }
+
+        @Override
+        public void onImageMessageReceived(RtmImageMessage rtmImageMessage, RtmChannelMember rtmChannelMember) {
+
+        }
+
+        @Override
+        public void onFileMessageReceived(RtmFileMessage rtmFileMessage, RtmChannelMember rtmChannelMember) {
+
+        }
+
+        @Override
+        public void onMemberJoined(RtmChannelMember rtmChannelMember) {
+
+        }
+
+        @Override
+        public void onMemberLeft(RtmChannelMember rtmChannelMember) {
+
+        }
+    };
 }

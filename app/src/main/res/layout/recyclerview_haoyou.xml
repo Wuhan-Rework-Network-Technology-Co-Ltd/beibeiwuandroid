@@ -24,12 +24,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <xin.banghua.beiyuan.CircleImageViewExtension
-                android:id="@+id/authportrait"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@mipmap/ic_launcher" />
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <xin.banghua.beiyuan.CircleImageViewExtension
+                    android:id="@+id/authportrait"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_launcher" />
+
+                <io.agora.chatroom.util.PortraitFrameView
+                    android:id="@+id/portraitFrameView"
+                    android:layout_width="66dp"
+                    android:layout_height="66dp" />
+            </FrameLayout>
             <ImageView
                 android:id="@+id/vip_gray"
                 android:layout_width="20dp"
@@ -75,7 +86,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="userNickName"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
             <TextView

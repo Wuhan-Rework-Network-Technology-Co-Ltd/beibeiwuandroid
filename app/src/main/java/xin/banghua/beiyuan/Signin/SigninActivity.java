@@ -1,6 +1,8 @@
 package xin.banghua.beiyuan.Signin;
 
 
+import static io.rong.imkit.fragment.ConversationFragment.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -35,16 +37,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.LaunchActivity;
 import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
-import xin.banghua.beiyuan.MainActivity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.SliderWebViewActivity;
 import xin.banghua.beiyuan.Uniquelogin;
-
-import static io.rong.imkit.fragment.ConversationFragment.TAG;
 
 public class SigninActivity extends Activity {
     private Context mContext;
@@ -239,7 +239,7 @@ public class SigninActivity extends Activity {
                             rongyunConnect.connect(object1.getString("token"));
                             //跳转首页
                             //Log.d("跳转首页",object1.getString("userNickName"));
-                            Intent intent = new Intent(SigninActivity.this, MainActivity.class);
+                            Intent intent = new Intent(SigninActivity.this, LaunchActivity.class);
                             startActivity(intent);
                         }
                     } catch (JSONException e) {

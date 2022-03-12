@@ -39,7 +39,7 @@
         android:id="@+id/luntanFragment"
         android:name="xin.banghua.beiyuan.Main4Branch.LuntanFragment"
         android:label="fragment_luntan"
-        tools:layout="@layout/fragment_luntan" >
+        tools:layout="@layout/fragment_guang_chang">
         <action
             android:id="@+id/luntan_guangchang_action"
             app:destination="@id/guangchangFragment" />

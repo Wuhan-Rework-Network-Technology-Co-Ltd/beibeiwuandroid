@@ -2,19 +2,97 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="xin.banghua.beiyuan">
-    <!-- 指定微信包名 -->
+
+    <permission
+        android:name="xin.banghua.beiyuan.push.permission.MESSAGE"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="xin.banghua.beiyuan.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN"
+        android:protectionLevel="signature" />
+
+    <queries>
+        <package android:name="com.tencent.mm" />
+    </queries>
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 小米 配置开始 < -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 小米 配置结束 < -->
+    <!-- 如果是安卓8.0，应用编译配置的targetSdkVersion>=26，请务必添加以下权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- MeiZu 配置开始 < -->
+    <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到 消息 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" /> <!-- 官方推送权限相关 -->
+    <!-- 魅族的权限  配置开始 -->
+    <!-- 兼容 Flyme5 的权限配置 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 兼容 Flyme3 的权限配置 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" /> <!-- 魅族的权限  配置结束 -->
+    <!-- 小米的权限  配置开始 -->
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" /> <!-- 这里com.xiaomi.mipushdemo改成app的包名 -->
+    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" /> <!-- 这里com.xiaomi.mipushdemo改成app的包名 -->
+    <!-- 小米的权限  配置结束 -->
+    <!-- oppo的权限  配置开始 -->
+    <uses-permission android:name="xin.banghua.beiyuan.push.permission.MESSAGE" />
+    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="xin.banghua.beiyuan.permission.C2D_MESSAGE" />
+    <uses-permission android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" /> <!-- 穿山甲 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 必要权限，解决安全风险漏洞，发送和注册广播事件需要调用带有传递权限的接口 -->
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
     <application
-        android:requestLegacyExternalStorage="true"
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".comment.CommentListActivity"></activity>
-
+        <activity
+            android:name=".Main5Branch.StoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Main5Branch.WalletActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Personage.FollowAndFansActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Main4Branch.VideoPlayActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity android:name=".comment.CommentListActivity" />
         <activity android:name=".FlashPhotoPreviewActivity" /> <!-- 这里配置云码channelId -->
         <activity android:name=".Personage.SetFriendsTagActivity" /> <!-- 这里配置云码mediaId -->
         <activity android:name=".Personage.SetRemarkAndTagActivity" />
@@ -79,7 +157,8 @@
         <activity
             android:name=".Personage.PersonageActivity"
             android:theme="@style/AppTheme.ActionBar.Show" />
-        <activity android:name=".LaunchActivity"
+        <activity
+            android:name=".LaunchActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -95,11 +174,13 @@
             android:label="@string/title_activity_main5" />
         <activity
             android:name=".Main4Activity"
-            android:label="@string/title_activity_main4" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_main4"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Main3Activity"
-            android:label="@string/title_activity_main3"
-            android:exported="false">
+            android:exported="false"
+            android:label="@string/title_activity_main3">
             <intent-filter>
                 <action android:name="xin.banghua.beiyuan.Main3Activity" />
 
@@ -146,6 +227,7 @@
         <activity
             android:name=".PushPackage.Oppo.OppoMessageReceiverActivity"
             android:exported="true" />
+
         <meta-data
             android:name="com.alibaba.sdk.android.cloudcode.channelId"
             android:value="id=598394599954655233" />
@@ -175,7 +257,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/rc_file_path" />
         </provider>
-
         <provider
             android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
             android:authorities="${applicationId}.TTFileProvider"
@@ -190,6 +271,7 @@
             android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
             android:authorities="${applicationId}.TTMultiProvider"
             android:exported="false" />
+
         <receiver
             android:name=".PushPackage.Xiaomi.XiaomiMessageReceiver"
             android:exported="true">
@@ -222,8 +304,8 @@
                 <action android:name="com.xiaomi.push.PING_TIMER" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".PushPackage.Meizu.MeizuMessageReceiver"
+        <receiver
+            android:name=".PushPackage.Meizu.MeizuMessageReceiver"
             android:exported="true">
             <intent-filter>
 
@@ -241,7 +323,8 @@
             </intent-filter>
         </receiver> <!-- 新小米 配置结束 < -->
         <!-- 新魅族 配置开始 < -->
-        <receiver android:name=".PushPackage.Vivo.PushMessageReceiverImpl"
+        <receiver
+            android:name=".PushPackage.Vivo.PushMessageReceiverImpl"
             android:exported="true">
             <intent-filter>
 
@@ -279,18 +362,18 @@
             android:enabled="true" />
         <service
             android:name="com.heytap.msp.push.service.CompatibleDataMessageCallbackService"
-            android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE">
             <intent-filter>
                 <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
         </service> <!-- 穿山甲 -->
         <service
             android:name="com.heytap.msp.push.service.DataMessageCallbackService"
-            android:permission="com.heytap.mcs.permission.SEND_PUSH_MESSAGE"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="com.heytap.mcs.permission.SEND_PUSH_MESSAGE">
             <intent-filter>
                 <action android:name="com.heytap.mcs.action.RECEIVE_MCS_MESSAGE" />
                 <action android:name="com.heytap.msp.push.RECEIVE_MCS_MESSAGE" />
@@ -300,76 +383,5 @@
             android:name="com.vivo.push.sdk.service.CommandClientService"
             android:exported="true" />
     </application>
-
-    <permission
-        android:name="xin.banghua.beiyuan.push.permission.MESSAGE"
-        android:protectionLevel="signature" />
-    <permission
-        android:name="xin.banghua.beiyuan.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <permission
-        android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature" />
-
-    <permission
-        android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN"
-        android:protectionLevel="signature" />
-
-    <queries>
-        <package android:name="com.tencent.mm" />
-    </queries>
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 小米 配置开始 < -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 小米 配置结束 < -->
-    <!-- 如果是安卓8.0，应用编译配置的targetSdkVersion>=26，请务必添加以下权限 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- MeiZu 配置开始 < -->
-    <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到 消息 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 兼容 flyme3.0 配置权限 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- MeiZu 配置结束 < -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" /> <!-- 官方推送权限相关 -->
-    <!-- 魅族的权限  配置开始 -->
-    <!-- 兼容 Flyme5 的权限配置 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 兼容 Flyme3 的权限配置 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" /> <!-- 魅族的权限  配置结束 -->
-    <!-- 小米的权限  配置开始 -->
-    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" /> <!-- 这里com.xiaomi.mipushdemo改成app的包名 -->
-    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" /> <!-- 这里com.xiaomi.mipushdemo改成app的包名 -->
-    <!-- 小米的权限  配置结束 -->
-    <!-- oppo的权限  配置开始 -->
-    <uses-permission android:name="xin.banghua.beiyuan.push.permission.MESSAGE" />
-    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="xin.banghua.beiyuan.permission.C2D_MESSAGE" />
-    <uses-permission android:name="xin.banghua.beiyuan.permission.MIPUSH_RECEIVE" />
-    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
-    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" /> <!-- 穿山甲 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 必要权限，解决安全风险漏洞，发送和注册广播事件需要调用带有传递权限的接口 -->
-    <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
-
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
-
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
 </manifest>

@@ -2,6 +2,7 @@ package xin.banghua.beiyuan.MainBranch;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,14 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableRow;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.DividerItemDecoration;
 
+import com.alibaba.fastjson.JSON;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
@@ -29,17 +32,23 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import io.agora.chatroom.activity.ChannelGridActivity;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.SliderWebViewActivity;
+import xin.banghua.beiyuan.Common;
 
 
 /**
@@ -55,8 +64,8 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
     UserInfoSliderAdapter adapter;
     PullLoadMoreRecyclerView recyclerView;
     //button
-    TableRow seewho_tablerow;
-    Button seewho_btn,seeall_btn,seefemale_btn,seemale_btn;
+    LinearLayout seewho_tablerow,seewho_tablerow2;
+    ImageView seewho_btn,seeall_btn,seefemale_btn,seemale_btn,vipDescription,goToRoom,goToRoomTwo;
     //vars
     private ArrayList<String> mUserID = new ArrayList<>();
     private ArrayList<String> mUserPortrait = new ArrayList<>();
@@ -96,7 +105,8 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_tuijian, container, false);
+        //mView = inflater.inflate(R.layout.fragment_tuijian, container, false);
+        mView = inflater.inflate(R.layout.fragment_shen_bian, container, false);
         return mView;
     }
 
@@ -104,6 +114,33 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        vipDescription = view.findViewById(R.id.vipDescription);
+        vipDescription.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SliderWebViewActivity.class);
+            intent.putExtra("slidername","会员权益");
+            intent.putExtra("sliderurl","https://www.chengzijianzhan.com/tetris/page/6774435626746904584/");
+            getContext().startActivity(intent);
+        });
+        goToRoom = view.findViewById(R.id.goToRoom);
+        goToRoom.setOnClickListener(v -> {
+            if (Common.myID ==null){
+                Intent intentSignin = new Intent(getContext(), SigninActivity.class);
+                getContext().startActivity(intentSignin);
+            }else {
+                Intent intent = new Intent(getContext(), ChannelGridActivity.class);
+                startActivity(intent);
+            }
+        });
+        goToRoomTwo = view.findViewById(R.id.goToRoomTwo);
+        goToRoomTwo.setOnClickListener(v -> {
+            if (Common.myID ==null){
+                Intent intentSignin = new Intent(getContext(), SigninActivity.class);
+                getContext().startActivity(intentSignin);
+            }else {
+                Intent intent = new Intent(getContext(), ChannelGridActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //使用okhttp获取推荐的幻灯片,然后获取全部用户信息，再赋值adpter
         getDataSlide(getString(R.string.tuijian_url));
@@ -112,6 +149,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
         recyclerView = view.findViewById(R.id.tuijian_RecyclerView);
         //快捷按钮
         seewho_tablerow = view.findViewById(R.id.seewho_tablerow);
+        seewho_tablerow2 = view.findViewById(R.id.seewho_tablerow2);
         seewho_btn = view.findViewById(R.id.seewho_btn);
         seewho_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,8 +157,10 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
 
                 if (seewho_tablerow.getVisibility()==View.VISIBLE){
                     seewho_tablerow.setVisibility(View.GONE);
+                    seewho_tablerow2.setVisibility(View.GONE);
                 }else {
                     seewho_tablerow.setVisibility(View.VISIBLE);
+                    seewho_tablerow2.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -239,13 +279,34 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
                 getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
             }
         });
+
+
+        adapter = new UserInfoSliderAdapter(getActivity(),userInfoLists);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLinearLayout();
+        recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+            @Override
+            public void onRefresh() {
+
+                Log.d(TAG, "onRefresh: start");
+                recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
+            }
+
+            @Override
+            public void onLoadMore() {
+                pageindex = pageindex+1;
+                getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
+                Log.d(TAG, "推荐页码："+pageindex);
+                recyclerView.postDelayed(()->recyclerView.setPullLoadMoreCompleted(),1000);
+            }
+        });
     }
 
 
     //三个按钮初始化
     private void initNavigateButton(View view){
         //Button tuijian = view.findViewById(R.id.tuijian_btn);
-        Button fujin = view.findViewById(R.id.fujin_btn);
+        TextView fujin = view.findViewById(R.id.fujin_btn);
         Button sousuo = view.findViewById(R.id.sousuo_btn);
 
 
@@ -358,8 +419,6 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
         recyclerView.setLinearLayout();
-        recyclerView.setMinimumHeight(500);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
             public void onRefresh() {
@@ -370,26 +429,6 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
 
             @Override
             public void onLoadMore() {
-//                if (pageindex==1&& Common.myID==null){
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-//                            .setTitle("登录以查看更多内容！")
-//                            .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialogInterface, int i) {
-//                                    Intent intent = new Intent(getActivity(), SigninActivity.class);
-//                                    getActivity().startActivity(intent);
-//                                }
-//                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialogInterface, int i) {
-//                                    dialogInterface.dismiss();
-//                                }
-//                            });
-//                    builder.create().show();
-//                }else {
-//                    pageindex = pageindex+1;
-//                    getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
-//                }
                 pageindex = pageindex+1;
                 getDataUserinfo(getString(R.string.tuijian_url),pageindex+"");
                 Log.d(TAG, "推荐页码："+pageindex);
@@ -469,7 +508,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
         }).start();
 
     }
-
+    List<UserInfoList> userInfoLists = new ArrayList<>();
     @SuppressLint("HandlerLeak")
     private Handler handler=new Handler(){
         @Override
@@ -479,14 +518,14 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
                 //1是用户数据，2是幻灯片
                 switch (msg.what){
                     case 1:
-                        try {
-                            String resultJson1 = msg.obj.toString();
-                            Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
-
-                            JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
-                            initUserInfo(mView,jsonArray);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        String resultJson1 = msg.obj.toString();
+                        if (pageindex==1){
+                            userInfoLists = JSON.parseArray(resultJson1, UserInfoList.class);
+                            adapter.setUserInfoLists(userInfoLists);
+                            adapter.notifyDataSetChanged();
+                        }else {
+                            userInfoLists.addAll(JSON.parseArray(resultJson1,UserInfoList.class));
+                            adapter.swapData(userInfoLists);
                         }
                         break;
                     case 2:

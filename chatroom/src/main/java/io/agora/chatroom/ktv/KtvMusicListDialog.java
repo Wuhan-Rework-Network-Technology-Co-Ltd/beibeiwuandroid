@@ -1,5 +1,7 @@
 package io.agora.chatroom.ktv;
 
+import static io.agora.chatroom.ktv.KtvFrameLayout.ktvView;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
@@ -28,7 +30,6 @@ import io.agora.chatroom.OkHttpInstance;
 import io.agora.chatroom.OkHttpResponseCallBack;
 import io.agora.chatroom.R;
 import io.agora.chatroom.R2;
-import io.agora.chatroom.activity.ChatRoomActivity;
 import io.agora.chatroom.model.Channel;
 import io.agora.chatroom.model.Constant;
 
@@ -134,6 +135,7 @@ public class KtvMusicListDialog {
 
     private volatile List<MemberMusicModel> musics = new ArrayList<>();
     public void initView(AppCompatActivity context, Channel channel){
+
         back_btn.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
         });
@@ -149,7 +151,7 @@ public class KtvMusicListDialog {
             OkHttpInstance.deleteSongRoom(new OkHttpResponseCallBack() {
                 @Override
                 public void getResponseString(String responseString) {
-                    ChatRoomActivity.ktvView.playNewSong();
+                    ktvView.playNewSong();
                 }
             });
         });
@@ -167,9 +169,9 @@ public class KtvMusicListDialog {
 //        menuViewPagerView_menu.add("歌曲");
 //        menuViewPagerView_menu.add("已点");
 
+
         viewpager_menu.addTab(viewpager_menu.newTab().setText("歌曲"));
         viewpager_menu.addTab(viewpager_menu.newTab().setText("已点"));
-
 
         viewpager_menu.setTabMode(TabLayout.MODE_SCROLLABLE);
 

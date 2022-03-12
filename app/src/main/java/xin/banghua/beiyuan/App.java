@@ -1,12 +1,15 @@
 package xin.banghua.beiyuan;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.net.http.HttpResponseCache;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.alibaba.ha.adapter.AliHaAdapter;
 import com.alibaba.ha.adapter.AliHaConfig;
@@ -21,10 +24,14 @@ import com.bytedance.sdk.openadsdk.TTAdConfig;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdSdk;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.agora.chatroom.ChatRoomApplication;
 import io.agora.chatroom.manager.RtcManager;
@@ -47,6 +54,11 @@ import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
+import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
+import xyz.doikki.videoplayer.player.VideoViewConfig;
+import xyz.doikki.videoplayer.player.VideoViewManager;
 
 //import xin.banghua.beiyuan.ContactCardExtensionModule;
 //import io.rong.contactcard.IContactCardInfoProvider;
@@ -85,6 +97,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
     public void onCreate() {
         super.onCreate();
 
+
+
         mApplication = this;
 
         //每次新启动，设值为1
@@ -92,6 +106,9 @@ public class App extends Application implements Application.ActivityLifecycleCal
         shvalue.saveOnestart(1);
 
         PushClass.initPushService(getApplicationContext());
+
+
+
 
 
         Log.d(TAG, "onCreate: onActivityonCreate:");
@@ -132,18 +149,40 @@ public class App extends Application implements Application.ActivityLifecycleCal
         rongyunConnect.connect(token);
 
 
-
+        RongExtensionManager.getInstance().addExtensionModule(new ContactCardExtensionModule());
 
         frontOrBack();
 
 
+        VideoViewManager.setConfig(VideoViewConfig.newBuilder()
+                //使用使用IjkPlayer解码
+                //.setPlayerFactory(IjkPlayerFactory.create())
+                //使用ExoPlayer解码
+                .setPlayerFactory(ExoMediaPlayerFactory.create())
+                //使用MediaPlayer解码
+                //.setPlayerFactory(AndroidMediaPlayerFactory.create())
+                .build());
 
+
+        new Timer().schedule(new TimerTask() {
+            public void run() {
+                if (Common.userInfoList != null){
+                    OkHttpInstance.updateOnline(new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            Log.d(TAG, "getResponseString: 更新在线状态");
+                        }
+                    });
+                }
+            }
+        }, 10000, 300000);
     }
-
-
 
     public static void initThirdSDK(){
         Log.d(TAG, "initThirdSDK: 启动第三方sdk");
+
+
+
         initHa();
         adInit();
 
@@ -153,6 +192,19 @@ public class App extends Application implements Application.ActivityLifecycleCal
         RtcManager.instance(getApplication()).init();
         RtmManager.instance(getApplication()).init();
         Constant.goToPersonalPage =  new Intent(getApplication(), PersonageActivity.class);
+
+
+
+        //礼物缓存
+        try {
+            File cacheDir = new File(getApplication().getExternalCacheDir(), "http");
+            HttpResponseCache.install(cacheDir, 1024 * 1024 * 128);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 
     /**
@@ -250,12 +302,16 @@ public class App extends Application implements Application.ActivityLifecycleCal
         registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                activity.getWindow().setStatusBarColor(getResources().getColor(R.color.text_color_4,null));
+                activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             }
             @Override
             public void onActivityStarted(Activity activity) {
                 if (count == 0) {
                     Log.v("vergo", "**********切到前台**********");
                     setFrontOrBack("1");
+
+
                 }
                 count++;
             }
@@ -327,7 +383,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
             Method declaredMethod = cls.getDeclaredMethod("currentActivityThread");
             declaredMethod.setAccessible(true);
             Object activityThread = declaredMethod.invoke(null);
-            Field mHiddenApiWarningShown = cls.getDeclaredField("mHiddenApiWarningShown");
+            @SuppressLint("SoonBlockedPrivateApi") Field mHiddenApiWarningShown = cls.getDeclaredField("mHiddenApiWarningShown");
             mHiddenApiWarningShown.setAccessible(true);
             mHiddenApiWarningShown.setBoolean(activityThread, true);
         } catch (Exception e) {

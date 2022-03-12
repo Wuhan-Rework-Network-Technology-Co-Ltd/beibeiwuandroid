@@ -1,5 +1,7 @@
 package io.agora.chatroom.ktv;
 
+import static io.agora.chatroom.ktv.KtvFrameLayout.ktvView;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +22,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.agora.chatroom.activity.ChatRoomActivity;
+import io.agora.chatroom.OkHttpInstance;
+import io.agora.chatroom.OkHttpResponseCallBack;
+import io.agora.chatroom.manager.RtcManager;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -135,14 +139,16 @@ public class MusicPlayer extends IRtcEngineEventHandler {
 
         reset();
 
-        mRtcEngine.addHandler(this);
+        //mRtcEngine.addHandler(this);
+        RtcManager.iRtcEngineEventHandlerList.add(this);
     }
 
     private void reset() {
+        Log.d(TAG, "reset: 测试333333");
         mAudioTracksCount = 0;
         mRecvedPlayPosition = 0;
         mLastRecvPlayPosTime = null;
-        mMusicModel = null;
+        //mMusicModel = null;
         mAudioTrackIndex = 1;
         mStatus = Status.IDLE;
     }
@@ -161,12 +167,14 @@ public class MusicPlayer extends IRtcEngineEventHandler {
     }
 
     public void playByListener(@NonNull MemberMusicModel mMusicModel) {
+        Log.d(TAG, "playByListener: 测试11111"+mMusicModel.getSongId());
         onMusicPlaingByListener();
         MusicPlayer.mMusicModel = mMusicModel;
         startDisplayLrc();
     }
 
     public int open(@NonNull MemberMusicModel mMusicModel) {
+        Log.d(TAG, "open: 测试222222"+mMusicModel.getSongId());
         Log.d(TAG, "open: 开始播放ktv"+mMusicModel.getFileMusic().getAbsolutePath());
         if (mRole != Constants.CLIENT_ROLE_BROADCASTER) {
             mLogger.e("play: current role is not broadcaster, abort playing");
@@ -402,9 +410,10 @@ public class MusicPlayer extends IRtcEngineEventHandler {
         return mStatus.isAtLeast(Status.Started);
     }
 
+
     @Override
     public void onStreamMessage(int uid, int streamId, byte[] data) {
-
+        Log.d(TAG, "onStreamMessage: 接收歌词同步消息");
         JSONObject jsonMsg;
         try {
             String strMsg = new String(data);
@@ -415,12 +424,8 @@ public class MusicPlayer extends IRtcEngineEventHandler {
                 Log.d(TAG, "onStreamMessage: 接收到歌词停止"+jsonMsg.getString("cmd"));
                 Log.d(TAG, "handleMessage: 播放新歌7");
                 onMusicStop();
-                ChatRoomActivity.ktvView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ChatRoomActivity.ktvView.playNewSong();
-                    }
-                },1500);
+
+                ktvView.playNewSong();
                 return;
             }
 
@@ -430,11 +435,11 @@ public class MusicPlayer extends IRtcEngineEventHandler {
                     Log.d(TAG, "handleMessage: 判断是否是同一首歌"+mMusicModel.getSongId()+""+mMusicModel.getSongId());
                     if (!mMusicModel.getSongId().equals(mMusicModel.getSongId())){
                         Log.d(TAG, "onMessageAdded: 播放新歌5");
-                        ChatRoomActivity.ktvView.playNewSong();
+                        ktvView.playNewSong();
                     }
                 }else {
                     Log.d(TAG, "handleMessage: 播放新歌6");
-                    ChatRoomActivity.ktvView.playNewSong();
+                    ktvView.playNewSong();
                 }
 
 
@@ -542,24 +547,35 @@ public class MusicPlayer extends IRtcEngineEventHandler {
     }
 
     public void onMusicCompleted() {
-        mLogger.i("onMusicCompleted() called");
-        stopDisplayLrc();
-        stopPublish();
-        reset();
-
-        mHandler.obtainMessage(ACTION_ON_MUSIC_COMPLETED).sendToTarget();
 
         //发送通知给其他听众，
         Map<String, Object> msg = new HashMap<>();
         msg.put("cmd", "musicStopped");
         JSONObject jsonMsg = new JSONObject(msg);
         Log.d(TAG, "onMusicCompleted: 发送终止当前歌曲");
-        mRtcEngine.sendStreamMessage(mStreamId, jsonMsg.toString().getBytes());
+        OkHttpInstance.deleteSong(mMusicModel.getSongId(),mMusicModel.getRoomId(), new OkHttpResponseCallBack() {
+            @Override
+            public void getResponseString(String responseString) {
+                Log.d(TAG, "getResponseString: 播放新歌3");
+                mRtcEngine.sendStreamMessage(mStreamId, jsonMsg.toString().getBytes());
+                ktvView.playNewSong();
+            }
+        });
+
+
+        mLogger.i("onMusicCompleted() called");
+        stopDisplayLrc();
+        stopPublish();
+        reset();
+
+        mHandler.obtainMessage(ACTION_ON_MUSIC_COMPLETED).sendToTarget();
     }
 
     public void destory() {
         mLogger.i("destory() called");
-        mRtcEngine.removeHandler(this);
+        //mRtcEngine.removeHandler(this);
+
+        RtcManager.iRtcEngineEventHandlerList.remove(this);
         mCallback = null;
     }
 

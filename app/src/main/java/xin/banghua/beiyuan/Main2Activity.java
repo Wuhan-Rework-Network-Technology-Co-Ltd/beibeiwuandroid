@@ -58,7 +58,6 @@ import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.utils.Common;
 
 public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoProvider {
     private static final String TAG = "Main2Activity";
@@ -146,7 +145,6 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-
 
         try {
             Log.d(TAG, "onCreate: Main2Activity");
@@ -301,7 +299,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
                     }
                 }
                 //好友信息
-                FriendList friends = new FriendList(jsonObject.getString("id"), jsonObject.getString("portrait"), nickname, jsonObject.getString("age"), jsonObject.getString("gender"), jsonObject.getString("region"), jsonObject.getString("property"), jsonObject.getString("vip"),jsonObject.getString("svip"));
+                FriendList friends = new FriendList(jsonObject.getString("id"), jsonObject.getString("portrait"), nickname, jsonObject.getString("age"), jsonObject.getString("gender"), jsonObject.getString("region"), jsonObject.getString("property"), jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("portraitframe"));
                 friendList.add(filledData(friends));
                 friendListMap.put(jsonObject.getString("id"),filledData(friends));
 

@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:text="亲，可用新版本上线喽！"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold" />
 
     <LinearLayout

@@ -46,7 +46,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="userNickName"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -93,7 +93,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
         </TableRow>
 

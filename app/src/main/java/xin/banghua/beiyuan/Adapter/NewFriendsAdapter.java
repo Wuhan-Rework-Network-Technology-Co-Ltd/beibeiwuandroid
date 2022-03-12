@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ import xin.banghua.beiyuan.Main2Activity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 
 public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.ViewHolder>  {
     private static final String TAG = "NewFriendsAdapter";
@@ -103,7 +104,7 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
         viewHolder.userID.setText(mUserID.get(i));
         Glide.with(mContext)
                 .asBitmap()
@@ -111,7 +112,7 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                 .into(viewHolder.userPortrait);
 
         //现在vip传过来的是时间
-        if (mUserVIP.get(i).isEmpty()||mUserVIP.get(i)=="null"){
+        if (TextUtils.isEmpty(mUserVIP.get(i))){
             viewHolder.vip_diamond.setVisibility(View.INVISIBLE);
             viewHolder.vip_black.setVisibility(View.INVISIBLE);
             viewHolder.vip_white.setVisibility(View.INVISIBLE);
@@ -170,9 +171,9 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                         agreeFriend(mContext.getString(R.string.agreefriendnew_url),mUserID.get(i),mUserPortrait.get(i),mUserNickName.get(i));
 
                         //同意了好友，则刷新
-                        xin.banghua.beiyuan.Common.newFriendOrDeleteFriend = true;
+                        Common.newFriendOrDeleteFriend = true;
                         FriendList friends = new FriendList(mUserID.get(i), mUserPortrait.get(i), mUserNickName.get(i), mUserAge.get(i), mUserGender.get(i), mUserRegion.get(i), mUserProperty.get(i), mUserVIP.get(i),mUserVIP.get(i));
-                        xin.banghua.beiyuan.Common.friendListMap.put(mUserID.get(i), Main2Activity.filledData(friends));
+                        Common.friendListMap.put(mUserID.get(i), Main2Activity.filledData(friends));
                     }
                 }
             });

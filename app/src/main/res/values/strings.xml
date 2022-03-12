@@ -31,6 +31,7 @@
     <string name="personage_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=personagenew&amp;m=socialchat</string>
     <string name="someonesluntan_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=someonesluntannew&amp;m=socialchat</string>
     <string name="luntan_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=luntannew&amp;m=socialchat</string>
+    <string name="luntan_url_new">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=luntannewnewnew&amp;m=socialchat</string>
     <string name="sawme_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=sawmenew&amp;m=socialchat</string>
     <string name="viptimeinsousuo_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=viptimeinsousuo&amp;m=socialchat</string>
     <string name="directsousuo_url">https://console.banghua.xin/app/index.php?i=99999&amp;c=entry&amp;a=webapp&amp;do=directsousuonew&amp;m=socialchat</string>

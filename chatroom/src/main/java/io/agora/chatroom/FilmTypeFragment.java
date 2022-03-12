@@ -1,5 +1,7 @@
 package io.agora.chatroom;
 
+import static io.agora.chatroom.SendBarrageFrameLayout.videoView;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +26,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.agora.chatroom.activity.ChatRoomActivity;
 import xin.banghua.pullloadmorerecyclerview.CusPullLoadMoreRecyclerView;
 import xin.banghua.pullloadmorerecyclerview.NiceImageView;
 
@@ -61,6 +62,7 @@ public class FilmTypeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
 
     Context mContext;
@@ -146,6 +148,7 @@ public class FilmTypeFragment extends Fragment {
 
         //网络请求
         pullLoadMoreRecyclerView.startWaveLoadingShow();
+        Log.d(TAG, "onViewCreated: 获取电影");
         OkHttpInstance.getFilmTopic(pageindex,filter,type, responseString -> {
             if (!responseString.equals("false")){
                 dataLists = JSON.parseArray(responseString,FilmList.class);
@@ -171,6 +174,8 @@ public class FilmTypeFragment extends Fragment {
             }
         });
     }
+
+
 
     public class CustomRecyclerAdapterAdapter extends RecyclerView.Adapter<ViewHolder>{
         List<FilmList> dataLists = new ArrayList<>();
@@ -207,7 +212,7 @@ public class FilmTypeFragment extends Fragment {
 
             holder.film_container.setOnClickListener(view -> {
                 Log.d(TAG, "onBindViewHolder: 选中电影名"+currentItem.getName());
-                ChatRoomActivity.videoView.initShow(currentItem);
+                videoView.initShow(currentItem);
             });
 
             Glide.with(mContext).load(currentItem.getCover()).into(holder.film_cover_img);

@@ -1,3 +1,35 @@
+//获取adapter中间位置
+int currentPosition = ((RecyclerView.LayoutParams) recyclerView.getChildAt(0).getLayoutParams()).getViewAdapterPosition();
+
+card圆角
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="5dp">
+        </androidx.cardview.widget.CardView>
+
+//跳转//传递对象，对象需要实现 implements Serializable。获取的值需要(ItemInfo) getIntent().getSerializableExtra("itemInfo");
+Intent intent = new Intent(SignupActivity.this, Userset.class);
+intent.putExtra("logtype","1");
+intent.putExtra("list", (Serializable) list);
+startActivity(intent);
+
+//避免软键盘直接弹出
+getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+关于多个module引用支付宝的问题，例如A引用B
+B需要使用api引用aar,A需要声明dirs '/Users/jiangdong/Desktop/androidapp/chatroom/libs','libs'
+这样就不会duplicate和找不到类了
+
+
+声网rtm消息分类：
+1.聊天室消息  messageType 包括房主切换房间和歌手离开座位
+2.同步电影   syn_anchor_film   filmCurrentPosition
+3.礼物消息   giftMessage    {"type":"giftMessage","gift_image":"1.png","gift_svga":"1.svga","senderName":"发送者名","senderPortrait":"发送者头像","receiverName":"接受者名"}
+
+
 //加密
 .add("sign", MD5Tool.getSign(myid))
 
@@ -6,6 +38,12 @@ textview，替换图片
 Resources resources = mContext.getResources();
 Drawable drawable = resources.getDrawable(R.drawable.vip_image,null);
 viewHolder.userVIP.setForeground(drawable);
+
+                Resources resources = mContext.getResources();
+                Drawable drawable = resources.getDrawable(R.mipmap.ggirl,null);
+                //((UserinfoHolder) viewHolder).userGender.setForeground(drawable);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth() - 10, drawable.getMinimumHeight() - 10);
+                ((UserinfoHolder) viewHolder).userAge.setCompoundDrawables(drawable, null, null, null);
 
 
 

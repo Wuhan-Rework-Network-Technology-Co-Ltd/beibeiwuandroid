@@ -1,6 +1,8 @@
 package xin.banghua.beiyuan.Main5Branch;
 
 
+import static io.rong.imkit.fragment.ConversationListFragment.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -41,10 +43,8 @@ import xin.banghua.beiyuan.BuildConfig;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.utils.Common;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.MD5Tool;
-
-import static io.rong.imkit.fragment.ConversationListFragment.TAG;
 
 
 /**
@@ -193,6 +193,7 @@ public class SettingFragment extends Fragment {
                 updateRedisCache(myid);
 
                 Common.myID = null;
+
 
                 SharedPreferences sp = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
@@ -426,7 +427,7 @@ public class SettingFragment extends Fragment {
                             }
                         });
                     }else {
-                        Toast.makeText(mContext, "当前版本："+BuildConfig.VERSION_CODE, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "当前版本："+BuildConfig.VERSION_NAME, Toast.LENGTH_LONG).show();
                     }
                     break;
             }

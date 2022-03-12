@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.Adapter;
 
+import xin.banghua.beiyuan.Common;
+
 public class FriendList {
     String mUserID;
     String mUserPortrait;
@@ -10,6 +12,7 @@ public class FriendList {
     String mUserProperty;
     String mVip;
     String mSVip;
+    String portraitframe;
     private String letters;//显示拼音的首字母
     public FriendList(String userID, String userPotrait, String userNickName,String userAge,String userGender,String userRegion,String userProperty,String userVip,String userSVip){
         this.mUserID = userID;
@@ -21,6 +24,27 @@ public class FriendList {
         this.mUserProperty = userProperty;
         this.mVip = userVip;
         this.mSVip = userSVip;
+    }
+
+    public FriendList(String userID, String userPotrait, String userNickName,String userAge,String userGender,String userRegion,String userProperty,String userVip,String userSVip,String portraitframe){
+        this.mUserID = userID;
+        this.mUserPortrait = userPotrait;
+        this.mUserNickName = userNickName;
+        this.mUserAge = userAge;
+        this.mUserGender = userGender;
+        this.mUserRegion = userRegion;
+        this.mUserProperty = userProperty;
+        this.mVip = userVip;
+        this.mSVip = userSVip;
+        this.portraitframe = portraitframe;
+    }
+
+    public String getPortraitframe() {
+        return Common.getOssResourceUrl(portraitframe);
+    }
+
+    public void setPortraitframe(String portraitframe) {
+        this.portraitframe = portraitframe;
     }
 
     public String getmSVip() {

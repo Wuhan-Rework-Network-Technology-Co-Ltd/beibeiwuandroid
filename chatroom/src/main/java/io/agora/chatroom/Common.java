@@ -4,10 +4,26 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.text.TextUtils;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,9 +32,16 @@ import java.util.Date;
 import java.util.List;
 
 import io.agora.chatroom.activity.ChatRoomService;
+import xyz.doikki.videoplayer.player.VideoView;
 
 public class Common {
 
+    public static int screen_width = 0;
+    public static int screen_height = 0;
+    public static float screen_density = 0f;
+    public static int screen_densityDpi = 0;
+
+    public static UserInfoList myUserInfoList = new UserInfoList();
 
     static Intent intentChatRoomService;//聊天室
     public static void instanceChatRoomService(Context context){
@@ -50,8 +73,30 @@ public class Common {
         }
     }
 
-
-
+    // split截取后缀名
+    public static String lastName(File file) {
+        if (file == null) return null;
+        String filename = file.getName();
+        // split用的是正则，所以需要用 //. 来做分隔符
+        String[] split = filename.split("\\.");
+        //注意判断截取后的数组长度，数组最后一个元素是后缀名
+        if (split.length > 1) {
+            return split[split.length - 1];
+        } else {
+            return "";
+        }
+    }
+    public static ViewGroup removeFromParent(VideoView videoView) {
+        if (videoView != null) {
+            ViewParent parent = videoView.getParent();
+            if (parent != null) {
+                ViewGroup group = (ViewGroup) parent;
+                group.removeView(videoView);
+                return group;
+            }
+        }
+        return null;
+    }
 
     /**
      * 用法：
@@ -183,4 +228,69 @@ public class Common {
         }
         return false;
     }
+
+
+    /*
+     *    get image from network
+     *    @param [String]imageURL
+     *    @return [BitMap]image
+     */
+    public static Bitmap returnBitMap(String url){
+        URL myFileUrl = null;
+        Bitmap bitmap = null;
+        try {
+            myFileUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+    /*
+    bitmap转圆形
+     */
+    public static Bitmap makeRoundCorner(Bitmap bitmap)
+    {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int left = 0, top = 0, right = width, bottom = height;
+        float roundPx = height/2;
+        if (width > height) {
+            left = (width - height)/2;
+            top = 0;
+            right = left + height;
+            bottom = height;
+        } else if (height > width) {
+            left = 0;
+            top = (height - width)/2;
+            right = width;
+            bottom = top + width;
+            roundPx = width/2;
+        }
+
+        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        int color = 0xff424242;
+        Paint paint = new Paint();
+        Rect rect = new Rect(left, top, right, bottom);
+        RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+
 }

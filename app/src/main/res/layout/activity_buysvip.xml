@@ -38,7 +38,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="40dp"
                             android:text="SVIP白金会员"
-                            android:textColor="@color/colorPrimaryDark"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="24sp"
                             android:textStyle="bold" />
 
@@ -107,7 +107,7 @@
                         android:drawableLeft="@drawable/ic_weixin"
                         android:text="支付"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimary" />
 
                     <Button
                         android:id="@+id/alipay1_btn"
@@ -117,7 +117,7 @@
                         android:drawableLeft="@drawable/ic_zhifubao"
                         android:text="支付"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -156,7 +156,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="40dp"
                             android:text="SVIP黑金会员"
-                            android:textColor="@color/colorPrimaryDark"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="24sp"
                             android:textStyle="bold" />
 
@@ -225,7 +225,7 @@
                         android:drawableLeft="@drawable/ic_weixin"
                         android:text="支付"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimary" />
 
                     <Button
                         android:id="@+id/alipay2_btn"
@@ -235,7 +235,7 @@
                         android:drawableLeft="@drawable/ic_zhifubao"
                         android:text="支付"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -274,7 +274,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="40dp"
                             android:text="SVIP钻石会员"
-                            android:textColor="@color/colorPrimaryDark"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="24sp"
                             android:textStyle="bold" />
 
@@ -343,7 +343,7 @@
                         android:drawableLeft="@drawable/ic_weixin"
                         android:text="支付"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimary" />
 
                     <Button
                         android:id="@+id/alipay3_btn"
@@ -353,7 +353,7 @@
                         android:drawableLeft="@drawable/ic_zhifubao"
                         android:text="支付"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimary" />
                 </LinearLayout>
             </LinearLayout>
 

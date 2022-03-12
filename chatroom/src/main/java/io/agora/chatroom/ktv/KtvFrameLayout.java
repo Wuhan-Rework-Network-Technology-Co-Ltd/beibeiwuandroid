@@ -66,8 +66,9 @@ public class KtvFrameLayout extends FrameLayout {
     private View mView;
 
 
-
+    public static KtvFrameLayout ktvView;
     private void init(Context context) {
+        ktvView = this;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.ktv_framelayout, this, true);
 
@@ -134,24 +135,18 @@ public class KtvFrameLayout extends FrameLayout {
         @Override
         public void onMusicStop() {
             Log.d(TAG, "onMusicStop: ");
-
+            lrcControlView.onIdleStatus();
         }
 
         @Override
         public void onMusicCompleted() {
             Log.d(TAG, "onMusicCompleted: ");
+            lrcControlView.onIdleStatus();
+
             lrcControlView.getLrcView().reset();
 
             if (memberMusicModels.size()==0){
                 playNewSong();
-            }else {
-                OkHttpInstance.deleteSong(memberMusicModels.get(0).getSongId(),memberMusicModels.get(0).getRoomId(), new OkHttpResponseCallBack() {
-                    @Override
-                    public void getResponseString(String responseString) {
-                        Log.d(TAG, "getResponseString: 播放新歌3");
-                        playNewSong();
-                    }
-                });
             }
         }
 
@@ -163,17 +158,16 @@ public class KtvFrameLayout extends FrameLayout {
         }
     };
 
-
+    public static Channel currentChannel;
     public void playNewSong(){
         Log.d(TAG, "playNewSong: 获取房间音乐1");
-        OkHttpInstance.getSongList(ChatRoomActivity.currentChannel.getId(), new OkHttpResponseCallBack() {
+        OkHttpInstance.getSongList(currentChannel.getId(), new OkHttpResponseCallBack() {
             @Override
             public void getResponseString(String responseString) {
                 if (!responseString.equals("false")){
                     memberMusicModels = JSON.parseArray(responseString,MemberMusicModel.class);
                     onMusicChanged(memberMusicModels.get(0));
                 }else {
-                    Log.d(TAG, "getResponseString: 1剩余歌曲"+ChatRoomActivity.ktvView.memberMusicModels.size());
                     memberMusicModels.clear();
                     if (mMusicPlayer!=null)
                         mMusicPlayer.stop();
@@ -203,7 +197,15 @@ public class KtvFrameLayout extends FrameLayout {
 
     LifecycleProvider<Lifecycle.Event> mLifecycleProvider;
     private void preperMusic(final MemberMusicModel musicModel, boolean isSinger) {
+        if (mMusicPlayer==null){
+            mMusicPlayer = new MusicPlayer(mContext, ChatRoomActivity.mManager.getRtcManager().getmRtcEngine());
+        }
         Log.d(TAG, "preperMusic: 触发准备");
+        try {
+            mLifecycleProvider = AndroidLifecycle.createLifecycleProvider(mContext);
+        }catch (Exception e){
+            Log.e(TAG, "preperMusic: 触发异常");
+        }
         mLifecycleProvider = AndroidLifecycle.createLifecycleProvider(mContext);
         mMusicCallback.onPrepareResource();
         MusicResourceManager.Instance(mContext)
