@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="color_audio">#2F85BC</color>
+
+    <color name="text_color_1">#FFFFFF</color>
+    <color name="text_color_2">#171717</color>
+    <color name="text_color_3">#FBE7CF</color>
+
+    <color name="text_color_4">#303E47</color>
+    <color name="text_color_5">#9E9E9E</color>
+    <color name="text_color_6">#212121</color>
+
+    <color name="text_color_7">#D81B60</color>
+
+    <color name="text_color_8">#8A1333</color>
+    <color name="text_color_9">#1976D2</color>
+
+    <color name="img_border_1"> #512DA8</color>
+
+
+    <color name="color_green">#388E3C</color>
+
+    <color name="color_grey">#595858</color>
+
+    <color name="colorLogo">#8A1333</color>
+
+    <color name="divider">#ffd2d2d2</color>
+
+    <color name="colorPrimary">#FDD000</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#FDD000</color>
+    <color name="colorBackground">#EDF0F5</color>
+
+    <color name="colorOrange1">#ffa726</color>
+    <color name="colorOrange2">#FBE7CF</color>
+    <color name="colorPurple1">#303E47</color>
+    <color name="colorBrown1">#8d6e63</color>
+    <color name="colorRed1">#cf000f</color>
+
+    <color name="colorGray1">#9E9E9E</color>
+    <color name="colorGray2">#515151</color>
+    <color name="colorGray4">#EDF0F5</color>
+    <color name="colorGray5">#C8C7C7</color>
+    <color name="colorGray6">#303E47</color>
+
+    <color name="colorBlue1">#108EE9</color>
+
+    <color name="tint">#f44336</color>
+
+    <color name="color1">#424549</color>
+    <color name="color2">#7e455e</color>
+    <color name="color3">#796e25</color>
+    <color name="color4">#597171</color>
+
+    <color name="red">#FF0000</color>
+
+
+    <color name="clr_normal">#9E9E9E</color>
+    <color name="clr_pressed">#a44100</color>
+
+    <color name="transparent">#00000000</color>
+
+
+    <color name="background">#2B292B</color>
+    <color name="background_deep">#B2000000</color>
+
+    <color name="background_against">#ddffffff</color>
+    <color name="background_against_deep">#B2FFFFFF</color>
+
+    <color name="background_70">#b22B292B</color>
+<!--    <color name="background">#8A1333</color>-->
+
+    <color name="background800">#424242</color>
+    <color name="background900">#212121</color>
+    <color name="white_56">#8effffff</color>
+    <color name="white_70">#b2ffffff</color>
+    <color name="white_87">#ddffffff</color>
+    <color name="white_93">#edf8f8f8</color>
+    <color name="black_56">#8e000000</color>
+    <color name="black_70">#b2000000</color>
+    <color name="black_87">#dd000000</color>
+    <color name="black_93">#ed000000</color>
+    <color name="skyBlue">#57A8D8</color>
+    <color name="yellow">#FBC02D</color>
+    <color name="md_yellow_100">#FFD600</color>
+    <color name="md_yellow_200">#FBC02D</color>
+    <color name="md_amber_700">#FFA000</color>
+    <color name="md_orange_100">#FFA726</color>
+    <color name="md_orange_200">#FF6D00</color>
+    <color name="md_green_100">#81C784</color>
+    <color name="md_green_200">#388E3C</color>
+    <color name="md_blue_100">#81D4fA</color>
+    <color name="md_blue_200">#0091EA</color>
+
+
+    <!--属性设置-->
+    <color name="blue_user">#0071BC</color><!--主色蓝 -->
+    <color name="blue_touch_user">#B3B3B3</color><!--主色 按住蓝 -->
+    <color name="background_user">#F2F2F2</color><!--主色 按住蓝 -->
+    <color name="black_user">#333333</color><!--主色  -->
+
+
+    <!--评论dialog-->
+    <color name="gray_d8">#ffd8d8d8</color>
+    <color name="gray_F1EBEB">#CDCBCB</color>
+    <color name="color_6f">#6f6f6f</color>
+    <color name="gray_9b">#9B9B9B</color>
+    <color name="black_21">#212121</color>
+
+
+    <!--sight-->
+    <color name="color_sight_white">#FFFFFF</color>
+    <color name="color_sight_primary">#3A91F3</color>
+
+
+    <!-- 声网语音 -->
+    <color name="title_text_color">#EEEEEE</color>
+    <color name="item_text_color">#EEEEEE</color>
+    <color name="btn_text_color">#CCCCCC</color>
+    <color name="edit_text_color">#CCCCCC</color>
+    <color name="tips_text_color">#999999</color>
+
+    <color name="gray">#333333</color>
+    <color name="black_alpha30">#4C9D9C98</color>
+    <color name="black_alpha60">#999D9C98</color>
+    <color name="white_alpha10">#19FFFFFF</color>
+    <color name="white_alpha30">#4CFFFFFF</color>
+    <color name="white_alpha40">#66FFFFFF</color>
+    <color name="white_alpha60">#99FFFFFF</color>
+    <color name="white_alpha90">#E6FFFFFF</color>
+    <color name="seat_border">#09BDF4</color>
+    <color name="black">#202932</color>
+    <color name="blue">#007AFF</color>
+
+    <color name="pink">#F85591</color>
+
+
+
+
+
+
+
+    <!--阿里云视频颜色-->
+
+
+        <!--其他一些常用颜色，除字体、背景色、线-->
+        <color name="alivc_common_white">#ffffffff</color>
+
+    <!--公用字体颜色-->
+    <color name="alivc_common_font_black_alpha_70">#B3000000</color>
+
+        <color name="alivc_common_font_white">#ffffffff</color>
+    <color name="alivc_common_font_gray_75">#757575</color>
+
+    <!--主题色，代表应用整体风格的颜色-->
+        <color name="alivc_common_theme_primary">#232A42</color>
+
+    <!--公用背景色，包含前景色、填充色-->
+        <color name="alivc_common_bg_transparent">#00000000</color>
+        <color name="alivc_common_bg_white">#ffffffff</color>
+    <color name="alivc_common_bg_gray_darker">#aaa</color>
+        <color name="alivc_common_bg_gray_light">#C3C5C6</color>
+        <color name="alivc_common_bg_gray_bright">#D8D8D8</color>
+
+        <color name="alivc_common_bg_black">#ff000000</color>
+        <color name="alivc_common_bg_black_alpha_30">#4d000000</color>
+        <color name="alivc_common_bg_black_alpha_40">#66000000</color>
+        <color name="alivc_common_bg_black_alpha_50">#7f000000</color>
+    <color name="alivc_common_bg_orange">#FC7729</color>
+    <color name="alivc_common_bg_red">#FC4347</color>
+
+    <!--公用线的颜色，包含边界线的颜色-->
+    <color name="alivc_common_line_red">#FFff0000</color>
+
+    <!--chatui-->
+    <color name="white">#fff</color>
+    <color name="green">#4ACC60</color>
+
+    <!-- Chat Activity -->
+    <color name="localBackground">#827b92</color>
+    <color name="remoteBackground">#484258</color>
+</resources>

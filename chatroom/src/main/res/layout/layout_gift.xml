@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_gravity="center"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="@dimen/gift_pop_width"
+        android:layout_height="@dimen/gift_pop_height"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_gift_container"
+        android:paddingStart="@dimen/gift_padding_horizontal"
+        android:paddingEnd="@dimen/gift_padding_horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/gift_img_size"
+            android:layout_height="@dimen/gift_img_size"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/gift_margin_horizontal"
+            android:layout_toStartOf="@id/iv_gift"
+            android:layout_toEndOf="@id/iv_avatar"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:textColor="@color/text_color_4"
+                android:textSize="@dimen/gift_name_text_size" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="送给"
+                    android:textColor="@color/text_color_2"
+                    android:textSize="@dimen/gift_tips_text_size" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  腹股沟管"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_color_7"
+                    android:textSize="@dimen/gift_tips_text_size" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_gift"
+            android:layout_width="@dimen/gift_img_size"
+            android:layout_height="@dimen/gift_img_size"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_gift" />
+
+    </RelativeLayout>
+
+</FrameLayout>

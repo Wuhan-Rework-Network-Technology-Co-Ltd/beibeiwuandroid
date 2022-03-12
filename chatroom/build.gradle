@@ -1,0 +1,119 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    compileSdkVersion 30
+    defaultConfig {
+        configurations.all {
+            resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
+        }
+        minSdkVersion 26
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':popmenu')
+
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation "com.google.code.gson:gson:2.8.7"
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
+
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    implementation project(path: ':imageselector')
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation 'junit:junit:4.13.2'
+
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+
+
+    //声网语音直播sdk
+    api 'io.agora.rtc:full-sdk:3.5.1'
+    api 'io.agora.rtm:rtm-sdk:1.4.2'
+
+    //网络okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
+    //glide  快速加载图片到view
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //阿里的json
+    implementation 'com.alibaba:fastjson:1.2.48'
+
+    //权限
+    implementation 'com.yanzhenjie:permission:2.0.3'
+
+
+    //下拉加载更多
+    implementation project(path: ':PullLoadMoreRecyclerView')
+
+    //弹幕库
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+
+    //gsy视频  包含了dkplayer-players:ijk，删掉
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack'
+
+    //下拉加载更多
+    implementation project(path: ':PullLoadMoreRecyclerView')
+
+
+    //重新启用dk播放器
+    implementation project(':dkplayer-java')
+    implementation project(':dkplayer-ui')
+    //implementation project(path: ':dkplayer-players:ijk')
+    implementation project(path: ':dkplayer-players:exo')
+    //缓存
+    //implementation project(':dkplayer-videocache')
+
+    implementation project(path: ':baselibrary')
+    implementation project(path: ':lrcview')
+
+
+    //多重recyclerview
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
+
+    //礼物svga
+    implementation 'com.github.svga:SVGAPlayer-Android:2.5.12'
+
+    //微信sdk
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
+    api (name: 'alipaysdk-noutdid-15.8.03.210428205839', ext: 'aar')
+
+}
