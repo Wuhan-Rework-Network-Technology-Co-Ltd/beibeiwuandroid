@@ -66,7 +66,6 @@
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <application
         android:name=".App"
@@ -78,6 +77,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".Signin.BindAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Signin.LoginSmsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Signin.OneKeyLogInActivityResult"
+            android:exported="false" />
         <activity
             android:name=".Main5Branch.StoreActivity"
             android:exported="false" />

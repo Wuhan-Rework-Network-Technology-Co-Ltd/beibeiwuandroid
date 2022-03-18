@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan;
 
+import static xin.banghua.onekeylogin.Constant.THEME_KEY;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -43,6 +45,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 //import android.support.design.widget.BottomNavigationView;
 
@@ -84,8 +87,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_haoyou:
                     if (Common.myID ==null){
-                        Intent intentSignin = new Intent(mContext, SigninActivity.class);
-                        mContext.startActivity(intentSignin);
+                        Intent intent = new Intent(MainActivity.this, OneKeyLoginActivity.class);
+                        intent.putExtra(THEME_KEY, 4);
+                        startActivity(intent);
                     }else {
                         Intent intent2 = new Intent(MainActivity.this, Main2Activity.class);
                         startActivity(intent2);
@@ -97,8 +101,9 @@ public class MainActivity extends AppCompatActivity {
                     //startActivity(intent3);
                     //启动会话列表
                     if (Common.myID ==null){
-                        Intent intentSignin = new Intent(mContext, SigninActivity.class);
-                        mContext.startActivity(intentSignin);
+                        Intent intent = new Intent(MainActivity.this, OneKeyLoginActivity.class);
+                        intent.putExtra(THEME_KEY, 4);
+                        startActivity(intent);
                     }else {
                         startActivity(new Intent(MainActivity.this, Main3Activity.class));
                     }
@@ -109,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_wode:
                     if (Common.myID ==null){
-                        Intent intentSignin = new Intent(mContext, SigninActivity.class);
-                        mContext.startActivity(intentSignin);
+                        Intent intent = new Intent(MainActivity.this, OneKeyLoginActivity.class);
+                        intent.putExtra(THEME_KEY, 4);
+                        startActivity(intent);
                     }else {
                         Intent intent5 = new Intent(MainActivity.this, Main5Activity.class);
                         startActivity(intent5);
@@ -361,8 +367,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void testChatRoom(View view){
         if (Common.myID ==null){
-            Intent intentSignin = new Intent(mContext, SigninActivity.class);
-            mContext.startActivity(intentSignin);
+            Intent intent = new Intent(MainActivity.this, OneKeyLoginActivity.class);
+            intent.putExtra(THEME_KEY, 4);
+            startActivity(intent);
         }else {
             Intent intent = new Intent(MainActivity.this, ChannelGridActivity.class);
             startActivity(intent);

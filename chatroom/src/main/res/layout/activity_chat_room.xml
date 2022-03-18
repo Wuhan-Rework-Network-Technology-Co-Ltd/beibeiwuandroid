@@ -8,6 +8,13 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.ChatRoomActivity">
 
+    <ImageView
+        android:id="@+id/room_bg_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/bg_channel_0"
+        android:scaleType="fitXY"/>
+
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"

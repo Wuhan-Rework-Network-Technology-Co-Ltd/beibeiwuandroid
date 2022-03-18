@@ -44,6 +44,7 @@ import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SliderWebViewActivity;
 import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class DongtaiSliderAdapter extends RecyclerView.Adapter implements ViewPagerEx.OnPageChangeListener{
     private static final String TAG = "DongtaiAdapter";
@@ -350,7 +351,12 @@ public class DongtaiSliderAdapter extends RecyclerView.Adapter implements ViewPa
             ((DongtaiSliderAdapter.ViewHolder) viewHolder).menu_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    InformBlacklistAdapter adapter = new InformBlacklistAdapter(mContext,"circle",currentItem.getId(),currentItem.getMyid());
+                    InformBlacklistAdapter adapter = new InformBlacklistAdapter(mContext, "circle", currentItem.getId(), currentItem.getMyid(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+
+                        }
+                    });
                     final DialogPlus dialog = DialogPlus.newDialog(mContext)
                             .setAdapter(adapter)
                             .setFooter(R.layout.inform_blacklist_foot)

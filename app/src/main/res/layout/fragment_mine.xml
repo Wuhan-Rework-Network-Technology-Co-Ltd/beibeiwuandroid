@@ -33,7 +33,6 @@
                     android:id="@+id/userportrait_iv"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@mipmap/rentou"
                     android:layout_gravity="center"/>
 
                 <io.agora.chatroom.util.PortraitFrameView
@@ -79,7 +78,7 @@
                         android:id="@+id/follow_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="关注：3"
+                        android:text="关注：0"
                         android:textSize="12sp"
                         android:textColor="@color/text_color_4"/>
                     <View
@@ -89,7 +88,7 @@
                         android:id="@+id/fans_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="粉丝：110"
+                        android:text="粉丝：0"
                         android:textSize="12sp"
                         android:textColor="@color/text_color_4"/>
                 </LinearLayout>
@@ -131,7 +130,7 @@
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="乐园号：1525115"
+                    android:text="乐园号：0"
                     android:textColor="@color/color_white"
                     android:textSize="13sp" />
                 <View

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main4Branch.InformReasonActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class InformBlacklistAdapter extends BaseAdapter {
     private static final String TAG = "TestAdapter";
@@ -36,13 +39,15 @@ public class InformBlacklistAdapter extends BaseAdapter {
 
 
     //传入类型和id，itemid举报时就是条目id
-    public InformBlacklistAdapter(Context context,String type,String itemid,String userid) {
+    OkHttpResponseCallBack okHttpResponseCallBack;
+    public InformBlacklistAdapter(Context context, String type, String itemid, String userid, OkHttpResponseCallBack  okHttpResponseCallBack) {
         this.context = context;
         this.type = type;
         this.itemid = itemid;
         this.userid = userid;
         layoutInflater = LayoutInflater.from(context);
         shuserinfo = new SharedHelper(context.getApplicationContext());
+        this.okHttpResponseCallBack = okHttpResponseCallBack;
     }
 
     @Override
@@ -111,9 +116,16 @@ public class InformBlacklistAdapter extends BaseAdapter {
             switch (msg.what){
                 case 1:
                     Toast.makeText(context, "拉黑成功", Toast.LENGTH_LONG).show();
+                    if (TextUtils.isEmpty(Common.userInfoList.getMyblacklist())){
+                        Common.userInfoList.setMyblacklist(userid);
+                    }else {
+                        Common.userInfoList.setMyblacklist(Common.userInfoList.getMyblacklist()+","+userid);
+                    }
+                    okHttpResponseCallBack.getResponseString("");
                     break;
                 case 2:
                     Toast.makeText(context, "删除已提交", Toast.LENGTH_LONG).show();
+                    okHttpResponseCallBack.getResponseString("");
                     break;
             }
         }

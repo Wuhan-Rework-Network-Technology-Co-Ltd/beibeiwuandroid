@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/text_color_2"
+
     android:orientation="vertical">
 
     <Button
@@ -21,6 +21,15 @@
         android:padding="5dp"
         android:textColor="@color/text_color_1"
         android:text="删除"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_tipoff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textColor="@color/text_color_1"
+        android:text="举报"
         android:textSize="18sp" />
 
 </LinearLayout>

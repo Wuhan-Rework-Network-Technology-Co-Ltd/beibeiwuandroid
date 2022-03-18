@@ -811,7 +811,7 @@ public class CommentDialog {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_popip, null, false);
         Button btn_copy = (Button) view.findViewById(R.id.btn_copy);
         Button btn_delete = (Button) view.findViewById(R.id.btn_delete);
-
+        Button btn_tipoff = (Button) view.findViewById(R.id.btn_tipoff);
         if (Integer.parseInt(Common.myID)<10 || Integer.parseInt(Common.myID)==20978 || Common.myID.equals(deleteCommentList.authid)||Common.myID.equals(luntanList.getAuthid())){
             btn_delete.setVisibility(View.VISIBLE);
         }else {
@@ -866,6 +866,16 @@ public class CommentDialog {
             ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
             cm.setText(deleteCommentList.getComment_text());
             Toast.makeText(mContext,"复制到剪切板",Toast.LENGTH_LONG).show();
+            popWindow.dismiss();
+        });
+
+        btn_tipoff.setOnClickListener(v1 -> {
+            OkHttpInstance.tipoffComment(deleteCommentList.id, new OkHttpResponseCallBack() {
+                @Override
+                public void getResponseString(String responseString) {
+                    Toast.makeText(mContext,"已举报，等待处理！",Toast.LENGTH_LONG).show();
+                }
+            });
             popWindow.dismiss();
         });
 

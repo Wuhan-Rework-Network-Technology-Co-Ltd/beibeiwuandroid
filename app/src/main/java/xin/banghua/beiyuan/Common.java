@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,10 +24,11 @@ import xin.banghua.beiyuan.Adapter.FollowList;
 import xin.banghua.beiyuan.Adapter.FriendList;
 import xin.banghua.beiyuan.Adapter.StoreList;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class Common {
     public static String myID = null;
-
+    private static final String TAG = "Common";
 
     public static int screen_width = 0;
     public static int screen_height = 0;
@@ -70,6 +72,134 @@ public class Common {
     }
 
 
+    /**
+     * 是朋友
+     *
+     * @param userInfoList 用户信息列表
+     * @return {@link Boolean}
+     */
+    public static Boolean isFriend(UserInfoList userInfoList){
+        if (Common.userInfoList!=null) {
+            if (("," + userInfoList.getMyfriends() + ",").contains("," + Common.userInfoList.getId() + ",")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是黑色列表
+     *
+     * @param blacklist 用户信息列表
+     * @return {@link Boolean}
+     */
+    public static Boolean isBlackList(String blacklist){
+        try {
+            if (Common.userInfoList!=null){
+                if ((","+blacklist+",").contains(","+Common.userInfoList.getId()+",")) {
+                    return true;
+                }else {
+                    return false;
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "isBlackList: 抛出异常");
+        }
+
+
+        return false;
+    }
+
+
+    /**
+     * 我是黑名单
+     *
+     * @param uid uid
+     * @return {@link Boolean}
+     */
+    public static Boolean isBlackListMe(String uid){
+        try {
+            if (Common.userInfoList!=null){
+                if ((","+Common.userInfoList.getMyblacklist()+",").contains(","+uid+",")) {
+                    return true;
+                }else {
+                    return false;
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "isBlackList: 抛出异常");
+        }
+
+
+        return false;
+    }
+
+
+    /**
+     * 是贵宾
+     *
+     * @param userInfoList 用户信息列表
+     * @return {@link Boolean}
+     */
+    public static Boolean isVip(UserInfoList userInfoList){
+        Integer current_timestamp = Math.round(new Date().getTime()/1000);
+        int vip_time = Integer.parseInt(userInfoList.getVip()+"");
+        if (vip_time > current_timestamp) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    /**
+     * 是svip
+     *
+     * @param userInfoList 用户信息列表
+     * @return {@link Boolean}
+     */
+    public static Boolean isSVip(UserInfoList userInfoList){
+        Integer current_timestamp = Math.round(new Date().getTime()/1000);
+        int vip_time = Integer.parseInt(userInfoList.getSvip()+"");
+        if (vip_time > current_timestamp) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
+    /*
+    移除自己的vip头像框
+     */
+    public static void removeVipPortraitFrameOrVehicle(){
+        if ((Common.userInfoList.getPortraitframe().contains("svip") || Common.userInfoList.getPortraitframe().contains("vip")) && !Common.isSVip(Common.userInfoList)){
+            if (Common.userInfoList.getPortraitframe().contains("svip")){
+                Common.userInfoList.setPortraitframe("");
+                OkHttpInstance.equipGoods("-1", responseString -> {
+                });
+            }
+            if (Common.userInfoList.getVeilcel().contains("svip")){
+                Common.userInfoList.setVeilcel("");
+                OkHttpInstance.equipGoods("-2", responseString -> {
+                });
+            }
+
+            if (!Common.isVip(Common.userInfoList)){
+                if (Common.userInfoList.getPortraitframe().contains("vip")){
+                    Common.userInfoList.setPortraitframe("");
+                    OkHttpInstance.equipGoods("-1", responseString -> {
+                    });
+                }
+                if (Common.userInfoList.getVeilcel().contains("vip")){
+                    Common.userInfoList.setVeilcel("");
+                    OkHttpInstance.equipGoods("-2", responseString -> {
+                    });
+                }
+            }
+        }
+    }
 
 
     // split截取后缀名
@@ -171,11 +301,13 @@ public class Common {
         } else if(deltime > 24*60*60) {
             //shortstring = (int)(deltime/(24*60*60)) + "天前";
             //shortstring = timestampToStrYYMMDD(dateline);
-            shortstring = "离线";
+            shortstring = "最近在线";
         } else if(deltime > 60*60) {
-            shortstring = (int)(deltime/(60*60)) + "小时前";
+            //shortstring = (int)(deltime/(60*60)) + "小时前";
+            shortstring = "今天在线";
         } else if(deltime > 300) {
-            shortstring = (int)(deltime/(60)) + "分前";
+            //shortstring = (int)(deltime/(60)) + "分前";
+            shortstring = "刚刚在线";
         } else {
             shortstring = "在线";
         }

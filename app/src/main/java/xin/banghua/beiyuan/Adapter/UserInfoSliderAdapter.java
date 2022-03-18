@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +27,7 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.orhanobut.dialogplus.DialogPlus;
 
 import org.json.JSONArray;
 
@@ -42,6 +44,7 @@ import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.utils.MapDistance;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  ViewPagerEx.OnPageChangeListener{
     private static final String TAG = "UserInfoSliderAdapter";
@@ -408,6 +411,61 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                     userInfoCallBack.getUserInfo(currentItem);
                     Toast.makeText(mContext,"已同意好友申请！",Toast.LENGTH_SHORT).show();
                 });
+                ((UserinfoHolder) viewHolder).userinfoLayout.setOnLongClickListener(new View.OnLongClickListener(){
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Log.d(TAG, "长按中");
+                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                                .setAdapter(new BaseAdapter() {
+                                    @Override
+                                    public int getCount() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public Object getItem(int position) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public long getItemId(int position) {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public View getView(int position, View convertView, ViewGroup parent) {
+                                        return null;
+                                    }
+                                })
+                                .setFooter(R.layout.dialog_foot_confirm)
+                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                                .create();
+                        dialog.show();
+                        View view = dialog.getFooterView();
+                        TextView prompt = view.findViewById(R.id.prompt_tv);
+                        prompt.setText("确定要删除吗？");
+                        Button dismissdialog_btn = view.findViewById(R.id.cancel_btn);
+                        dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        Button confirm_btn = view.findViewById(R.id.confirm_btn);
+                        confirm_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                OkHttpInstance.deleteFriendNumber(currentItem.getId(),responseString -> {
+                                    userInfoLists.remove(i);
+                                    notifyDataSetChanged();
+                                });
+                                dialog.dismiss();
+                            }
+                        });
+                        return true;
+                    }
+                });
+
             }else {
                 ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.GONE);
             }

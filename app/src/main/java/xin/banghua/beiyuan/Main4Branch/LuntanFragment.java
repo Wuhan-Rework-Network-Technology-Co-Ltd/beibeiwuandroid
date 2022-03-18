@@ -1,6 +1,8 @@
 package xin.banghua.beiyuan.Main4Branch;
 
 
+import static xin.banghua.onekeylogin.Constant.THEME_KEY;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.agora.chatroom.activity.ChannelGridActivity;
 import io.agora.chatroom.activity.PublishPostActivity;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -55,6 +59,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.LuntanList;
 import xin.banghua.beiyuan.Adapter.LuntanSliderAdapter;
 import xin.banghua.beiyuan.App;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.MarqueeTextView;
 import xin.banghua.beiyuan.MarqueeTextViewClickListener;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
@@ -65,8 +70,8 @@ import xin.banghua.beiyuan.Signin.ProvinceAdapter;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.bean.AddrBean;
 import xin.banghua.beiyuan.custom_ui.CustomVideoView;
-import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.ScreenUtils;
+import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 
 /**
@@ -141,18 +146,29 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
 
 
 
-
+    ImageView goToRoomTwo;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         marqueeTv =  view.findViewById(R.id.marquee);
         look_just_btn = view.findViewById(R.id.look_just_btn);
+
+        goToRoomTwo = view.findViewById(R.id.goToRoomTwo);
+        goToRoomTwo.setOnClickListener(v -> {
+            if (Common.myID ==null){
+                Intent intentSignin = new Intent(getContext(), SigninActivity.class);
+                getContext().startActivity(intentSignin);
+            }else {
+                Intent intent = new Intent(getContext(), ChannelGridActivity.class);
+                startActivity(intent);
+            }
+        });
         //首页初始化
 //        getDataGonggao(getString(R.string.luntan_url));
 //        getDataSlider(getString(R.string.luntan_url),"首页");
 
-        subtitle = "首页";
-        getDataPostlist(getString(R.string.luntan_url_new),"首页","1");
+        subtitle = "精华";
+        getDataPostlist(getString(R.string.luntan_url_new),"精华","1");
         if (lookJust.get(subtitle)!=null){
             if (!lookJust.get(subtitle).equals("1")){
                 look_just_btn.setVisibility(View.VISIBLE);
@@ -348,7 +364,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
         toggleButton11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                subtitle = "首页";
+                subtitle = "精华";
                 filter_region = "不限";
                 pageindex = 1;
                 toggleButton11.setTextSize(22);
@@ -372,7 +388,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
             @Override
             public void onClick(View v) {
                 if (Common.myID==null){
-                    Intent intent = new Intent(getActivity(), SigninActivity.class);
+                    Intent intent = new Intent(getActivity(), OneKeyLoginActivity.class);
+                    intent.putExtra(THEME_KEY, 4);
                     getActivity().startActivity(intent);
                     return;
                 }
@@ -404,7 +421,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
         toggleButton13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                subtitle = "精华";
+                subtitle = "首页";
                 filter_region = "不限";
                 pageindex = 1;
                 toggleButton11.setTextSize(15);
@@ -575,7 +592,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
             public void onClick(View v) {
                 //Navigation.findNavController(v).navigate(R.id.luntan_fabutiezi_action);
                 if (Common.myID==null){
-                    Intent intent = new Intent(getActivity(), SigninActivity.class);
+                    Intent intent = new Intent(getActivity(), OneKeyLoginActivity.class);
+                    intent.putExtra(THEME_KEY, 4);
                     getActivity().startActivity(intent);
                 }else {
                     Intent intent = new Intent(getActivity(), PublishPostActivity.class);
@@ -680,21 +698,29 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 for (int i=0;i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    String[] postPicture = jsonObject.getString("postpicture").split(",");
-                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
-                            jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
-                            jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
-                            jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
-                            jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
-                    posts.setComment_forbid(jsonObject.getString("comment_forbid"));
-                    posts.setPostvideo(jsonObject.getString("postvideo"));
-                    posts.setWidth(jsonObject.getString("width"));
-                    posts.setHeight(jsonObject.getString("height"));
-                    posts.setCover(jsonObject.getString("cover"));
-                    posts.setOnline(jsonObject.getString("online"));
-                    posts.setPortraitframe(jsonObject.getString("portraitframe"));
-                    luntanLists.add(posts);
+                    if (!Common.isBlackList(jsonObject.getString("myblacklist")) && !Common.isBlackListMe(jsonObject.getString("authid"))){
+                        String[] postPicture = jsonObject.getString("postpicture").split(",");
+                        LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
+                                jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
+                                jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
+                                jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
+                                jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
+                                jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
+                        posts.setComment_forbid(jsonObject.getString("comment_forbid"));
+                        posts.setPostvideo(jsonObject.getString("postvideo"));
+                        posts.setWidth(jsonObject.getString("width"));
+                        posts.setHeight(jsonObject.getString("height"));
+                        posts.setCover(jsonObject.getString("cover"));
+                        posts.setOnline(jsonObject.getString("online"));
+                        posts.setPortraitframe(jsonObject.getString("portraitframe"));
+                        posts.setMyfriends(jsonObject.getString("myfriends"));
+                        posts.setMyblacklist(jsonObject.getString("myblacklist"));
+                        posts.setPlay_once(jsonObject.getString("play_once"));
+                        posts.setMore_five(jsonObject.getString("more_five"));
+                        posts.setPlay_completed(jsonObject.getString("play_completed"));
+                        posts.setPlay_time(jsonObject.getString("play_time"));
+                        luntanLists.add(posts);
+                    }
                 }
                 adapter.swapData(luntanLists);
             }
@@ -707,39 +733,30 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
             if (jsonArray.length()>0){
                 for (int i=0;i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String[] postPicture = jsonObject.getString("postpicture").split(",");
-                    LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
-                            jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
-                            jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
-                            jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
-                            jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
-                            jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
-                    posts.setComment_forbid(jsonObject.getString("comment_forbid"));
-                    posts.setPostvideo(jsonObject.getString("postvideo"));
-                    posts.setWidth(jsonObject.getString("width"));
-                    posts.setHeight(jsonObject.getString("height"));
-                    posts.setCover(jsonObject.getString("cover"));
-                    posts.setOnline(jsonObject.getString("online"));
-                    posts.setPortraitframe(jsonObject.getString("portraitframe"));
 
-//                    if (i%3==0){
-//                        posts.setCover("https://oss.banghua.xin/audios/99999/2022/02/D98TNR5jJ98gZG88Xcimc83P.jpeg");
-//                        posts.setPostvideo("https://oss.banghua.xin/audios/99999/2022/02/xwVrBZVReI4QMwsgMi4QqrWRwgbQmq.mp4");
-//                        posts.setWidth("1280");
-//                        posts.setHeight("720");
-//                    }else if (i%4==0){
-//                        posts.setCover("https://oss.banghua.xin/audios/99999/2022/02/bzgWsbAgGaw8HW8g8J8sTt8U.jpeg");
-//                        posts.setPostvideo("https://oss.banghua.xin/audios/99999/2022/02/RVXIuSxnEESdVuOS6uu6NCsXeevOHn.mp4");
-//                        posts.setWidth("720");
-//                        posts.setHeight("1280");
-//                    }else if (i%5==0){
-//                        posts.setCover("https://oss.banghua.xin/audios/99999/2022/02/yqqdC422bd12D02JVJMZ7M4b.jpeg");
-//                        posts.setPostvideo("https://oss.banghua.xin/audios/99999/2022/02/Odc8dmMo081tZeaY0TMJz0tg8g4cv8.mp4");
-//                        posts.setWidth("720");
-//                        posts.setHeight("760");
-//                    }
-
-                    luntanLists.add(posts);
+                    if (!Common.isBlackList(jsonObject.getString("myblacklist")) && !Common.isBlackListMe(jsonObject.getString("authid"))){
+                        String[] postPicture = jsonObject.getString("postpicture").split(",");
+                        LuntanList posts = new LuntanList(jsonObject.getString("age"),jsonObject.getString("gender"),jsonObject.getString("region"),
+                                jsonObject.getString("property"),jsonObject.getString("id"),jsonObject.getString("plateid"),
+                                jsonObject.getString("platename"),jsonObject.getString("authid"),jsonObject.getString("authnickname"),
+                                jsonObject.getString("authportrait"),jsonObject.getString("posttip"),jsonObject.getString("posttitle"),
+                                jsonObject.getString("posttext"),postPicture,jsonObject.getString("like"),jsonObject.getString("favorite"),
+                                jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
+                        posts.setComment_forbid(jsonObject.getString("comment_forbid"));
+                        posts.setPostvideo(jsonObject.getString("postvideo"));
+                        posts.setWidth(jsonObject.getString("width"));
+                        posts.setHeight(jsonObject.getString("height"));
+                        posts.setCover(jsonObject.getString("cover"));
+                        posts.setOnline(jsonObject.getString("online"));
+                        posts.setPortraitframe(jsonObject.getString("portraitframe"));
+                        posts.setMyfriends(jsonObject.getString("myfriends"));
+                        posts.setMyblacklist(jsonObject.getString("myblacklist"));
+                        posts.setPlay_once(jsonObject.getString("play_once"));
+                        posts.setMore_five(jsonObject.getString("more_five"));
+                        posts.setPlay_completed(jsonObject.getString("play_completed"));
+                        posts.setPlay_time(jsonObject.getString("play_time"));
+                        luntanLists.add(posts);
+                    }
                 }
             }
 

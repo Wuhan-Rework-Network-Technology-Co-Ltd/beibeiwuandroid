@@ -10,6 +10,20 @@ public class LuntanList  implements Serializable {
     public LuntanList() {
     }
 
+    @JSONField(name = "myfriends")
+    String myfriends = "";
+    @JSONField(name = "myblacklist")
+    String myblacklist = "";
+
+    @JSONField(name = "play_once")
+    String play_once;
+    @JSONField(name = "more_five")
+    String more_five;
+    @JSONField(name = "play_completed")
+    String play_completed;
+    @JSONField(name = "play_time")
+    String play_time;
+
     @JSONField(name = "id")
     String id;
     @JSONField(name = "plateid")
@@ -103,6 +117,54 @@ public class LuntanList  implements Serializable {
         this.authsvip = authsvip;
 
         this.comment_sum = comment_sum;
+    }
+
+    public String getPlay_time() {
+        return play_time;
+    }
+
+    public void setPlay_time(String play_time) {
+        this.play_time = play_time;
+    }
+
+    public String getMyfriends() {
+        return myfriends;
+    }
+
+    public void setMyfriends(String myfriends) {
+        this.myfriends = myfriends;
+    }
+
+    public String getMyblacklist() {
+        return myblacklist;
+    }
+
+    public void setMyblacklist(String myblacklist) {
+        this.myblacklist = myblacklist;
+    }
+
+    public String getPlay_once() {
+        return play_once;
+    }
+
+    public void setPlay_once(String play_once) {
+        this.play_once = play_once;
+    }
+
+    public String getMore_five() {
+        return more_five;
+    }
+
+    public void setMore_five(String more_five) {
+        this.more_five = more_five;
+    }
+
+    public String getPlay_completed() {
+        return play_completed;
+    }
+
+    public void setPlay_completed(String play_completed) {
+        this.play_completed = play_completed;
     }
 
     public String getPortraitframe() {

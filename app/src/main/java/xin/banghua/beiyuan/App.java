@@ -6,6 +6,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.http.HttpResponseCache;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +35,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import io.agora.chatroom.ChatRoomApplication;
+import io.agora.chatroom.manager.ChatRoomManager;
 import io.agora.chatroom.manager.RtcManager;
 import io.agora.chatroom.manager.RtmManager;
 import io.agora.chatroom.model.Constant;
@@ -54,8 +56,12 @@ import xin.banghua.beiyuan.Main3Branch.RongyunConnect;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.Signin.LoginSmsActivity;
+import xin.banghua.beiyuan.Signin.OneKeyLogInActivityResult;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
+import xin.banghua.onekeylogin.ModeSelectActivity;
+import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
 import xyz.doikki.videoplayer.player.VideoViewConfig;
 import xyz.doikki.videoplayer.player.VideoViewManager;
@@ -108,7 +114,9 @@ public class App extends Application implements Application.ActivityLifecycleCal
         PushClass.initPushService(getApplicationContext());
 
 
-
+        //一键登录
+        ModeSelectActivity.sign_in_intent = new Intent(mApplication, LoginSmsActivity.class);
+        ModeSelectActivity.log_in_intent = new Intent(mApplication, OneKeyLogInActivityResult.class);
 
 
         Log.d(TAG, "onCreate: onActivityonCreate:");
@@ -141,6 +149,42 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
 //        closeAndroidPDialog();
 
+        RongIMClient.getInstance().setOnReceiveMessageListener(new RongIMClient.OnReceiveMessageWrapperListener() {
+            /**
+             * 接收实时或者离线消息。
+             * 注意:
+             * 1. 针对接收离线消息时，服务端会将 200 条消息打成一个包发到客户端，客户端对这包数据进行解析。
+             * 2. hasPackage 标识是否还有剩余的消息包，left 标识这包消息解析完逐条抛送给 App 层后，剩余多少条。
+             * 如何判断离线消息收完：
+             * 1. hasPackage 和 left 都为 0；
+             * 2. hasPackage 为 0 标识当前正在接收最后一包（200条）消息，left 为 0 标识最后一包的最后一条消息也已接收完毕。
+             *
+             * @param message    接收到的消息对象
+             * @param left       每个数据包数据逐条上抛后，还剩余的条数
+             * @param hasPackage 是否在服务端还存在未下发的消息包
+             * @param offline    消息是否离线消息
+             * @return 是否处理消息。 如果 App 处理了此消息，返回 true; 否则返回 false 由 SDK 处理。
+             */
+            @Override
+            public boolean onReceived(final Message message, final int left, boolean hasPackage, boolean offline) {
+                Log.d(TAG, "onMessageClick: 1被封禁");
+                if (message.getObjectName().equals("RC:TxtMsg")){
+                    String[] textSplit = message.getContent().toString().split("'");
+                    if (textSplit[1].contains("你因为违规，已被封禁。") && message.getSenderUserId().equals("1")){
+                        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("userID", "");
+                        editor.commit();
+                        Intent intent = new Intent(App.getApplication(), OneKeyLoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                        startActivity(intent);
+                        System.exit(0);
+                    }
+                }
+                return false;
+            }
+        });
+
 
         //获取融云token
         SharedHelper sh = new SharedHelper(getApplicationContext());
@@ -151,7 +195,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         RongExtensionManager.getInstance().addExtensionModule(new ContactCardExtensionModule());
 
-        frontOrBack();
+
 
 
         VideoViewManager.setConfig(VideoViewConfig.newBuilder()
@@ -176,6 +220,11 @@ public class App extends Application implements Application.ActivityLifecycleCal
                 }
             }
         }, 10000, 300000);
+
+
+
+
+        frontOrBack();
     }
 
     public static void initThirdSDK(){
@@ -311,7 +360,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
                     Log.v("vergo", "**********切到前台**********");
                     setFrontOrBack("1");
 
-
+                    ChatRoomManager.instance(getApplication()).joinChannel("0");
                 }
                 count++;
             }

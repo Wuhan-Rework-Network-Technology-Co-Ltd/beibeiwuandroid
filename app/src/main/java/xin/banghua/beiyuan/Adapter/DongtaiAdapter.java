@@ -34,6 +34,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHolder>{
     private static final String TAG = "DongtaiAdapter";
@@ -268,7 +269,12 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
         viewHolder.menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InformBlacklistAdapter adapter = new InformBlacklistAdapter(mContext,"circle",currentItem.getId(),currentItem.getMyid());
+                InformBlacklistAdapter adapter = new InformBlacklistAdapter(mContext, "circle", currentItem.getId(), currentItem.getMyid(), new OkHttpResponseCallBack() {
+                    @Override
+                    public void getResponseString(String responseString) {
+
+                    }
+                });
                 final DialogPlus dialog = DialogPlus.newDialog(mContext)
                         .setAdapter(adapter)
                         .setFooter(R.layout.inform_blacklist_foot)

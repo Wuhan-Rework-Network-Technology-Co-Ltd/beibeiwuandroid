@@ -1,6 +1,7 @@
 package io.agora.chatroom.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +19,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.agora.chatroom.R;
 import io.agora.chatroom.R2;
-import io.agora.chatroom.model.Channel;
+import io.agora.chatroom.UserInfoList;
 
 public class ChannelGridAdapter extends RecyclerView.Adapter<ChannelGridAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
     private OnItemClickListener mListener;
 
-    private List<Channel> mChannelList;
+    private List<UserInfoList> mChannelList;
 
     public ChannelGridAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
-    public void initData(List<Channel> mChannelList) {
+    public void initData(List<UserInfoList> mChannelList) {
         this.mChannelList = mChannelList;
 
 //        Resources resources = context.getResources();
@@ -50,6 +51,7 @@ public class ChannelGridAdapter extends RecyclerView.Adapter<ChannelGridAdapter.
 //
 //        drawables.recycle();
 //        backgrounds.recycle();
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -67,12 +69,19 @@ public class ChannelGridAdapter extends RecyclerView.Adapter<ChannelGridAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Channel channel = mChannelList.get(position);
+        UserInfoList channel = mChannelList.get(position);
 
-        Glide.with(mInflater.getContext()).load(channel.getAudioroomcover()).into( holder.iv_image);
+        if (!TextUtils.isEmpty(channel.getAudioroomcover())){
+            Glide.with(mInflater.getContext()).load(channel.getAudioroomcover()).into( holder.iv_image);
+        }else {
+            Glide.with(mInflater.getContext()).load(channel.getPortrait()).into( holder.iv_image);
+        }
+
         //holder.iv_image.setImageResource(channel.getDrawableRes());
         holder.tv_name.setText(channel.getAudioroomname());
+        holder.room_id.setText("id："+channel.getId());
 
+        holder.user_count.setText(channel.getAudiopopulation()+"人");
         holder.view.setOnClickListener((view) -> {
             if (mListener != null)
                 mListener.onItemClick(view, position, channel);
@@ -89,6 +98,10 @@ public class ChannelGridAdapter extends RecyclerView.Adapter<ChannelGridAdapter.
         ImageView iv_image;
         @BindView(R2.id.tv_name)
         TextView tv_name;
+        @BindView(R2.id.user_count)
+        TextView user_count;
+        @BindView(R2.id.room_id)
+        TextView room_id;
 
         ViewHolder(View view) {
             super(view);
@@ -98,7 +111,7 @@ public class ChannelGridAdapter extends RecyclerView.Adapter<ChannelGridAdapter.
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position, Channel channel);
+        void onItemClick(View view, int position, UserInfoList channel);
     }
 
 }

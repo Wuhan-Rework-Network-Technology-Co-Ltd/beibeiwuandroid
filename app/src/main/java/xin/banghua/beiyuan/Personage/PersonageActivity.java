@@ -113,6 +113,8 @@ public class PersonageActivity extends AppCompatActivity {
 
     TextView follow_tv,fans_tv;
 
+    TextView id_tv;
+
     ConstraintLayout container;
     RecyclerView sent_gift_recyclerview;
 
@@ -123,6 +125,7 @@ public class PersonageActivity extends AppCompatActivity {
     GiftSentAdapter giftSentAdapter;
 
     PortraitFrameView portraitFrameView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,6 +190,7 @@ public class PersonageActivity extends AppCompatActivity {
         Log.d(TAG, "onViewCreated: 进入person");
         follow_tv = findViewById(R.id.follow_tv);
         fans_tv = findViewById(R.id.fans_tv);
+        id_tv = findViewById(R.id.id_tv);
         //取出选中的用户id
         //SharedHelper shvalue = new SharedHelper(App.getApplication().getApplicationContext());
         //mUserID = shvalue.readValue().get("value");
@@ -691,6 +695,7 @@ public class PersonageActivity extends AppCompatActivity {
             }
         });
         portraitFrameView.setPortraitFrame(Common.getOssResourceUrl(jsonObject.getString("portraitframe")));
+        id_tv.setText("乐园id："+jsonObject.getString("id"));
         follow_tv.setText("关注："+jsonObject.getString("follow"));
         follow_tv.setOnClickListener(v -> {
             Intent intent = new Intent(this,FollowAndFansActivity.class);
@@ -873,7 +878,14 @@ public class PersonageActivity extends AppCompatActivity {
                             Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
 
                             userInfoList = JSON.parseObject(resultJson1,UserInfoList.class);
-
+                            if (Common.isBlackList(userInfoList.getMyblacklist())){
+                                make_friend_btn.setText("已被对方加入黑名单");
+                                make_friend_btn.setClickable(false);
+                                user_tiezi.setClickable(false);
+                                join_room_btn.setClickable(false);
+                                svip_chat_btn.setClickable(false);
+                                make_follow.setClickable(false);
+                            }
                             JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
                             try {
                                 initPersonage(mView,jsonObject);
@@ -897,6 +909,11 @@ public class PersonageActivity extends AppCompatActivity {
                         break;
                     case 3:
                         add_blacklist_tv.setText("移除黑名单");
+                        if (TextUtils.isEmpty(Common.userInfoList.getMyblacklist())){
+                            Common.userInfoList.setMyblacklist(userInfoList.getId());
+                        }else {
+                            Common.userInfoList.setMyblacklist(Common.userInfoList.getMyblacklist()+","+userInfoList.getId());
+                        }
                         Toast.makeText(mContext,"已加入黑名单",Toast.LENGTH_LONG).show();
                         break;
                     case 4:

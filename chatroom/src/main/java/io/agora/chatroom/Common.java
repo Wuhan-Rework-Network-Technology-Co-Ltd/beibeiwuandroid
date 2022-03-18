@@ -43,6 +43,8 @@ public class Common {
 
     public static UserInfoList myUserInfoList = new UserInfoList();
 
+    public static String[] filterString = {};
+
     static Intent intentChatRoomService;//聊天室
     public static void instanceChatRoomService(Context context){
         intentChatRoomService = new Intent(context, ChatRoomService.class);

@@ -58,7 +58,7 @@ public class SignupActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","小贝乐园用户协议");
-                intent.putExtra("sliderurl","https://www.banghua.xin/useragreement.html");
+                intent.putExtra("sliderurl","https://console.banghua.xin/useragreement.html");
                 mContext.startActivity(intent);
             }
         });
@@ -68,7 +68,7 @@ public class SignupActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","小贝乐园隐私政策");
-                intent.putExtra("sliderurl","https://www.banghua.xin/privacypolicy.html");
+                intent.putExtra("sliderurl","https://console.banghua.xin/privacypolicy.html");
                 mContext.startActivity(intent);
             }
         });

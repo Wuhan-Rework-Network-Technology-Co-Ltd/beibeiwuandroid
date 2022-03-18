@@ -75,9 +75,13 @@ public class PortraitFrameView extends FrameLayout {
     SVGAParser svgaParser;
 
     public void setPortraitFrame(String svgaUrl){
+
         if (TextUtils.isEmpty(svgaUrl)){
+            this.setVisibility(INVISIBLE);
             return;
         }
+
+        this.setVisibility(VISIBLE);
         portrait_frame_image_view = mView.findViewById(R.id.portrait_frame_image_view);
         animationView = mView.findViewById(R.id.portrait_frame_svga_view);
 

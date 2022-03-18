@@ -208,6 +208,7 @@ public class SousuoresultFragment extends Fragment {
                             .add("userRegion",getArguments().getString("userRegion"))
                             .add("userGender",getArguments().getString("userGender"))
                             .add("userProperty",getArguments().getString("userProperty"))
+                            .add("userOnline",getArguments().getString("userOnline"))
                             .add("latitude",locationInfo.get("latitude"))
                             .add("longitude",locationInfo.get("longitude"))
                             .add("pageindex",pageindex)

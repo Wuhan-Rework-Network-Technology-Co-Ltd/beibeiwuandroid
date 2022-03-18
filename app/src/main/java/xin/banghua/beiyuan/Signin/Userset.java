@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.donkingliang.imageselector.utils.ImageSelector;
 import com.google.gson.GsonBuilder;
@@ -42,6 +45,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.LaunchActivity;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.bean.AddrBean;
 
 public class Userset extends AppCompatActivity {
@@ -69,9 +73,72 @@ public class Userset extends AppCompatActivity {
     private List<AddrBean.ProvinceBean.CityBean> cityBeanList;
     private AddrBean.ProvinceBean provinceBean;
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_conversation_personpage) {
+            Log.d(TAG, "onOptionsItemSelected: 跳过注册设置");
+            userNickname = userNickname_et.getText().toString();
+//                if (userNickname.equals("")&&logtype.equals("1")){
+//                    Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+            userAge = userAge_et.getText().toString();
+            if (userAge.equals("")){
+                Toast.makeText(mContext, "请输入年龄", Toast.LENGTH_LONG).show();
+                return true;
+            }
+            userRegion = userRegion_et.getText().toString();
+            if (userRegion.equals("")){
+                Toast.makeText(mContext, "请输入地区", Toast.LENGTH_LONG).show();
+                return true;
+            }
+            userSignature = userSignature_et.getText().toString();
+//                if (userSignature.equals("")){
+//                    Toast.makeText(mContext, "请输入个人签名", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+            userGender = ((RadioButton) findViewById(userGender_rg.getCheckedRadioButtonId())).getText().toString();
+            userProperty = ((RadioButton) findViewById(userProperty_rg.getCheckedRadioButtonId())).getText().toString();
+            referral = referral_et.getText().toString();
+
+            if (if_submited == 1){
+                return true;
+            }
+            if_submited = 1;
+            if (logtype.equals("1")){
+                postSignUp("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signup&m=socialchat");
+            }else if (logtype.equals("2")){
+                postWXSignUp("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signupwx&m=socialchat");
+            }
+            return true;
+        }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish(); // back button
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override  //菜单的填充
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_toolbar_userset, menu);
+        return true;
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userset);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("资料填写");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         CheckPermission.verifyPermissionCameraAndStorage(Userset.this);
 
@@ -136,7 +203,7 @@ public class Userset extends AppCompatActivity {
 
 
 
-        Log.d("账号密码", userAccount+"/"+userPassword);
+
 
         userPortrait_iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,10 +236,10 @@ public class Userset extends AppCompatActivity {
 //                    return;
 //                }
                 userNickname = userNickname_et.getText().toString();
-                if (userNickname.equals("")&&logtype.equals("1")){
-                    Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_LONG).show();
-                    return;
-                }
+//                if (userNickname.equals("")&&logtype.equals("1")){
+//                    Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
                 userAge = userAge_et.getText().toString();
                 if (userAge.equals("")){
                     Toast.makeText(mContext, "请输入年龄", Toast.LENGTH_LONG).show();
@@ -184,10 +251,10 @@ public class Userset extends AppCompatActivity {
                     return;
                 }
                 userSignature = userSignature_et.getText().toString();
-                if (userSignature.equals("")){
-                    Toast.makeText(mContext, "请输入个人签名", Toast.LENGTH_LONG).show();
-                    return;
-                }
+//                if (userSignature.equals("")){
+//                    Toast.makeText(mContext, "请输入个人签名", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
                 userGender = ((RadioButton) findViewById(userGender_rg.getCheckedRadioButtonId())).getText().toString();
                 userProperty = ((RadioButton) findViewById(userProperty_rg.getCheckedRadioButtonId())).getText().toString();
                 referral = referral_et.getText().toString();
@@ -279,6 +346,8 @@ public class Userset extends AppCompatActivity {
                     }else {
                         Log.d("跳转", "intent");
                         Toast.makeText(mContext, "手机注册成功", Toast.LENGTH_LONG).show();
+                        SharedHelper sh = new SharedHelper(mContext);
+                        sh.saveUserInfoID(msg.obj.toString());
                         Intent intent = new Intent(Userset.this, LaunchActivity.class);
                         startActivity(intent);
                     }

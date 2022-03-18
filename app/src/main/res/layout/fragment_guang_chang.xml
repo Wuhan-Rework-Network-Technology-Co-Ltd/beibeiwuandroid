@@ -27,7 +27,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color333"
-                    android:text="动态"
+                    android:text="推荐"
                     android:layout_gravity="bottom"
                     android:textStyle="bold"
                     android:textSize="22sp"/>
@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color333"
-                    android:text="精华"
+                    android:text="最新"
                     android:layout_gravity="bottom"
                     android:textStyle="bold"
                     android:textSize="15sp"/>

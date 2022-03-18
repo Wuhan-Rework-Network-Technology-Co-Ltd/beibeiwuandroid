@@ -58,6 +58,7 @@ import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.custom_ui.ad.CommonCallBackInterfaceWithSlashAd;
 import xin.banghua.beiyuan.custom_ui.ad.SplashAdFrameLayout;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class LaunchActivity extends Activity {
     private static final String TAG = "SplashScreenSampleActivity";
@@ -138,6 +139,11 @@ public class LaunchActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        
+        if (",165661,117886,86261,1596,169152,20978,".contains(",169152,")){
+            Log.d(TAG, "onCreate: 测试包含169152");
+        }
 
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -187,12 +193,14 @@ public class LaunchActivity extends Activity {
         sh = new SharedHelper(getApplicationContext());
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
-        if(userInfo.get("userID")==""){
 
+        if(userInfo.get("userID")==""){
+            Log.d(TAG, "ifSignin: 1启动是否登录");
             Common.myID = null;
 //            Intent intentSignin = new Intent(MainActivity.this, SigninActivity.class);
 //            startActivity(intentSignin);
         }else{
+            Log.d(TAG, "ifSignin: 2启动是否登录"+userInfo.toString());
             //唯一登录验证
             Common.myID = userInfo.get("userID");
             io.agora.chatroom.model.Constant.sUserId = Integer.parseInt(Common.myID);
@@ -335,10 +343,18 @@ public class LaunchActivity extends Activity {
                     Common.myInfo = msg.obj.toString();
                     Log.d(TAG, "handleMessage: 自己信息"+Common.myInfo);
                     Common.userInfoList = JSON.parseObject(Common.myInfo, UserInfoList.class);
+                    OkHttpInstance.postRongyunUserRegister(Common.userInfoList, new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            Log.d(TAG, "getResponseString: 融云登录成功");
+                        }
+                    });
+                    Common.removeVipPortraitFrameOrVehicle();
                     io.agora.chatroom.Common.myUserInfoList = JSON.parseObject(Common.myInfo, io.agora.chatroom.UserInfoList.class);
                     Log.d(TAG, "handleMessage: 1自己信息"+Common.userInfoList.getId());
                     //聊天室用户信息
                     try {
+                        io.agora.chatroom.model.Constant.sUserId= Integer.parseInt(Common.userInfoList.getId());
                         io.agora.chatroom.model.Constant.sName = Common.userInfoList.getNickname();
                         io.agora.chatroom.model.Constant.sPortrait = Common.userInfoList.getPortrait();
                         io.agora.chatroom.model.Constant.sGender = Common.userInfoList.getGender();
@@ -414,7 +430,7 @@ public class LaunchActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","小贝乐园用户协议");
-                intent.putExtra("sliderurl","https://www.banghua.xin/useragreement.html");
+                intent.putExtra("sliderurl","https://console.banghua.xin/useragreement.html");
                 mContext.startActivity(intent);
                 dialog.dismiss();
             }
@@ -425,7 +441,7 @@ public class LaunchActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","小贝乐园隐私政策");
-                intent.putExtra("sliderurl","https://www.banghua.xin/privacypolicy.html");
+                intent.putExtra("sliderurl","https://console.banghua.xin/privacypolicy.html");
                 mContext.startActivity(intent);
                 dialog.dismiss();
             }

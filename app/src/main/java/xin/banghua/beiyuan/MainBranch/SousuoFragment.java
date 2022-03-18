@@ -1,7 +1,10 @@
 package xin.banghua.beiyuan.MainBranch;
 
 
+import static xin.banghua.beiyuan.utils.ThreadUtils.runOnUiThread;
+
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -25,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.gson.GsonBuilder;
+import com.orhanobut.dialogplus.DialogPlus;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +41,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.Main5Branch.BuyvipActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.CityAdapter;
@@ -59,13 +66,15 @@ public class SousuoFragment extends Fragment {
     //昵称，年龄，地区
     EditText userNickname_et,userAge_et,userRegion_et,direct_et;
     //性别，标签
-    RadioGroup userGender_rg,userProperty_rg;
-    RadioButton male_rb,female_rb,zProperty_rb,bProperty_rb,dProperty_rb;
+    RadioGroup userGender_rg,userProperty_rg,userOnline_rg;
+    RadioButton male_rb,female_rb,zProperty_rb,bProperty_rb,dProperty_rb,outline,online;
 
     //
-    String logtype,userAccount,userPassword,userNickname,userAge,userRegion,userGender,userProperty,userPortrait;
+    String logtype,userAccount,userPassword,userNickname,userAge,userRegion,userGender,userProperty,userPortrait,userOnline;
     Button direct_btn,condition_btn;
 
+
+    View hold_view;
 
     TextView viptime_tv;
     public SousuoFragment() {
@@ -81,10 +90,22 @@ public class SousuoFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(!vipPrivilege()){
+            hold_view.setVisibility(View.VISIBLE);
+            hold_view.setOnClickListener(v -> needVip());
+        }else {
+            hold_view.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         userRegion_et = view.findViewById(R.id.userRegion);
         //默认不限
+        hold_view = view.findViewById(R.id.hold_view);//直接搜索
         userRegion_et.setText("不限");
         userProperty_rg = view.findViewById(R.id.userProperty);//直接搜索
         direct_et = view.findViewById(R.id.direct_et);
@@ -92,6 +113,7 @@ public class SousuoFragment extends Fragment {
         //条件搜索
         userAge_et = view.findViewById(R.id.userAge);
         userGender_rg = view.findViewById(R.id.userGender);
+        userOnline_rg = view.findViewById(R.id.userOnline_rg);
         condition_btn = view.findViewById(R.id.submit_btn);
         viptime_tv = view.findViewById(R.id.viptime_tv);
         zProperty_rb = view.findViewById(R.id.zProperty);
@@ -101,7 +123,11 @@ public class SousuoFragment extends Fragment {
         spCity = view.findViewById(R.id.spinner_city);
         spProvince = view.findViewById(R.id.spinner_province);
         //vip
-        getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+        outline = view.findViewById(R.id.outline);
+        online = view.findViewById(R.id.online);
+
+
+        //getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
         //初始化导航按钮
         initNavigateButton(view);
 
@@ -252,6 +278,83 @@ public class SousuoFragment extends Fragment {
         });
     }
 
+    private Boolean vipPrivilege(){
+        if (Common.userInfoList!=null){
+            if(Common.isVip(Common.userInfoList)||Common.isSVip(Common.userInfoList)){
+                zProperty_rb.setEnabled(true);
+                bProperty_rb.setEnabled(true);
+                dProperty_rb.setEnabled(true);
+                userRegion_et.setEnabled(true);
+                spCity.setEnabled(true);
+                spProvince.setEnabled(true);
+                outline.setEnabled(true);
+                online.setEnabled(true);
+                return true;
+            }else {
+                zProperty_rb.setEnabled(false);
+                bProperty_rb.setEnabled(false);
+                dProperty_rb.setEnabled(false);
+                userRegion_et.setEnabled(false);
+                spCity.setEnabled(false);
+                spProvince.setEnabled(false);
+                outline.setEnabled(false);
+                online.setEnabled(false);
+
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private void needVip(){
+        runOnUiThread(new Runnable() {
+            public void run() {
+                final DialogPlus dialog = DialogPlus.newDialog(getActivity())
+                        .setAdapter(new BaseAdapter() {
+                            @Override
+                            public int getCount() {
+                                return 0;
+                            }
+
+                            @Override
+                            public Object getItem(int position) {
+                                return null;
+                            }
+
+                            @Override
+                            public long getItemId(int position) {
+                                return 0;
+                            }
+
+                            @Override
+                            public View getView(int position, View convertView, ViewGroup parent) {
+                                return null;
+                            }
+                        })
+                        .setFooter(R.layout.dialog_foot_needvip)
+                        .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                        .create();
+                dialog.show();
+                View view = dialog.getFooterView();
+                Button buvip = view.findViewById(R.id.buyvip_btn);
+                buvip.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), BuyvipActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                Button cancel = view.findViewById(R.id.goback_btn);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
     //获取值作为监听参数
     private Bundle getDirectBundle(){
         Bundle bundle = new Bundle();
@@ -267,8 +370,10 @@ public class SousuoFragment extends Fragment {
         bundle.putString("userRegion",userRegion_et.getText().toString());
         userGender = ((RadioButton) view.findViewById(userGender_rg.getCheckedRadioButtonId())).getText().toString();
         userProperty = ((RadioButton) view.findViewById(userProperty_rg.getCheckedRadioButtonId())).getText().toString();
+        userOnline = ((RadioButton) view.findViewById(userOnline_rg.getCheckedRadioButtonId())).getText().toString();
         bundle.putString("userGender",userGender);
         bundle.putString("userProperty",userProperty);
+        bundle.putString("userOnline",userOnline);
         return bundle;
     }
 

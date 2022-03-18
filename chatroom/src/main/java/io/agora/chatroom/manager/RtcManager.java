@@ -14,6 +14,7 @@ import java.util.Locale;
 import io.agora.chatroom.OkHttpInstance;
 import io.agora.chatroom.OkHttpResponseCallBack;
 import io.agora.chatroom.R;
+import io.agora.chatroom.activity.ChatRoomActivity;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -154,18 +155,23 @@ public final class RtcManager {
         @Override
         public void onConnectionStateChanged(int state, int reason) {
             super.onConnectionStateChanged(state, reason);
-            for (IRtcEngineEventHandler handler : iRtcEngineEventHandlerList) {
-                handler.onConnectionStateChanged(state,reason);
-            }
-
             Log.d(TAG, "onConnectionStateChanged: 频道已被封禁"+state+"|"+reason);
             if (reason==CONNECTION_CHANGED_BANNED_BY_SERVER){
                 Log.d(TAG, "onConnectionStateChanged: 频道已被封禁");
                 runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(mContext,"频道已被封禁",Toast.LENGTH_LONG).show();
+                        try {
+                            leaveChannel();
+                            ChatRoomActivity.chatRoomActivity.finish();
+                        }catch (Exception e){
+                            Log.e(TAG, "run: 抛出异常");
+                        }
                     }
                 });
+            }
+            for (IRtcEngineEventHandler handler : iRtcEngineEventHandlerList) {
+                handler.onConnectionStateChanged(state,reason);
             }
         }
 

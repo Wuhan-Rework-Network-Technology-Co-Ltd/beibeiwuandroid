@@ -8,16 +8,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.agora.chatroom.OkHttpInstance;
 import io.agora.chatroom.OkHttpResponseCallBack;
 import xin.banghua.beiyuan.Adapter.LuntanList;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.R;
 import xyz.doikki.videocontroller.StandardVideoController;
 import xyz.doikki.videoplayer.controller.ControlWrapper;
@@ -56,17 +62,57 @@ public class VideoPlayActivity extends AppCompatActivity {
     }
 
     int currentPosition = 0;
+
+    @BindView(R.id.data_btn)
+    Button data_btn;
+    @BindView(R.id.video_data)
+    TableLayout video_data;
+    @BindView(R.id.close_data)
+    ImageView close_data;
+    @BindView(R.id.play_once)
+    TextView play_once;
+    @BindView(R.id.more_five)
+    TextView more_five;
+    @BindView(R.id.play_completed)
+    TextView play_completed;
+    @BindView(R.id.play_time)
+    TextView play_time;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_play);
+
+        ButterKnife.bind(this);
+
+        luntanList = (LuntanList) getIntent().getSerializableExtra("luntanList");
 
         back_img = findViewById(R.id.back_img);
         back_img.setOnClickListener(v -> {
             onBackPressed();
         });
 
-        luntanList = (LuntanList) getIntent().getSerializableExtra("luntanList");
+
+
+        data_btn.setOnClickListener(v -> {
+            video_data.setVisibility(View.VISIBLE);
+        });
+        close_data.setOnClickListener(v -> {
+            video_data.setVisibility(View.GONE);
+        });
+        try {
+            if (luntanList.getAuthid().equals(Common.userInfoList.getId())){
+                data_btn.setVisibility(View.VISIBLE);
+            }
+            Log.d(TAG, "luntanList.getPlay_once(): "+luntanList.getPlay_once());
+            play_once.setText(luntanList.getPlay_once()+"次");
+            more_five.setText(String.format("%.2f", (Double.parseDouble(luntanList.getMore_five())/Double.parseDouble(luntanList.getPlay_once())*100))+" %");
+            play_completed.setText(String.format("%.2f", (Double.parseDouble(luntanList.getPlay_completed())/Double.parseDouble(luntanList.getPlay_once())*100))+" %");
+            play_time.setText((Integer.parseInt(luntanList.getPlay_time())/Integer.parseInt(luntanList.getMore_five())/1000)+" s");
+        }catch (Exception e){
+            Log.e(TAG, "onCreate: 抛出异常" );
+        }
+
+
         videoView = findViewById(R.id.player);
         //videoView.setUrl("https://oss.banghua.xin/audios/99999/2022/02/bxgA1v3XEOOU16eXazX3u3OkEEuvxO.mp4"); //设置视频地址
         videoView.setUrl(luntanList.getPostvideo()); //设置视频地址
@@ -106,12 +152,12 @@ public class VideoPlayActivity extends AppCompatActivity {
                 if (position > 5000 && !isMoreThanFiveSeconds[0]) {
                     isMoreThanFiveSeconds[0] = true;
                     Log.d(TAG, "onProgressChanged: 播放视频进度超5秒" + position);
-                    OkHttpInstance.moreThanFiveSeconds(luntanList.getId(), new OkHttpResponseCallBack() {
-                        @Override
-                        public void getResponseString(String responseString) {
-
-                        }
-                    });
+//                    OkHttpInstance.moreThanFiveSeconds(luntanList.getId(), new OkHttpResponseCallBack() {
+//                        @Override
+//                        public void getResponseString(String responseString) {
+//
+//                        }
+//                    });
                 }
             }
 

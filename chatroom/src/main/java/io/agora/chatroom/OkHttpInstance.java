@@ -403,7 +403,7 @@ public class OkHttpInstance {
                 RequestBody formBody = new FormBody.Builder()
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSystemRoom&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=agoraRoomMem&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -973,6 +973,38 @@ public class OkHttpInstance {
                     if (okHttpResponseCallBack!=null){
                         String resultString = response.body().string();
                         Log.d(TAG, "run:播放时长" + resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 得到过滤词
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getFilterWords(OkHttpResponseCallBack okHttpResponseCallBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getFilterWords&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (okHttpResponseCallBack!=null){
+                        String resultString = response.body().string();
+                        Log.d(TAG, "得到过滤词" + resultString);
                         runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
                     }
                 }catch (Exception e) {

@@ -56,6 +56,7 @@
         android:layout_marginTop="50dp"
         android:fillViewport="true">
 
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -271,69 +272,179 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="高级选项"
+                    android:text="高级选项（vip专用）"
                     android:textAlignment="center" />
             </TableRow>
 
             <TableRow
+                android:id="@+id/vip_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/rc_btn_voice_normal"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView23"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:text="属性:"
-                        android:textColor="@color/callkit_color_90mask"
-                        android:textSize="18sp" />
-
-                    <RadioGroup
-                        android:id="@+id/userProperty"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/zProperty"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Z" />
+                            android:background="@drawable/rc_btn_voice_normal"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/bProperty"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/textView23"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:text="属性:"
+                                android:textColor="@color/callkit_color_90mask"
+                                android:textSize="18sp" />
+
+                            <RadioGroup
+                                android:id="@+id/userProperty"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/zProperty"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Z" />
+
+                                <RadioButton
+                                    android:id="@+id/bProperty"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="B" />
+
+                                <RadioButton
+                                    android:id="@+id/dProperty"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="双" />
+
+                                <RadioButton
+                                    android:id="@+id/unlimited"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:checked="true"
+                                    android:text="不限" />
+                            </RadioGroup>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="B" />
+                            android:background="@drawable/rc_btn_voice_normal"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/dProperty"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/textView24"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:text="省份:"
+                                android:textColor="@color/callkit_color_90mask"
+                                android:textSize="18sp" />
+
+                            <Spinner
+                                android:id="@+id/spinner_province"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:foreground="@drawable/ic_region"
+                                android:foregroundGravity="center_vertical" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="双" />
+                            android:background="@drawable/rc_btn_voice_normal"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/unlimited"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/textView25"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:text="城市:"
+                                android:textColor="@color/callkit_color_90mask"
+                                android:textSize="18sp" />
+
+                            <Spinner
+                                android:id="@+id/spinner_city"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:foreground="@drawable/ic_city"
+                                android:foregroundGravity="center_vertical" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:checked="true"
-                            android:text="不限" />
-                    </RadioGroup>
+                            android:background="@drawable/rc_btn_voice_normal"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:text="状态:"
+                                android:textColor="@color/callkit_color_90mask"
+                                android:textSize="18sp" />
+
+                            <RadioGroup
+                                android:id="@+id/userOnline_rg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/outline"
+                                    style="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="全部" />
+
+                                <RadioButton
+                                    android:id="@+id/online"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:checked="true"
+                                    android:text="在线" />
+                            </RadioGroup>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:id="@+id/hold_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:visibility="gone"/>
+                </FrameLayout>
+
+
+
+
 
             </TableRow>
 
@@ -355,68 +466,34 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/vip_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/rc_btn_voice_normal"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView24"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:text="省份:"
-                        android:textColor="@color/callkit_color_90mask"
-                        android:textSize="18sp" />
-
-                    <Spinner
-                        android:id="@+id/spinner_province"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:foreground="@drawable/ic_region"
-                        android:foregroundGravity="center_vertical" />
-
-                </LinearLayout>
 
             </TableRow>
 
             <TableRow
+                android:id="@+id/vip_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/rc_btn_voice_normal"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView25"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:text="城市:"
-                        android:textColor="@color/callkit_color_90mask"
-                        android:textSize="18sp" />
 
-                    <Spinner
-                        android:id="@+id/spinner_city"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:foreground="@drawable/ic_city"
-                        android:foregroundGravity="center_vertical" />
+            </TableRow>
 
-                </LinearLayout>
+
+            <TableRow
+                android:id="@+id/vip_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
 
             </TableRow>
 

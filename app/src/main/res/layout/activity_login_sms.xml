@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Signin.LoginSmsActivity"
+    android:background="@color/background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/page_1"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+        <TextView
+            android:layout_marginTop="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/title_tv"
+            android:textSize="25sp"
+            android:textColor="@color/text_color_1"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机号登陆/注册" />
+
+
+        <EditText
+            android:layout_marginTop="50dp"
+            android:id="@+id/phone_et"
+            app:layout_constraintTop_toBottomOf="@id/title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入手机号"
+            android:inputType="phone"
+            android:textColor="@color/text_color_1"
+            android:textSize="20sp"
+            android:textColorHint="@color/text_color_5"/>
+
+
+
+        <TextView
+            android:id="@+id/hint_tv"
+            app:layout_constraintTop_toBottomOf="@id/phone_et"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="16sp"
+            android:textColor="@color/text_color_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="若该手机号未注册，将为您直接注册" />
+
+
+        <Button
+            android:id="@+id/next_btn"
+            android:layout_marginTop="50dp"
+            app:layout_constraintTop_toBottomOf="@id/hint_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/text_color_2"
+            android:background="@drawable/round_gradient_blue"
+            android:text="下一步"/>
+
+
+
+        <LinearLayout
+            android:id="@+id/privacy_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toTopOf="@id/third_login">
+
+            <CheckBox
+                android:id="@+id/privacypolity_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false" />
+
+            <Button
+                android:id="@+id/useragreement_btn"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="乐园用户协议"
+                android:textColor="@color/gray_9b" />
+
+            <Button
+                android:id="@+id/privacypolicy_btn"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="乐园隐私政策"
+                android:textColor="@color/gray_9b" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/third_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+
+            android:layout_marginBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="其他登录方式"
+                android:textAlignment="center"
+                android:textColor="@color/gray_9b"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/wxLogin_btn"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_weixin"
+                    android:text="微信登录"
+                    android:textColor="@color/text_color_6"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/oneKeyLogin_btn"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_phone"
+                    android:text="一键登录"
+                    android:textColor="@color/text_color_10"
+                    android:textStyle="bold" />
+
+
+                <Button
+                    android:id="@+id/password_btn"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_password"
+                    android:text="密码登录"
+                    android:textColor="@color/text_color_7"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.luozm.captcha.Captcha
+
+        android:layout_marginTop="100dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/captCha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:src="@mipmap/puzzle"
+        android:visibility="gone"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/page_2"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <TextView
+            android:layout_marginTop="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/code_title_tv"
+            android:textSize="25sp"
+            android:textColor="@color/text_color_1"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请输入验证码" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/code_title_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/code_hint_tv"
+            android:textSize="16sp"
+            android:textColor="@color/text_color_5"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已发送验证码至尾号" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/code_title_tv"
+            app:layout_constraintStart_toEndOf="@id/code_hint_tv"
+            android:id="@+id/phone_end_tv"
+            android:textSize="16sp"
+            android:textColor="@color/text_color_1"
+            android:textStyle="normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0829" />
+
+        <com.tuo.customview.VerificationCodeView
+            app:layout_constraintTop_toBottomOf="@id/code_hint_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/codeView"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
+            app:icv_et_bg_focus="@drawable/shape_icv_et_bg_focus"
+            app:icv_et_bg_normal="@drawable/shape_icv_et_bg_normal"
+            app:icv_et_divider_drawable="@drawable/shape_divider_identifying"
+            app:icv_et_number="4"
+            app:icv_et_pwd="true"
+            app:icv_et_pwd_radius="10dp"
+            app:icv_et_text_color="#000000"
+            app:icv_et_width="80dp" />
+
+
+        <TextView
+            android:layout_margin="10dp"
+            android:id="@+id/countDown_hint_tv"
+            app:layout_constraintTop_toBottomOf="@id/codeView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="16sp"
+            android:textColor="@color/text_color_1"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重新发送" />
+
+        <TextView
+            android:layout_margin="10dp"
+            android:id="@+id/countDown_tv"
+            app:layout_constraintTop_toBottomOf="@id/codeView"
+            app:layout_constraintStart_toEndOf="@id/countDown_hint_tv"
+            android:textSize="16sp"
+            android:textColor="@color/text_color_8"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(60s)" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ImageView
+        android:id="@+id/go_back_img"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/back_arrow_black"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

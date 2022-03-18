@@ -1,5 +1,8 @@
 package xin.banghua.beiyuan.Adapter;
 
+import static xin.banghua.beiyuan.utils.ThreadUtils.runOnUiThread;
+import static xin.banghua.onekeylogin.Constant.THEME_KEY;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -53,7 +56,6 @@ import xin.banghua.beiyuan.Main4Branch.PostListActivity;
 import xin.banghua.beiyuan.Main4Branch.VideoPlayActivity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
-import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.SliderWebViewActivity;
 import xin.banghua.beiyuan.comment.CommentDialog;
 import xin.banghua.beiyuan.custom_ui.CustomVideoView;
@@ -61,10 +63,12 @@ import xin.banghua.beiyuan.custom_ui.NiceImageView;
 import xin.banghua.beiyuan.custom_ui.NiceZoomImageView;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
+import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewPagerEx.OnPageChangeListener {
     private static final String TAG = "LuntanAdapter";
 
+    LuntanSliderAdapter luntanSliderAdapter;
     Integer current_timestamp = Math.round(new Date().getTime()/1000);
     //幻灯片
     SliderLayout mDemoSlider;
@@ -78,15 +82,29 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
 
     String slidesort = "首页";
     public LuntanSliderAdapter(List<LuntanList> luntanLists,Context mContext,String slidesort) {
-        Log.d(TAG, "LuntanAdapter: start");
+        Log.d(TAG, "LuntanAdapter: start"+luntanLists.size());
+
+
         this.luntanLists = luntanLists;
         this.mContext = mContext;
         this.slidesort = slidesort;
+
+        luntanSliderAdapter = this;
+
+        Log.d(TAG, "4测试黑名单: "+luntanLists.size());
+
+    }
+    //替换数据，并更新
+    public void setData(List<LuntanList> luntanLists){
+        this.luntanLists = luntanLists;
+        notifyDataSetChanged();
     }
     //替换数据，并更新
     public void swapData(List<LuntanList> luntanLists){
+        int oldSize = this.luntanLists.size();
+        int newSize = luntanLists.size();
         this.luntanLists = luntanLists;
-        notifyDataSetChanged();
+        notifyItemRangeInserted(oldSize , newSize);
     }
     @Override
     public int getItemViewType(int position) {
@@ -211,6 +229,8 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
 //            mDemoSlider.addOnPageChangeListener(this);
         }else if (viewHolder instanceof LuntanSliderAdapter.ViewHolder){
             final LuntanList currentItem = luntanLists.get(currentPosition-1);
+            Log.d(TAG, "onBindViewHolder: 测试帖子"+currentItem.getAuthid()+currentItem.getAuthnickname());
+
             viewHolders.put(i,((ViewHolder) viewHolder));
             String authattributes_string = currentItem.getAuthage()+"岁 | "+currentItem.getAuthgender()+" | "+currentItem.getAuthregion()+" | "+currentItem.getAuthproperty();
             //((ViewHolder) viewHolder).authattributes.setText(authattributes_string);
@@ -541,7 +561,15 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             ((ViewHolder) viewHolder).menu_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    InformBlacklistAdapter adapter = new InformBlacklistAdapter(mContext,"post",currentItem.getId(),currentItem.getAuthid());
+                    InformBlacklistAdapter adapter = new InformBlacklistAdapter(mContext, "post", currentItem.getId(), currentItem.getAuthid(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            runOnUiThread(()->{
+                                luntanLists.remove(currentPosition-1);
+                                luntanSliderAdapter.notifyDataSetChanged();
+                            });
+                        }
+                    });
                     final DialogPlus dialog = DialogPlus.newDialog(mContext)
                             .setAdapter(adapter)
                             .setFooter(R.layout.inform_blacklist_foot)
@@ -569,7 +597,8 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                             .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Intent intent = new Intent(mContext, SigninActivity.class);
+                                    Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                                    intent.putExtra(THEME_KEY, 4);
                                     mContext.startActivity(intent);
                                 }
                             }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -625,6 +654,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 Glide.with(mContext).load(currentItem.getCover()).into(((ViewHolder) viewHolder).cover_view);
 
                 ((ViewHolder) viewHolder).video_layout.setOnClickListener(v -> {
+                    Log.d(TAG, "222luntanList.getPlay_once(): "+currentItem.getPlay_once());
                     Intent intent = new Intent(mContext, VideoPlayActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("luntanList", (Serializable) currentItem);
@@ -666,7 +696,8 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                     .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(mContext, SigninActivity.class);
+                            Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                            intent.putExtra(THEME_KEY, 4);
                             mContext.startActivity(intent);
                         }
                     }).setNegativeButton("取消", new DialogInterface.OnClickListener() {

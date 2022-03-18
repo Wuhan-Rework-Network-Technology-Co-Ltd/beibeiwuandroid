@@ -190,6 +190,7 @@ public class UserInfoList implements Serializable {
     }
 
     public void setPortraitframe(String portraitframe) {
+        io.agora.chatroom.Common.myUserInfoList.setPortraitframe(portraitframe);
         this.portraitframe = portraitframe;
     }
 
@@ -198,6 +199,7 @@ public class UserInfoList implements Serializable {
     }
 
     public void setVeilcel(String veilcel) {
+        io.agora.chatroom.Common.myUserInfoList.setVeilcel(portraitframe);
         this.veilcel = veilcel;
     }
 
@@ -383,6 +385,7 @@ public class UserInfoList implements Serializable {
     }
 
     public void setPortrait(String portrait) {
+        io.agora.chatroom.Common.myUserInfoList.setPortraitframe(portrait);
         this.portrait = portrait;
     }
 
@@ -391,6 +394,7 @@ public class UserInfoList implements Serializable {
     }
 
     public void setNickname(String nickname) {
+        io.agora.chatroom.Common.myUserInfoList.setNickname(nickname);
         this.nickname = nickname;
     }
 

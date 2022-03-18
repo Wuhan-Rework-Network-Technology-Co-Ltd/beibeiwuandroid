@@ -1,0 +1,1177 @@
+
+
+//textview横线
+textview.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG ); //中间横线
+textview.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
+textview.getPaint().setAntiAlias(true);// 抗锯齿
+
+//fromXDelta toXDelta
+1.可以为具体的数值，单位为px，表示动画起始位置与当前位置的偏移量。比如100px，则view移到离view当前位置100px的位置，开始执行动画
+2.百分比，是指当前view宽或高的百分比，比如view的宽度为100px，50%，指的是偏移量为50px，同第一种情况
+3.百分比p，是指当前view的父view宽或者高的百分比。比如父view的宽度为1080px，50%p，则偏移量为540px，同第一种情况
+
+
+//转义
+Html.fromHtml(x,FROM_HTML_MODE_LEGACY).toString(); //quot; => "
+Html.escapeHtml(x);  //" => quot;
+
+//一键登录
+                    ModeSelectActivity.sign_in_intent = new Intent(mContext, SigninActivity.class);
+                    intent = new Intent(mContext, ModeSelectActivity.class);
+                    intent.putExtra(THEME_KEY, 2);
+
+//第三方库使用v4,v7找不到类的问题
+gradle.properties下加入
+android.useAndroidX=true，表示主工程使用AndroidX形式。
+android.enableJetifier=true，表示针对主工程中使用到的三方库，也会自动执行AndroidX的替换过程，创建时就是androidx的项目没有这一行，需要加上。
+
+//关于我的页面的滚动问题，关系组件共有3个，一个是外部NestedScrollView,一个是内部recyclerview,另一个是viewpage的菜单（用于保持在顶部）
+//1.首先先滚动外部NestedScrollView，在onScrollChanged中判断viewpage的菜单（tabLayout）是否可见，部分不可见时（scrollRect.top>0）
+//外部NestedScrollView停止滚动，改为内部recyclerview滚动。
+        Rect scrollRect = new Rect();
+        //子控件在可视范围内（至少有一个像素在可视范围内）
+        tabLayout.getLocalVisibleRect(scrollRect);
+        if (scrollRect.top>0) {
+            if (y == 0){
+                y = getScrollY();
+            }
+            scrollTo(0,y);
+            Common.outerScroll = false;//外部不可滑动
+            Common.innerScroll = true;//内部可滑动
+            Log.d(TAG, "onScrollChanged:可见 "+scrollRect.top);
+        }
+//2.内部recyclerview滚动监听，由于步骤1，使得外部NestedScrollView停止滚动，内部recyclerview可以滚动。
+//当用户滚动到底，又滚动回内部recyclerview顶部时，改为外部可滚动，内部不可滚动。
+               if (!str_liked.getRecyclerView().canScrollVertically(-1)) {
+                    Log.d(TAG, "onScrollChange: 到顶了");
+                    Common.outerScroll = true;//外部可滑动
+                    Common.innerScroll = false;//内部不可滑动
+                }else {
+                    Log.d(TAG, "onScrollChange: 没到顶");
+                    Common.outerScroll = false;//外部不可滑动
+                    Common.innerScroll = true;//内部可滑动
+                }
+//3.注：如何停止滚动，通过监听可滚动组件的onTouchEvent，来阻止move动作的传导
+        if (!Common.outerScroll)//不是true则不可滑动
+            return Common.outerScroll;
+
+//时间戳转年月日或分钟前
+Common.timestampToStr(Long.parseLong("1602566550"));//年月日   例如2021-07-13 13:22:14
+Common.getShortTime(Long.parseLong("1602566550"));//多少分钟前  例如 5分钟前
+
+//跳转个人页面
+                Common.currentSelectedUserID = currentItem.getUserid();
+                Intent intent = new Intent(v.getContext(), NewPersonageActivity.class);
+                intent.putExtra("userID",currentItem.getUserid());
+                Log.d(TAG, "onClick: 跳转个人页面");
+                v.getContext().startActivity(intent);
+
+//自定义xin.banghua.pullloadmorerecyclerview.CusPullLoadMoreRecyclerView
+
+//数字转换变万
+changeNumberFormatIntoW(12000);//1.2w
+
+//关于结束线程，线程执行完毕自动关闭，循环线程需要while判断是否跳出
+
+//获取技能相关
+String[] skill_name_list = mContext.getResources().getStringArray(R.array.skill_name);
+String[] skill_unit_list = mContext.getResources().getStringArray(R.array.skill_unit);
+String[] skill_first_price_list = mContext.getResources().getStringArray(R.array.skill_first_price);
+String[] skill_second_price_list = mContext.getResources().getStringArray(R.array.skill_second_price);
+String[] skill_third_price_list = mContext.getResources().getStringArray(R.array.skill_third_price);
+
+TypedArray drawables = resources.obtainTypedArray(R.array.store_portraitframe_drawables);
+
+//RadioGroup的默认选中不能用radioButton.setChecked(true);要用radio_group.check(radioButton.getId());否则无法改变RadioGroup被默认选中的项
+
+//返回
+    <ImageView
+        android:id="@+id/back_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_my_back_arrow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/back_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="全部评论"
+        android:textColor="@color/text_color_1"
+        android:gravity="center_vertical"
+        android:textSize="20sp"/>
+
+
+//map的两种遍历方式
+遍历方式一、当键和值都需要用到时所采用的方法
+Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+  System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+}
+遍历方式二、当只使用键或者值时所采用的方法。
+Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+//遍历map中的键
+for (Integer key : map.keySet()) {
+  System.out.println("Key = " + key);
+}
+//遍历map中的值
+for (Integer value : map.values()) {
+  System.out.println("Value = " + value);
+}
+
+
+
+//关于自定义view继承framelayout点击没反应
+自定义view内部组件不能new View.OnClickListener(),否则外层没反应。只能用回调的方式执行
+
+//关于多布局BaseMultiItemQuickAdapter的使用，具体参见ChatAdapter和ChatMessage
+继承BaseMultiItemQuickAdapter并制定数据类型，这个数据类型必须继承MultiItemEntity，并复写getItemType
+两个类：构造函数ChatAdapter和convert，
+构造函数需要调用super(data)，并调用addItemType注册全部layout
+
+
+
+//图片压缩
+                        CompressImageTask.get().compressImage(ImageConfig.getDefaultConfig(postpicture,postpicture), new CompressImageTask.OnImageResult() {
+                            @Override
+                            public void startCompress() {
+                                //压缩前可以选择加载LoadingView
+                            }
+                            @Override
+                            public void resultFileSucceed(File file) {
+                                //成功回调
+                                Log.d(TAG, "OnSuccess: 压缩成功:");
+                            }
+
+                            @Override
+                            public void resultFileError() {
+                                //失败回调
+                                Log.d(TAG, "OnSuccess: 压缩失败:");
+                            }
+                        });
+
+//提示音
+SoundUtil.getInstance(getApplicationContext()).playSoundLoop(1);
+
+//加密
+.add("sign", MD5Tool.getSign(myid))
+
+//播放assets音乐
+AssetFileDescriptor afd = getResources().getAssets().openFd("bgm1.mp3");
+mediaPlayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+
+//子控件超出父控件   父控件添加android:clipChildren=“false”
+
+//PopupWindow尽量不要用，改用BottomSheetDialog。PopupWindow内部点击时间有冲突，Chronometer开始后Seekbar无法滑动。
+
+//去除首尾# string1.substring(1,string1.length() - 1)
+
+//加载动画
+            <com.wang.avi.AVLoadingIndicatorView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorName="BallSpinFadeLoaderIndicator"
+                android:layout_above="@+id/chronometer"
+                android:layout_centerHorizontal="true"
+                android:visibility="visible"
+                app:indicatorColor="@color/black"
+                />
+
+//android  储存器地址   storage/emulated/0
+File directory = Environment.getExternalStorageDirectory();
+//android  储存器地址(本软件可读)   storage/emulated/0/Android/data/xin.banghua.moyuan/files/Music/
+ContextWrapper cw = new ContextWrapper(getApplicationContext());
+File directory = cw.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+
+//显示自定义dialog
+                GiftDialog giftDialog = new GiftDialog(VideoChatViewActivity.this);
+                giftDialog.show();
+
+//viewpager官方菜单栏   xml中加入TabLayout，代码中List<String> menuViewPagerView_menu = new ArrayList<>();  viewpager_menu.setupWithViewPager(viewPager);
+                            //adapter复写
+                            @Override
+                            public CharSequence getPageTitle(int position) {
+                                return menuViewPagerView_menu.get(position);
+                            }
+
+                            //xml部分
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
+                            <com.google.android.material.tabs.TabLayout
+                                android:id="@+id/viewpager_menu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/background"
+                                app:tabSelectedTextColor="@color/color3"
+                                app:tabIndicatorColor="@color/alivc_common_bg_orange"
+                                app:tabTextColor="@color/color4"
+                                app:tabIndicatorHeight="3dp"
+                                app:tabMode="fixed"/>
+
+                            <androidx.viewpager.widget.ViewPager
+                                android:id="@+id/viewpager"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </LinearLayout>
+
+//把View变为bitmap
+Bitmap bitmap = FileUtils.getBitmap(congratulation_framelayout);
+
+//替换数据，并更新
+    public void swapData(List<Comment1List> comment1Lists) {
+        Log.d(TAG, "PostAdapter: swapData  comment2_layout");
+        //notifyDataSetChanged();
+        int oldSize = this.comment1Lists.size();
+        int newSize = comment1Lists.size();
+        this.comment1Lists = comment1Lists;
+        notifyItemRangeInserted(oldSize , newSize);
+    }
+
+//间隔执行  倒计时
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                    }
+                });
+            }
+        }, 2000, 2000);
+
+
+//adapter刷新是监听getItemCount数量变化，数量没变则刷新没效果
+
+//AppCompatTextView开头空两格"\t\t\t\t"
+
+//获取年月日   这个方法需要android26以上
+            LocalDateTime dateTime = LocalDateTime.now();
+            String today = dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+//Calendar获取年月日
+Calendar calendar = Calendar.getInstance();
+calendar.get(Calendar.YEAR);//获取年
+calendar.get(Calendar.MONTH) + 1;//获取月份  注意:1月份的值为0，需加1为现实中月份
+calendar.get(Calendar.DAY_OF_MONTH);//获取几号
+
+//svg图标的灰色圈
+  <path
+      android:pathData="M512,512m-512,0a512,512 0,1 0,1024 0,512 512,0 1,0 -1024,0Z"
+      android:fillColor="#8C8C8C"/>
+
+//fragment再用viewpager嵌套fragment会出问题
+
+//对象序列化传递，要么Serializable，要么 Parcelable，intent可以Serializable。Bundle只能Parcelable。
+Serializable传递对象 mBundle.putSerializable(SER_KEY,mPerson);
+Parcelable传递对象   mBundle.putParcelable(PAR_KEY, mBook);
+
+//关于嵌套ScrollView的滑动问题
+onTouchEvent执行父类是可滑动，不执行父类不可滑动
+开始时外部可滑动，内部不可滑动，到达高度后，判断内部是否在顶，在顶则外部可滑动，不在顶则外部不可滑动
+
+//侧边菜单栏DrawerLayout下有NavigationView，headerLayout表示填充layout（app:headerLayout="@layout/activity_buyvip"）,menu表示菜单xml（app:menu="@menu/menu_drawer"）
+navigation.getHeaderView(0)  来获取  headView，再用headview.findViewById获取组件
+
+
+//占位图@drawable/picture_icon_placeholder
+
+//两个JSON转变对象的方法
+1.JSON.parseArray(responseString,LuntanList.class);   JSON.parseObject(responseString, UserInfoList.class);
+2.Gson().fromJson(str, Member.class);
+//对象转变JSON的方法
+JSON.toJSONString(obj);
+
+//自定义组件设置app:属性方法，现在attrs.xml中预设组件属性，然后在构造函数中通过obtainStyledAttributes获取属性集合，再集合中获取指定属性值
+
+//两种动画形式：
+1.xml文件
+Animation mShowAction = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in);
+game_table_row.startAnimation(mShowAction);//或者view.setAnimation(mShowAction);  mShowAction.start();
+2.代码实现单个动画
+Animation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, -6.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+mShowAction.setDuration(1500);
+increaseTV.setAnimation(mShowAction);
+//代码实现组合动画
+AnimationSet animationSet = new AnimationSet(true);
+animationSet.addAnimation(mShowAction);
+animationSet.addAnimation(mShowActionOther);
+view.setAnimation(animationSet);
+
+//新头像框PortraitFrameView，setPortraitFrame可设置png或svga头像框，区分是svga头像框需要加字段"_svga"
+
+//动态fragment
+    public void switchFragment(Fragment from, Fragment to) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (from == null) {
+            if (to != null) {
+                transaction.replace(R.id.id_content, to);
+                transaction.commit();
+            }
+        } else {
+            if (!to.isAdded()) {
+                transaction.hide(from).add(R.id.id_content, to).commit();
+            } else {
+                transaction.hide(from).show(to).commit();
+            }
+        }
+    }
+
+
+//fragment的onActivityResult调用需要在activity中调用下面的onActivityResult
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /**
+         * 1.使用getSupportFragmentManager().getFragments()获取到当前Activity中添加的Fragment集合
+         * 2.遍历Fragment集合，手动调用在当前Activity中的Fragment中的onActivityResult()方法。
+         */
+        if (getSupportFragmentManager().getFragments() != null && getSupportFragmentManager().getFragments().size() > 0) {
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            for (Fragment mFragment : fragments) {
+                mFragment.onActivityResult(requestCode, resultCode, data);
+            }
+        }
+    }
+
+
+//ViewHolder外部获取的办法，ViewHolder作为recyclerView的子元素本身就是被LayoutManager负责缓存，回收和显示的。
+//不同页面的ViewHolder也是共同被管理的，所以不能直接保存，只能通过recyclerView获取。
+ViewHolder viewHolder = (ViewHolder)rvPage.getChildViewHolder(rvPage.getChildAt(position));//先获取指定位置的子view，再通过子view获取holder,这个获取的是可见位置的view
+ViewHolder viewHolder = (ViewHolder)rvPage.findViewHolderForAdapterPosition(position);//这个才是按Adapter数据集合的位置返回的
+
+
+//更新声网用户属性操作失败ATTRIBUTE_OPERATION_ERR_FAILURE，可能是OkHttpInstance嵌套的太多，网络请求会失败，外层嵌套个runOnUiThread就好了，runOnSubThread没用，应该是子线程不能嵌套太多
+//猜测应该是一次嵌套的子线程不能超过3个，第三次网络请求应该跳回主线程执行
+//*根本原因是登录声网的1秒内不能添加属性，所以设三秒延迟
+
+
+//判断字符串是否为空用TextUtils.isEmpty(x)，既可以判断null,也可以判断""
+
+
+//判断是否登录
+SharedHgetIntentelper.getInstance(getActivity()).readUserInfo().get("userID")==null
+
+
+//软件盘弹出，页面整体上移，在activity的setContentView前添加下面代码
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//要组件不随着键盘上移，就设置绝对高度
+
+//长按显示上下文菜单 this.registerForContextMenu(timer);
+//context_menu
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/timer_start" android:title=" 开始计时 " />
+    <item android:id="@+id/timer_stop" android:title=" 终止计时 " />
+    <item android:id="@+id/timer_reset" android:title=" 清零 " />
+</menu>
+//创建上下文菜单
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo){
+		super.onCreateContextMenu(menu, v, menuInfo);
+		if (v.getId() == R.id.chronometer){
+		//加载xml菜单布局文件
+        	this.getMenuInflater().inflate(R.menu.context_menu, menu);
+        	// 设定头部图标
+        	menu.setHeaderIcon(R.drawable.icon);
+        	// 设定头部标题
+        	menu.setHeaderTitle(" 计时器控制选项 ");
+		}
+	}
+//选择菜单项后的响应
+	@Override
+	public boolean onContextItemSelected(MenuItem item)
+	{
+		switch (item.getItemId()){
+		  case R.id.timer_start:
+		       break;
+		}
+	}
+//计时器Chronometer
+
+//关于viewpager2的跳转问题onPageSelected和adapter的onBindViewHolder
+1.setCurrentItem会调用onPageSelected（不管adapter准备好没有），然后才调用更新adapter，也就是onBindViewHolder
+2.如果要在onPageSelected后直接对adapter的viewholder直接操作是不行的，因为onBindViewHolder还没有执行
+3.在onPageSelected中执行viewholder需要用viewpager2.post方法
+4..post方法会判断view是否渲染完成，没完成渲染就放入队列，渲染之后执行（也就是onBindViewHolder之后），所以.post方法可以获取view的宽高
+
+//获取视频帧
+MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+mediaMetadataRetriever.setDataSource(bean.getVideoProxyUrl());
+Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime();
+
+//ViewPager2第一次滑动卡顿问题，怀疑是ViewPager2中的recyclerview获得焦点，可以调用recyclerview.scrollBy(0,1);让recyclerview滚动一点，就好了。(附加scrollToPositionWithOffset滚动置顶)
+
+//实现上下滑动，可以用recyclerveiew+PagerSnapHelper（snapHelper放入recyclerveiew，没有直接预加载的方法，切换视频会卡顿），使用ViewPager或ViewPager2（其实也就是官方的recyclerveiew+PagerSnapHelper，有预加载，不卡顿）
+
+
+//10位时间戳（System.currentTimeMillis()和new Date().getTime()都是取毫秒时间戳）
+Integer current_timestamp = Math.round(new Date().getTime()/1000);//别用，页面不改变时间一样
+//秒级时间戳
+                String time = String.valueOf(System.currentTimeMillis());
+                Log.d(TAG, "sendPeerMessage: 秒级时间戳第一种："+time.substring(0,time.length()-3));
+                Log.d(TAG, "sendPeerMessage: 秒级时间戳第二种："+Long.valueOf(System.currentTimeMillis()/1000));
+                Log.d(TAG, "sendPeerMessage: 秒级时间戳第二种："+Integer.valueOf((int) (System.currentTimeMillis()/1000)));
+
+//textview 换行
+rb_zuotian.setText("第一行"+"\n"+"第二行");
+
+//獲取文件後綴名
+fileName.substring(fileName.lastIndexOf("."),fileName.length());
+
+//内部文件地址和外部文件地址
+File dir = new File("data/data/" + "xin.banghua.moyuan" + "/databases");//内部直接写绝对地址
+context.getCacheDir();//缓存目录，一般不要放，会消失  /data/user/0/包名/cache/
+Environment.getExternalStorageDirectory()
+
+//距离
+MapDistance.getDistance(Common.latitude,Common.longitude,currentItem.getLatitude(),currentItem.getLongitude())+"km"
+
+//Fragment not attached to a context.
+if (isAdded()){//判断fragment是否已绑定activity}
+
+//避免软键盘直接弹出
+getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+//是否登录
+                if (!Common.ifSignIn){
+                    Intent intentSignin = new Intent(getActivity(), SigninActivity.class);
+                    startActivity(intentSignin);
+                    return;
+                }
+
+//分隔获取的只是数组Arrays.asList产生的也只是AbstractList，不能add和remove,需要新建ArrayList，如下：
+new ArrayList<String>(Arrays.asList(jsonObject.getString("favorite").split(",")));
+
+//adapter中的数据源会被更改，刷新时需要使用外部完整数据源，不能在刷新时直接对adapter数据源做添加操作
+
+//目前好友使用了friendListMap缓存，好友备注也有缓存。获取好友现在只在MyFriendsFragment中获取并缓存，HomePage2Activity等等都不再获取
+
+
+//intent uri 隐私跳转  intent序列化与反序列化 intent.toURI();   Intent.parseUri(uriString, 0);
+//生成intent uri    intent序列化
+    Intent intent = new Intent(this, MainActivity.class);
+    intent.setData(Uri.parse("vpushscheme://com.vivo.pushtest/detail?key=value"));
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    String intentUrl = intent.toUri(Intent.URI_INTENT_SCHEME);
+//生成结果：intent://com.vivo.pushtest/detail?key=value#Intent;scheme=vpushscheme;launchFlags=0x10000000;component=xin.banghua.beiyuan/.MainActivity;end
+//跳转intent     intent反序列化
+            Intent it = null;
+            try {
+                it = Intent.parseUri(intentUrl,0);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            startActivity(it);
+//跳转目标页获取intent.setData传递的值
+String userid = getIntent().getDataString();//值为"vpushscheme://com.vivo.pushtest/detail?key=value"
+//Activity的隐式声明
+<activity android:name=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.View" />
+        <data
+           android:scheme="vpushscheme"
+           android:host="com.vivo.pushtest"
+           android:path="/detail"
+        />
+    </intent-filter>
+</activity>
+
+//避免viewpager预加载fragment
+//onViewCreated会被预加载，fragment可见时会调用setUserVisibleHint，所以需要把数据加载等放在setUserVisibleHint中
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        //防止数据预加载, 只预加载View，不预加载数据
+        if (isVisibleToUser && isVisible()) {
+            Log.d(TAG, "fragment是否可见: 现在可见");
+        }
+    }
+
+//字符串数组
+        String[] sliderImages  = new String[3];
+        for (int i = 0; i < 3; i++) {
+            sliderImages[i] = "asdad";
+        }
+
+//AtEdittext第二次以后会重复的问题
+content_et.append("@");
+
+
+//比较大小
+                    //所有选项字节数
+                    int vote_title_et_count = vote_title_et.getText().toString().length();
+                    int vote_option1_et_count = vote_option1_et.getText().toString().length();
+                    int vote_option2_et_count = vote_option2_et.getText().toString().length();
+                    int vote_option3_et_count = vote_option3_et.getText().toString().length();
+                    int vote_option4_et_count = vote_option4_et.getText().toString().length();
+                    int vote_option5_et_count = vote_option5_et.getText().toString().length();
+                    int vote_option6_et_count = vote_option6_et.getText().toString().length();
+                    // 创建一个动态数组
+                    ArrayList<Integer> sites = new ArrayList<>();
+                    sites.add(vote_title_et_count);
+                    sites.add(vote_option1_et_count);
+                    sites.add(vote_option2_et_count);
+                    sites.add(vote_option3_et_count);
+                    sites.add(vote_option4_et_count);
+                    sites.add(vote_option5_et_count);
+                    sites.add(vote_option6_et_count);
+                    // 元素进行升序排列
+                    sites.sort(Comparator.naturalOrder());
+                    System.out.println("排序后: " + sites);
+
+
+//luntanlist是帖子数据库是post，postlist是评论1数据库是comment1，commentlist是评论2数据库是comment2
+
+//年龄
+Common.getAge(Common.parseStringToDate(jsonObject.getString("age")))
+Common.getShortTime(Long.parseLong(jsonObject.getString("time")))
+//在线
+Common.getOnlineState(Long.parseLong("1602566550"))
+
+//当数据库值为空null时
+.equals("null")或=="null"为真
+
+//spannable点击生效需要加
+textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+//url特殊字符编解码
+        try {
+            String url = "https://www.xtest.com/?key=";
+            String wd = "智能+学习";
+            String encoderUrl = null;
+            encoderUrl = URLEncoder.encode(wd, "UTF-8");
+            System.out.println(url + encoderUrl);
+            String decoderUrl = URLDecoder.decode(encoderUrl, "UTF-8");
+            System.out.println(url + decoderUrl);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+//card
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            app:cardBackgroundColor="#FBE7D0"
+            app:cardCornerRadius="15dp">
+            </androidx.cardview.widget.CardView>
+
+//intent传递bundle
+Intent intent = new Intent();
+intent.setClass(TestBundle.this, Target.class);
+intent.putExtras(mBundle);
+
+//取出数据
+Bundle bundle = getIntent().getExtras();    //得到传过来的bundle
+String data = bundle.getString("Data");
+
+//显示或隐藏键盘（SHOW_FORCED，强制显示）
+    /**
+     * 显示和隐藏键盘
+     */
+    public void toggleInput() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+    }
+
+//SharedPreferences保存和读取set集合
+editor.putStringSet("filter_search", treeSet);
+sp.getStringSet("filter_search",null);
+
+//set迭代遍历
+        Set<String> set = new HashSet<String>();
+
+        Iterator <String>it = set.iterator() ;
+        while(it.hasNext()){　　　　　　　　//迭代器遍历
+            String str = it.next() ;
+            System.out.println(str) ;
+        }
+        System.out.println("***************");
+        for(String str : s){　　　　　　//for循环遍历
+            System.out.println(str) ;
+        }
+
+//map迭代遍历
+            Map<String,String> map = new HashMap();
+
+            for(String key:map.keySet()){//keySet获取map集合key的集合  然后在遍历key即可
+                String value = map.get(key).toString();//
+                System.out.println("key:"+key+" vlaue:"+value);
+            }
+
+            Iterator<Entry<String, Object>> it = map.entrySet().iterator();//迭代器
+            while(it.hasNext()){
+                  Entry<String, Object> entry = it.next();
+                  System.out.println("key:"+entry.getKey()+"  key:"+entry.getValue());
+            }
+
+            for (Map.Entry<String, String> m : map.entrySet()) {//通过entrySet
+                System.out.println("key:" + m.getKey() + " value:" + m.getValue());
+            }
+
+
+//recyclerview的数据会预加载下一个，holder的组件是有序列号的，非holder组件会调用下一次，要注意，否则会造成数据错误。
+
+//viewpager的acitvity调用fragment中的方法更新ui
+fragment的方法必须在viewpager的onPageSelected中调用，否则第三个以后的fragment的ui报空对象错误。（viewpager启动就加载前两个fragment，第三个的创建方法和前两个不同，导致不是同一个实例）
+
+//onCreate在onResume之前，但是onResume每次进入前台都会执行
+
+//List和Array之间的转换（不能使用add,remove方法）
+List<String> listB= Arrays.asList(strs);
+String[] animals=list.toArray(new String[0]);
+//这个才能使用add,remove方法
+int[] a={1,2,3,4,5};
+        List<Integer> list=new ArrayList<>();
+        for(int i:a){
+            list.add(i);
+        }
+
+//adapter中变量一定要放在外面，不能放在onCLick方法里面，否则会错乱。
+
+//对于字符串“a,b,c,”java的分隔split只会分隔三个部分（swift的split也是三部分），php的explode会分隔4个部分，最后一个为""，需要加以判断
+
+//改变module名字，先改变directory名，再改变settings.gradle下此module的名字
+
+//SearchView直接展开
+topic_search.onActionViewExpanded();
+
+//recyclerView必须设置LayoutManager,否则adapter不执行
+recyclerView.setLinearLayout();
+
+//layout  include
+            <include
+                android:id="@+id/layout_luntan_include"
+                layout="@layout/layout_luntan_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+
+//资源文件转bitmap
+Resources res = context.getResources();
+Bitmap bmp= BitmapFactory.decodeResource(res, R.mipmap.flower);
+
+//ButterKnife
+    @BindView(R.id.container)
+    ConstraintLayout container;
+
+    ButterKnife.bind(this);
+    ButterKnife.bind(this,view);//fragment中
+
+//跳转webview
+                Intent intent = new Intent(getActivity(), SliderWebViewActivity.class);
+                intent.putExtra("slidername","完善个人信息奖励说明");
+                intent.putExtra("sliderurl","https://www.banghua.xin/processCompletedInfo/index.html");
+                getActivity().startActivity(intent);
+
+//微信分享
+WxShareUtils.shareWeb(ChatRoomActivity.this,"wx53be6d2a46dd69a4",Common.getOssResourceUrl("attachment/moyuan.apk"),"陌缘语音房间","快来我的语音房间(ID:123)一起连麦吧!",null);
+
+//本地文件夹
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		intent.setType("*/*");
+		intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		fragment.startActivityForResult(intent, requestCode);
+
+//图片上下有空白,保持宽度，高度自适应
+android:scaleType="fitXY"
+android:adjustViewBounds="true"
+
+//延迟执行
+textview.postDelayed(() -> holder.authportrait_framelayout.removeView(imageView), 1000);
+//UI线程
+runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mCropProgress.setProgress(percent);
+            }
+        });
+
+//xml中点击android:onClick="toMain"，方法必须加View view参数
+public void toMain(View view){}
+
+//CompoundDrawables设置
+        Drawable transparent = ContextCompat.getDrawable(mContext, R.drawable.ic_share_icon);
+        transparent.setBounds(0, 0, transparent.getMinimumWidth(), transparent.getMinimumHeight());
+        holder.userinfo_btn.setCompoundDrawables(null,null,transparent,null);
+
+//随机数  (数据类型)(最小值+Math.random()*(最大值-最小值+1))
+(int) (1+Math.random()*(4-1+1))
+
+//TextView 单行省略号
+            android:layout_margin="5dp"
+            android:ellipsize="end"
+            android:maxEms="6"
+            android:maxLines="1"
+
+//悬浮窗口的黑色背景透明化
+wmParams.format = PixelFormat.TRANSLUCENT;
+
+//text颜色
+tv.setTextColor(0x039BE5);
+tx.setTextColor(android.graphics.Color.RED);
+tx.setTextColor(tx.getResources().getColor(R.drawable.red));
+
+    //送礼物变量
+    String checkedBroadCasterIdList;//选中的主播，id用逗号分隔
+    String checkedSeatIdList;//选中的礼物
+    int sendGiftNum;//发送的礼物数量
+
+//动态生成图片
+        ImageView imageView = new ImageView(this);
+        imageView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));  //设置图片宽高
+        imageView.setImageResource(R.drawable.ic_launcher); //图片资源
+        llWindLayout.addView(imageView); //动态添加图片
+
+//继承点击事件
+    implements View.OnClickListener
+
+    menu1_btn.setOnClickListener(this);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btHorizontalFlip:
+                //水平翻转
+                likeView.horizontalFlip();
+                break;
+                }
+            }
+
+//常量
+public static final String ARG_PARAM1 = "param1";
+
+//一个动画改编多值
+PropertyValuesHolder holder1 = PropertyValuesHolder.ofFloat("scaleX", 1);
+PropertyValuesHolder holder2 = PropertyValuesHolder.ofFloat("scaleY", 1);
+PropertyValuesHolder holder3 = PropertyValuesHolder.ofFloat("alpha", 1);
+
+ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(view, holder1, holder2, holder3)
+animator.start();
+
+
+
+//resource转drawable
+this.getResources().getDrawable(R.drawable.icon);
+
+
+
+//glide播放gif
+            Glide.with(mContext)
+                    .load("https://www.banghua.xin/audio_wave.gif")
+                    .into(((ViewHolder) holder).audio_wave_img);
+//glide的gif只播放一次
+Glide.with(MainActivity.this).load(Uri.parse("android.resource://xin.banghua.implicitintent/"+R.raw.moyuangif))
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (resource instanceof GifDrawable)
+                        ((GifDrawable) resource).setLoopCount(1);
+                        return false;
+                    }
+                })
+                .into(imageView);
+
+//glide自定义对象
+CustomTarget<Drawable> customTarget = new CustomTarget<Drawable>() {
+                @Override
+                public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                    container.setBackground(resource);
+                }
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+            };
+Glide.with(this).load(intent.getStringExtra(BUNDLE_KEY_BACKGROUND_RES)).into(customTarget);
+//或者
+Glide.with(this)
+    .asBitmap()
+    .load(uri)
+    .apply(options)
+    .into(new CustomTarget() {
+        @Override
+        public void onResourceReady(@NonNull Object resource, @Nullable Transition transition) {
+            mBackgroundManager.setBitmap((Bitmap)resource);
+        }
+        @Override
+        public void onLoadCleared(@Nullable Drawable placeholder) { }
+    });
+
+
+//判断service是否存在
+public static boolean isServiceExisted(Context context, String className) {
+	ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+	List<ActivityManager.RunningServiceInfo> serviceList = activityManager.getRunningServices(Integer.MAX_VALUE);
+	if(!(serviceList.size() > 0)) {
+		return false;
+	}
+	for(int i = 0; i < serviceList.size(); i++) {
+		RunningServiceInfo serviceInfo = serviceList.get(i);
+		ComponentName serviceName = serviceInfo.service;
+		if(serviceName.getClassName().equals(className)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+
+//数组是否包含某值
+Arrays.asList(arr).contains(targetValue);
+
+//类型化数组：资源型数组(图片)转变成一个数组对象,使用后要回收
+Resources resources = context.getResources();
+TypedArray drawables = resources.obtainTypedArray(R.array.channel_list_drawable);
+drawables.getResourceId(i, 0);
+drawables.recycle();
+
+//获取宽度呀注意，这个父元素给与的，如果父元素使用了layout_weight，则宽度是layout_weight之前的宽度
+getMeasuredWidth()
+.getLayoutParams().width
+
+//绝对地址
+File m4aFile = new File(Environment.getExternalStorageDirectory(),"original_audio.m4a");
+
+网络图片转bitmap
+                Glide.with(ShopDetailsActivity.this).load(shopInfoEntity.getImgs().get(0)).asBitmap().into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        //由于微信分享的图片要求在32k一下,所以要转换成缩略图
+                        bitmap = Tool.createBitmapThumbnail(resource, false);
+                        wxBitMap = bitmap;
+//                            saveBitmap(bitmap);
+//                            String sss = saveMyBitmap("fenxiang", bitmap);
+                        saveBitmap(bitmap);
+                    }
+                });
+
+//数组包含判断
+if (Arrays.asList(likepost).contains(jsonObject.getString("id"))) {
+                            map.put("likedBoolean", true);
+                        }else {
+                            map.put("likedBoolean", false);
+                        }
+
+//选择线程执行
+MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                ...
+            }
+        });
+
+
+//SharedHelper保存的值原则上应该加上用户id,否则多号时会错乱
+
+//中文路径 %E9%99%8C转成中文  图片上传崩溃的原因
+mPath = URLDecoder.decode(mPath, "UTF-8");
+
+//设置粗体
+info_btn.getPaint().setFakeBoldText(true);
+
+//intent动画
+overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+
+//评论详情页评论1（comment1）和跟评2（comment2）用的都是CommentList类，唯一的不同是跟评2有comment1id这个参数,评论1的comment1id就是id。
+
+//分隔
+String[] followPicture = jsonObject.getString("threecomment2").split("`");
+                switch (followPicture.length){
+                    case 1:
+                        followPicture1 = followPicture[0];
+                        break;
+                    case 2:
+                        followPicture1 = followPicture[0];
+                        followPicture2 = followPicture[1];
+                        break;
+                    case 3:
+                        followPicture1 = followPicture[0];
+                        followPicture2 = followPicture[1];
+                        followPicture3 = followPicture[2];
+                        break;
+                }
+
+//相同的字符串equals返回false,
+new String(v1.getBytes("ISO-8859-1"),"UTF-8")
+
+//返回和结束的继承:activity结束是finish()，fragment只有onStop（）
+@Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+@Override
+    public void onStop() {
+        super.onStop();
+    }
+@Override
+    public void onDestroy(){
+        super.onDestroy();
+     }
+
+//activity获得view
+getWindow().getDecorView()
+
+常用：
+textview，替换图片
+Resources resources = mContext.getResources();
+Drawable drawable = resources.getDrawable(R.drawable.vip_image,null);
+viewHolder.userVIP.setForeground(drawable);
+
+
+
+if (result.get("resultStatus").equals("9000"))//一定要用.equals
+https://console.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=tuijian&m=moyuan
+<View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#555555"
+            android:padding="3dp"
+            android:layout_marginTop="60dp"/>
+
+//跳转//传递对象，对象需要实现 implements Serializable。获取的值需要(ItemInfo) getIntent().getSerializableExtra("itemInfo");
+Intent intent = new Intent(SignupActivity.this, Userset.class);
+intent.putExtra("logtype","1");
+intent.putExtra("list", (Serializable) list);
+startActivity(intent);
+//fragment跳转
+Navigation.findNavController(v).navigate(R.id.guangchang_fabudongtai_action);
+//获值
+Intent intent = getIntent();
+String data = intent.getStringExtra("extra_data");
+//带返回值的intent
+//A页面
+Intent intent=new Intent(Activity_a.this,Activity_b.class);
+startActivityForResult(intent,REQUEST_CODE_B);
+//B页面
+Intent intent = new Intent();
+intent.putExtra("respond", "Hello,Alice!I'm Bob.");
+setResult(Activity.RESULT_OK, intent);
+finish();
+
+
+
+Toast.makeText(this, "请输入账号密码", Toast.LENGTH_LONG).show();
+Toast toast = Toast.makeText(getActivity(), "密码错误", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
+返回按钮
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/iv_back_left"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="TODO"
+            android:src="@mipmap/item_left_back_btn"
+            android:visibility="visible"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+            ImageView back_btn = findViewById(R.id.iv_back_left);
+            back_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+网络图片:
+Glide.with(mContext)
+     .asBitmap()
+     .load(mUserPortrait.get(i))
+     .into(viewHolder.userPortrait);
+*Fragment直接跳转
+fujin.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.tuijian_fujin_action));
+*Activity跳转另一个activity的fragment
+fragment可直接String result = getActivity().getIntent().getStringExtra("result");取值
+*fragment中获取activity
+private Context mContext;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.mContext = getActivity();
+    }
+1.读写本地数据
+在SharedHelper.java中添加读写方法
+写入：
+//保存选中的用户id
+SharedHelper shvalue = new SharedHelper(mContext);
+shvalue.saveValue(mUserID.get(i));
+读取：
+SharedHelper shvalue = new SharedHelper(getActivity().getApplicationContext());
+mUserID = shvalue.readValue().get("value");
+获取本人信息
+SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+String myid = shuserinfo.readUserInfo().get("userID");
+String mynickname = shuserinfo.readUserInfo().get("userNickName");
+String myportrait = shuserinfo.readUserInfo().get("userPortrait");
+Map<String,String> locationInfo = shuserinfo.readLocation();
+.add("latitude", locationInfo.get("latitude"))
+.add("longitude", locationInfo.get("longitude"))
+
+2.网络操作
+
+    //TODO okhttp获取用户信息
+    public void getDataUserinfo(final String url){
+         new Thread(new Runnable() {
+            @Override
+            public void run(){
+                SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
+                String myid = shuserinfo.readUserInfo().get("userID");
+
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("type", "getUserInfo")
+                        .build();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    Message message=handler.obtainMessage();
+                    message.obj=response.body().string();
+                    message.what=1;
+                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+                    handler.sendMessageDelayed(message,10);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //网络数据部分
+    //处理返回的数据
+    @SuppressLint("HandlerLeak")
+     private Handler handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                //1是用户数据，2是幻灯片
+                switch (msg.what){
+                    case 1:
+                        try {
+                            Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
+
+                            JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
+                            Log.d(TAG, "handleMessage: 用户隐私"+jsonObject.getInt("allowlocation"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        try {
+                            Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
+                            JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
+                            if (jsonArray.length()>0){
+                                        for (int i=0;i<jsonArray.length();i++){
+                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                            ArrayList<String> mUserID.add(jsonObject.getString("id"));
+                                        }
+                                    }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            }
+        };
+    //session持久化
+    String sessionid;
+    try {
+            new Thread(new Runnable() {
+                    @Override
+                    public void run(){
+                        SharedHelper shuserinfo = new SharedHelper(Main3Activity.this);
+                        String myid = shuserinfo.readUserInfo().get("userID");
+
+                        OkHttpClient client = OkHttpInstance.getInstance();
+
+                        RequestBody formBody = new FormBody.Builder()
+                                .add("type", "getUserInfo")
+                                .build();
+                        Request.Builder builder = new Request.Builder()
+                                .url("https://console.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=Matchchat&m=moyuan")
+                                .post(formBody)
+                                .header("Connection", "Keep-Alive");
+                        if (sessionid!=null){
+                            Log.d(TAG, "测试sessionid"+sessionid);
+                            builder.addHeader("cookie",sessionid);
+                        }
+                        Request request = builder.build();
+
+                        try (Response response = client.newCall(request).execute()) {
+                            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+//                            Message message=handler.obtainMessage();
+//                            message.obj=response.body().string();
+//                            message.what=1;
+//                            Log.d(TAG, "测试cookie"+cookies.toString());
+                            Log.d(TAG, "测试session"+response.body().string());
+                            //handler.sendMessageDelayed(message,10);
+
+
+
+
+                            Headers headers =response.headers();//response为okhttp请求后的响应
+
+                            List cookies = headers.values("Set-Cookie");
+
+                            String session = (String) cookies.get(0);
+
+                            sessionid = session.substring(0,session.indexOf(";"));
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+3.json读取
+JSONObject jsonObject = new JSONObject(msg.obj.toString());//原生的
+jsonObject.getString("userid");
+
+JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();//自定义的
+jsonObject.getString("userid");
+
+JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
+        if (jsonArray.length()>0){
+            for (int i=0;i<jsonArray.length();i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                ArrayList<String> mUserID.add(jsonObject.getString("id"));
+            }
+        }
+
+        //Arraylist遍历
+         Iterator mUserID = list.iterator();
+               while(mUserID.hasNext()){
+                   System.out.println(mUserID.next());
+               }
+
+4.recyclerview
+        RecyclerView recyclerView = findViewById(R.id.test_recyclerview);
+        //adpter绑定数据
+        AdapterTest adapterTest = new AdapterTest(testDataLists);
+        //RecyclerView绑定adpter
+        recyclerView.setAdapter(adapterTest);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));//增加分割线

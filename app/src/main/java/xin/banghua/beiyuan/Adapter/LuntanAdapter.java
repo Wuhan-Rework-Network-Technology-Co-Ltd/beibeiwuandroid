@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.Adapter;
 
+import static xin.banghua.beiyuan.utils.ThreadUtils.runOnUiThread;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -54,6 +56,7 @@ import xin.banghua.beiyuan.custom_ui.CustomVideoView;
 import xin.banghua.beiyuan.custom_ui.NiceImageView;
 import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder> {
     private static final String TAG = "LuntanAdapter";
@@ -68,6 +71,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         Log.d(TAG, "LuntanAdapter: start");
         this.luntanLists = luntanLists;
         this.mContext = mContext;
+        luntanAdapter = this;
     }
     //替换数据，并更新
     public void swapData(List<LuntanList> luntanLists){
@@ -92,6 +96,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         super.onViewAttachedToWindow(viewHolder);
         viewHolder.portraitFrameView.setPortraitFrame(viewHolder.portraitFrameView.getTag().toString());
     }
+    LuntanAdapter luntanAdapter;
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         int currentPosition = i;
@@ -439,7 +444,15 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         viewHolder.menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InformBlacklistAdapter adapter = new InformBlacklistAdapter(mContext,"post",currentItem.getId(),currentItem.getAuthid());
+                InformBlacklistAdapter adapter = new InformBlacklistAdapter(mContext, "post", currentItem.getId(), currentItem.getAuthid(), new OkHttpResponseCallBack() {
+                    @Override
+                    public void getResponseString(String responseString) {
+                        runOnUiThread(()->{
+                            luntanLists.remove(currentPosition);
+                            luntanAdapter.notifyDataSetChanged();
+                        });
+                    }
+                });
                 final DialogPlus dialog = DialogPlus.newDialog(mContext)
                         .setAdapter(adapter)
                         .setFooter(R.layout.inform_blacklist_foot)
@@ -534,6 +547,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                 Glide.with(mContext).load(currentItem.getCover()).into(viewHolder.cover_view);
 
                 viewHolder.video_layout.setOnClickListener(v -> {
+                    Log.d(TAG, "luntanList.getPlay_once(): "+currentItem.getPlay_once());
                     Intent intent = new Intent(mContext, VideoPlayActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("luntanList", (Serializable) currentItem);

@@ -34,7 +34,15 @@ public class SharedHelper {
         this.mContext = mContext;
     }
 
-
+    //定义一个保存数据的方法   保存用户信息
+    public void saveUserInfoID(String userID) {
+        Log.d(TAG, "saveUserInfoID: 一键登录写入数据"+userID);
+        SharedPreferences sp = App.getApplication().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("userID", userID);
+        editor.commit();
+        //Toast.makeText(mContext, "信息已写入SharedPreference中", Toast.LENGTH_SHORT).show();
+    }
     //定义一个保存数据的方法   保存用户信息
     public void saveUserInfo(String userID, String userNickName,String userPortrait,String userAge,String userGender,String userProperty,String userRegion) {
         SharedPreferences sp = App.getApplication().getSharedPreferences("userInfo", Context.MODE_PRIVATE);

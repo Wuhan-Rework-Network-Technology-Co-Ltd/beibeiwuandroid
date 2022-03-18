@@ -193,7 +193,7 @@
                 android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="第三方登录"
+                android:text="其他方式登录"
                 android:textAlignment="center"
                 android:textColor="@color/rc_ext_sub_menu_item_text_color"
                 android:textSize="18sp" />
@@ -203,15 +203,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center">
-
-            <Button
-                android:id="@+id/wxLogin_btn"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_weixin"
-                android:text="微信登录"
-                android:textColor="@color/rc_picsel_toolbar_send_pressed" />
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/wxLogin_btn"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_weixin"
+                    android:text="微信登录"
+                    android:textColor="@color/text_color_6"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/oneKeyLogin_btn"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_phone"
+                    android:text="一键登录"
+                    android:textColor="@color/text_color_10"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </TableRow>
 
     </TableLayout>

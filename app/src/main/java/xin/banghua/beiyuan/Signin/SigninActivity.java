@@ -2,6 +2,7 @@ package xin.banghua.beiyuan.Signin;
 
 
 import static io.rong.imkit.fragment.ConversationFragment.TAG;
+import static xin.banghua.onekeylogin.Constant.THEME_KEY;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -45,6 +46,7 @@ import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.SliderWebViewActivity;
 import xin.banghua.beiyuan.Uniquelogin;
+import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 public class SigninActivity extends Activity {
     private Context mContext;
@@ -55,7 +57,7 @@ public class SigninActivity extends Activity {
     EditText userPassword;
 
     //三个按钮
-    private Button signIn,signUp,findPassword,wxLogin_btn,privacypolity_btn,useragreement_btn;
+    private Button signIn,signUp,findPassword,wxLogin_btn,privacypolity_btn,useragreement_btn,oneKeyLogin_btn;
     CheckBox privacypolicy_check;
     //okhttp
 
@@ -95,7 +97,7 @@ public class SigninActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","小贝乐园用户协议");
-                intent.putExtra("sliderurl","https://www.banghua.xin/useragreement.html");
+                intent.putExtra("sliderurl","https://console.banghua.xin/useragreement.html");
                 mContext.startActivity(intent);
             }
         });
@@ -105,7 +107,7 @@ public class SigninActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","小贝乐园隐私政策");
-                intent.putExtra("sliderurl","https://www.banghua.xin/privacypolicy.html");
+                intent.putExtra("sliderurl","https://console.banghua.xin/privacypolicy.html");
                 mContext.startActivity(intent);
             }
         });
@@ -183,6 +185,14 @@ public class SigninActivity extends Activity {
                 req.state = "wechat_sdk_demo_test";
                 api.sendReq(req);
             }
+        });
+
+
+        oneKeyLogin_btn = findViewById(R.id.oneKeyLogin_btn);
+        oneKeyLogin_btn.setOnClickListener(view -> {
+            Intent intent1 = new Intent(mContext, OneKeyLoginActivity.class);
+            intent1.putExtra(THEME_KEY, 4);
+            startActivity(intent1);
         });
     }
 

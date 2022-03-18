@@ -689,7 +689,7 @@ public class UserInfoList implements Serializable {
     }
 
     public String getAudioroomcover() {
-        return audioroomcover;
+        return Common.getOssResourceUrl(audioroomcover);
     }
 
     public void setAudioroomcover(String audioroomcover) {
@@ -697,7 +697,7 @@ public class UserInfoList implements Serializable {
     }
 
     public String getAudioroombackground() {
-        return audioroombackground;
+        return Common.getOssResourceUrl(audioroombackground);
     }
 
     public void setAudioroombackground(String audioroombackground) {

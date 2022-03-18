@@ -124,12 +124,12 @@ public class CustomVideoView extends FrameLayout {
                 if (position >= 5000 && !isMoreThanFiveSeconds[0]) {
                     isMoreThanFiveSeconds[0] = true;
                     Log.d(TAG, "onProgressChanged: 播放视频进度超5秒" + position);
-                    OkHttpInstance.moreThanFiveSeconds(luntanList.getId(), new OkHttpResponseCallBack() {
-                        @Override
-                        public void getResponseString(String responseString) {
-
-                        }
-                    });
+//                    OkHttpInstance.moreThanFiveSeconds(luntanList.getId(), new OkHttpResponseCallBack() {
+//                        @Override
+//                        public void getResponseString(String responseString) {
+//
+//                        }
+//                    });
                 }
             }
 
@@ -193,6 +193,8 @@ public class CustomVideoView extends FrameLayout {
             }
         });
         cover_img = mView.findViewById(R.id.cover_img);
+
+
     }
 
     public VideoView videoView;
@@ -253,6 +255,7 @@ public class CustomVideoView extends FrameLayout {
         videoView.setUrl(luntanList.getPostvideo()); //设置视频地址
         //videoView.setLooping(true);
         videoView.start();
+        videoView.setVolume(0.0f,0.0f);
         Log.d(TAG, "start: 2播放了"+luntanList.getPostvideo());
     }
 

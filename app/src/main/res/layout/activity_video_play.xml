@@ -20,4 +20,120 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/back_arrow"/>
+
+    <Button
+        android:id="@+id/data_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="数据"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:textColor="@color/text_color_4"
+        android:alpha="0.5"/>
+
+    <TableLayout
+        android:id="@+id/video_data"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="播放数据"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="center" />
+            <ImageView
+                android:id="@+id/close_data"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/ktv_room_close" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="播放量"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/play_once"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textSize="16sp"
+                android:textAlignment="textEnd"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="5秒播放率"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/more_five"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textSize="16sp"
+                android:textAlignment="textEnd"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="完播率"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/play_completed"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textSize="16sp"
+                android:textAlignment="textEnd"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="平均观看时长"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/play_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textSize="16sp"
+                android:textAlignment="textEnd"/>
+        </TableRow>
+    </TableLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

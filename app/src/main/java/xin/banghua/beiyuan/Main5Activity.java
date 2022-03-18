@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan;
 
+import static xin.banghua.onekeylogin.Constant.THEME_KEY;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +29,7 @@ import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.model.Conversation;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 public class Main5Activity extends AppCompatActivity {
     Uniquelogin uniquelogin;
@@ -103,8 +106,9 @@ public class Main5Activity extends AppCompatActivity {
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
         if(userInfo.get("userID")==""){
-            Intent intentSignin = new Intent(Main5Activity.this, SigninActivity.class);
-            startActivity(intentSignin);
+            Intent intent = new Intent(Main5Activity.this, OneKeyLoginActivity.class);
+            intent.putExtra(THEME_KEY, 4);
+            startActivity(intent);
         }else{
             //唯一登录验证
             uniquelogin = new Uniquelogin(this,handler);

@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/drawable/bg_py.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/drawable/bg_search_hui.xml" value="0.18952702702702703" />
         <entry key="app/src/main/res/drawable/bg_sousuo.xml" value="0.29010416666666666" />
+        <entry key="app/src/main/res/drawable/ic_comment_red.xml" value="0.25495495495495496" />
         <entry key="app/src/main/res/drawable/ic_deletefriend.xml" value="0.18952702702702703" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.29010416666666666" />
@@ -26,16 +27,20 @@
         <entry key="app/src/main/res/drawable/rc_gift_plugin_icon.xml" value="0.25225225225225223" />
         <entry key="app/src/main/res/drawable/red_10.xml" value="0.18453947368421053" />
         <entry key="app/src/main/res/drawable/red_round.xml" value="0.18952702702702703" />
+        <entry key="app/src/main/res/drawable/round_gradient_blue.xml" value="0.25495495495495496" />
         <entry key="app/src/main/res/drawable/tjhy_10.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/drawable/yuan_et_shixin.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/drawable/yuan_sex_nan.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/drawable/yuan_sex_nv.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/font/bevan.xml" value="0.19864864864864865" />
+        <entry key="app/src/main/res/layout/activity_buysvip.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_buyvip.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/activity_common_setting.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/activity_conversation.xml" value="0.23097826086956522" />
         <entry key="app/src/main/res/layout/activity_follow_and_fans.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/activity_imager_pager.xml" value="0.17725409836065573" />
+        <entry key="app/src/main/res/layout/activity_inform_reason.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_login_sms.xml" value="0.1585144927536232" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1802536231884058" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.2264957264957265" />
         <entry key="app/src/main/res/layout/activity_main3.xml" value="0.11565523306948108" />
@@ -43,8 +48,11 @@
         <entry key="app/src/main/res/layout/activity_main5.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/activity_make_friend.xml" value="0.23097826086956522" />
         <entry key="app/src/main/res/layout/activity_new_friend.xml" value="0.2324561403508772" />
+        <entry key="app/src/main/res/layout/activity_one_key_log_in.xml" value="0.21693840579710144" />
         <entry key="app/src/main/res/layout/activity_personage.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/activity_private_setting.xml" value="0.2324561403508772" />
+        <entry key="app/src/main/res/layout/activity_reset.xml" value="0.20199275362318841" />
+        <entry key="app/src/main/res/layout/activity_signin.xml" value="0.21693840579710144" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2264957264957265" />
         <entry key="app/src/main/res/layout/activity_singleperson.xml" value="0.27708333333333335" />
         <entry key="app/src/main/res/layout/activity_sound.xml" value="0.2324561403508772" />
@@ -52,42 +60,56 @@
         <entry key="app/src/main/res/layout/activity_userset.xml" value="0.16734972677595628" />
         <entry key="app/src/main/res/layout/activity_video_play.xml" value="0.1369535519125683" />
         <entry key="app/src/main/res/layout/activity_wallet.xml" value="0.17481884057971014" />
+        <entry key="app/src/main/res/layout/badge_friendapply.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/badge_unreadmessage.xml" value="0.1" />
         <entry key="app/src/main/res/layout/comment_dialog.xml" value="0.17905405405405406" />
         <entry key="app/src/main/res/layout/comment_main_item.xml" value="0.17905405405405406" />
         <entry key="app/src/main/res/layout/custom_video_view.xml" value="0.1369535519125683" />
+        <entry key="app/src/main/res/layout/dialog_foot_confirm.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_foot_luntan_search.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_foot_needsvip.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_foot_needvip.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_foot_vipconversion.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/dialog_foot_withdraw.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/fragment_fabutiezi.xml" value="0.17905405405405406" />
         <entry key="app/src/main/res/layout/fragment_follow_or_fans.xml" value="0.2206140350877193" />
         <entry key="app/src/main/res/layout/fragment_fu_jin.xml" value="0.27708333333333335" />
         <entry key="app/src/main/res/layout/fragment_goods.xml" value="0.21693840579710144" />
-        <entry key="app/src/main/res/layout/fragment_guang_chang.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_guang_chang.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_guangchang.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_luntan.xml" value="0.2264957264957265" />
         <entry key="app/src/main/res/layout/fragment_me.xml" value="0.27708333333333335" />
         <entry key="app/src/main/res/layout/fragment_mine.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_personage.xml" value="0.27708333333333335" />
+        <entry key="app/src/main/res/layout/fragment_reset_personal_info.xml" value="0.20199275362318841" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/fragment_shen_bian.xml" value="0.165" />
-        <entry key="app/src/main/res/layout/fragment_sousuo.xml" value="0.11895338610378188" />
+        <entry key="app/src/main/res/layout/fragment_sousuo.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_sousuoresult.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/fragment_tuijian.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/layout/gift_dialog.xml" value="0.165" />
         <entry key="app/src/main/res/layout/guangchang_fragment_adapter.xml" value="0.25" />
         <entry key="app/src/main/res/layout/home_fragment_adapter.xml" value="0.25" />
         <entry key="app/src/main/res/layout/image_text_view.xml" value="0.23097826086956522" />
+        <entry key="app/src/main/res/layout/infrom_blacklist_layout.xml" value="0.240990990990991" />
         <entry key="app/src/main/res/layout/item_comment_child_new.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_gift_selected.xml" value="0.16734972677595628" />
         <entry key="app/src/main/res/layout/item_gift_unselected.xml" value="0.1777027027027027" />
+        <entry key="app/src/main/res/layout/item_popip.xml" value="0.240990990990991" />
         <entry key="app/src/main/res/layout/portrait_frame_view.xml" value="0.21693840579710144" />
+        <entry key="app/src/main/res/layout/recyclerview_dongtai.xml" value="0.240990990990991" />
         <entry key="app/src/main/res/layout/recyclerview_haoyou.xml" value="0.21693840579710144" />
         <entry key="app/src/main/res/layout/recyclerview_haoyouapply.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/recyclerview_luntan.xml" value="0.1635928961748634" />
+        <entry key="app/src/main/res/layout/recyclerview_posthead.xml" value="0.240990990990991" />
         <entry key="app/src/main/res/layout/recyclerview_postlist.xml" value="0.2264957264957265" />
         <entry key="app/src/main/res/layout/recyclerview_slider.xml" value="0.27708333333333335" />
         <entry key="app/src/main/res/layout/recyclerview_userinfo.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/layout/slider_bar.xml" value="0.1635928961748634" />
         <entry key="app/src/main/res/layout/store_item_layout.xml" value="0.21693840579710144" />
         <entry key="app/src/main/res/layout/video_layout_cover.xml" value="0.15881147540983606" />
+        <entry key="app/src/main/res/menu/menu_toolbar_conversation.xml" value="0.240990990990991" />
+        <entry key="app/src/main/res/menu/menu_toolbar_userset.xml" value="0.240990990990991" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
         <entry key="chatroom/src/main/res/drawable/bg_az.xml" value="0.18952702702702703" />
@@ -129,15 +151,31 @@
         <entry key="chatroom/src/main/res/layout/ktv_music_list_dialog.xml" value="0.1635928961748634" />
         <entry key="chatroom/src/main/res/layout/layout_chat_room_bottom.xml" value="0.16734972677595628" />
         <entry key="chatroom/src/main/res/layout/layout_gift.xml" value="0.165" />
+        <entry key="chatroom/src/main/res/layout/layout_item_channel.xml" value="0.240990990990991" />
         <entry key="chatroom/src/main/res/layout/layout_item_message.xml" value="0.17434210526315788" />
-        <entry key="chatroom/src/main/res/layout/layout_item_seat.xml" value="0.16700819672131148" />
+        <entry key="chatroom/src/main/res/layout/layout_item_seat.xml" value="0.375" />
         <entry key="chatroom/src/main/res/layout/portrait_frame_view.xml" value="0.21693840579710144" />
         <entry key="chatroom/src/main/res/layout/room_set.xml" value="0.16700819672131148" />
         <entry key="chatroom/src/main/res/layout/send_barrage_framelayout.xml" value="0.17905405405405406" />
+        <entry key="chatroom/src/main/res/layout/user_info_dialog.xml" value="0.240990990990991" />
         <entry key="chatroom/src/main/res/layout/view_toast_custom.xml" value="0.17481884057971014" />
         <entry key="contactcard/src/main/res/drawable/rc_contact_plugin_icon.xml" value="0.25225225225225223" />
         <entry key="imageselector/src/main/res/drawable/selecter_radio_text.xml" value="0.18952702702702703" />
         <entry key="imageselector/src/main/res/layout/image_text_dialog.xml" value="0.23097826086956522" />
+        <entry key="onekeylogin/src/main/res/layout/activity_auth.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/activity_custom_web.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/activity_display.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/activity_login.xml" value="0.21693840579710144" />
+        <entry key="onekeylogin/src/main/res/layout/activity_login_delay.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/activity_login_sms.xml" value="0.21693840579710144" />
+        <entry key="onekeylogin/src/main/res/layout/activity_main.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/activity_message.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/activity_select.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/custom_full_port.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/custom_land_dialog.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/custom_port_dialog_action_bar.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/custom_switch_other.xml" value="0.240990990990991" />
+        <entry key="onekeylogin/src/main/res/layout/list_item.xml" value="0.240990990990991" />
       </map>
     </option>
   </component>

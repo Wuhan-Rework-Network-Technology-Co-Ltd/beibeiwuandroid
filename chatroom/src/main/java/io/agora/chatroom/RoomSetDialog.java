@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +62,7 @@ public class RoomSetDialog {
         bottomSheetDialog.setOnDismissListener(dialog -> {
             //消失监听
             room_name = room_name_et.getText().toString();
+            Toast.makeText(mContext, "正在保存并更新设置...", Toast.LENGTH_LONG).show();
             if (!TextUtils.isEmpty(room_name)||!TextUtils.isEmpty(room_cover)||!TextUtils.isEmpty(room_bg))
             OkHttpInstance.roomSet(room_name, room_cover, room_bg, new OkHttpResponseCallBack() {
                 @Override
@@ -71,10 +73,10 @@ public class RoomSetDialog {
                         Constant.sRoomName = jsonObject.getString("audioroomname");
                         Constant.sRoomCover = jsonObject.getString("audioroomcover");
                         Constant.sRoomBG = jsonObject.getString("audioroombackground");
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             });
         });

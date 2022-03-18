@@ -41,8 +41,8 @@ android {
         applicationId "xin.banghua.beiyuan"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 68
-        versionName "68"
+        versionCode 70
+        versionName "70"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -91,6 +91,7 @@ dependencies {
     implementation files('libs\\AMap_Location_V4.9.0_20200228.jar')
     implementation project(path: ':imageselector')
     implementation project(path: ':PullLoadMoreRecyclerView')
+    implementation project(path: ':onekeylogin')
 
 
     testImplementation 'junit:junit:4.12'
@@ -221,4 +222,11 @@ dependencies {
     implementation project(':dkplayer-ui')
     //implementation project(path: ':dkplayer-players:ijk')
     implementation project(path: ':dkplayer-players:exo')
+
+
+    //滑块验证
+    implementation 'com.luozm.captcha:captcha:1.1.2'
+
+    //验证码输入框
+    implementation 'com.jacktuotuo.customview:verificationcodeview:1.0.5'
 }

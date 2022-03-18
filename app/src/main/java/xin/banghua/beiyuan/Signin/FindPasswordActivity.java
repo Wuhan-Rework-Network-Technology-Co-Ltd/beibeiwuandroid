@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.Signin;
 
+import static io.rong.imkit.fragment.ConversationFragment.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -23,8 +25,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.utils.MD5Tool;
-
-import static io.rong.imkit.fragment.ConversationFragment.TAG;
 
 public class FindPasswordActivity extends AppCompatActivity {
 

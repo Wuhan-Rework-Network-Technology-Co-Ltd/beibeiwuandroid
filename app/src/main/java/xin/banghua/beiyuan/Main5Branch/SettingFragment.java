@@ -2,6 +2,7 @@ package xin.banghua.beiyuan.Main5Branch;
 
 
 import static io.rong.imkit.fragment.ConversationListFragment.TAG;
+import static xin.banghua.onekeylogin.Constant.THEME_KEY;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -40,11 +41,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.BuildConfig;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
-import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.MD5Tool;
+import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 
 /**
@@ -198,8 +200,10 @@ public class SettingFragment extends Fragment {
                 SharedPreferences sp = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("userID", "");
+                editor.putString("uniquelogintoken", "1");
                 editor.commit();
-                Intent intent = new Intent(mContext, SigninActivity.class);
+                Intent intent = new Intent(getActivity(), OneKeyLoginActivity.class);
+                intent.putExtra(THEME_KEY, 4);
                 startActivity(intent);
 
                 RtmManager.instance(mContext).logout();
@@ -207,8 +211,6 @@ public class SettingFragment extends Fragment {
 
 
                 getActivity().finish();
-
-
 
 
             }

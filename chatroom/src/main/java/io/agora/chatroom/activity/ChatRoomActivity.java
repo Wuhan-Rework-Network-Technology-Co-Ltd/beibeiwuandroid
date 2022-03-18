@@ -6,6 +6,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -24,12 +26,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,11 +46,13 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
 import com.elvishew.xlog.LogLevel;
 import com.elvishew.xlog.XLog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -168,6 +175,8 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
 
     @BindView(R2.id.screen_layout)
     ConstraintLayout screen_layout;
+    @BindView(R2.id.room_bg_img)
+    ImageView room_bg_img;
 
     public static GiftFrameLayout gift_layout;
 
@@ -182,6 +191,12 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
         VideoViewManager.setConfig(VideoViewConfig.newBuilder()
                 .setPlayerFactory(ExoMediaPlayerFactory.create())
                 .build());
+
+        if(Common.filterString.length==0){
+            OkHttpInstance.getFilterWords(responseString -> {
+                Common.filterString = responseString.split(",");
+            });
+        }
 
         chatRoomActivity = this;
 
@@ -198,7 +213,7 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
 
         Intent intent = getIntent();
         mChannelId = getIntent().getStringExtra(BUNDLE_KEY_CHANNEL_ID);
-        container.setBackgroundResource(intent.getIntExtra(BUNDLE_KEY_BACKGROUND_RES, R.mipmap.bg_channel_0));
+
 
         try {
             if (Common.isServiceExisted(this,"io.agora.chatroom.activity.ChatRoomService")) {
@@ -327,8 +342,23 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
         if (requestCode == PERMISSION_REQ_ID) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 mManager.joinChannel(mChannelId);
-            else
-                AlertUtil.showAlertDialog(this, "No permission", "finish", (dialog, which) -> finish());
+            else{
+                int permission1 = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+                int permission3 = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                int permission4 = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permission1 != PermissionChecker.PERMISSION_GRANTED ||
+                        permission3 != PermissionChecker.PERMISSION_GRANTED || permission4 != PermissionChecker.PERMISSION_GRANTED) {
+                    //2.没有权限，弹出对话框申请
+                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},1000);
+                }else {
+                    //intentMain();
+                }
+                Toast.makeText(mContext,"请打开麦克风等权限！",Toast.LENGTH_SHORT).show();
+                //AlertUtil.showAlertDialog(this, "请打开麦克风等权限！", "finish", (dialog, which) -> finish());
+            }
+
         }
     }
 
@@ -378,6 +408,9 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
                     adjustUI();
                     tv_title.setText(currentChannel.getAudioroomname());
 
+
+                    if (!TextUtils.isEmpty(currentChannel.getAudioroombackground()))
+                        Glide.with(mContext).load(currentChannel.getAudioroombackground()).into(room_bg_img);
 
 //                    ktvMusicListDialog = new KtvMusicListDialog(ChatRoomActivity.this);
 //                    ktvMusicListDialog.initView(ChatRoomActivity.this,currentChannel);
@@ -565,12 +598,22 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
         }
     }
 
+
     @OnEditorAction({R2.id.et_input})
     public void onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEND || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-            String message = v.getText().toString();
-            if (TextUtils.isEmpty(message)) return;
-            mManager.sendMessage(message);
+            final String[] message = {v.getText().toString()};
+            if (TextUtils.isEmpty(message[0])) return;
+
+            Log.d(TAG, "onEditorAction: 发消息");
+
+            for (String element: Common.filterString) {
+                if (message[0].contains(element)){
+                    message[0] = message[0].replace(element, "*");
+                    Log.d(TAG, "onEditorAction: 过滤了"+message[0]);
+                }
+            }
+            mManager.sendMessage(message[0]);
             v.setText("");
         }
     }
@@ -866,7 +909,9 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
         mWebView.loadUrl(url);
 //        String postData= "myid="+ Common.myID +"&sign="+ MD5Tool.getSign(myID)+"&type=";
 //        mWebView.postUrl(url,postData.getBytes());
-
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -913,6 +958,11 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
                 return super.shouldInterceptRequest(view, request);
             }
 
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                //super.onReceivedSslError(view, handler, error);
+                handler.proceed();
+            }
         });
     }
     public final class InJavaScriptLocalObj

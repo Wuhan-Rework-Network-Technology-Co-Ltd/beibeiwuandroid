@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.Signin.BindAccountActivity;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 
 public class Main4Activity extends AppCompatActivity {
@@ -101,7 +103,6 @@ public class Main4Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main4);
-        ifSignin();
         mTextMessage = (TextView) findViewById(R.id.message);
 
         mContext = this;
@@ -137,6 +138,16 @@ public class Main4Activity extends AppCompatActivity {
             }
         };
         RongIM.getInstance().addUnReadMessageCountChangedObserver(iUnReadMessageObserver, Conversation.ConversationType.PRIVATE);
+
+
+
+
+        if (Common.userInfoList!=null){
+            if (TextUtils.isEmpty(Common.userInfoList.getPhone())){
+                Intent intent = new Intent(mContext, BindAccountActivity.class);
+                mContext.startActivity(intent);
+            }
+        }
     }
 
     public void updateVersion(){

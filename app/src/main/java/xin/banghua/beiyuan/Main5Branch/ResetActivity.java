@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.Main5Branch;
 
+import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +51,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.CheckPermission;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main5Activity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
@@ -56,10 +59,7 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.CityAdapter;
 import xin.banghua.beiyuan.Signin.ProvinceAdapter;
 import xin.banghua.beiyuan.bean.AddrBean;
-import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.MD5Tool;
-
-import static com.donkingliang.imageselector.ImageSelectorActivity.IMAGE_SELECTOR_REQUEST_CODE;
 
 public class ResetActivity extends AppCompatActivity {
 
@@ -390,6 +390,8 @@ public class ResetActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putString("userNickName", value);
                         editor.commit();
+
+                        Common.userInfoList.setNickname(value);
                         //融云更新缓存
                         SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                         String myid = shuserinfo.readUserInfo().get("userID");
@@ -406,6 +408,7 @@ public class ResetActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString("userPortrait", msg.obj.toString());
                     editor.commit();
+                    Common.userInfoList.setPortrait(msg.obj.toString());
                     //融云更新缓存
                     SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                     String myid = shuserinfo.readUserInfo().get("userID");

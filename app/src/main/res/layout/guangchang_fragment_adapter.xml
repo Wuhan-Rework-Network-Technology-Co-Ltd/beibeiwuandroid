@@ -400,6 +400,7 @@
         android:layout_margin="20dp"
         android:textSize="14sp"
         android:textStyle="bold"
+        android:gravity="center"
         android:textColor="@color/white"
         android:background="@drawable/red_round"/>
     <View

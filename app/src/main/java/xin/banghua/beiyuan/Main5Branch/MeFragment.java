@@ -92,6 +92,8 @@ public class MeFragment extends Fragment {
         super.onResume();
         if (Common.userInfoList!=null){
             portraitFrameView.setPortraitFrame(Common.userInfoList.getPortraitframe());
+            usernickname_tv.setText(Common.userInfoList.getNickname());
+
         }
     }
 
@@ -144,7 +146,7 @@ public class MeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","小贝乐园用户协议");
-                intent.putExtra("sliderurl","https://www.banghua.xin/useragreement.html");
+                intent.putExtra("sliderurl","https://console.banghua.xin/useragreement.html");
                 mContext.startActivity(intent);
             }
         });
@@ -154,7 +156,7 @@ public class MeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","小贝乐园隐私政策");
-                intent.putExtra("sliderurl","https://www.banghua.xin/privacypolicy.html");
+                intent.putExtra("sliderurl","https://console.banghua.xin/privacypolicy.html");
                 mContext.startActivity(intent);
             }
         });
@@ -248,11 +250,12 @@ public class MeFragment extends Fragment {
 
         SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
         final String myid = shuserinfo.readUserInfo().get("userID");
-        String mynickname = shuserinfo.readUserInfo().get("userNickName");
-        myportrait = shuserinfo.readUserInfo().get("userPortrait");
 
 
-        usernickname_tv.setText(mynickname);
+        if (Common.userInfoList!=null){
+            usernickname_tv.setText(Common.userInfoList.getNickname());
+        }
+
 
 
         beiyuanid_btn.setText("乐园号："+myid);
@@ -383,10 +386,13 @@ public class MeFragment extends Fragment {
                     String resultJson1 = msg.obj.toString();
                     Log.d(TAG, "handleMessage: 会员时长信息"+msg.obj.toString());
 //                    if (!(msg.obj.toString().equals("会员已到期")))  userportrait_iv.isVIP(true,getResources(),false);
-                    Glide.with(App.getApplication())
-                            .asBitmap()
-                            .load(Common.getOssResourceUrl(myportrait))
-                            .into(userportrait_iv);
+                    if (Common.userInfoList!=null){
+                        Glide.with(App.getApplication())
+                                .asBitmap()
+                                .load(Common.userInfoList.getPortrait())
+                                .into(userportrait_iv);
+                    }
+
                     if (!(msg.obj.toString().equals("会员已到期"))){
                         // 按指定模式在字符串查找
                         String line = msg.obj.toString();

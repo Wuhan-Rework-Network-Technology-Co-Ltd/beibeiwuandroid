@@ -5,6 +5,7 @@ import static xyz.doikki.videoplayer.player.VideoView.STATE_PREPARED;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -390,7 +391,7 @@ public class PublishPostActivity extends AppCompatActivity {
                 Log.d("进入run","run");
                 String fileName = "postpicture.png";
                 String videoName = "post.mp4";
-                String myid = Common.myUserInfoList.getId();
+                String myid = PublishPostActivity.this.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("userID", "");
                 //开始网络传输
                 OkHttpClient client = new OkHttpClient();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");

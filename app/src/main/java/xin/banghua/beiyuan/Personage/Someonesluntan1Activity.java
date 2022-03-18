@@ -119,6 +119,12 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                     posts.setCover(jsonObject.getString("cover"));
                     posts.setOnline(jsonObject.getString("online"));
                     posts.setPortraitframe(jsonObject.getString("portraitframe"));
+                    posts.setMyfriends(jsonObject.getString("myfriends"));
+                    posts.setMyblacklist(jsonObject.getString("myblacklist"));
+                    posts.setPlay_once(jsonObject.getString("play_once"));
+                    posts.setMore_five(jsonObject.getString("more_five"));
+                    posts.setPlay_completed(jsonObject.getString("play_completed"));
+                    posts.setPlay_time(jsonObject.getString("play_time"));
                     luntanLists.add(posts);
                 }
                 adapter.swapData(luntanLists);
@@ -143,6 +149,12 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                     posts.setCover(jsonObject.getString("cover"));
                     posts.setOnline(jsonObject.getString("online"));
                     posts.setPortraitframe(jsonObject.getString("portraitframe"));
+                    posts.setMyfriends(jsonObject.getString("myfriends"));
+                    posts.setMyblacklist(jsonObject.getString("myblacklist"));
+                    posts.setPlay_once(jsonObject.getString("play_once"));
+                    posts.setMore_five(jsonObject.getString("more_five"));
+                    posts.setPlay_completed(jsonObject.getString("play_completed"));
+                    posts.setPlay_time(jsonObject.getString("play_time"));
                     luntanLists.add(posts);
                 }
             }
@@ -338,7 +350,7 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                     Message message=handler.obtainMessage();
                     message.obj=response.body().string();
                     message.what=1;
-                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+                    Log.d(TAG, "run: getDataPostlist发送的值"+message.obj.toString());
                     handler.sendMessageDelayed(message,10);
                 }catch (Exception e) {
                     e.printStackTrace();
