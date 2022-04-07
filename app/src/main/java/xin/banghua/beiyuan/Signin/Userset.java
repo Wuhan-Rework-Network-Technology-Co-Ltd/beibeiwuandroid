@@ -350,6 +350,7 @@ public class Userset extends AppCompatActivity {
                         sh.saveUserInfoID(msg.obj.toString());
                         Intent intent = new Intent(Userset.this, LaunchActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                     break;
                 case 2:
@@ -357,6 +358,7 @@ public class Userset extends AppCompatActivity {
                     Toast.makeText(mContext, "微信注册成功", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(Userset.this, LaunchActivity.class);
                     startActivity(intent);
+                    finish();
             }
 
         }

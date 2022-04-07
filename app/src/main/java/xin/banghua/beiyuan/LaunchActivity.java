@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,9 @@ import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSON;
 import com.baidu.mobads.sdk.api.SplashAd;
+import com.lansosdk.videoeditor.LanSoEditor;
+import com.lansosdk.videoeditor.LanSongFileUtil;
+import com.libyuv.LibyuvUtil;
 import com.orhanobut.dialogplus.DialogPlus;
 
 import org.json.JSONException;
@@ -44,6 +48,9 @@ import java.util.Map;
 
 import io.agora.chatroom.manager.ChatRoomManager;
 import io.agora.chatroom.util.MD5Tool;
+import io.rong.imkit.RongIM;
+import io.rong.imkit.model.UIConversation;
+import io.rong.imlib.model.Conversation;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -75,7 +82,23 @@ public class LaunchActivity extends Activity {
         super.onResume();
 
 
+//        try {
+//            SingletonMusicPlayer.getInstance().reset();
+//            SingletonMusicPlayer.getInstance().setDataSource("data/data/xin.banghua.beiyuan/files/Music/缘分一道桥 (片段).mp3");
+//            SingletonMusicPlayer.getInstance().prepare();
+//            SingletonMusicPlayer.getInstance().start();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
+//        Common.downloadAttachment("gif", "test", "https://www.banghua.xin/test.gif", new OkHttpDownloadCallBack() {
+//            @Override
+//            public void getBaseDownloadTask(BaseDownloadTask task) {
+//                Log.d(TAG, "getBaseDownloadTask: 下载完成后地址"+task.getPath()+"|"+task.getTargetFilePath());
+//            }
+//        });
+
+        App.getApplication().initVideoCaptureAsync();
 
 
         intent = new Intent(LaunchActivity.this, Main4Activity.class);
@@ -85,8 +108,6 @@ public class LaunchActivity extends Activity {
 
 
         Log.d(TAG, "onCreate: md5"+ MD5Tool.MD5("123"));
-
-
 
         ifSignin();
 
@@ -139,6 +160,51 @@ public class LaunchActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        //初始化视频编辑器
+        LanSoEditor.initSDK(LaunchActivity.this, null);
+        LanSongFileUtil.setFileDir("data/data/xin.banghua.beiyuan/files/"+System.currentTimeMillis()+"/");
+        LibyuvUtil.loadLibrary();
+
+        RongIM.setConversationListBehaviorListener(new RongIM.ConversationListBehaviorListener() {
+            @Override
+            public boolean onConversationPortraitClick(Context context, Conversation.ConversationType conversationType, String s) {
+                return false;
+            }
+            /**
+             * 会话头像长按监听
+             *
+             * @param context          上下文。
+             * @param conversationType 会话类型。
+             * @param targetId         被点击的用户id。
+             * @return true 拦截事件, false 执行融云 SDK 内部默认处理逻辑
+             */
+            @Override
+            public boolean onConversationPortraitLongClick(Context context, Conversation.ConversationType conversationType, String targetId) {
+                return false;
+            }
+
+            @Override
+            public boolean onConversationLongClick(Context context, View view, UIConversation uiConversation) {
+                return false;
+            }
+
+            /**
+             * 会话列表中的 Item 点击监听
+             *
+             * @param context      上下文。
+             * @param view         触发点击的 View。
+             * @param conversation 长按时的会话条目
+             * @return true 拦截事件, false 执行融云 SDK 内部默认处理逻辑
+             */
+            @Override
+            public boolean onConversationClick(Context context, View view, UIConversation conversation) {
+                Log.d(TAG, "onConversationClick: 点击了会话列表"+conversation.getConversationTargetId()+"|"+conversation.getConversationSenderId());
+                //RongIM.getInstance().startSubConversationList(mContext , Conversation.ConversationType.PRIVATE);
+                return false;
+            }
+        });
         
         
         if (",165661,117886,86261,1596,169152,20978,".contains(",169152,")){
@@ -183,6 +249,11 @@ public class LaunchActivity extends Activity {
 
         image_framelayout = findViewById(R.id.image_framelayout);
         launchImage = findViewById(R.id.launchImage);
+        //Glide.with(mContext).load(R.mipmap.emoji_1).into(launchImage);
+
+
+//        Log.d(TAG, "onCreate: 图片地址"+Common.imageTranslateUri(mContext,R.mipmap.emoji_1));
+//        Glide.with(mContext).load(Common.imageTranslateUri(mContext,R.mipmap.emoji_1)).into(launchImage);
         launchImage.setImageResource(R.drawable.launch);
     }
 
@@ -194,7 +265,7 @@ public class LaunchActivity extends Activity {
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
 
-        if(userInfo.get("userID")==""){
+        if(TextUtils.isEmpty(userInfo.get("userID"))){
             Log.d(TAG, "ifSignin: 1启动是否登录");
             Common.myID = null;
 //            Intent intentSignin = new Intent(MainActivity.this, SigninActivity.class);
@@ -217,7 +288,66 @@ public class LaunchActivity extends Activity {
             startService(startIntent);
 
             //获取自己信息，储存在Common类中
-            getDataMyInfo(getString(R.string.personage_url),userInfo.get("userID"));
+            OkHttpInstance.getUserAttributesMe(userInfo.get("userID"),responseString -> {
+                if (responseString.equals("ip已被封禁!")){
+                    System.exit(0);
+                }
+
+                Common.myInfo = responseString;
+                Log.d(TAG, "handleMessage: 自己信息"+Common.myInfo);
+                Common.userInfoList = JSON.parseObject(Common.myInfo, UserInfoList.class);
+
+                OkHttpInstance.postRongyunUserRegister(Common.userInfoList, new OkHttpResponseCallBack() {
+                    @Override
+                    public void getResponseString(String responseString) {
+                        Log.d(TAG, "getResponseString: 融云登录成功");
+                    }
+                });
+                Common.removeVipPortraitFrameOrVehicle();
+                io.agora.chatroom.Common.myUserInfoList = JSON.parseObject(Common.myInfo, io.agora.chatroom.UserInfoList.class);
+                Log.d(TAG, "handleMessage: 1自己信息"+Common.userInfoList.getId());
+                //聊天室用户信息
+                try {
+                    io.agora.chatroom.model.Constant.sUserId= Integer.parseInt(Common.userInfoList.getId());
+                    io.agora.chatroom.model.Constant.sName = Common.userInfoList.getNickname();
+                    io.agora.chatroom.model.Constant.sPortrait = Common.userInfoList.getPortrait();
+                    io.agora.chatroom.model.Constant.sGender = Common.userInfoList.getGender();
+                    io.agora.chatroom.model.Constant.sProperty = Common.userInfoList.getProperty();
+                    io.agora.chatroom.model.Constant.sRoomName = Common.userInfoList.getAudioroomname();
+                    io.agora.chatroom.model.Constant.sRoomCover = Common.userInfoList.getAudioroomcover();
+                    io.agora.chatroom.model.Constant.sRoomBG = Common.userInfoList.getAudioroombackground();
+                    io.agora.chatroom.model.Constant.vip = Common.userInfoList.getVip();
+                    io.agora.chatroom.model.Constant.svip = Common.userInfoList.getSvip();
+                } catch (NumberFormatException e) {
+                    Log.d(TAG, "handleMessage: 抛出自己信息异常");
+                    e.printStackTrace();
+                }
+
+                try {
+                    //缓存好友备注
+                    if(!responseString.equals("false")){
+                        JSONObject jsonObject = new ParseJSONObject(responseString).getParseJSON();
+                        if (jsonObject.getInt("svip_try")==1){
+                            Log.d(TAG, "svip已试用");
+                            SharedHelper.getInstance(LaunchActivity.this).saveTryChat(1);
+                        }
+                        if (!jsonObject.getString("friendsremark").equals("null")&&!jsonObject.getString("friendsremark").equals("")){
+                            Map<String,String> map = new HashMap();
+                            String[] friendsRemarkArray = jsonObject.getString("friendsremark").split(";");//id1:remark1
+                            for (int i=0;i<friendsRemarkArray.length;i++){
+                                String[] friendRemark = friendsRemarkArray[i].split(":");//id1    remark1
+                                map.put(friendRemark[0],friendRemark[1]);
+                            }
+                            Common.friendsRemarkMap = map;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                ChatRoomManager.instance(getApplication()).joinChannel("0");
+            });
+            //getDataMyInfo(getString(R.string.personage_url),userInfo.get("userID"));
 
             OkHttpInstance.getFollowList(userInfo.get("userID"), responseString -> {
                 if (!responseString.equals("false")){
@@ -340,6 +470,10 @@ public class LaunchActivity extends Activity {
                     }
                     break;
                 case 2:
+                    if (msg.obj.toString().equals("ip已被封禁!")){
+                        System.exit(0);
+                    }
+
                     Common.myInfo = msg.obj.toString();
                     Log.d(TAG, "handleMessage: 自己信息"+Common.myInfo);
                     Common.userInfoList = JSON.parseObject(Common.myInfo, UserInfoList.class);
@@ -371,19 +505,21 @@ public class LaunchActivity extends Activity {
 
                     try {
                         //缓存好友备注
-                        JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
-                        if (jsonObject.getInt("svip_try")==1){
-                            Log.d(TAG, "svip已试用");
-                            SharedHelper.getInstance(LaunchActivity.this).saveTryChat(1);
-                        }
-                        if (!jsonObject.getString("friendsremark").equals("null")&&!jsonObject.getString("friendsremark").equals("")){
-                            Map<String,String> map = new HashMap();
-                            String[] friendsRemarkArray = jsonObject.getString("friendsremark").split(";");//id1:remark1
-                            for (int i=0;i<friendsRemarkArray.length;i++){
-                                String[] friendRemark = friendsRemarkArray[i].split(":");//id1    remark1
-                                map.put(friendRemark[0],friendRemark[1]);
+                        if(!msg.obj.toString().equals("false")){
+                            JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
+                            if (jsonObject.getInt("svip_try")==1){
+                                Log.d(TAG, "svip已试用");
+                                SharedHelper.getInstance(LaunchActivity.this).saveTryChat(1);
                             }
-                            Common.friendsRemarkMap = map;
+                            if (!jsonObject.getString("friendsremark").equals("null")&&!jsonObject.getString("friendsremark").equals("")){
+                                Map<String,String> map = new HashMap();
+                                String[] friendsRemarkArray = jsonObject.getString("friendsremark").split(";");//id1:remark1
+                                for (int i=0;i<friendsRemarkArray.length;i++){
+                                    String[] friendRemark = friendsRemarkArray[i].split(":");//id1    remark1
+                                    map.put(friendRemark[0],friendRemark[1]);
+                                }
+                                Common.friendsRemarkMap = map;
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

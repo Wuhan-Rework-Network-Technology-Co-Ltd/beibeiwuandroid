@@ -125,9 +125,15 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                     posts.setMore_five(jsonObject.getString("more_five"));
                     posts.setPlay_completed(jsonObject.getString("play_completed"));
                     posts.setPlay_time(jsonObject.getString("play_time"));
+                    posts.setPostpicture(jsonObject.getString("postpicture"));
+                    posts.setVitality(jsonObject.getString("vitality"));
+                    posts.setPost(jsonObject.getString("post"));
+                    posts.setComment(jsonObject.getString("comment"));
+                    posts.setTopic(jsonObject.getString("topic"));
+                    posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
                     luntanLists.add(posts);
                 }
-                adapter.swapData(luntanLists);
+                adapter.setLuntanLists(luntanLists);
             }
         }else {
             //不同板块，需要先清零
@@ -155,6 +161,12 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                     posts.setMore_five(jsonObject.getString("more_five"));
                     posts.setPlay_completed(jsonObject.getString("play_completed"));
                     posts.setPlay_time(jsonObject.getString("play_time"));
+                    posts.setPostpicture(jsonObject.getString("postpicture"));
+                    posts.setVitality(jsonObject.getString("vitality"));
+                    posts.setPost(jsonObject.getString("post"));
+                    posts.setComment(jsonObject.getString("comment"));
+                    posts.setTopic(jsonObject.getString("topic"));
+                    posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
                     luntanLists.add(posts);
                 }
             }

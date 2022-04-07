@@ -105,10 +105,27 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                             jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
                     posts.setComment_forbid(jsonObject.getString("comment_forbid"));
                     posts.setPostvideo(jsonObject.getString("postvideo"));
+                    posts.setWidth(jsonObject.getString("width"));
+                    posts.setHeight(jsonObject.getString("height"));
+                    posts.setCover(jsonObject.getString("cover"));
+                    posts.setOnline(jsonObject.getString("online"));
+                    posts.setPortraitframe(jsonObject.getString("portraitframe"));
+                    posts.setMyfriends(jsonObject.getString("myfriends"));
+                    posts.setMyblacklist(jsonObject.getString("myblacklist"));
+                    posts.setPlay_once(jsonObject.getString("play_once"));
+                    posts.setMore_five(jsonObject.getString("more_five"));
+                    posts.setPlay_completed(jsonObject.getString("play_completed"));
+                    posts.setPlay_time(jsonObject.getString("play_time"));
+                    posts.setPostpicture(jsonObject.getString("postpicture"));
+                    posts.setVitality(jsonObject.getString("vitality"));
+                    posts.setPost(jsonObject.getString("post"));
+                    posts.setComment(jsonObject.getString("comment"));
+                    posts.setTopic(jsonObject.getString("topic"));
+                    posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
                     luntanLists.add(posts);
                 }
             }
-            adapter.swapData(luntanLists);
+            adapter.setLuntanLists(luntanLists);
         }else {
             //不同板块，需要先清零
             luntanLists.clear();
@@ -124,6 +141,23 @@ public class SomeonesluntanActivity extends AppCompatActivity {
                             jsonObject.getString("time"),jsonObject.getString("vip"),jsonObject.getString("svip"),jsonObject.getString("comment_sum"));
                     posts.setComment_forbid(jsonObject.getString("comment_forbid"));
                     posts.setPostvideo(jsonObject.getString("postvideo"));
+                    posts.setWidth(jsonObject.getString("width"));
+                    posts.setHeight(jsonObject.getString("height"));
+                    posts.setCover(jsonObject.getString("cover"));
+                    posts.setOnline(jsonObject.getString("online"));
+                    posts.setPortraitframe(jsonObject.getString("portraitframe"));
+                    posts.setMyfriends(jsonObject.getString("myfriends"));
+                    posts.setMyblacklist(jsonObject.getString("myblacklist"));
+                    posts.setPlay_once(jsonObject.getString("play_once"));
+                    posts.setMore_five(jsonObject.getString("more_five"));
+                    posts.setPlay_completed(jsonObject.getString("play_completed"));
+                    posts.setPlay_time(jsonObject.getString("play_time"));
+                    posts.setPostpicture(jsonObject.getString("postpicture"));
+                    posts.setVitality(jsonObject.getString("vitality"));
+                    posts.setPost(jsonObject.getString("post"));
+                    posts.setComment(jsonObject.getString("comment"));
+                    posts.setTopic(jsonObject.getString("topic"));
+                    posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
                     luntanLists.add(posts);
                 }
             }

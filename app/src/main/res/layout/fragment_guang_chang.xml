@@ -17,101 +17,110 @@
             android:orientation="horizontal"
             >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="visible">
-                <TextView
-                    android:id="@+id/toggleButton11"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/color333"
-                    android:text="推荐"
-                    android:layout_gravity="bottom"
-                    android:textStyle="bold"
-                    android:textSize="22sp"/>
-                <TextView
-                    android:id="@+id/toggleButton12"
-                    android:paddingTop="4dp"
-                    android:paddingRight="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color333"
-                    android:text="同城"
-                    android:layout_gravity="bottom"
-                    android:textStyle="bold"
-                    android:textSize="15sp"/>
-                <TextView
-                    android:id="@+id/toggleButton13"
-                    android:paddingTop="4dp"
-                    android:paddingRight="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color333"
-                    android:text="最新"
-                    android:layout_gravity="bottom"
-                    android:textStyle="bold"
-                    android:textSize="15sp"/>
-
-                <TextView
-                    android:id="@+id/toggleButton14"
-                    android:paddingTop="4dp"
-                    android:paddingRight="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color333"
-                    android:text="招募令"
-                    android:layout_gravity="bottom"
-                    android:textStyle="bold"
-                    android:textSize="15sp"/>
-
-                <TextView
-                    android:id="@+id/toggleButton15"
-                    android:paddingTop="4dp"
-                    android:paddingRight="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color333"
-                    android:text="关注"
-                    android:layout_gravity="bottom"
-                    android:textStyle="bold"
-                    android:textSize="15sp"/>
-
-
-                <RelativeLayout
-                    android:id="@+id/luntanRelease"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:gravity="center"
-                        android:layout_marginRight="15dp"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/yellow_shixin_yuanjiao"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+                    <TextView
+                        android:id="@+id/toggleButton11"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_marginLeft="10dp"
-                            android:layout_width="16dp"
-                            android:layout_height="18dp"
-                            android:src="@mipmap/fabu"/>
-                        <TextView
-                            android:layout_marginLeft="8dp"
-                            android:layout_width="30dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/color_white"
-                            android:text="发布"
-                            android:layout_marginRight="10dp"
-                            android:textStyle="bold"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
-                </RelativeLayout>
-            </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color333"
+                        android:text="推荐"
+                        android:layout_gravity="bottom"
+                        android:textStyle="bold"
+                        android:textSize="22sp"/>
+                    <TextView
+                        android:id="@+id/toggleButton12"
+                        android:paddingTop="4dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color333"
+                        android:text="同城"
+                        android:layout_gravity="bottom"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <TextView
+                        android:id="@+id/toggleButton13"
+                        android:paddingTop="4dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color333"
+                        android:text="最新"
+                        android:layout_gravity="bottom"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/toggleButton14"
+                        android:paddingTop="4dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color333"
+                        android:text="招募令"
+                        android:layout_gravity="bottom"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/toggleButton15"
+                        android:paddingTop="4dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color333"
+                        android:text="关注"
+                        android:layout_gravity="bottom"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+
+
+                    <RelativeLayout
+                        android:id="@+id/luntanRelease"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="15dp"
+                            android:background="@drawable/yellow_shixin_yuanjiao"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="18dp"
+                                android:layout_marginLeft="10dp"
+                                android:src="@mipmap/fabu" />
+
+                            <TextView
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="10dp"
+                                android:text="发布"
+                                android:textColor="@color/color_white"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -218,4 +227,12 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:text="刚刚看过↓"/>
+
+    <ImageView
+        android:id="@+id/goToRoomTwo"
+        android:layout_width="129dp"
+        android:layout_height="46dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="80dp"
+        android:src="@mipmap/h_party" />
 </FrameLayout>

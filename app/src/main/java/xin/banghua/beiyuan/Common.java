@@ -1,15 +1,31 @@
 package xin.banghua.beiyuan;
 
+import static com.faceunity.nama.post.utils.FileUtilsFU.getExternalFileDir;
+import static xin.banghua.beiyuan.utils.ThreadUtils.runOnUiThread;
+
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.Chronometer;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,9 +38,14 @@ import java.util.Map;
 import io.agora.chatroom.activity.ChatRoomService;
 import xin.banghua.beiyuan.Adapter.FollowList;
 import xin.banghua.beiyuan.Adapter.FriendList;
+import xin.banghua.beiyuan.Adapter.LuntanList;
 import xin.banghua.beiyuan.Adapter.StoreList;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
+import xin.banghua.beiyuan.chat.VideoFloatService;
+import xin.banghua.beiyuan.chat.VoiceFloatService;
+import xin.banghua.beiyuan.utils.OkHttpDownloadCallBack;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.ZipUtils;
 
 public class Common {
     public static String myID = null;
@@ -70,6 +91,7 @@ public class Common {
             return OSS_PREFIX + resourceUrl;//现在的oss只保存后缀，前缀要自己添加
         }
     }
+
 
 
     /**
@@ -401,7 +423,7 @@ public class Common {
      * @param className
      * @return
      */
-    public static boolean isServiceExisted(AppCompatActivity context, String className) {
+    public static boolean isServiceExisted(Activity context, String className) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> serviceList = activityManager.getRunningServices(Integer.MAX_VALUE);
         if(!(serviceList.size() > 0)) {
@@ -415,5 +437,403 @@ public class Common {
             }
         }
         return false;
+    }
+
+
+
+    public static int getLevelFromUser(UserInfoList userInfoList){
+        //自定义部分
+        int lv = Integer.parseInt(userInfoList.getVitality()) + Integer.parseInt(userInfoList.getPost()) + Integer.parseInt(userInfoList.getComment());
+        if (lv <= 100){
+            return R.mipmap.lv1;
+        }else if (lv <= 200){
+            return R.mipmap.lv2;
+        }else if (lv <= 400){
+            return R.mipmap.lv3;
+        }else if (lv <= 800){
+            return R.mipmap.lv4;
+        }else if (lv <= 1600){
+            return R.mipmap.lv5;
+        }else if (lv <= 3500){
+            return R.mipmap.lv6;
+        }else if (lv <= 5500){
+            return R.mipmap.lv7;
+        }else if (lv <= 7500){
+            return R.mipmap.lv8;
+        }else if (lv <= 10000){
+            return R.mipmap.lv9;
+        }else if (lv <= 15000){
+            return R.mipmap.lv10;
+        }else if (lv <= 20000){
+            return R.mipmap.lv11;
+        }else if (lv <= 25000){
+            return R.mipmap.lv12;
+        }else if (lv <= 30000){
+            return R.mipmap.lv13;
+        }else if (lv <= 40000){
+            return R.mipmap.lv14;
+        }else if (lv <= 50000){
+            return R.mipmap.lv15;
+        }else if (lv <= 60000){
+            return R.mipmap.lv16;
+        }else if (lv <= 70000){
+            return R.mipmap.lv17;
+        }else if (lv <= 80000){
+            return R.mipmap.lv18;
+        }else if (lv <= 90000){
+            return R.mipmap.lv19;
+        }else{
+           return R.mipmap.lv20;
+        }
+    }
+
+    public static int getLevelFromPost(LuntanList luntanList){
+        //自定义部分
+        int lv = Integer.parseInt(luntanList.getVitality()) + Integer.parseInt(luntanList.getPost()) + Integer.parseInt(luntanList.getComment());
+        if (lv <= 100){
+            return R.mipmap.lv1;
+        }else if (lv <= 200){
+            return R.mipmap.lv2;
+        }else if (lv <= 400){
+            return R.mipmap.lv3;
+        }else if (lv <= 800){
+            return R.mipmap.lv4;
+        }else if (lv <= 1600){
+            return R.mipmap.lv5;
+        }else if (lv <= 3500){
+            return R.mipmap.lv6;
+        }else if (lv <= 5500){
+            return R.mipmap.lv7;
+        }else if (lv <= 7500){
+            return R.mipmap.lv8;
+        }else if (lv <= 10000){
+            return R.mipmap.lv9;
+        }else if (lv <= 15000){
+            return R.mipmap.lv10;
+        }else if (lv <= 20000){
+            return R.mipmap.lv11;
+        }else if (lv <= 25000){
+            return R.mipmap.lv12;
+        }else if (lv <= 30000){
+            return R.mipmap.lv13;
+        }else if (lv <= 40000){
+            return R.mipmap.lv14;
+        }else if (lv <= 50000){
+            return R.mipmap.lv15;
+        }else if (lv <= 60000){
+            return R.mipmap.lv16;
+        }else if (lv <= 70000){
+            return R.mipmap.lv17;
+        }else if (lv <= 80000){
+            return R.mipmap.lv18;
+        }else if (lv <= 90000){
+            return R.mipmap.lv19;
+        }else{
+            return R.mipmap.lv20;
+        }
+    }
+
+
+    /**
+     * 隐藏动物
+     *
+     * @return {@link TranslateAnimation}
+     */
+    public static TranslateAnimation hideAnimUpToDown(){
+        TranslateAnimation hideAnim = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 1.0f);
+        hideAnim.setDuration(500);
+        return hideAnim;
+    }
+
+    public static TranslateAnimation hideAnimDownToUp(){
+        TranslateAnimation hideAnim = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, -1.0f);
+        hideAnim.setDuration(500);
+        return hideAnim;
+    }
+
+    public static TranslateAnimation showAnimDownToUp(){
+        TranslateAnimation showAnim = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f);
+        showAnim.setDuration(500);
+        return showAnim;
+    }
+
+    public static TranslateAnimation showAnimUpToDown(){
+        TranslateAnimation showAnim = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, -1.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f);
+        showAnim.setDuration(500);
+        return showAnim;
+    }
+
+
+
+
+    static Intent intentVoiceFloatService;//语音聊天
+    public static void instanceVoiceFloatService(Context context){
+        intentVoiceFloatService = new Intent(context, VoiceFloatService.class);
+    }
+    public static Intent getInstanceVoiceFloatService(){
+        return intentVoiceFloatService;
+    }
+
+    static Intent intentVideoFloatService;//视频聊天
+    public static void instanceVideoFloatService(Context context){
+        intentVideoFloatService = new Intent(context, VideoFloatService.class);
+    }
+    public static Intent getInstanceVideoFloatService(){
+        return intentVideoFloatService;
+    }
+
+
+
+    /**
+     *
+     * @param cmt  Chronometer控件
+     * @return 小时+分钟+秒数  的所有秒数
+     */
+    public static int getChronometerSeconds(Chronometer cmt) {
+        int totalss = 0;
+        String string = cmt.getText().toString();
+        if(string.length()==7){
+
+            String[] split = string.split(":");
+            String string2 = split[0];
+            int hour = Integer.parseInt(string2);
+            int Hours =hour*3600;
+            String string3 = split[1];
+            int min = Integer.parseInt(string3);
+            int Mins =min*60;
+            int  SS =Integer.parseInt(split[2]);
+            totalss = Hours+Mins+SS;
+            return totalss;
+        }
+
+        else if(string.length()==5){
+
+            String[] split = string.split(":");
+            String string3 = split[0];
+            int min = Integer.parseInt(string3);
+            int Mins =min*60;
+            int  SS =Integer.parseInt(split[1]);
+
+            totalss =Mins+SS;
+            return totalss;
+        }
+        return totalss;
+    }
+
+
+
+    /**
+     * 下载相芯美颜特效
+     * 下载并解压faceunity到data/data/xin.banghua.beiyuan/files/faceunity
+     */
+    public static void downloadFU(){
+        Log.d(TAG, "动画下载pending: ");
+        //下载
+        FileDownloader.getImpl().create(getOssResourceUrl("attachment/faceunity.zip"))
+                .setPath("data/data/xin.banghua.beiyuan/files/faceunity.zip")
+                .setListener(new FileDownloadListener() {
+                    @Override
+                    protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.d(TAG, "动画下载pending: ");
+                    }
+
+                    @Override
+                    protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
+                        Log.d(TAG, "动画下载connected: ");
+                    }
+
+                    @Override
+                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.d(TAG, "动画下载progress: ");
+                    }
+
+                    @Override
+                    protected void blockComplete(BaseDownloadTask task) {
+                        Log.d(TAG, "动画下载blockComplete: ");
+                    }
+
+                    @Override
+                    protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
+                        Log.d(TAG, "动画下载retry: ");
+                    }
+
+                    @Override
+                    protected void completed(BaseDownloadTask task) {
+                        Log.d(TAG, "动画下载completed: ");
+                        //下载完成后解压zip
+                        try {
+                            ZipUtils.UnZipFolder("data/data/" + "xin.banghua.beiyuan" + "/files/faceunity.zip","data/data/" + "xin.banghua.beiyuan" + "/files/faceunity");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.d(TAG, "动画下载paused: ");
+                    }
+
+                    @Override
+                    protected void error(BaseDownloadTask task, Throwable e) {
+                        Log.d(TAG, "动画下载error: "+e.toString());
+                        //出错后重新下载
+                        downloadFU();
+                    }
+
+                    @Override
+                    protected void warn(BaseDownloadTask task) {
+                        Log.d(TAG, "warn: ");
+                    }
+                }).start();
+    }
+
+
+    public static String getAccthmentPath(String type, String fileName){
+        if (type.equals("Music")){
+            return "data/data/xin.banghua.beiyuan/files/"+type+"/"+fileName+".mp3";
+        }else if (type.equals("Gif")){
+            return "data/data/xin.banghua.beiyuan/files/"+type+"/"+fileName+".gif";
+        }else {
+            return "data/data/xin.banghua.beiyuan/files/"+type+"/"+fileName+".mp4";
+        }
+    }
+    /**
+     * 附加文件下载，如在线音乐等
+     * @param type         类型，如:audio,image,etc
+     * @param fileName     文件名，如：红色高跟鞋.mp3
+     * @param okHttpDownloadCallBack 下载后的回调
+     */
+    public static void downloadAttachment(String type, String fileName, String downloadUrl, OkHttpDownloadCallBack okHttpDownloadCallBack){
+        //下载
+
+        String downloadPath = getAccthmentPath(type,fileName);
+        FileDownloader.getImpl().create(downloadUrl)
+                .setPath(downloadPath)
+                .setListener(new FileDownloadListener() {
+                    @Override
+                    protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.d(TAG, "pending: ");
+                    }
+
+                    @Override
+                    protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
+                        Log.d(TAG, "connected: ");
+                    }
+
+                    @Override
+                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.d(TAG, "progress: ");
+                    }
+
+                    @Override
+                    protected void blockComplete(BaseDownloadTask task) {
+                        Log.d(TAG, "blockComplete: ");
+                    }
+
+                    @Override
+                    protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
+                        Log.d(TAG, "retry: ");
+                    }
+
+                    @Override
+                    protected void completed(BaseDownloadTask task) {
+                        Log.d(TAG, "completed: ");
+
+                        runOnUiThread(()->okHttpDownloadCallBack.getBaseDownloadTask(task));
+                    }
+
+                    @Override
+                    protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.d(TAG, "paused: ");
+                    }
+
+                    @Override
+                    protected void error(BaseDownloadTask task, Throwable e) {
+                        Log.d(TAG, "error: "+e.toString());
+                        //出错后重新下载
+                        downloadAttachment(type,fileName,downloadUrl,okHttpDownloadCallBack);
+                    }
+
+                    @Override
+                    protected void warn(BaseDownloadTask task) {
+                        Log.d(TAG, "warn: ");
+                    }
+                }).start();
+    }
+
+
+    public static String imageTranslateUri(Context context, int resId){
+        Uri uri = Uri.parse(
+                ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+                        + context.getResources().getResourcePackageName(resId) + "/"
+                        + context.getResources().getResourceTypeName(resId) + "/"
+                        + context.getResources().getResourceEntryName(resId)
+        );
+        return uri.toString();
+    }
+
+
+    /**
+     * 将Assets文件拷贝到应用作用域存储
+     *
+     * @param context    Context
+     * @param assetsPath String
+     * @param fileName   String
+     */
+    public static String copyAssetsToExternalFilesDir(Context context, String assetsPath, String fileName) {
+        File fileDir = new File(getExternalFileDir(context).getPath() + File.separator + "assets");
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+        File file = new File(fileDir, fileName);
+        if (file.exists()) {
+            return file.getAbsolutePath();
+        }
+        try {
+            InputStream inputStream = context.getAssets().open(assetsPath);
+            FileOutputStream fos = new FileOutputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(inputStream);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            byte[] byteArray = new byte[1024];
+            int bytes = bis.read(byteArray);
+            while (bytes > 0) {
+                bos.write(byteArray, 0, bytes);
+                bos.flush();
+                bytes = bis.read(byteArray);
+            }
+            bos.close();
+            fos.close();
+            return file.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * 转变大于10000的数字单位为w，例如24234：2.4w
+     * @param num
+     * @return
+     */
+    public static String changeNumberFormatIntoW(int num) {
+        if(num<10000){
+            return String.valueOf(num);
+        }else{
+            double n = (double)num/10000;
+            return String.format("%.1f",n)+"w";
+        }
     }
 }

@@ -36,7 +36,6 @@ public class OneKeyLogInActivityResult extends AppCompatActivity {
 
         String login_result = getIntent().getStringExtra("login_result");
 
-
         Log.d(TAG, "onCreate: 一键登录结果"+login_result);
 
         SharedHelper sh = new SharedHelper(mContext);
@@ -65,12 +64,12 @@ public class OneKeyLogInActivityResult extends AppCompatActivity {
                     sh.saveUserInfoID(object.getString("userID"));
                     intent = new Intent(mContext, LaunchActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
 

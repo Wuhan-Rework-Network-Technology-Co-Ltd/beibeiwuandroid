@@ -78,6 +78,88 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
+            android:name=".Main4Branch.DouyinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".script.ScriptActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".chat.MessageReceivedService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".Main5Branch.RPVerifyActivity"
+            android:exported="true" />
+        <activity
+            android:name=".publish.PublishPostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".publish.EditVideoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".publish.ScriptSingleEffectActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".publish.ScriptEffectActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".publish.AllEffectActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreenTheme" />
+
+        <service
+            android:name=".chat.VideoFloatService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".chat.VideoChatViewActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".chat.VoiceFloatService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".chat.VoiceChatViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".topic.TopicPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Main4Branch.PublishPostNewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Main3Branch.SubConversationListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="xin.banghua.beiyuan"
+                    android:pathPrefix="/subconversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".match.OnlineMatchActivity"
+            android:exported="false" />
+        <activity
             android:name=".Signin.BindAccountActivity"
             android:exported="false" />
         <activity

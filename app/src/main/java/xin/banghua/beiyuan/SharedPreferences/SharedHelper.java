@@ -1,5 +1,7 @@
 package xin.banghua.beiyuan.SharedPreferences;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -237,5 +239,21 @@ public class SharedHelper {
     public Boolean readAutoPlay() {
         SharedPreferences sp = mContext.getSharedPreferences("AutoPlay", Context.MODE_PRIVATE);
         return sp.getBoolean("AutoPlay", true);
+    }
+
+    //TODO 用于前端通知显示
+    //定义一个保存数据的方法   前端通知显示设置
+    public void savePrompt(String name,Boolean isShow) {
+        SharedPreferences sp = mContext.getSharedPreferences("prompt", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(name, isShow);
+        editor.commit();
+        //Toast.makeText(mContext, "信息已写入SharedPreference中", Toast.LENGTH_SHORT).show();
+    }
+
+    //定义一个读取SP文件的方法
+    public Boolean readPrompt(String name) {
+        SharedPreferences sp = mContext.getSharedPreferences("prompt", MODE_PRIVATE);
+        return sp.getBoolean(name, false);
     }
 }

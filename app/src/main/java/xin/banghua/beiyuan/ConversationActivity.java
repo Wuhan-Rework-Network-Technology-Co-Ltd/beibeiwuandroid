@@ -78,6 +78,9 @@ public class ConversationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_conversation);
 
 
+
+
+
         container = findViewById(R.id.container);
 
 

@@ -4,11 +4,13 @@ package xin.banghua.beiyuan.Main5Branch;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import xin.banghua.beiyuan.CheckPermission;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.R;
 
 
@@ -34,10 +37,23 @@ public class ResetPersonalInfoFragment extends Fragment {
     Button reset_property_btn;
     Button reset_region_btn;
     Button reset_signature_btn;
+    Button rp_verify_btn;
+    TextView rp_verify_tv;
 
     public ResetPersonalInfoFragment() {
         // Required empty public constructor
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!Common.userInfoList.getRp_verify_time().equals("0")){
+            rp_verify_tv.setText("已认证");
+            rp_verify_btn.setClickable(false);
+        }
+    }
+
     private Context mContext;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,6 +146,25 @@ public class ResetPersonalInfoFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        rp_verify_btn = view.findViewById(R.id.rp_verify_btn);
+
+        rp_verify_tv  = view.findViewById(R.id.rp_verify_tv);
+        Log.d(TAG, "onViewCreated: 认证"+Common.userInfoList.getRp_verify_time());
+        if (Common.userInfoList.getRp_verify_time().equals("0")){
+            Log.d(TAG, "onViewCreated: 1未认证");
+            rp_verify_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext,RPVerifyActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }else {
+
+            rp_verify_tv.setText("已认证");
+            rp_verify_btn.setClickable(false);
+        }
 
 
         //ImageView back_btn = view.findViewById(R.id.iv_back_left);

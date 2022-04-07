@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chat.VideoChatViewActivity">
+    <RelativeLayout
+        android:id="@+id/activity_video_chat_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:id="@+id/remote_video_view_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/remoteBackground">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@id/icon_padding">
+
+                        <ImageView
+                            android:layout_width="@dimen/remote_back_icon_size"
+                            android:layout_height="@dimen/remote_back_icon_size"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/question_icon" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/icon_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/remote_back_icon_margin_bottom"
+                        android:layout_alignParentBottom="true" >
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/local_video_view_container"
+                    android:layout_width="@dimen/local_preview_width"
+                    android:layout_height="@dimen/local_preview_height"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/local_preview_margin_top"
+                    android:layout_marginEnd="@dimen/local_preview_margin_right"
+                    android:layout_marginRight="@dimen/local_preview_margin_right"
+                    android:background="@color/localBackground"
+                    android:onClick="onLocalContainerClick">
+
+                    <ImageView
+                        android:layout_width="@dimen/local_back_icon_size"
+                        android:layout_height="@dimen/local_back_icon_size"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/logo" />
+
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:id="@+id/control_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/control_bottom_margin">
+
+                    <ImageView
+                        android:id="@+id/btn_call"
+                        android:layout_width="@dimen/call_button_size"
+                        android:layout_height="@dimen/call_button_size"
+                        android:layout_centerInParent="true"
+                        android:onClick="onCallClicked"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/btn_endcall" />
+
+                    <ImageView
+                        android:id="@+id/btn_switch_camera"
+                        android:layout_width="@dimen/other_button_size"
+                        android:layout_height="@dimen/other_button_size"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/control_bottom_horizontal_margin"
+                        android:layout_toEndOf="@id/btn_call"
+                        android:layout_toRightOf="@id/btn_call"
+                        android:onClick="onSwitchCameraClicked"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/btn_switch_camera" />
+
+                    <ImageView
+                        android:id="@+id/btn_mute"
+                        android:layout_width="@dimen/other_button_size"
+                        android:layout_height="@dimen/other_button_size"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/control_bottom_horizontal_margin"
+                        android:layout_toStartOf="@id/btn_call"
+                        android:layout_toLeftOf="@id/btn_call"
+                        android:onClick="onLocalAudioMuteClicked"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/btn_unmute" />
+
+                </RelativeLayout>
+
+
+
+                <RelativeLayout
+                    android:id="@+id/follow_gift_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginVertical="150dp"
+                    android:layout_marginBottom="@dimen/control_bottom_margin">
+
+                    <ImageView
+                        android:id="@+id/btn_beautiful"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_beautiful_icon"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/btn_report_violation"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/btn_beautiful"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_report_violation"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/btn_gift"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/btn_report_violation"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_gift_icon"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/btn_follow"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/btn_gift"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_plus_red"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/btn_rock_paper_scissors"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/btn_follow"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/rock_paper_scissors_icon"
+                        android:visibility="gone" />
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/ie_browser_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginVertical="50dp">
+
+                    <ImageView
+                        android:id="@+id/zoom_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_zoom_icon"
+                        android:visibility="visible" />
+                </RelativeLayout>
+                <Chronometer
+                    android:id ="@+id/chronometer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:format="%s"
+                    android:textSize="80px"
+                    android:textColor="@color/colorGray2"
+                    android:visibility="visible"/>
+                <TextView
+                    android:id="@+id/prompt_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="等待接通中..."
+                    android:textColor="@color/text_color_1"
+                    android:textSize="16sp"
+                    android:layout_marginTop="500dp"
+                    android:layout_centerHorizontal="true"/>
+            </RelativeLayout>
+
+        </FrameLayout>
+
+
+
+        <com.faceunity.nama.ui.FaceUnityView
+            android:id="@+id/fu_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -126,12 +126,20 @@ public class PersonageActivity extends AppCompatActivity {
 
     PortraitFrameView portraitFrameView;
 
+
+    ImageView lv_img;
+
+    ImageView rp_verify_img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singleperson);
 
         mContext = this;
+
+
+
 
         androidx.appcompat.app.ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -150,6 +158,9 @@ public class PersonageActivity extends AppCompatActivity {
         giftSentAdapter = new GiftSentAdapter(mContext,giftLists);
         sent_gift_recyclerview.setLayoutManager(new GridLayoutManager(mContext,4));
         sent_gift_recyclerview.setAdapter(giftSentAdapter);
+
+
+
     }
 
 
@@ -169,6 +180,8 @@ public class PersonageActivity extends AppCompatActivity {
 
 
     public void onViewCreated() {
+
+        rp_verify_img = findViewById(R.id.rp_verify_img);
 
         portraitFrameView = findViewById(R.id.portraitFrameView);
         container = findViewById(R.id.container);
@@ -668,7 +681,6 @@ public class PersonageActivity extends AppCompatActivity {
         }).start();
     }
     public void initPersonage(View view, JSONObject jsonObject) throws JSONException {
-
         make_friend_gift.setOnClickListener(v -> {
             make_friend_gift.setText("不要忘了点击开始申请哦！");
             try {
@@ -878,6 +890,12 @@ public class PersonageActivity extends AppCompatActivity {
                             Log.d(TAG, "handleMessage: 用户数据接收的值"+msg.obj.toString());
 
                             userInfoList = JSON.parseObject(resultJson1,UserInfoList.class);
+                            //实名认证
+                            if (userInfoList.getRp_verify_time().equals("0")){
+                                rp_verify_img.setVisibility(View.GONE);
+                            }else {
+                                rp_verify_img.setVisibility(View.VISIBLE);
+                            }
                             if (Common.isBlackList(userInfoList.getMyblacklist())){
                                 make_friend_btn.setText("已被对方加入黑名单");
                                 make_friend_btn.setClickable(false);
@@ -886,6 +904,8 @@ public class PersonageActivity extends AppCompatActivity {
                                 svip_chat_btn.setClickable(false);
                                 make_follow.setClickable(false);
                             }
+                            lv_img = findViewById(R.id.lv_img);
+                            lv_img.setImageResource(Common.getLevelFromUser(userInfoList));
                             JSONObject jsonObject = new ParseJSONObject(msg.obj.toString()).getParseJSON();
                             try {
                                 initPersonage(mView,jsonObject);

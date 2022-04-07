@@ -23,12 +23,16 @@
             <option value="$PROJECT_DIR$/dkplayer-players" />
             <option value="$PROJECT_DIR$/dkplayer-players/exo" />
             <option value="$PROJECT_DIR$/dkplayer-ui" />
+            <option value="$PROJECT_DIR$/dkplayer-videocachenew" />
+            <option value="$PROJECT_DIR$/faceunity" />
+            <option value="$PROJECT_DIR$/fu_ui" />
             <option value="$PROJECT_DIR$/imageselector" />
             <option value="$PROJECT_DIR$/lrcview" />
             <option value="$PROJECT_DIR$/onekeylogin" />
             <option value="$PROJECT_DIR$/popmenu" />
             <option value="$PROJECT_DIR$/wave_loading" />
             <option value="$PROJECT_DIR$/wavesidebar" />
+            <option value="$PROJECT_DIR$/weixinrecorded" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

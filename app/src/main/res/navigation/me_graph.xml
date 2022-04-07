@@ -35,4 +35,13 @@
             android:id="@+id/reset_me_action"
             app:destination="@id/meFragment" />
     </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/resetPersonalInfoFragment"-->
+<!--        android:name="xin.banghua.beiyuan.Main4Branch.NewDynamicFragment"-->
+<!--        android:label="fragment_reset_personal_info"-->
+<!--        tools:layout="@layout/fragment_reset_personal_info" >-->
+<!--        <action-->
+<!--            android:id="@+id/reset_me_action"-->
+<!--            app:destination="@id/meFragment" />-->
+<!--    </fragment>-->
 </navigation>

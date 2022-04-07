@@ -150,7 +150,7 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
         mEnableAudioFocus = a.getBoolean(R.styleable.VideoView_enableAudioFocus, mEnableAudioFocus);
         mIsLooping = a.getBoolean(R.styleable.VideoView_looping, false);
         mCurrentScreenScaleType = a.getInt(R.styleable.VideoView_screenScaleType, mCurrentScreenScaleType);
-        mPlayerBackgroundColor = a.getColor(R.styleable.VideoView_playerBackgroundColor, Color.BLACK);
+        mPlayerBackgroundColor = a.getColor(R.styleable.VideoView_playerBackgroundColor, Color.TRANSPARENT);
         a.recycle();
 
         initView();
@@ -559,6 +559,7 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
      */
     @Override
     public void onError(Exception e) {
+        Log.d(TAG, "onError: 播放出错"+e);
         mPlayerContainer.setKeepScreenOn(false);
         setPlayState(STATE_ERROR);
     }

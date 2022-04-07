@@ -1,6 +1,8 @@
 package io.agora.chatroom.manager;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -34,6 +36,7 @@ import io.agora.rtm.RtmImageMessage;
 import io.agora.rtm.RtmMediaOperationProgress;
 import io.agora.rtm.RtmMessage;
 import io.agora.rtm.SendMessageOptions;
+import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 public final class RtmManager {
 
@@ -418,6 +421,17 @@ public final class RtmManager {
         public void onMessageReceived(RtmMessage rtmMessage, String s) {
             Log.i(TAG, String.format("onPeerMessageReceived %s %s", rtmMessage.getText(), s));
             Log.d(TAG, "onMessageReceived: 收到个人消息"+rtmMessage.getText().toString());
+            if (s.equals("1") && rtmMessage.getText().equals("你因为违规，已被封禁。")){
+                SharedPreferences sp = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("userID", "");
+                editor.commit();
+                Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                mContext.startActivity(intent);
+                System.exit(0);
+                return;
+            }
             if (mListener != null)
                 mListener.onMessageReceived(rtmMessage);
 

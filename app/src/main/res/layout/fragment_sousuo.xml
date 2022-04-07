@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:iconifiedByDefault="false"
-                    android:queryHint="按昵称搜索" />
+                    android:queryHint="按昵称或乐园ID搜索" />
             </TableRow>
 
             <TableRow
@@ -422,6 +422,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
+                                    android:checked="true"
                                     android:text="全部" />
 
                                 <RadioButton
@@ -429,7 +430,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:checked="true"
+                                    android:checked="false"
                                     android:text="在线" />
                             </RadioGroup>
 

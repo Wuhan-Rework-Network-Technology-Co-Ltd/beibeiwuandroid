@@ -83,6 +83,9 @@ public class MeFragment extends Fragment {
 
     PortraitFrameView portraitFrameView;
     TextView follow_tv,fans_tv;
+
+    ImageView lv_img;
+    ImageView rp_verify_img;
     public MeFragment() {
         // Required empty public constructor
     }
@@ -94,6 +97,19 @@ public class MeFragment extends Fragment {
             portraitFrameView.setPortraitFrame(Common.userInfoList.getPortraitframe());
             usernickname_tv.setText(Common.userInfoList.getNickname());
 
+            lv_img.setImageResource(Common.getLevelFromUser(Common.userInfoList));
+
+
+            follow_tv.setText("关注："+Common.userInfoList.getFollow());
+
+            fans_tv.setText("粉丝："+Common.userInfoList.getFans());
+
+
+            if (!Common.userInfoList.getRp_verify_time().equals("0")){
+                rp_verify_img.setVisibility(View.VISIBLE);
+            }else {
+                rp_verify_img.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -114,6 +130,9 @@ public class MeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        rp_verify_img = view.findViewById(R.id.rp_verify_img);
+
+        lv_img = view.findViewById(R.id.lv_img);
         portraitFrameView = view.findViewById(R.id.portraitFrameView);
         follow_tv = view.findViewById(R.id.follow_tv);
         fans_tv = view.findViewById(R.id.fans_tv);
@@ -201,14 +220,14 @@ public class MeFragment extends Fragment {
         user_signature = view.findViewById(R.id.user_signature);
         if (Common.userInfoList != null){
             user_signature.setText(Common.userInfoList.getSignature());
-            follow_tv.setText("关注："+Common.userInfoList.getFollow());
+
             follow_tv.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), FollowAndFansActivity.class);
                 intent.putExtra("userId",Common.userInfoList.getId());
                 intent.putExtra("type",0);
                 getActivity().startActivity(intent);
             });
-            fans_tv.setText("粉丝："+Common.userInfoList.getFans());
+
             fans_tv.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(),FollowAndFansActivity.class);
                 intent.putExtra("userId",Common.userInfoList.getId());
@@ -452,7 +471,7 @@ public class MeFragment extends Fragment {
                             }
                         }
                     }else {
-                           vip_gray.setVisibility(View.VISIBLE);
+                           vip_gray.setVisibility(View.GONE);
                     }
                     break;
             }

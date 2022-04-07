@@ -24,14 +24,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.zolad.zoominimageview.ZoomInImageView;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +47,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.Main4Branch.ImagerPagerActivity;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main4Branch.PostListActivity;
 import xin.banghua.beiyuan.Main4Branch.VideoPlayActivity;
 import xin.banghua.beiyuan.Main5Branch.SomeonesluntanActivity;
@@ -54,7 +57,8 @@ import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.comment.CommentDialog;
 import xin.banghua.beiyuan.custom_ui.CustomVideoView;
 import xin.banghua.beiyuan.custom_ui.NiceImageView;
-import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.topic.TopicAddedItem;
+import xin.banghua.beiyuan.topic.TopicList;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
@@ -74,9 +78,16 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         luntanAdapter = this;
     }
     //替换数据，并更新
-    public void swapData(List<LuntanList> luntanLists){
+    public void setLuntanLists(List<LuntanList> luntanLists){
         this.luntanLists = luntanLists;
         notifyDataSetChanged();
+    }
+
+    public void swapData(List<LuntanList> luntanLists){
+        int oldSize = this.luntanLists.size();
+        int newSize = luntanLists.size();
+        this.luntanLists = luntanLists;
+        notifyItemRangeInserted(oldSize , newSize);
     }
     @NonNull
     @Override
@@ -102,6 +113,8 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         int currentPosition = i;
         viewHolders.put(i,((LuntanAdapter.ViewHolder) viewHolder));
         final LuntanList currentItem = luntanLists.get(i);
+
+        viewHolder.lv_img.setImageResource(Common.getLevelFromPost(currentItem));
 
         String authattributes_string = currentItem.getAuthage()+"岁 | "+currentItem.getAuthgender()+" | "+currentItem.getAuthregion()+" | "+currentItem.getAuthproperty();
         //viewHolder.authattributes.setText(authattributes_string);
@@ -145,7 +158,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         viewHolder.vip_gray.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(currentItem.getAuthsvip())){
             if (TextUtils.isEmpty(currentItem.getAuthvip())){
-
+                viewHolder.vip_gray.setVisibility(View.GONE);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(R.drawable.ic_vip_gray)
@@ -154,6 +167,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                 Log.d("会员时间",currentItem.getAuthvip()+"");
                 int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
                 if (vip_time > current_timestamp) {
+                    viewHolder.vip_gray.setVisibility(View.VISIBLE);
                     //vipicon分级
                     Log.d("会员时长", ((vip_time - current_timestamp) + ""));
                     if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
@@ -173,6 +187,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                                 .into(viewHolder.vip_gray);
                     }
                 } else {
+                    viewHolder.vip_gray.setVisibility(View.GONE);
                     Glide.with(mContext)
                             .asBitmap()
                             .load(R.drawable.ic_vip_gray)
@@ -183,6 +198,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
             Log.d("会员时间",currentItem.getAuthsvip()+"");
             int svip_time = Integer.parseInt(currentItem.getAuthsvip()+"");
             if (svip_time > current_timestamp) {
+                viewHolder.vip_gray.setVisibility(View.VISIBLE);
                 //vipicon分级
                 Log.d("会员时长", ((svip_time - current_timestamp) + ""));
                 if ((svip_time - current_timestamp) < 3600 * 24 * 30) {
@@ -203,7 +219,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                 }
             } else {
                 if (TextUtils.isEmpty(currentItem.getAuthvip())){
-                    viewHolder.vip_gray.setVisibility(View.VISIBLE);
+                    viewHolder.vip_gray.setVisibility(View.GONE);
                     Glide.with(mContext)
                             .asBitmap()
                             .load(R.drawable.ic_vip_gray)
@@ -212,6 +228,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                     Log.d("会员时间",currentItem.getAuthvip()+"");
                     int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
                     if (vip_time > current_timestamp) {
+                        viewHolder.vip_gray.setVisibility(View.VISIBLE);
                         //vipicon分级
                         Log.d("会员时长", ((vip_time - current_timestamp) + ""));
                         if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
@@ -231,6 +248,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                                     .into(viewHolder.vip_gray);
                         }
                     } else {
+                        viewHolder.vip_gray.setVisibility(View.GONE);
                         Glide.with(mContext)
                                 .asBitmap()
                                 .load(R.drawable.ic_vip_gray)
@@ -309,80 +327,98 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         }else {
             viewHolder.posttext.setText(currentItem.getPosttext());
         }
-        if (currentItem.getPostpicture().length!=1){
-            viewHolder.postpicture.setVisibility(View.GONE);
-        }else if (currentItem.getPostpicture().length==1){
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(Common.getOssResourceUrl(currentItem.getPostpicture()[0]))
-                    .into(viewHolder.postpicture);
-            viewHolder.postpicture.setVisibility(View.VISIBLE);
-            viewHolder.postpicture.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
-                    intent.putExtra("luntanlist", currentItem);
-                    intent.putExtra("image_index", 0);
-                    v.getContext().startActivity(intent);
-                }
-            });
-        }
-        if (currentItem.getPostpicture().length<2){
-            viewHolder.postpicture1.setVisibility(View.GONE);
-        }else {
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(Common.getOssResourceUrl(currentItem.getPostpicture()[0]))
-                    .into(viewHolder.postpicture1);
-            viewHolder.postpicture1.setVisibility(View.VISIBLE);
-            viewHolder.postpicture1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
-                    intent.putExtra("luntanlist", currentItem);
-                    intent.putExtra("image_index", 0);
-                    v.getContext().startActivity(intent);
-                }
-            });
-        }
-        if (currentItem.getPostpicture().length<2){
-            viewHolder.postpicture2.setVisibility(View.GONE);
-        }else {
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(Common.getOssResourceUrl(currentItem.getPostpicture()[1]))
-                    .into(viewHolder.postpicture2);
-            viewHolder.postpicture2.setVisibility(View.VISIBLE);
-            viewHolder.postpicture2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
-                    intent.putExtra("luntanlist", currentItem);
-                    intent.putExtra("image_index", 1);
-                    v.getContext().startActivity(intent);
-                }
-            });
-        }
-        if (currentItem.getPostpicture().length<3){
-            viewHolder.postpicture3.setVisibility(View.GONE);
-        }else {
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(Common.getOssResourceUrl(currentItem.getPostpicture()[2]))
-                    .into(viewHolder.postpicture3);
-            viewHolder.postpicture3.setVisibility(View.VISIBLE);
-            viewHolder.postpicture3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
-                    intent.putExtra("luntanlist", currentItem);
-                    intent.putExtra("image_index", 2);
-                    v.getContext().startActivity(intent);
-                }
-            });
-        }
+//        if (currentItem.getPostpictureList().length!=1){
+//            viewHolder.postpicture.setVisibility(View.GONE);
+//        }else if (currentItem.getPostpictureList().length==1){
+//            Glide.with(mContext)
+//                    .asBitmap()
+//                    .load(Common.getOssResourceUrl(currentItem.getPostpictureList()[0]))
+//                    .into(viewHolder.postpicture);
+//            viewHolder.postpicture.setVisibility(View.VISIBLE);
+//            viewHolder.postpicture.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+//                    intent.putExtra("luntanlist", currentItem);
+//                    intent.putExtra("image_index", 0);
+//                    v.getContext().startActivity(intent);
+//                }
+//            });
+//        }
+//        if (currentItem.getPostpictureList().length<2){
+//            viewHolder.postpicture1.setVisibility(View.GONE);
+//        }else {
+//            Glide.with(mContext)
+//                    .asBitmap()
+//                    .load(Common.getOssResourceUrl(currentItem.getPostpictureList()[0]))
+//                    .into(viewHolder.postpicture1);
+//            viewHolder.postpicture1.setVisibility(View.VISIBLE);
+//            viewHolder.postpicture1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+//                    intent.putExtra("luntanlist", currentItem);
+//                    intent.putExtra("image_index", 0);
+//                    v.getContext().startActivity(intent);
+//                }
+//            });
+//        }
+//        if (currentItem.getPostpictureList().length<2){
+//            viewHolder.postpicture2.setVisibility(View.GONE);
+//        }else {
+//            Glide.with(mContext)
+//                    .asBitmap()
+//                    .load(Common.getOssResourceUrl(currentItem.getPostpictureList()[1]))
+//                    .into(viewHolder.postpicture2);
+//            viewHolder.postpicture2.setVisibility(View.VISIBLE);
+//            viewHolder.postpicture2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+//                    intent.putExtra("luntanlist", currentItem);
+//                    intent.putExtra("image_index", 1);
+//                    v.getContext().startActivity(intent);
+//                }
+//            });
+//        }
+//        if (currentItem.getPostpictureList().length<3){
+//            viewHolder.postpicture3.setVisibility(View.GONE);
+//        }else {
+//            Glide.with(mContext)
+//                    .asBitmap()
+//                    .load(Common.getOssResourceUrl(currentItem.getPostpictureList()[2]))
+//                    .into(viewHolder.postpicture3);
+//            viewHolder.postpicture3.setVisibility(View.VISIBLE);
+//            viewHolder.postpicture3.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+//                    intent.putExtra("luntanlist", currentItem);
+//                    intent.putExtra("image_index", 2);
+//                    v.getContext().startActivity(intent);
+//                }
+//            });
+//        }
+
+        if (currentItem.getPostpicture().contains("images")){
+            String[] postPicture = currentItem.getPostpicture().split(",");
+            PictureAdapter pictureAdapter = new PictureAdapter(mContext,currentItem);
+            viewHolder.recyclerView.setVisibility(View.VISIBLE);
+            viewHolder.recyclerView.setAdapter(pictureAdapter);
+            if (postPicture.length==1){
+                viewHolder.recyclerView.setLayoutManager(new GridLayoutManager(mContext,1));
+            }else if(postPicture.length==2 || postPicture.length==4){
+                viewHolder.recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+            }else {
+                viewHolder.recyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
+            }
+
+            pictureAdapter.setPictures(Arrays.asList(postPicture));
 
 
+        }else {
+            viewHolder.recyclerView.setVisibility(View.GONE);
+        }
 
         viewHolder.like.setText(""+currentItem.getLike());
         viewHolder.like_layout.setOnClickListener(new View.OnClickListener() {
@@ -448,8 +484,12 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                     @Override
                     public void getResponseString(String responseString) {
                         runOnUiThread(()->{
-                            luntanLists.remove(currentPosition);
-                            luntanAdapter.notifyDataSetChanged();
+                            try {
+                                luntanLists.remove(currentPosition);
+                                luntanAdapter.notifyDataSetChanged();
+                            }catch (Exception e){
+                                Log.e(TAG, "getResponseString: 抛出异常" );
+                            }
                         });
                     }
                 });
@@ -582,6 +622,27 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                 notifyDataSetChanged();
             });
         });
+
+
+
+        if (!TextUtils.isEmpty(currentItem.getTopic())){
+            if (currentItem.getTopic()!="null"){
+                List<TopicList> topicLists = JSON.parseArray(currentItem.getTopic(), TopicList.class);
+                viewHolder.topic_layout.removeAllViews();
+                for (int j = 0;j<topicLists.size();j++){
+                    TopicAddedItem topicAddedItem = new TopicAddedItem(mContext);
+                    topicAddedItem.initShow(topicLists.get(j));
+                    viewHolder.topic_layout.addView(topicAddedItem);
+                }
+            }
+        }
+
+
+        if (!currentItem.getRp_verify_time().equals("0")){
+            viewHolder.rp_verify_img.setVisibility(View.VISIBLE);
+        }else {
+            viewHolder.rp_verify_img.setVisibility(View.GONE);
+        }
     }
     public void intentPostlist(View v,LuntanList currentItem){
         Intent intent = new Intent(v.getContext(), PostListActivity.class);
@@ -594,7 +655,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         intent.putExtra("posttip",currentItem.getPosttip());
         intent.putExtra("posttitle",currentItem.getPosttitle());
         intent.putExtra("posttext",currentItem.getPosttext());
-        intent.putExtra("postpicture",currentItem.getPostpicture());
+        intent.putExtra("postpicture",currentItem.getPostpictureList());
         intent.putExtra("like",currentItem.getLike());
         intent.putExtra("favorite",currentItem.getFavorite());
         intent.putExtra("time",currentItem.getTime());
@@ -664,9 +725,23 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         ImageView follow_img;
 
         PortraitFrameView portraitFrameView;
+
+        RecyclerView recyclerView;
+
+        ImageView lv_img;
+
+        LinearLayout topic_layout;
+
+        ImageView rp_verify_img;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            rp_verify_img = itemView.findViewById(R.id.rp_verify_img);
+
+            topic_layout = itemView.findViewById(R.id.topic_layout);
+
+            lv_img = itemView.findViewById(R.id.lv_img);
+            recyclerView = itemView.findViewById(R.id.recyclerview);
             portraitFrameView = itemView.findViewById(R.id.portraitFrameView);
 //            id = itemView.findViewById(R.id.id);
 //            plateid = itemView.findViewById(R.id.plateid);

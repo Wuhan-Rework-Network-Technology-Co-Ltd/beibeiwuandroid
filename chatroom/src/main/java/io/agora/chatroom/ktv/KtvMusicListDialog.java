@@ -189,8 +189,6 @@ public class KtvMusicListDialog {
             }
         };
 
-        int[] viewLocation = new int[2];
-
         viewpager_menu.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

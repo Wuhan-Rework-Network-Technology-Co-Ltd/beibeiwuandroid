@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.alibaba.fastjson.JSON;
 import com.daimajia.slider.library.SliderLayout;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -27,6 +28,7 @@ import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.FormBody;
@@ -34,11 +36,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.Adapter.UserInfoAdapter;
+import xin.banghua.beiyuan.Adapter.UserInfoList;
+import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 
 /**
@@ -50,7 +54,7 @@ public class SousuoresultFragment extends Fragment {
 
     private View mView;
     private Integer pageindex = 1;
-    UserInfoAdapter adapter;
+    UserInfoSliderAdapter adapter;
     private SliderLayout mDemoSlider;
     //vars
     private ArrayList<String> mUserID = new ArrayList<>();
@@ -78,6 +82,7 @@ public class SousuoresultFragment extends Fragment {
         return mView;
     }
 
+    List<UserInfoList> userInfoLists = new ArrayList<>();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -86,11 +91,48 @@ public class SousuoresultFragment extends Fragment {
         //初始化导航按钮
         initNavigateButton(view);
 
+        final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.tuijian_RecyclerView);
+        adapter = new UserInfoSliderAdapter(getActivity(),userInfoLists);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLinearLayout();;
+        recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+            @Override
+            public void onRefresh() {
+
+                Log.d(TAG, "onRefresh: start");
+                recyclerView.setPullLoadMoreCompleted();
+            }
+
+            @Override
+            public void onLoadMore() {
+                pageindex = pageindex+1;
+                if (getArguments().getString("type")=="direct") {
+                    getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),pageindex+"",responseString -> {
+                        userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
+                        adapter.swapData(userInfoLists);
+                    });
+                }else {
+                    getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),pageindex+"",responseString -> {
+                        userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
+                        adapter.swapData(userInfoLists);
+                    });
+                }
+                Log.d(TAG, "搜索页码："+pageindex);
+                recyclerView.setPullLoadMoreCompleted();
+            }
+        });
+
         if (getArguments().getString("type")=="direct") {
             //获取用户信息
-            getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),"1");
+            getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),"1",responseString -> {
+                userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
+                adapter.swapData(userInfoLists);
+            });
         }else if(getArguments().getString("type")=="condition"){
-            getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),"1");
+            getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),"1",responseString -> {
+                userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
+                adapter.swapData(userInfoLists);
+            });
         }
     }
 
@@ -152,37 +194,37 @@ public class SousuoresultFragment extends Fragment {
     }
 
     private void initRecyclerView(View view){
-        Log.d(TAG, "initRecyclerView: init recyclerview");
-
-        final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.tuijian_RecyclerView);
-        adapter = new UserInfoAdapter(view.getContext(),mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLinearLayout();;
-        recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
-            @Override
-            public void onRefresh() {
-
-                Log.d(TAG, "onRefresh: start");
-                recyclerView.setPullLoadMoreCompleted();
-            }
-
-            @Override
-            public void onLoadMore() {
-                pageindex = pageindex+1;
-                if (getArguments().getString("type")=="direct") {
-                    getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),pageindex+"");
-                }else {
-                    getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),pageindex+"");
-                }
-                Log.d(TAG, "搜索页码："+pageindex);
-                recyclerView.setPullLoadMoreCompleted();
-            }
-        });
+//        Log.d(TAG, "initRecyclerView: init recyclerview");
+//
+//        final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.tuijian_RecyclerView);
+//        //adapter = new UserInfoAdapter(view.getContext(),mUserID,mUserPortrait,mUserNickName,mUserAge,mUserGender,mUserProperty,mUserLocation,mUserRegion,mUserVIP,mUserSVIP,mAllowLocation);
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLinearLayout();;
+//        recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//
+//                Log.d(TAG, "onRefresh: start");
+//                recyclerView.setPullLoadMoreCompleted();
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                pageindex = pageindex+1;
+//                if (getArguments().getString("type")=="direct") {
+//                    getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),pageindex+"");
+//                }else {
+//                    getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),pageindex+"");
+//                }
+//                Log.d(TAG, "搜索页码："+pageindex);
+//                recyclerView.setPullLoadMoreCompleted();
+//            }
+//        });
     }
 
 
     //TODO okhttp获取用户信息
-    public void getDataUserinfo(final String url,Bundle bundle,final String pageindex){
+    public void getDataUserinfo(final String url, Bundle bundle, final String pageindex,OkHttpResponseCallBack okHttpResponseCallBack){
         new Thread(new Runnable() {
             @Override
             public void run(){
@@ -224,11 +266,12 @@ public class SousuoresultFragment extends Fragment {
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                    Message message=handler.obtainMessage();
-                    message.obj=response.body().string();
-                    message.what=1;
-                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
-                    handler.sendMessageDelayed(message,10);
+                    okHttpResponseCallBack.getResponseString(response.body().string());
+//                    Message message=handler.obtainMessage();
+//                    message.obj=response.body().string();
+//                    message.what=1;
+//                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+//                    handler.sendMessageDelayed(message,10);
                 }catch (Exception e) {
                     e.printStackTrace();
                 }

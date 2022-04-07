@@ -140,7 +140,7 @@ public class PortraitFrameView extends FrameLayout {
                 });
             }else {
                 try {
-                    svgaParser.decodeFromInputStream(new FileInputStream("data/data/" + "xin.banghua.moyuan" + "/files/svga/"+name+".svga"),name,new SVGAParser.ParseCompletion() {
+                    svgaParser.decodeFromInputStream(new FileInputStream("data/data/" + "xin.banghua.beiyuan" + "/files/svga/"+name+".svga"),name,new SVGAParser.ParseCompletion() {
                         @Override
                         public void onComplete(@NotNull SVGAVideoEntity videoItem) {
                             animationView.setVideoItem(videoItem);

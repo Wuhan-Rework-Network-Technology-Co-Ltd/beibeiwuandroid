@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/item_seat_size"
-    android:layout_height="@dimen/item_seat_size"
+    android:layout_width="66dp"
+    android:layout_height="66dp"
     android:clipChildren="false">
     <FrameLayout
         android:id="@+id/iv_seat_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
         android:gravity="center">
         <io.agora.chatroom.widget.SpreadView
             android:id="@+id/view_anim"
-            android:layout_width="@dimen/item_seat_btn_size"
-            android:layout_height="@dimen/item_seat_btn_size"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
             android:layout_centerInParent="true" />
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_seat"
-            android:layout_width="@dimen/item_seat_btn_size"
-            android:layout_height="@dimen/item_seat_btn_size"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:background="@drawable/bg_seat_item"
             android:src="@mipmap/ic_join" />
-
         <io.agora.chatroom.util.PortraitFrameView
             android:id="@+id/portraitFrameView"
             android:layout_width="66dp"

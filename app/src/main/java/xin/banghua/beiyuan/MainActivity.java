@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         sh = new SharedHelper(getApplicationContext());
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
-        if(userInfo.get("userID")==""){
+        if(userInfo.get("userID").equals("")){
 //            Intent intentSignin = new Intent(Main4Activity.this, SigninActivity.class);
 //            startActivity(intentSignin);
         }else{

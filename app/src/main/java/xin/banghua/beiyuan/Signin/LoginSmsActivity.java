@@ -259,7 +259,7 @@ public class LoginSmsActivity extends AppCompatActivity {
             public void inputComplete() {
                 if (codeView.getInputContent().length()==4){
                     if (codeView.getInputContent().equals(smscode)){
-                        OkHttpInstance.signinOneKeyLogin(userAccountString, new OkHttpResponseCallBack() {
+                        OkHttpInstance.smsLogin(userAccountString, new OkHttpResponseCallBack() {
                             @Override
                             public void getResponseString(String responseString) {
                                 log_in_intent.putExtra("login_result",responseString);

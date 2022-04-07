@@ -233,6 +233,25 @@ public class GoodsFragment extends Fragment {
                 holder.buy_btn.setVisibility(View.GONE);
             }
 
+            if (!Common.userInfoList.getRp_verify_time().equals("0") && (currentItem.getDescription().equals("实名认证专属头像框") || currentItem.getDescription().equals("实名认证专属坐骑"))){
+                holder.buy_btn.setVisibility(View.VISIBLE);
+                holder.buy_btn.setClickable(true);
+                holder.buy_btn.setText("装备");
+                holder.buy_btn.setBackgroundResource(R.drawable.red_round);
+                holder.buy_btn.setOnClickListener(v -> {
+                    if (currentItem.getType().equals("头像框")){
+                        Common.userInfoList.setPortraitframe(currentItem.getSvga());
+                    }else if (currentItem.getType().equals("坐骑")){
+                        Common.userInfoList.setVeilcel(currentItem.getSvga());
+                    }
+                    OkHttpInstance.equipGoods(currentItem.getId(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            notifyDataSetChanged();
+                        }
+                    });
+                });
+            }
             if (Common.isSVip(Common.userInfoList) && (currentItem.getDescription().equals("svip专属头像框") || currentItem.getDescription().equals("svip专属坐骑") || currentItem.getDescription().equals("vip专属头像框") || currentItem.getDescription().equals("vip专属坐骑"))){
                 holder.buy_btn.setVisibility(View.VISIBLE);
                 holder.buy_btn.setClickable(true);
@@ -272,7 +291,84 @@ public class GoodsFragment extends Fragment {
                 });
             }
 
-
+            int lv = Integer.parseInt(Common.userInfoList.getVitality()) + Integer.parseInt(Common.userInfoList.getPost()) + Integer.parseInt(Common.userInfoList.getComment());
+            Log.d(TAG, "onBindViewHolder: 等级数值"+lv);
+            if (lv > 800 && (currentItem.getDescription().equals("5级专属头像框") || currentItem.getDescription().equals("5级专属坐骑"))){
+                holder.buy_btn.setVisibility(View.VISIBLE);
+                holder.buy_btn.setClickable(true);
+                holder.buy_btn.setText("装备");
+                holder.buy_btn.setBackgroundResource(R.drawable.red_round);
+                holder.buy_btn.setOnClickListener(v -> {
+                    if (currentItem.getType().equals("头像框")){
+                        Common.userInfoList.setPortraitframe(currentItem.getSvga());
+                    }else if (currentItem.getType().equals("坐骑")){
+                        Common.userInfoList.setVeilcel(currentItem.getSvga());
+                    }
+                    OkHttpInstance.equipGoods(currentItem.getId(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            notifyDataSetChanged();
+                        }
+                    });
+                });
+            }
+            if (lv > 10000 && (currentItem.getDescription().equals("10级专属头像框") || currentItem.getDescription().equals("10级专属坐骑"))){
+                holder.buy_btn.setVisibility(View.VISIBLE);
+                holder.buy_btn.setClickable(true);
+                holder.buy_btn.setText("装备");
+                holder.buy_btn.setBackgroundResource(R.drawable.red_round);
+                holder.buy_btn.setOnClickListener(v -> {
+                    if (currentItem.getType().equals("头像框")){
+                        Common.userInfoList.setPortraitframe(currentItem.getSvga());
+                    }else if (currentItem.getType().equals("坐骑")){
+                        Common.userInfoList.setVeilcel(currentItem.getSvga());
+                    }
+                    OkHttpInstance.equipGoods(currentItem.getId(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            notifyDataSetChanged();
+                        }
+                    });
+                });
+            }
+            if (lv > 40000 && (currentItem.getDescription().equals("15级专属头像框") || currentItem.getDescription().equals("15级专属坐骑"))){
+                holder.buy_btn.setVisibility(View.VISIBLE);
+                holder.buy_btn.setClickable(true);
+                holder.buy_btn.setText("装备");
+                holder.buy_btn.setBackgroundResource(R.drawable.red_round);
+                holder.buy_btn.setOnClickListener(v -> {
+                    if (currentItem.getType().equals("头像框")){
+                        Common.userInfoList.setPortraitframe(currentItem.getSvga());
+                    }else if (currentItem.getType().equals("坐骑")){
+                        Common.userInfoList.setVeilcel(currentItem.getSvga());
+                    }
+                    OkHttpInstance.equipGoods(currentItem.getId(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            notifyDataSetChanged();
+                        }
+                    });
+                });
+            }
+            if (lv > 90000 && (currentItem.getDescription().equals("20级专属头像框") || currentItem.getDescription().equals("20级专属坐骑"))){
+                holder.buy_btn.setVisibility(View.VISIBLE);
+                holder.buy_btn.setClickable(true);
+                holder.buy_btn.setText("装备");
+                holder.buy_btn.setBackgroundResource(R.drawable.red_round);
+                holder.buy_btn.setOnClickListener(v -> {
+                    if (currentItem.getType().equals("头像框")){
+                        Common.userInfoList.setPortraitframe(currentItem.getSvga());
+                    }else if (currentItem.getType().equals("坐骑")){
+                        Common.userInfoList.setVeilcel(currentItem.getSvga());
+                    }
+                    OkHttpInstance.equipGoods(currentItem.getId(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            notifyDataSetChanged();
+                        }
+                    });
+                });
+            }
 
             if (currentItem.getSvga().equals(Common.userInfoList.getPortraitframe()) || currentItem.getSvga().equals(Common.userInfoList.getVeilcel())){
                 holder.buy_btn.setText("已装备");

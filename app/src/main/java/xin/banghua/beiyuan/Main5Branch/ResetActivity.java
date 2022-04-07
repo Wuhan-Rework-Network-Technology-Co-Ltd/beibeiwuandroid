@@ -50,6 +50,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main5Activity;
@@ -255,7 +256,7 @@ public class ResetActivity extends AppCompatActivity {
                         .load(R.drawable.picture_icon_placeholder)
                         .into(portrait);
             }else {
-                Glide.with(this)
+                Glide.with(App.getApplication())
                         .asBitmap()
                         .load(Common.getOssResourceUrl(myportrait))
                         .into(portrait);

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:id="@+id/item_layout"
+    android:background="@color/background">
+    <FrameLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp" >
+
+        <ImageView
+            android:id="@+id/music_iv_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/selector_music_play_pic" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/music_iv_play"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:alpha="0.7"
+                android:background="@drawable/shape_play_button_background"
+                android:src="@drawable/music_play" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="5dp" >
+
+        <TextView
+            android:id="@+id/music_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="歌曲"
+            android:textColor="#666"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/music_tv_singer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="3dp"
+            android:text="歌手"
+            android:textColor="#999"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/music_tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="3dp"
+            android:text="00:00"
+            android:textColor="#999"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/music_iv_cut"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_icon_cutter"
+        android:visibility="visible"/>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loading_view"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:indicatorName="BallSpinFadeLoaderIndicator"
+        android:layout_above="@+id/chronometer"
+        android:layout_gravity="center"
+        style="@style/AVLoadingIndicatorView.Small"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/black" />
+
+</LinearLayout>

@@ -13,6 +13,21 @@ public class UserInfoList implements Serializable {
 
     }
 
+
+    @JSONField(name="rp_verify_time")
+    String rp_verify_time = "";//真人认证成功时间，存在则说明完成了真人认证
+
+    @JSONField(name="match_star")
+    String match_star = "0";//好友是否同意
+    @JSONField(name="match_times")
+    String match_times = "0";//好友是否同意
+    @JSONField(name="match_gender")
+    String match_gender = "不限";//好友是否同意
+    @JSONField(name="match_property")
+    String match_property = "双";//好友是否同意
+
+    @JSONField(name="agree")
+    String agree = "0";//好友是否同意
     //头像框和坐骑
     @JSONField(name="portraitframe")
     String portraitframe = "";//礼物清单
@@ -184,6 +199,53 @@ public class UserInfoList implements Serializable {
     @JSONField(name="audioroom_online")
     String audioroom_online = "";//语音房间发布时间
 
+    public String getRp_verify_time() {
+        return rp_verify_time;
+    }
+
+    public void setRp_verify_time(String rp_verify_time) {
+        this.rp_verify_time = rp_verify_time;
+    }
+
+    public String getMatch_star() {
+        return match_star;
+    }
+
+    public void setMatch_star(String match_star) {
+        this.match_star = match_star;
+    }
+
+    public String getMatch_times() {
+        return match_times;
+    }
+
+    public void setMatch_times(String match_times) {
+        this.match_times = match_times;
+    }
+
+    public String getMatch_gender() {
+        return match_gender;
+    }
+
+    public void setMatch_gender(String match_gender) {
+        this.match_gender = match_gender;
+    }
+
+    public String getMatch_property() {
+        return match_property;
+    }
+
+    public void setMatch_property(String match_property) {
+        this.match_property = match_property;
+    }
+
+    public String getAgree() {
+        return agree;
+    }
+
+    public void setAgree(String agree) {
+        this.agree = agree;
+    }
 
     public String getPortraitframe() {
         return Common.getOssResourceUrl(portraitframe);

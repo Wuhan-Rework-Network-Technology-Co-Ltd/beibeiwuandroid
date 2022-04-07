@@ -1013,4 +1013,149 @@ public class OkHttpInstance {
             }
         }).start();
     }
+
+
+
+
+    /**
+     * 得到话题
+     *
+     * @param topic                  主题
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getTopic(final String topic,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("topic", topic)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getTopic&m=socialchat")
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String responseString = response.body().string();
+                        Log.d(TAG, "run: 得到话题"+responseString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(responseString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 创建主题
+     *
+     * @param topic                  主题
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void createTopic(final String topic,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("topic", topic)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=createTopic&m=socialchat")
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        Log.d(TAG, "run: 创建主题");
+                        String responseString = response.body().string();
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(responseString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 报告违反
+     *
+     * @param type   类型
+     * @param itemid itemid
+     * @param reason 原因
+     */
+    public static void reportViolation(String type,String itemid,String reason) {
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("type", type)  //类型，0是个人作品举报，1是聊天举报,2是匹配举报,3是房间举报
+                            .add("myid", Common.myUserInfoList.getId())
+                            .add("itemid", itemid)  //举报的作品id,或用户id，或频道id
+                            .add("reason", reason)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=ReportViolation&m=socialchat")
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String result = response.body().string();
+                        Log.d(TAG, "run: 举报成功"+ result);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 删除小贝比赛
+     *
+     */
+    public static void removeXiaobeiMatch(String type){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("id",Common.myUserInfoList.getId())
+                            .add("type",type)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://redis.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=removeXiaobeiMatch&m=rediscache")
+                            .post(formBody)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 删除小贝比赛"+resultString);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

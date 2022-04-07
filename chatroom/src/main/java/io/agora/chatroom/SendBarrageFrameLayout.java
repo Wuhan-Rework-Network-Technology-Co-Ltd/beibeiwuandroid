@@ -48,6 +48,7 @@ import io.agora.rtm.RtmImageMessage;
 import io.agora.rtm.RtmMediaOperationProgress;
 import io.agora.rtm.RtmMessage;
 import xyz.doikki.videocontroller.StandardVideoController;
+import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
 import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.player.VideoViewManager;
 
@@ -225,7 +226,7 @@ public class SendBarrageFrameLayout extends FrameLayout {
             no_film.setVisibility(GONE);
 
             VideoView mVideoView = getVideoViewManager().get(Tag.PIP);
-//            mVideoView.setPlayerFactory(ExoMediaPlayerFactory.create());
+            mVideoView.setPlayerFactory(ExoMediaPlayerFactory.create());
             StandardVideoController controller = new StandardVideoController(mContext);
 
             controller.addDefaultControlComponent(mCurrentFilm.getName(), false, new SeekBar.OnSeekBarChangeListener() {

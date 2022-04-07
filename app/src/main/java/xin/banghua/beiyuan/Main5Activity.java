@@ -105,7 +105,7 @@ public class Main5Activity extends AppCompatActivity {
         sh = new SharedHelper(getApplicationContext());
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
-        if(userInfo.get("userID")==""){
+        if(userInfo.get("userID").equals("")){
             Intent intent = new Intent(Main5Activity.this, OneKeyLoginActivity.class);
             intent.putExtra(THEME_KEY, 4);
             startActivity(intent);

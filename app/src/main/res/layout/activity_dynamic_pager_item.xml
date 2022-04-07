@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_against_deep">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background_against_deep">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_against_deep">
+
+            <ImageView
+                android:id="@+id/jz_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="gone" />
+            <FrameLayout
+                android:id="@+id/jz_video_frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <xin.banghua.beiyuan.utils.SampleCoverVideo
+                    android:id="@+id/sampleCoverVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+
+                <xin.banghua.beiyuan.Main4Branch.tiktok.TikTokView
+                    android:id="@+id/tiktok_View"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
+
+            <xin.banghua.beiyuan.Main4Branch.LikeLayout
+                android:id="@+id/likeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            </xin.banghua.beiyuan.Main4Branch.LikeLayout>
+
+
+
+
+            <Button
+                android:id="@+id/btn_intent_album"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="180dp"
+                android:background="@drawable/shape_corner_transparent"
+                android:text="查看图集"
+                android:textColor="@color/text_color_1"
+                android:textSize="10dp"
+                android:visibility="gone"/>
+
+            <xin.banghua.beiyuan.Main4Branch.UMExpandLayout
+                android:id="@+id/umExpandLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:background="@android:color/transparent"
+                tools:ignore="MissingClass">
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_poi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="10dp"
+                        android:drawableLeft="@drawable/ic_location"
+                        android:text="南京"
+                        android:shadowColor="@color/black"
+                        android:textColor="@color/text_color_4"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="10dp"
+                        android:text="你好"
+                        android:shadowColor="@color/black"
+                        android:textColor="@color/text_color_4"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_text"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:shadowColor="@color/black"
+                        android:layout_margin="10dp"
+                        android:text="TextViewasddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                        android:textColor="@color/text_color_2" />
+
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_music_name"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="40dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:textSize="15sp"
+                            android:text=" ♪ "
+                            android:textColor="@color/blue" />
+                        <xin.banghua.beiyuan.custom_ui.MyMarqueeTextView
+                            android:id="@+id/tv_music_name"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:singleLine="true"
+                            android:text="原声"
+                            android:shadowColor="@color/black"
+                            android:textColor="@color/text_color_5"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right|bottom"
+                    android:gravity="bottom|center"
+                    android:orientation="vertical"
+                    android:clipChildren="false">
+
+                    <FrameLayout
+                        android:id="@+id/authportrait_framelayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/authportrait"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/ic_launcher" />
+
+                        <xin.banghua.beiyuan.custom_ui.PortraitFrameView
+                            android:id="@+id/portraitFrameView"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_gravity="bottom|right"
+                            android:visibility="visible">
+
+                        </xin.banghua.beiyuan.custom_ui.PortraitFrameView>
+                        <ImageView
+                            android:id="@+id/vip_gray"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_gravity="bottom|right"
+                            android:src="@drawable/ic_vip_gray"
+                            android:shadowColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/add_follow_img"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="bottom|center_horizontal"
+                            app:srcCompat="@drawable/ic_plus_red" />
+
+                    </FrameLayout>
+
+                    <com.like.LikeButton
+                        android:id="@+id/likeButton"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="30dp"
+                        app:icon_size="35dp"
+                        app:icon_type="heart"
+                        android:outlineSpotShadowColor="@color/black"
+                        app:like_drawable="@drawable/a_douyin_heart_selected"
+                        app:unlike_drawable="@drawable/a_douyin_heart"
+                        android:visibility="visible"/>
+
+                    <TextView
+                        android:id="@+id/tv_like"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:shadowColor="@color/black"
+                        android:textColor="@color/text_color_4"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:id="@+id/comment_view"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="20dp"
+                        android:outlineSpotShadowColor="@color/black"
+                        android:background="@drawable/a_douyin_comment" />
+
+                    <TextView
+                        android:id="@+id/tv_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:shadowColor="@color/black"
+                        android:textColor="@color/text_color_4"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:id="@+id/share_view"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="20dp"
+                        android:visibility="invisible" />
+
+
+                    <ImageView
+                        android:id="@+id/pay_reward_rank"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="20dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/tv_share"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="100dp"
+                        android:gravity="center"
+                        android:text="253"
+                        android:textColor="#fff"
+                        android:textSize="12sp"
+                        android:visibility="invisible" />
+                </LinearLayout>
+
+                <xin.banghua.beiyuan.Main4Branch.DouyinAudioView
+                    android:id="@+id/douyinAudioView"
+                    android:layout_width="85dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="30dp"
+                    ></xin.banghua.beiyuan.Main4Branch.DouyinAudioView>
+            </FrameLayout>
+            </xin.banghua.beiyuan.Main4Branch.UMExpandLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical"
+        android:clipChildren="false">
+        <ImageView
+            android:id="@+id/eyes_toggle_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="invisible"
+            android:layout_marginTop="150dp">
+        </ImageView>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -189,7 +189,7 @@ public class Main4Activity extends AppCompatActivity {
         sh = new SharedHelper(getApplicationContext());
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
-        if(userInfo.get("userID")==""){
+        if(userInfo.get("userID").equals("")){
 
             Common.myID = null;
 //            Intent intentSignin = new Intent(MainActivity.this, SigninActivity.class);

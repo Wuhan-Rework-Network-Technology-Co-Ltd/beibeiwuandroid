@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
@@ -37,13 +38,18 @@ import org.json.JSONArray;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.agora.chatroom.activity.ChatRoomActivity;
+import io.agora.chatroom.manager.RtmManager;
 import io.agora.chatroom.util.PortraitFrameView;
+import io.agora.rtm.ErrorInfo;
+import io.agora.rtm.ResultCallback;
+import io.agora.rtm.RtmMessage;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,16 +57,21 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.Common;
-import xin.banghua.beiyuan.Main4Branch.ImagerPagerActivity;
+import xin.banghua.beiyuan.Main4Branch.DouyinActivity;
 import xin.banghua.beiyuan.Main4Branch.PostListActivity;
 import xin.banghua.beiyuan.Main4Branch.VideoPlayActivity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SliderWebViewActivity;
+import xin.banghua.beiyuan.chat.VideoChatViewActivity;
+import xin.banghua.beiyuan.chat.VoiceChatViewActivity;
 import xin.banghua.beiyuan.comment.CommentDialog;
 import xin.banghua.beiyuan.custom_ui.CustomVideoView;
+import xin.banghua.beiyuan.custom_ui.MatchDialog;
 import xin.banghua.beiyuan.custom_ui.NiceImageView;
 import xin.banghua.beiyuan.custom_ui.NiceZoomImageView;
+import xin.banghua.beiyuan.topic.TopicAddedItem;
+import xin.banghua.beiyuan.topic.TopicList;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
@@ -146,39 +157,254 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
     public ViewHolder getViewHolder(int position){
         return viewHolders.get(position);
     }
+
+
+    private void startVoiceMatch(){
+        if (Common.myID ==null){
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
+                    .setTitle("登录后可以发起聊天！")
+                    .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                            intent.putExtra(THEME_KEY, 4);
+                            mContext.startActivity(intent);
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+            builder.create().show();
+        }else {
+            OkHttpInstance.xiaobeiMatch("语音", new OkHttpResponseCallBack() {
+                @Override
+                public void getResponseString(String responseString) {
+                    if (responseString.equals("wait")){
+                        VoiceChatViewActivity.targetId = null;
+                        Intent intent = new Intent(mContext, VoiceChatViewActivity.class);
+                        intent.putExtra("channel", "match"+Common.userInfoList.getId());
+                        intent.putExtra("targetId", Common.userInfoList.getId());
+                        intent.putExtra("targetPortrait", Common.userInfoList.getPortrait());
+                        intent.putExtra("myRole", "remote");
+                        mContext.startActivity(intent);
+                    }else {
+                        UserInfoList userInfoList = JSON.parseObject(responseString,UserInfoList.class);
+                        RtmMessage message = RtmManager.instance(mContext).getRtmClient().createMessage();
+                        message.setText("{\"type\":\"match_voice\"}");
+                        RtmManager.instance(mContext).getRtmClient().sendMessageToPeer(userInfoList.getId(), message, RtmManager.instance(mContext).getSendMessageOptions(), new ResultCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "onSuccess: 声网消息发送成功");
+                                UserInfoList userInfoList = JSON.parseObject(responseString,UserInfoList.class);
+                                Intent intent = new Intent(mContext, VoiceChatViewActivity.class);
+                                intent.putExtra("channel", "match"+userInfoList.getId());
+                                intent.putExtra("targetId", Common.userInfoList.getId());
+                                intent.putExtra("targetPortrait", Common.userInfoList.getPortrait());
+                                intent.putExtra("myRole", "remote");
+                                mContext.startActivity(intent);
+                            }
+                            @Override
+                            public void onFailure(ErrorInfo errorInfo) {
+                                Log.d(TAG, "onFailure: 声网消息发送失败"+errorInfo.toString());
+                                startVoiceMatch();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    private void startVideoMatch(){
+        if (Common.myID ==null){
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
+                    .setTitle("登录后可以发起匹配！")
+                    .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                            intent.putExtra(THEME_KEY, 4);
+                            mContext.startActivity(intent);
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+            builder.create().show();
+        }else {
+            OkHttpInstance.xiaobeiMatch("视频", new OkHttpResponseCallBack() {
+                @Override
+                public void getResponseString(String responseString) {
+                    if (responseString.equals("wait")){
+                        VideoChatViewActivity.targetId = null;
+                        Intent intent = new Intent(mContext, VideoChatViewActivity.class);
+                        intent.putExtra("channel", "match"+Common.userInfoList.getId());
+                        intent.putExtra("targetId", Common.userInfoList.getId());
+                        intent.putExtra("targetPortrait", Common.userInfoList.getPortrait());
+                        intent.putExtra("myRole", "remote");
+                        mContext.startActivity(intent);
+                    }else {
+                        UserInfoList userInfoList = JSON.parseObject(responseString,UserInfoList.class);
+                        RtmMessage message = RtmManager.instance(mContext).getRtmClient().createMessage();
+                        message.setText("{\"type\":\"match_video\"}");
+                        RtmManager.instance(mContext).getRtmClient().sendMessageToPeer(userInfoList.getId(), message, RtmManager.instance(mContext).getSendMessageOptions(), new ResultCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "onSuccess: 声网消息发送成功");
+                                UserInfoList userInfoList = JSON.parseObject(responseString,UserInfoList.class);
+                                Intent intent = new Intent(mContext, VideoChatViewActivity.class);
+                                intent.putExtra("channel", "match"+userInfoList.getId());
+                                intent.putExtra("targetId", Common.userInfoList.getId());
+                                intent.putExtra("targetPortrait", Common.userInfoList.getPortrait());
+                                intent.putExtra("myRole", "remote");
+                                mContext.startActivity(intent);
+                            }
+                            @Override
+                            public void onFailure(ErrorInfo errorInfo) {
+                                Log.d(TAG, "onFailure: 声网消息发送失败"+errorInfo.toString());
+                                startVideoMatch();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder,final int i) {
         int currentPosition = i;
         if (viewHolder instanceof LuntanSliderAdapter.SliderHolder){
-            OkHttpInstance.getSlide(slidesort, new OkHttpResponseCallBack() {
-                @Override
-                public void getResponseString(String responseString) {
-                    try {
-                        List<SlideList> slideLists = JSON.parseArray(responseString,SlideList.class);
+            if (slidesort.equals("精华")){
+                ((SliderHolder) viewHolder).slider_layout.setVisibility(View.GONE);
+                ((SliderHolder) viewHolder).match_layout.setVisibility(View.VISIBLE);
 
-                        Glide.with(App.getApplication()).load(slideLists.get(0).getSlidepicture()).into(((SliderHolder) viewHolder).leyuan_convention);
-                        ((SliderHolder) viewHolder).leyuan_convention.setOnClickListener(v -> {
-                            Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-                            intent.putExtra("slidername",slideLists.get(0).getSlidename());
-                            intent.putExtra("sliderurl",slideLists.get(0).getSlideurl());
-                            mContext.startActivity(intent);
+                Glide.with(App.getApplication()).load(R.mipmap.voice_match).into(((SliderHolder) viewHolder).voice_match_img);
+                ((SliderHolder) viewHolder).voice_match_img.setOnClickListener(v -> {
+                    if (Common.myID ==null){
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
+                                .setTitle("登录后可以发起匹配！")
+                                .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                                        intent.putExtra(THEME_KEY, 4);
+                                        mContext.startActivity(intent);
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                        builder.create().show();
+                    }else {
+                        MatchDialog matchDialog = new MatchDialog(mContext);
+                        matchDialog.initShow(new OkHttpResponseCallBack() {
+                            @Override
+                            public void getResponseString(String responseString) {
+                                ((SliderHolder) viewHolder).precaution_fraud.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        startVoiceMatch();
+                                    }
+                                },1000);
+                            }
                         });
-
-                        Glide.with(App.getApplication()).load(slideLists.get(1).getSlidepicture()).into(((SliderHolder) viewHolder).precaution_fraud);
-                        ((SliderHolder) viewHolder).precaution_fraud.setOnClickListener(v -> {
-                            Intent intent = new Intent(mContext, SliderWebViewActivity.class);
-                            intent.putExtra("slidername",slideLists.get(1).getSlidename());
-                            intent.putExtra("sliderurl",slideLists.get(1).getSlideurl());
-                            mContext.startActivity(intent);
-                        });
-                    }catch (Exception e){
-                        Log.e(TAG, "getResponseString: 抛出异常");
                     }
-                }
-            });
+                });
 
+                Glide.with(App.getApplication()).load(R.mipmap.video_match).into(((SliderHolder) viewHolder).video_match_img);
+                ((SliderHolder) viewHolder).video_match_img.setOnClickListener(v -> {
+                    if (Common.myID ==null){
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
+                                .setTitle("登录后可以发起匹配！")
+                                .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                                        intent.putExtra(THEME_KEY, 4);
+                                        mContext.startActivity(intent);
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                        builder.create().show();
+                    }else {
+                        MatchDialog matchDialog = new MatchDialog(mContext);
+                        matchDialog.initShow(new OkHttpResponseCallBack() {
+                            @Override
+                            public void getResponseString(String responseString) {
+                                ((SliderHolder) viewHolder).precaution_fraud.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        startVideoMatch();
+                                    }
+                                },1000);
+                            }
+                        });
+                    }
+                });
 
+                Glide.with(App.getApplication()).load(R.mipmap.short_video).into(((SliderHolder) viewHolder).video_dynamic_img);
+                ((SliderHolder) viewHolder).video_dynamic_img.setOnClickListener(v -> {
+                    if (Common.myID ==null){
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
+                                .setTitle("登录后可以发起匹配！")
+                                .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                                        intent.putExtra(THEME_KEY, 4);
+                                        mContext.startActivity(intent);
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                        builder.create().show();
+                    }else {
+                        mContext.startActivity(new Intent(mContext, DouyinActivity.class));
+                    }
+                });
+            }else {
+                ((SliderHolder) viewHolder).slider_layout.setVisibility(View.VISIBLE);
+                ((SliderHolder) viewHolder).match_layout.setVisibility(View.GONE);
+                OkHttpInstance.getSlide(slidesort, new OkHttpResponseCallBack() {
+                    @Override
+                    public void getResponseString(String responseString) {
+                        try {
+                            List<SlideList> slideLists = JSON.parseArray(responseString,SlideList.class);
 
+                            Glide.with(App.getApplication()).load(slideLists.get(0).getSlidepicture()).into(((SliderHolder) viewHolder).leyuan_convention);
+                            ((SliderHolder) viewHolder).leyuan_convention.setOnClickListener(v -> {
+                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+                                intent.putExtra("slidername",slideLists.get(0).getSlidename());
+                                intent.putExtra("sliderurl",slideLists.get(0).getSlideurl());
+                                mContext.startActivity(intent);
+                            });
+
+                            Glide.with(App.getApplication()).load(slideLists.get(1).getSlidepicture()).into(((SliderHolder) viewHolder).precaution_fraud);
+                            ((SliderHolder) viewHolder).precaution_fraud.setOnClickListener(v -> {
+                                Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+                                intent.putExtra("slidername",slideLists.get(1).getSlidename());
+                                intent.putExtra("sliderurl",slideLists.get(1).getSlideurl());
+                                mContext.startActivity(intent);
+                            });
+                        }catch (Exception e){
+                            Log.e(TAG, "getResponseString: 抛出异常");
+                        }
+                    }
+                });
+            }
 //            HashMap<String,String> url_maps = new HashMap<String, String>();
 //            if (jsonArray.length()>0){
 //                for (int j=0;j<jsonArray.length();j++){
@@ -231,6 +457,9 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             final LuntanList currentItem = luntanLists.get(currentPosition-1);
             Log.d(TAG, "onBindViewHolder: 测试帖子"+currentItem.getAuthid()+currentItem.getAuthnickname());
 
+
+            ((ViewHolder) viewHolder).lv_img.setImageResource(Common.getLevelFromPost(currentItem));
+
             viewHolders.put(i,((ViewHolder) viewHolder));
             String authattributes_string = currentItem.getAuthage()+"岁 | "+currentItem.getAuthgender()+" | "+currentItem.getAuthregion()+" | "+currentItem.getAuthproperty();
             //((ViewHolder) viewHolder).authattributes.setText(authattributes_string);
@@ -278,7 +507,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
 
             if (TextUtils.isEmpty(currentItem.getAuthsvip())){
                 if (TextUtils.isEmpty(currentItem.getAuthvip())){
-
+                    ((ViewHolder) viewHolder).vip_gray.setVisibility(View.GONE);
                     Glide.with(mContext)
                             .asBitmap()
                             .load(R.drawable.ic_vip_gray)
@@ -287,6 +516,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                     Log.d("会员时间",currentItem.getAuthvip()+"");
                     int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
                     if (vip_time > current_timestamp) {
+                        ((ViewHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
                         //vipicon分级
                         Log.d("会员时长", ((vip_time - current_timestamp) + ""));
                         if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
@@ -306,6 +536,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                                     .into(((ViewHolder) viewHolder).vip_gray);
                         }
                     } else {
+                        ((ViewHolder) viewHolder).vip_gray.setVisibility(View.GONE);
                         Glide.with(mContext)
                                 .asBitmap()
                                 .load(R.drawable.ic_vip_gray)
@@ -316,6 +547,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 Log.d("会员时间",currentItem.getAuthsvip()+"");
                 int svip_time = Integer.parseInt(currentItem.getAuthsvip()+"");
                 if (svip_time > current_timestamp) {
+                    ((ViewHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
                     //vipicon分级
                     Log.d("会员时长", ((svip_time - current_timestamp) + ""));
                     if ((svip_time - current_timestamp) < 3600 * 24 * 30) {
@@ -336,7 +568,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                     }
                 } else {
                     if (TextUtils.isEmpty(currentItem.getAuthvip())){
-                        ((ViewHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
+                        ((ViewHolder) viewHolder).vip_gray.setVisibility(View.GONE);
                         Glide.with(mContext)
                                 .asBitmap()
                                 .load(R.drawable.ic_vip_gray)
@@ -345,6 +577,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                         Log.d("会员时间",currentItem.getAuthvip()+"");
                         int vip_time = Integer.parseInt(currentItem.getAuthvip()+"");
                         if (vip_time > current_timestamp) {
+                            ((ViewHolder) viewHolder).vip_gray.setVisibility(View.VISIBLE);
                             //vipicon分级
                             Log.d("会员时长", ((vip_time - current_timestamp) + ""));
                             if ((vip_time - current_timestamp) < 3600 * 24 * 30) {
@@ -364,6 +597,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                                         .into(((ViewHolder) viewHolder).vip_gray);
                             }
                         } else {
+                            ((ViewHolder) viewHolder).vip_gray.setVisibility(View.GONE);
                             Glide.with(mContext)
                                     .asBitmap()
                                     .load(R.drawable.ic_vip_gray)
@@ -431,78 +665,99 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 ((ViewHolder) viewHolder).detail_content.setVisibility(View.GONE);
             }
 
-            if (currentItem.getPostpicture().length!=1){
-                ((ViewHolder) viewHolder).postpicture.setVisibility(View.GONE);
-            }else if (currentItem.getPostpicture().length==1){
-                Glide.with(mContext)
-                        .asBitmap()
-                        .load(Common.getOssResourceUrl(currentItem.getPostpicture()[0]))
-                        .into(((ViewHolder) viewHolder).postpicture);
-                ((ViewHolder) viewHolder).postpicture.setVisibility(View.VISIBLE);
-                ((ViewHolder) viewHolder).postpicture.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
-                        intent.putExtra("luntanlist", currentItem);
-                        intent.putExtra("image_index", 0);
-                        v.getContext().startActivity(intent);
-                    }
-                });
-            }
-            if (currentItem.getPostpicture().length<2){
-                ((ViewHolder) viewHolder).postpicture1.setVisibility(View.GONE);
+//            if (currentItem.getPostpictureList().length!=1){
+//                ((ViewHolder) viewHolder).postpicture.setVisibility(View.GONE);
+//            }else if (currentItem.getPostpictureList().length==1){
+//                Glide.with(mContext)
+//                        .asBitmap()
+//                        .load(Common.getOssResourceUrl(currentItem.getPostpictureList()[0]))
+//                        .into(((ViewHolder) viewHolder).postpicture);
+//                ((ViewHolder) viewHolder).postpicture.setVisibility(View.VISIBLE);
+//                ((ViewHolder) viewHolder).postpicture.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+//                        intent.putExtra("luntanlist", currentItem);
+//                        intent.putExtra("image_index", 0);
+//                        v.getContext().startActivity(intent);
+//                    }
+//                });
+//            }
+//            if (currentItem.getPostpictureList().length<2){
+//                ((ViewHolder) viewHolder).postpicture1.setVisibility(View.GONE);
+//            }else {
+//                Glide.with(mContext)
+//                        .asBitmap()
+//                        .load(Common.getOssResourceUrl(currentItem.getPostpictureList()[0]))
+//                        .into(((ViewHolder) viewHolder).postpicture1);
+//                ((ViewHolder) viewHolder).postpicture1.setVisibility(View.VISIBLE);
+//                ((ViewHolder) viewHolder).postpicture1.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+//                        intent.putExtra("luntanlist", currentItem);
+//                        intent.putExtra("image_index", 0);
+//                        v.getContext().startActivity(intent);
+//                    }
+//                });
+//            }
+//            if (currentItem.getPostpictureList().length<2){
+//                ((ViewHolder) viewHolder).postpicture2.setVisibility(View.GONE);
+//            }else {
+//                Glide.with(mContext)
+//                        .asBitmap()
+//                        .load(Common.getOssResourceUrl(currentItem.getPostpictureList()[1]))
+//                        .into(((ViewHolder) viewHolder).postpicture2);
+//                ((ViewHolder) viewHolder).postpicture2.setVisibility(View.VISIBLE);
+//                ((ViewHolder) viewHolder).postpicture2.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+//                        intent.putExtra("luntanlist", currentItem);
+//                        intent.putExtra("image_index", 1);
+//                        v.getContext().startActivity(intent);
+//                    }
+//                });
+//            }
+
+            if (currentItem.getPostpicture().contains("images")){
+                String[] postPicture = currentItem.getPostpicture().split(",");
+                PictureAdapter pictureAdapter = new PictureAdapter(mContext,currentItem);
+                ((ViewHolder) viewHolder).recyclerView.setVisibility(View.VISIBLE);
+                ((ViewHolder) viewHolder).recyclerView.setAdapter(pictureAdapter);
+                if (postPicture.length==1){
+                    ((ViewHolder) viewHolder).recyclerView.setLayoutManager(new GridLayoutManager(mContext,1));
+                }else if(postPicture.length==2 || postPicture.length==4){
+                    ((ViewHolder) viewHolder).recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+                }else {
+                    ((ViewHolder) viewHolder).recyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
+                }
+
+                pictureAdapter.setPictures(Arrays.asList(postPicture));
+
+
             }else {
-                Glide.with(mContext)
-                        .asBitmap()
-                        .load(Common.getOssResourceUrl(currentItem.getPostpicture()[0]))
-                        .into(((ViewHolder) viewHolder).postpicture1);
-                ((ViewHolder) viewHolder).postpicture1.setVisibility(View.VISIBLE);
-                ((ViewHolder) viewHolder).postpicture1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
-                        intent.putExtra("luntanlist", currentItem);
-                        intent.putExtra("image_index", 0);
-                        v.getContext().startActivity(intent);
-                    }
-                });
+                ((ViewHolder) viewHolder).recyclerView.setVisibility(View.GONE);
             }
-            if (currentItem.getPostpicture().length<2){
-                ((ViewHolder) viewHolder).postpicture2.setVisibility(View.GONE);
-            }else {
-                Glide.with(mContext)
-                        .asBitmap()
-                        .load(Common.getOssResourceUrl(currentItem.getPostpicture()[1]))
-                        .into(((ViewHolder) viewHolder).postpicture2);
-                ((ViewHolder) viewHolder).postpicture2.setVisibility(View.VISIBLE);
-                ((ViewHolder) viewHolder).postpicture2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
-                        intent.putExtra("luntanlist", currentItem);
-                        intent.putExtra("image_index", 1);
-                        v.getContext().startActivity(intent);
-                    }
-                });
-            }
-            if (currentItem.getPostpicture().length<3){
-                ((ViewHolder) viewHolder).postpicture3.setVisibility(View.GONE);
-            }else {
-                Glide.with(mContext)
-                        .asBitmap()
-                        .load(Common.getOssResourceUrl(currentItem.getPostpicture()[2]))
-                        .into(((ViewHolder) viewHolder).postpicture3);
-                ((ViewHolder) viewHolder).postpicture3.setVisibility(View.VISIBLE);
-                ((ViewHolder) viewHolder).postpicture3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
-                        intent.putExtra("luntanlist", currentItem);
-                        intent.putExtra("image_index", 2);
-                        v.getContext().startActivity(intent);
-                    }
-                });
-            }
+
+//            if (currentItem.getPostpictureList().length<3){
+//                ((ViewHolder) viewHolder).postpicture3.setVisibility(View.GONE);
+//            }else {
+//                Glide.with(mContext)
+//                        .asBitmap()
+//                        .load(Common.getOssResourceUrl(currentItem.getPostpictureList()[2]))
+//                        .into(((ViewHolder) viewHolder).postpicture3);
+//                ((ViewHolder) viewHolder).postpicture3.setVisibility(View.VISIBLE);
+//                ((ViewHolder) viewHolder).postpicture3.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(v.getContext(), ImagerPagerActivity.class);
+//                        intent.putExtra("luntanlist", currentItem);
+//                        intent.putExtra("image_index", 2);
+//                        v.getContext().startActivity(intent);
+//                    }
+//                });
+//            }
 
             ((ViewHolder) viewHolder).like.setText(""+currentItem.getLike());
             ((ViewHolder) viewHolder).like_layout.setOnClickListener(new View.OnClickListener() {
@@ -686,6 +941,24 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                     notifyDataSetChanged();
                 });
             });
+
+            if (!TextUtils.isEmpty(currentItem.getTopic())){
+                if (currentItem.getTopic()!="null"){
+                    List<TopicList> topicLists = JSON.parseArray(currentItem.getTopic(),TopicList.class);
+                    ((ViewHolder) viewHolder).topic_layout.removeAllViews();
+                    for (int j = 0;j<topicLists.size();j++){
+                        TopicAddedItem topicAddedItem = new TopicAddedItem(mContext);
+                        topicAddedItem.initShow(topicLists.get(j));
+                        ((ViewHolder) viewHolder).topic_layout.addView(topicAddedItem);
+                    }
+                }
+            }
+
+            if (!currentItem.getRp_verify_time().equals("0")){
+                ((ViewHolder) viewHolder).rp_verify_img.setVisibility(View.VISIBLE);
+            }else {
+                ((ViewHolder) viewHolder).rp_verify_img.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -726,7 +999,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         intent.putExtra("posttip",currentItem.getPosttip());
         intent.putExtra("posttitle",currentItem.getPosttitle());
         intent.putExtra("posttext",currentItem.getPosttext());
-        intent.putExtra("postpicture",currentItem.getPostpicture());
+        intent.putExtra("postpicture",currentItem.getPostpictureList());
         intent.putExtra("like",currentItem.getLike());
         intent.putExtra("favorite",currentItem.getFavorite());
         intent.putExtra("time",currentItem.getTime());
@@ -759,15 +1032,28 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
     private class SliderHolder extends RecyclerView.ViewHolder{
         private static final String TAG = "SliderHolder";
 
+        LinearLayout slider_layout;
         ImageView leyuan_convention;
         ImageView precaution_fraud;
+
+        LinearLayout match_layout;
+        ImageView voice_match_img;
+        ImageView video_match_img;
+        ImageView video_dynamic_img;
         public SliderHolder(View itemView) {
             super(itemView);
             Log.d(TAG, "SliderHolder: 进入");
             mDemoSlider = itemView.findViewById(R.id.recyclerview_slider);
 
+
+            slider_layout = itemView.findViewById(R.id.slider_layout);
             leyuan_convention = itemView.findViewById(R.id.leyuan_convention);
             precaution_fraud = itemView.findViewById(R.id.precaution_fraud);
+
+            match_layout = itemView.findViewById(R.id.match_layout);
+            voice_match_img = itemView.findViewById(R.id.voice_match_img);
+            video_match_img = itemView.findViewById(R.id.video_match_image);
+            video_dynamic_img = itemView.findViewById(R.id.video_dynamic_image);
         }
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -826,9 +1112,23 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         ImageView follow_img;
 
         PortraitFrameView portraitFrameView;
+
+        RecyclerView recyclerView;
+
+        ImageView lv_img;
+
+        LinearLayout topic_layout;
+
+        ImageView rp_verify_img;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            rp_verify_img = itemView.findViewById(R.id.rp_verify_img);
+
+            topic_layout = itemView.findViewById(R.id.topic_layout);
+
+            lv_img = itemView.findViewById(R.id.lv_img);
+            recyclerView = itemView.findViewById(R.id.recyclerview);
             portraitFrameView = itemView.findViewById(R.id.portraitFrameView);
             //id = itemView.findViewById(R.id.id);
             //plateid = itemView.findViewById(R.id.plateid);

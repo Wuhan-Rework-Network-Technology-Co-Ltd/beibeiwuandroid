@@ -8,19 +8,22 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -28,19 +31,32 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
 import com.donkingliang.imageselector.utils.ImageSelector;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.agora.chatroom.Common;
+import io.agora.chatroom.OkHttpInstance;
 import io.agora.chatroom.R;
+import io.agora.chatroom.R2;
+import io.agora.chatroom.topic.TopicDialog;
+import io.agora.chatroom.topic.TopicList;
 import io.agora.chatroom.util.CheckPermission;
 import io.agora.chatroom.util.MD5Tool;
+import io.agora.chatroom.util.NiceZoomImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -84,6 +100,8 @@ public class PublishPostActivity extends AppCompatActivity {
     VideoView videoView;
     int videoHeight = 0;
     int videoWidth = 0;
+
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -110,15 +128,42 @@ public class PublishPostActivity extends AppCompatActivity {
         }
     }
     Long videoDuration = 0l;
+
+
+    public List<String> pictures = new ArrayList<>();
+
+
+
+    @BindView(R2.id.recyclerview)
+    RecyclerView recyclerview;
+
+    PictureAdapter pictureAdapter;
+
+    public List<TopicList> topicLists = new ArrayList<>();
+    @BindView(R2.id.add_topic)
+    Button add_topic;
+
+
+    public LinearLayout topic_layout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_recruitment);
 
+        ButterKnife.bind(this);
+
         mContext = this;
+
+        if(Common.filterString.length==0){
+            OkHttpInstance.getFilterWords(responseString -> {
+                Common.filterString = responseString.split(",");
+            });
+        }
 
         zoom_layout = findViewById(R.id.zoom_layout);
         videoView = findViewById(R.id.player);
+        topic_layout = findViewById(R.id.topic_layout);
 
         ImageView back_btn = findViewById(R.id.iv_back_left);
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -131,10 +176,54 @@ public class PublishPostActivity extends AppCompatActivity {
         CheckPermission.verifyPermissionCameraAndStorage(mContext);
 
 
-
+        pictureAdapter = new PictureAdapter(pictures);
+        recyclerview.setAdapter(pictureAdapter);
+        recyclerview.setLayoutManager(new GridLayoutManager(mContext,3));
 
         title_et = findViewById(R.id.title_et);
+        title_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                for (String element: Common.filterString) {
+                    if (s.toString().contains(element)){
+                        title_et.setText(s.toString().replace(element, "*"));
+                        Log.d(TAG, "onEditorAction: 过滤了"+s.toString());
+                    }
+                }
+            }
+        });
         content_et = findViewById(R.id.content_et);
+        content_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                for (String element: Common.filterString) {
+                    if (s.toString().contains(element)){
+                        content_et.setText(s.toString().replace(element, "*"));
+                        Log.d(TAG, "onEditorAction: 过滤了"+s.toString());
+                    }
+                }
+            }
+        });
         bankuai_rg = findViewById(R.id.bankuai_rg);
         zipai_rb = findViewById(R.id.zipai_rb);
         zhenshi_rb = findViewById(R.id.zhenshi_rb);
@@ -263,7 +352,7 @@ public class PublishPostActivity extends AppCompatActivity {
                 platename = ((RadioButton)findViewById(bankuai_rg.getCheckedRadioButtonId())).getText().toString();
 
                 release_btn.setClickable(false);
-                postFabutiezi("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabutiezi&m=socialchat");
+                postFabutiezi("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabutiezinew&m=socialchat");
 
             }
         });
@@ -277,6 +366,16 @@ public class PublishPostActivity extends AppCompatActivity {
             dongtai_rb.setVisibility(View.GONE);
             bankuai_rg.check(zhaomuling_rb.getId());
         }
+
+        TopicDialog topicDialog = new TopicDialog(this);
+        add_topic.setOnClickListener(v -> {
+            topicDialog.initShow(this);
+        });
+    }
+
+
+    public void addTopicView(){
+
     }
 
     @Override
@@ -331,23 +430,29 @@ public class PublishPostActivity extends AppCompatActivity {
                                 imageView1.setVisibility(View.GONE);
                                 imageView2.setVisibility(View.GONE);
                                 imageView3.setVisibility(View.GONE);
+
+                                recyclerview.setVisibility(View.GONE);
                                 break;
                             case 1:
-                                imageView1.setImageURI(Uri.parse(mPath));
-                                postpicture1 = mPath;
-                                imageView2.setVisibility(View.VISIBLE);
-                                Log.d(TAG, "onActivityResult1: 动态图片地址"+postpicture1);
-                                break;
-                            case 2:
-                                imageView2.setImageURI(Uri.parse(mPath));
-                                postpicture2 = mPath;
-                                imageView3.setVisibility(View.VISIBLE);
-                                Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture2);
-                                break;
-                            case 3:
-                                imageView3.setImageURI(Uri.parse(mPath));
-                                postpicture3 = mPath;
-                                Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture3);
+                                pictures.add(image);
+                                pictureAdapter.setPictures(pictures);
+                                videoView.setVisibility(View.GONE);
+                                recyclerview.setVisibility(View.VISIBLE);
+//                                imageView1.setImageURI(Uri.parse(mPath));
+//                                postpicture1 = mPath;
+//                                imageView2.setVisibility(View.VISIBLE);
+//                                Log.d(TAG, "onActivityResult1: 动态图片地址"+postpicture1);
+//                                break;
+//                            case 2:
+//                                imageView2.setImageURI(Uri.parse(mPath));
+//                                postpicture2 = mPath;
+//                                imageView3.setVisibility(View.VISIBLE);
+//                                Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture2);
+//                                break;
+//                            case 3:
+//                                imageView3.setImageURI(Uri.parse(mPath));
+//                                postpicture3 = mPath;
+//                                Log.d(TAG, "onActivityResult: 动态图片地址"+postpicture3);
                                 break;
                         }
                     }
@@ -405,17 +510,27 @@ public class PublishPostActivity extends AppCompatActivity {
                 multipartBody.addFormDataPart("platename", platename);
                 multipartBody.addFormDataPart("comment_forbid", comment_forbid);
 
-                if (!postvideo.isEmpty())
-                {
+                if (topicLists.size()>0){
+                    Log.d(TAG, "run: 帖子话题"+JSON.toJSONString(topicLists));
+                    multipartBody.addFormDataPart("topicLists", JSON.toJSONString(topicLists));
+                }
+                if (!postvideo.isEmpty()) {
                     Log.d(TAG, "run: 111视频长度"+videoDuration);
                     multipartBody.addFormDataPart("width", videoView.getVideoSize()[0]+"");
                     multipartBody.addFormDataPart("height", videoView.getVideoSize()[1]+"");
                     multipartBody.addFormDataPart("postvideo","postvideo."+Common.lastName(new File(postvideo)),RequestBody.create(new File(postvideo),MEDIA_TYPE_VIDEO));
                     multipartBody.addFormDataPart("duration", videoDuration+"");
                 }
-                if (!postpicture1.isEmpty())multipartBody.addFormDataPart("postpicture1","postpicture1."+Common.lastName(new File(postpicture1)), RequestBody.create(new File(postpicture1),MEDIA_TYPE_PNG));
-                if (!postpicture2.isEmpty())multipartBody.addFormDataPart("postpicture2","postpicture2."+Common.lastName(new File(postpicture2)),RequestBody.create(new File(postpicture2),MEDIA_TYPE_PNG));
-                if (!postpicture3.isEmpty())multipartBody.addFormDataPart("postpicture3","postpicture3."+Common.lastName(new File(postpicture3)),RequestBody.create(new File(postpicture3),MEDIA_TYPE_PNG));
+
+                if(pictures.size()>0){
+                    for (int i=0;i<pictures.size();i++){
+                        multipartBody.addFormDataPart("postpicture"+i,"postpicture"+i+"."+Common.lastName(new File(pictures.get(i))), RequestBody.create(new File(pictures.get(i)),MEDIA_TYPE_PNG));
+                    }
+                }
+
+//                if (!postpicture1.isEmpty())multipartBody.addFormDataPart("postpicture1","postpicture1."+Common.lastName(new File(postpicture1)), RequestBody.create(new File(postpicture1),MEDIA_TYPE_PNG));
+//                if (!postpicture2.isEmpty())multipartBody.addFormDataPart("postpicture2","postpicture2."+Common.lastName(new File(postpicture2)),RequestBody.create(new File(postpicture2),MEDIA_TYPE_PNG));
+//                if (!postpicture3.isEmpty())multipartBody.addFormDataPart("postpicture3","postpicture3."+Common.lastName(new File(postpicture3)),RequestBody.create(new File(postpicture3),MEDIA_TYPE_PNG));
                 RequestBody requestBody = multipartBody.build();
 
                 Request request = new Request.Builder()
@@ -440,7 +555,7 @@ public class PublishPostActivity extends AppCompatActivity {
                         toast.show();
                     });
 
-                    if (!result.equals("发布成功，等待审核！")){
+                    if (!result.equals("发布成功，等待审核！（经验+1，积分+10）")){
                         release_btn.setClickable(true);
                         return;
                     }
@@ -464,5 +579,122 @@ public class PublishPostActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+
+
+
+    public class PictureAdapter extends RecyclerView.Adapter<ViewHolder>{
+        List<String> pictures = new ArrayList<>();
+
+        public PictureAdapter(List<String> pictures) {
+            this.pictures = pictures;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.picture_item0,parent,false);
+            ViewHolder viewHolder = new ViewHolder(view);
+            return viewHolder;
+        }
+
+        public void setPictures(List<String> pictures){
+            this.pictures = pictures;
+            notifyDataSetChanged();
+        }
+        public void swapData(List<String> pictures){
+            int oldSize = this.pictures.size();
+            int newSize = pictures.size();
+            this.pictures = pictures;
+            notifyItemRangeInserted(oldSize , newSize);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            Log.d(TAG, "onBindViewHolder: 刷新");
+            int currentPosition = position;
+            if (this.pictures.size() == position){
+                holder.delete_img.setVisibility(View.GONE);
+                Glide.with(mContext).load(R.drawable.plus).into(holder.picture_img);
+                holder.picture_img.setOnClickListener(v -> {
+
+                    CheckPermission.verifyPermissionCameraAndStorage(mContext);
+
+                    int num = 9 - pictures.size();
+
+                    if (imageView_state==1){
+                        ImageSelector.builder()
+                                .onlyImage(true)
+                                .useCamera(true) // 设置是否使用拍照
+                                .setSingle(false)  //设置是否单选
+                                .setMaxSelectCount(num)
+                                .setViewImage(true) //是否点击放大图片查看,，默认为true
+                                .start(mContext, IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
+                    }else {
+                        new AlertDialog.Builder(mContext)
+                                .setTitle("图片or视频")
+                                .setMessage("选择发布图片或视频动态")
+                                .setNegativeButton("图片", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ImageSelector.builder()
+                                                .onlyImage(true)
+                                                .useCamera(true) // 设置是否使用拍照
+                                                .setSingle(false)  //设置是否单选
+                                                .setMaxSelectCount(num)
+                                                .setViewImage(true) //是否点击放大图片查看,，默认为true
+                                                .start(mContext, IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
+                                        imageView_state = 1;
+                                    }
+                                })
+                                .setPositiveButton("视频", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ImageSelector.builder()
+                                                .onlyVideo(true)
+                                                .useCamera(true) // 设置是否使用拍照
+                                                .setSingle(true)  //设置是否单选
+                                                .setViewImage(true) //是否点击放大图片查看,，默认为true
+                                                .start(mContext, IMAGE_SELECTOR_REQUEST_CODE); // 打开相册
+                                        imageView_state = 0;
+                                    }
+                                })
+                                .show();
+                    }
+                });
+            }else {
+                String currentItem = this.pictures.get(position);
+                Glide.with(mContext).load(currentItem).into(holder.picture_img);
+                holder.delete_img.setVisibility(View.VISIBLE);
+                holder.delete_img.setOnClickListener(v -> {
+                    this.pictures.remove(currentPosition);
+                    notifyDataSetChanged();
+                });
+                holder.picture_img.setClickable(false);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            if (pictures.size()==9){
+                return this.pictures.size();
+            }else {
+                return this.pictures.size() + 1;
+            }
+        }
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+
+        NiceZoomImageView picture_img;
+        ImageView delete_img;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            picture_img = itemView.findViewById(R.id.picture_img);
+            delete_img = itemView.findViewById(R.id.delete_img);
+        }
     }
 }

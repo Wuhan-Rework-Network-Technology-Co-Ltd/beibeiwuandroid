@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:padding="10dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="匹配条件"
+            android:layout_margin="10dp"
+            android:textColor="@color/text_color_1"
+            android:textSize="18sp"/>
+        <RadioGroup
+            android:layout_margin="20dp"
+            android:id="@+id/userGender"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/unlimited_gender"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/unlimited_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="不限" />
+            <RadioButton
+                android:id="@+id/male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="男" />
+
+            <RadioButton
+                android:id="@+id/female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="女" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:layout_margin="20dp"
+            android:id="@+id/userProperty"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/dProperty"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/dProperty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="双" />
+            <RadioButton
+                android:id="@+id/zProperty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Z" />
+
+            <RadioButton
+                android:id="@+id/bProperty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="B" />
+        </RadioGroup>
+        <Button
+            android:id="@+id/submit_btn"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开始匹配"
+            android:textColor="@color/text_color_4"
+            android:background="@drawable/round_gradient_blue"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

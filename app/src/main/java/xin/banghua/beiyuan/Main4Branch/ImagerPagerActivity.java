@@ -12,8 +12,8 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import xin.banghua.beiyuan.Adapter.LuntanList;
-import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.R;
 
 
 public class ImagerPagerActivity extends AppCompatActivity {
@@ -42,14 +42,19 @@ public class ImagerPagerActivity extends AppCompatActivity {
 
         sliderShow = findViewById(R.id.image_pager_slider);
 
-        for (int i=0;i<luntanList.getPostpicture().length;i++){
+
+
+        String[] postPicture = luntanList.getPostpicture().split(",");
+        for (int i = 0; i<postPicture.length; i++){
             TextSliderView textSliderView = new TextSliderView(this);
             textSliderView
                     .description("")
                     .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
-                    .image(Common.getOssResourceUrl(luntanList.getPostpicture()[i]));
+                    .image(Common.getOssResourceUrl(postPicture[i]));
             sliderShow.addSlider(textSliderView);
         }
+
+
         sliderShow.setPresetTransformer(SliderLayout.Transformer.Accordion);
         sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         sliderShow.setCustomAnimation(new DescriptionAnimation());

@@ -84,6 +84,7 @@ public class FollowOrFansFragment extends Fragment {
     CusPullLoadMoreRecyclerView pullLoadMoreRecyclerView;
 
     String pageIndex = "0";
+    UserInfoSliderAdapter exampleFragmentAdapter;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -91,9 +92,8 @@ public class FollowOrFansFragment extends Fragment {
         ButterKnife.bind(this,view);
 
 
-
         //adpter绑定数据
-        UserInfoSliderAdapter exampleFragmentAdapter = new UserInfoSliderAdapter(getActivity(),userInfoLists);
+        exampleFragmentAdapter = new UserInfoSliderAdapter(getActivity(),userInfoLists);
         //RecyclerView绑定adpter
         pullLoadMoreRecyclerView.setAdapter(exampleFragmentAdapter);
         pullLoadMoreRecyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -141,12 +141,21 @@ public class FollowOrFansFragment extends Fragment {
 
         pullLoadMoreRecyclerView.startWaveLoadingShow();
 
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         //网络请求
         if (mParam2.equals("关注")){
             OkHttpInstance.getFollowUser(mParam1,pageIndex, responseString -> {
                 if (!responseString.equals("false")){
+                    userInfoLists.clear();
                     userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
-                    exampleFragmentAdapter.swapData(userInfoLists);
+                    exampleFragmentAdapter.setUserInfoLists(userInfoLists);
                     pullLoadMoreRecyclerView.stopWaveLoadingShow();
                 }else {
                     pullLoadMoreRecyclerView.noDataShow();
@@ -155,8 +164,9 @@ public class FollowOrFansFragment extends Fragment {
         }else if (mParam2.equals("粉丝")){
             OkHttpInstance.getFansUser(mParam1,pageIndex, responseString -> {
                 if (!responseString.equals("false")){
+                    userInfoLists.clear();
                     userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
-                    exampleFragmentAdapter.swapData(userInfoLists);
+                    exampleFragmentAdapter.setUserInfoLists(userInfoLists);
                     pullLoadMoreRecyclerView.stopWaveLoadingShow();
                 }else {
                     pullLoadMoreRecyclerView.noDataShow();

@@ -4,6 +4,8 @@ import static io.agora.chatroom.ThreadUtils.runOnUiThread;
 import static io.agora.chatroom.ktv.KtvFrameLayout.ktvView;
 
 import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -89,40 +91,51 @@ public final class ChatRoomManager extends SeatManager implements MessageManager
         mListener = listener;
     }
 
+
+    public static  Intent startIntent;
     public void joinChannel(String channelId) {
+        if (channelId.equals("")){
+            return;
+        }
         Log.d(TAG, "onSuccess: rtm登录"+channelId);
         this.channelId = channelId;
-        mRtmManager.login(Constant.sUserId, new ResultCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Member member = new Member(Common.myUserInfoList.getId(), Common.myUserInfoList.getNickname(),
-                        Common.myUserInfoList.getPortrait(),Common.myUserInfoList.getGender(),
-                        Common.myUserInfoList.getProperty(),Common.myUserInfoList.getPortraitframe(),Common.myUserInfoList.getVeilcel());
+        if (!TextUtils.isEmpty(Common.myUserInfoList.getId())){
+            mRtmManager.login(Integer.parseInt(Common.myUserInfoList.getId()), new ResultCallback<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
 
-                mRtmManager.setLocalUserAttributes(AttributeKey.KEY_USER_INFO, member.toJsonString());
+                    mContext.startService(startIntent);
 
-                if (!channelId.equals("0")){
-                    mRtcManager.joinChannel(channelId, Integer.parseInt(Common.myUserInfoList.getId()));
+
+                    Member member = new Member(Common.myUserInfoList.getId(), Common.myUserInfoList.getNickname(),
+                            Common.myUserInfoList.getPortrait(),Common.myUserInfoList.getGender(),
+                            Common.myUserInfoList.getProperty(),Common.myUserInfoList.getPortraitframe(),Common.myUserInfoList.getVeilcel());
+
+                    mRtmManager.setLocalUserAttributes(AttributeKey.KEY_USER_INFO, member.toJsonString());
+
+                    if (!channelId.equals("0")){
+                        mRtcManager.joinChannel(channelId, Integer.parseInt(Common.myUserInfoList.getId()));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(ErrorInfo errorInfo) {
-                if (errorInfo.getErrorCode()==8){
-                    mRtmManager.logoutWithCallback(new ResultCallback() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            joinChannel(channelId);
-                        }
+                @Override
+                public void onFailure(ErrorInfo errorInfo) {
+                    if (errorInfo.getErrorCode()==8){
+                        mRtmManager.logoutWithCallback(new ResultCallback() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                joinChannel(channelId);
+                            }
 
-                        @Override
-                        public void onFailure(ErrorInfo errorInfo) {
+                            @Override
+                            public void onFailure(ErrorInfo errorInfo) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void leaveChannel() {
@@ -276,6 +289,9 @@ public final class ChatRoomManager extends SeatManager implements MessageManager
     private RtcManager.RtcEventListener mRtcListener = new RtcManager.RtcEventListener() {
         @Override
         public void onJoinChannelSuccess(String channelId) {
+            if (ChatRoomActivity.chatRoomActivity.container==null){
+                return;
+            }
             mRtmManager.joinChannel(channelId, new ResultCallback<Void>() {
                 @Override
                 public void onSuccess(Void unused) {

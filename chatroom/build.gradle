@@ -11,7 +11,7 @@ android {
         configurations.all {
             resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
         }
-        minSdkVersion 26
+        minSdkVersion 25
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -53,6 +53,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.1'
     implementation project(path: ':imageselector')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation project(path: ':onekeylogin')
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -83,24 +84,21 @@ dependencies {
     //下拉加载更多
     implementation project(path: ':PullLoadMoreRecyclerView')
 
-    //弹幕库
-    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
-    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
-
-    //gsy视频  包含了dkplayer-players:ijk，删掉
-    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack'
-
-    //下拉加载更多
-    implementation project(path: ':PullLoadMoreRecyclerView')
-
 
     //重新启用dk播放器
     implementation project(':dkplayer-java')
     implementation project(':dkplayer-ui')
-    //implementation project(path: ':dkplayer-players:ijk')
+//    implementation project(path: ':dkplayer-players:ijk')
     implementation project(path: ':dkplayer-players:exo')
     //缓存
     //implementation project(':dkplayer-videocache')
+
+    //弹幕库
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+
+    //去除其他组件
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.9-release-jitpack'
 
     implementation project(path: ':baselibrary')
     implementation project(path: ':lrcview')
@@ -116,4 +114,11 @@ dependencies {
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
     api (name: 'alipaysdk-noutdid-15.8.03.210428205839', ext: 'aar')
 
+    //ZoomInImageView  图片手势放大
+    implementation 'com.zolad:zoominimageview:1.0.0'
+
+    implementation 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2'
+
+    //标签选择器
+    implementation 'co.lujun:androidtagview:1.1.7'
 }

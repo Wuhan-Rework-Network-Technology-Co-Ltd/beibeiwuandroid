@@ -81,7 +81,7 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
                 Intent intent = new Intent(view.getContext(), SliderWebViewActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 intent.putExtra("slidername","审核");
-                intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=99999&c=entry&do=post_censorship&m=socialchat&page=1&id="+Common.myID);
+                intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=99999&c=entry&do=post_censorship&m=socialchat&page=1&id="+Common.userInfoList.getId());
                 view.getContext().startActivity(intent);
             }
         }

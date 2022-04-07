@@ -229,6 +229,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                 //跳转首页
                                 Intent intent = new Intent(WXEntryActivity.this, LaunchActivity.class);
                                 startActivity(intent);
+                                finish();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

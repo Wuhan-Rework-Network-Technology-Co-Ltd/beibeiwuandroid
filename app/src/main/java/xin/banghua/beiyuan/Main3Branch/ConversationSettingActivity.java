@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.agora.chatroom.util.ReportDialog;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
@@ -39,12 +40,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.Personage.SetRemarkAndTagActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.Common;
 
 public class ConversationSettingActivity extends AppCompatActivity {
     private static final String TAG = "ConversationSettingActi";
@@ -94,7 +95,8 @@ public class ConversationSettingActivity extends AppCompatActivity {
         report_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"举报已提交",Toast.LENGTH_LONG).show();
+                ReportDialog reportDialog = new ReportDialog(ConversationSettingActivity.this);
+                reportDialog.show(ReportDialog.REPORT_TYPE_1,targetId);
             }
         });
 

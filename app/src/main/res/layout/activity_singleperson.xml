@@ -96,10 +96,22 @@
                             android:id="@+id/user_nickname"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="用户已注销"
+                            android:text="加载失败，请重试"
                             android:textStyle="bold"
                             android:textColor="@color/color333"
                             android:textSize="17sp" />
+                        <ImageView
+                            android:id="@+id/lv_img"
+                            android:layout_width="30dp"
+                            android:layout_height="20dp"
+                            android:layout_margin="3dp"
+                            android:src="@mipmap/lv1"/>
+                        <ImageView
+                            android:id="@+id/rp_verify_img"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_margin="3dp"
+                            android:src="@drawable/ic_rp_verify"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -204,7 +216,7 @@
                             android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="乐园id:5"
+                            android:text="乐园id:0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/text_color_5"
                             android:layout_marginRight="5dp"

@@ -284,6 +284,7 @@ public class CommentDialog {
                                 NetworkRequestComment.sendComment(comment_et.getText().toString(), luntanList.getId(),luntanList.getAuthid(), mainID,mainID_user, subID, subID_comment,ifauthreply, new OkHttpResponseCallBack() {
                                     @Override
                                     public void getResponseString(String responseString) {
+                                        Toast.makeText(mContext,"评论成功，经验+1，积分+5",Toast.LENGTH_SHORT).show();
                                         CommentList commentList = new CommentList();
                                         commentList.setId(responseString);
                                         commentList.setTime(Math.round(new Date().getTime()/1000)+"");
@@ -411,7 +412,7 @@ public class CommentDialog {
         subID = "0";
         sub_nickname = "";
         subID_comment = "0";
-        comment_et.setHint("留下你的精彩评论吧~~");
+        comment_et.setHint("留下你的精彩评论吧~~(经验+1，积分+5)");
     }
     public void showInput() {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(INPUT_METHOD_SERVICE);

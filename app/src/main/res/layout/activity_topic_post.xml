@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".topic.TopicPostActivity"
+    tools:ignore="MissingDefaultResource">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/header_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/topic_textview"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:text="你好吗？"
+                        android:textSize="18sp"
+                        android:textColor="@color/white_93"
+                        android:gravity="center" />
+
+                    <ImageView
+                        android:id="@+id/topic_image"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:src="@drawable/logo"
+                        android:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_toRightOf="@+id/topic_image"
+                        android:id="@+id/layout_topic_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:textSize="22sp"
+                            android:text=" # "
+                            android:textColor="@color/text_color_9" />
+                        <xin.banghua.beiyuan.custom_ui.MyMarqueeTextView
+                            android:id="@+id/topic_name"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textAlignment="center"
+                            android:textColor="@color/text_color_9"
+                            android:textSize="22sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/used_times"
+                        android:layout_toRightOf="@+id/topic_image"
+                        android:layout_below="@+id/layout_topic_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textColor="@color/text_color_1"
+                        android:text="1 人使用"
+                        android:visibility="visible"/>
+
+                    <TextView
+                        android:id="@+id/topic_description"
+                        android:layout_toRightOf="@+id/topic_image"
+                        android:layout_below="@+id/used_times"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textColor="@color/text_color_3"
+                        android:textSize="12sp"
+                        android:text="" />
+                </RelativeLayout>
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/viewpager_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background"
+                    app:tabSelectedTextColor="@color/color3"
+                    app:tabIndicatorColor="@color/alivc_common_bg_orange"
+                    app:tabTextColor="@color/color4"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabMode="fixed"/>
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

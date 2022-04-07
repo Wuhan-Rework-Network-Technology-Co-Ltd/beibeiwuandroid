@@ -65,8 +65,9 @@
                 <TextView
                     android:id="@+id/userNickName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:text="魔法少女郭德纲"
+                    android:layout_margin="3dp"
                     android:textColor="@color/color333"
                     android:textSize="13sp" />
 
@@ -75,7 +76,21 @@
                     android:layout_width="10dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="5dp"
+                    android:visibility="gone"
                     android:foreground="@mipmap/huizhang" />
+                <ImageView
+                    android:id="@+id/lv_img"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="3dp"
+                    android:src="@mipmap/lv1"/>
+
+                <ImageView
+                    android:id="@+id/rp_verify_img"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_margin="3dp"
+                    android:src="@drawable/ic_rp_verify"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

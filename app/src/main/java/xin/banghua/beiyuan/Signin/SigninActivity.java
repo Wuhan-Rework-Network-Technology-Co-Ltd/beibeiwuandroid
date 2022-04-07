@@ -251,6 +251,7 @@ public class SigninActivity extends Activity {
                             //Log.d("跳转首页",object1.getString("userNickName"));
                             Intent intent = new Intent(SigninActivity.this, LaunchActivity.class);
                             startActivity(intent);
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

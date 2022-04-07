@@ -245,7 +245,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         sh = new SharedHelper(getApplicationContext());
         userInfo = sh.readUserInfo();
         //Toast.makeText(mContext, userInfo.toString(), Toast.LENGTH_SHORT).show();
-        if (userInfo.get("userID") == "") {
+        if (userInfo.get("userID").equals("")) {
             Intent intent = new Intent(Main2Activity.this, OneKeyLoginActivity.class);
             intent.putExtra(THEME_KEY, 4);
             startActivity(intent);

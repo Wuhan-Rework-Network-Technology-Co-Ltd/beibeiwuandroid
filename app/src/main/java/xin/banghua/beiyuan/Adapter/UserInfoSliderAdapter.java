@@ -84,6 +84,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
     }
     public void setUserInfoLists(List<UserInfoList> userInfoLists){
         this.userInfoLists = userInfoLists;
+        notifyDataSetChanged();
     }
     public void swapData(List<UserInfoList> userInfoLists){
         int oldSize = this.userInfoLists.size();
@@ -161,7 +162,6 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
         if (holder instanceof UserinfoHolder){
             ((UserinfoHolder) holder).portraitFrameView.setPortraitFrame(((UserinfoHolder) holder).portraitFrameView.getTag().toString());
         }
-
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
@@ -220,6 +220,9 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
 //            mDemoSlider.setVisibility(View.GONE);
         }else if (viewHolder instanceof UserinfoHolder){
             UserInfoList currentItem = userInfoLists.get(i);
+
+            ((UserinfoHolder) viewHolder).lv_img.setImageResource(Common.getLevelFromUser(currentItem));
+
             ((UserinfoHolder) viewHolder).online_tv.setText(currentItem.getOnline());
             if (currentItem.getOnline().equals("在线")){
                 Glide.with(mContext).load(R.mipmap.green_point).into( ((UserinfoHolder) viewHolder).online_img);
@@ -406,11 +409,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
 
             if(userInfoCallBack!=null){
                 ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.VISIBLE);
-                ((UserinfoHolder) viewHolder).custom_btn.setOnClickListener(v -> {
-                    ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.GONE);
-                    userInfoCallBack.getUserInfo(currentItem);
-                    Toast.makeText(mContext,"已同意好友申请！",Toast.LENGTH_SHORT).show();
-                });
+
                 ((UserinfoHolder) viewHolder).userinfoLayout.setOnLongClickListener(new View.OnLongClickListener(){
                     @Override
                     public boolean onLongClick(View v) {
@@ -466,6 +465,20 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                     }
                 });
 
+                ((UserinfoHolder) viewHolder).custom_btn.setOnClickListener(v -> {
+                    ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.GONE);
+                    userInfoCallBack.getUserInfo(currentItem);
+                    Toast.makeText(mContext,"已同意好友申请！",Toast.LENGTH_SHORT).show();
+                });
+                if (currentItem.getAgree().equals("1")){
+                    ((UserinfoHolder) viewHolder).custom_btn.setText("已加");
+                    ((UserinfoHolder) viewHolder).custom_btn.setClickable(false);
+                    ((UserinfoHolder) viewHolder).custom_btn.setBackgroundResource(R.drawable.corner_gray_bg);
+                }else {
+                    ((UserinfoHolder) viewHolder).custom_btn.setText("同意");
+                    ((UserinfoHolder) viewHolder).custom_btn.setClickable(true);
+                    ((UserinfoHolder) viewHolder).custom_btn.setBackgroundResource(R.drawable.bd_bg_square_round_corner_blue);
+                }
             }else {
                 ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.GONE);
             }
@@ -485,6 +498,13 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                 ((UserinfoHolder) viewHolder).remaindwords_tv.setText("  "+currentItem.getYourleavewords());
             }else {
                 ((UserinfoHolder) viewHolder).remaindwords_layout.setVisibility(View.GONE);
+            }
+
+
+            if (!currentItem.getRp_verify_time().equals("0")){
+                ((UserinfoHolder) viewHolder).rp_verify_img.setVisibility(View.VISIBLE);
+            }else {
+                ((UserinfoHolder) viewHolder).rp_verify_img.setVisibility(View.GONE);
             }
         }
     }
@@ -553,9 +573,16 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
         TextView remaindwords_tv;
 
         PortraitFrameView portraitFrameView;
+
+        ImageView lv_img;
+
+        ImageView rp_verify_img;
         public UserinfoHolder(@NonNull View itemView) {
             super(itemView);
 
+            rp_verify_img = itemView.findViewById(R.id.rp_verify_img);
+
+            lv_img = itemView.findViewById(R.id.lv_img);
             portraitFrameView = itemView.findViewById(R.id.portraitFrameView);
 
             remaindwords_layout = itemView.findViewById(R.id.remaindwords_layout);

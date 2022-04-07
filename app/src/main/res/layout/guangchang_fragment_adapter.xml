@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -71,6 +72,22 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center"
                     android:src="@mipmap/nian" />
+
+                <ImageView
+                    android:id="@+id/lv_img"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="3dp"
+                    android:src="@mipmap/lv1"/>
+
+
+                <ImageView
+                    android:id="@+id/rp_verify_img"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_margin="3dp"
+                    android:src="@drawable/ic_rp_verify"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -222,6 +239,15 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recyclerview"
+                tools:listitem="@layout/picture_item0"
+                app:spanCount="3"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+
+
             <xin.banghua.beiyuan.custom_ui.CustomVideoView
                 android:id="@+id/player"
                 android:layout_width="200dp"
@@ -300,6 +326,20 @@
                 android:alpha="0"/>
         </FrameLayout>
     </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_width="360dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/topic_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <LinearLayout
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"

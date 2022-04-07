@@ -182,7 +182,7 @@ mediaPlayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLe
 
 //android  储存器地址   storage/emulated/0
 File directory = Environment.getExternalStorageDirectory();
-//android  储存器地址(本软件可读)   storage/emulated/0/Android/data/xin.banghua.moyuan/files/Music/
+//android  储存器地址(本软件可读)   storage/emulated/0/Android/data/xin.banghua.beiyuan/files/Music/
 ContextWrapper cw = new ContextWrapper(getApplicationContext());
 File directory = cw.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
 
@@ -426,7 +426,7 @@ rb_zuotian.setText("第一行"+"\n"+"第二行");
 fileName.substring(fileName.lastIndexOf("."),fileName.length());
 
 //内部文件地址和外部文件地址
-File dir = new File("data/data/" + "xin.banghua.moyuan" + "/databases");//内部直接写绝对地址
+File dir = new File("data/data/" + "xin.banghua.beiyuan" + "/databases");//内部直接写绝对地址
 context.getCacheDir();//缓存目录，一般不要放，会消失  /data/user/0/包名/cache/
 Environment.getExternalStorageDirectory()
 

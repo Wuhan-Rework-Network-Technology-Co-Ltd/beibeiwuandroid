@@ -10,6 +10,19 @@ public class LuntanList  implements Serializable {
     public LuntanList() {
     }
 
+    @JSONField(name="rp_verify_time")
+    String rp_verify_time = "";//真人认证成功时间，存在则说明完成了真人认证
+
+    @JSONField(name = "topic")
+    String topic = "";
+
+    @JSONField(name = "vitality")
+    String vitality = "0";
+    @JSONField(name = "post")
+    String post = "0";
+    @JSONField(name = "comment")
+    String comment = "0";
+
     @JSONField(name = "myfriends")
     String myfriends = "";
     @JSONField(name = "myblacklist")
@@ -45,9 +58,9 @@ public class LuntanList  implements Serializable {
     @JSONField(name = "posttext")
     String posttext;
     @JSONField(name = "postpicture")
-    String postpictureString;
+    String postpicture;
 
-    String[] postpicture;
+    String[] postpictureList;
 
 
 
@@ -57,17 +70,17 @@ public class LuntanList  implements Serializable {
     String favorite;
     @JSONField(name = "time")
     String time;
-    @JSONField(name = "authage")
+    @JSONField(name = "age")
     String authage;
-    @JSONField(name = "authgender")
+    @JSONField(name = "gender")
     String authgender;
-    @JSONField(name = "authregion")
+    @JSONField(name = "region")
     String authregion;
-    @JSONField(name = "authproperty")
+    @JSONField(name = "property")
     String authproperty;
-    @JSONField(name = "authvip")
+    @JSONField(name = "vip")
     String authvip;
-    @JSONField(name = "authsvip")
+    @JSONField(name = "svip")
     String authsvip;
     @JSONField(name = "comment_sum")
     String comment_sum;
@@ -93,7 +106,7 @@ public class LuntanList  implements Serializable {
 
     public LuntanList(String authage, String authgender, String authregion, String authproperty, String id, String plateid,
                       String platename, String authid, String authnickname, String authportrait, String posttip,
-                      String posttitle, String posttext, String[] postpicture, String like, String favorite, String time,
+                      String posttitle, String posttext, String[] postpictureList, String like, String favorite, String time,
                       String authvip,String authsvip,String comment_sum) {
         this.authage = authage;
         this.authgender = authgender;
@@ -108,7 +121,7 @@ public class LuntanList  implements Serializable {
         this.posttip = posttip;
         this.posttitle = posttitle;
         this.posttext = posttext;
-        this.postpicture = postpicture;
+        this.postpictureList = postpictureList;
         this.like = like;
         this.favorite = favorite;
         this.time = time;
@@ -117,6 +130,46 @@ public class LuntanList  implements Serializable {
         this.authsvip = authsvip;
 
         this.comment_sum = comment_sum;
+    }
+
+    public String getRp_verify_time() {
+        return rp_verify_time;
+    }
+
+    public void setRp_verify_time(String rp_verify_time) {
+        this.rp_verify_time = rp_verify_time;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public String getVitality() {
+        return vitality;
+    }
+
+    public void setVitality(String vitality) {
+        this.vitality = vitality;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getPlay_time() {
@@ -223,12 +276,12 @@ public class LuntanList  implements Serializable {
         this.postvideo = postvideo;
     }
 
-    public String getPostpictureString() {
-        return postpictureString;
+    public String getPostpicture() {
+        return postpicture;
     }
 
-    public void setPostpictureString(String postpictureString) {
-        this.postpictureString = postpictureString;
+    public void setPostpicture(String postpicture) {
+        this.postpicture = postpicture;
     }
 
     public String getComment_forbid() {
@@ -323,8 +376,8 @@ public class LuntanList  implements Serializable {
         this.posttext = posttext;
     }
 
-    public void setPostpicture(String[] postpicture) {
-        this.postpicture = postpicture;
+    public void setPostpictureList(String[] postpictureList) {
+        this.postpictureList = postpictureList;
     }
 
     public void setLike(String like) {
@@ -375,8 +428,8 @@ public class LuntanList  implements Serializable {
         return posttext;
     }
 
-    public String[] getPostpicture() {
-        return postpicture;
+    public String[] getPostpictureList() {
+        return postpictureList;
     }
 
     public String getLike() {

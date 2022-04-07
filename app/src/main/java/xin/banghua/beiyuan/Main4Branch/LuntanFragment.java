@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.agora.chatroom.activity.ChannelGridActivity;
-import io.agora.chatroom.activity.PublishPostActivity;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -70,6 +69,7 @@ import xin.banghua.beiyuan.Signin.ProvinceAdapter;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.bean.AddrBean;
 import xin.banghua.beiyuan.custom_ui.CustomVideoView;
+import xin.banghua.beiyuan.publish.AllEffectActivity;
 import xin.banghua.beiyuan.utils.ScreenUtils;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
@@ -161,6 +161,18 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
             }else {
                 Intent intent = new Intent(getContext(), ChannelGridActivity.class);
                 startActivity(intent);
+
+//                Intent intent = new Intent(getActivity(), VideoChatViewActivity.class);
+//                intent.putExtra("channel", "1");
+//                intent.putExtra("targetId", Common.userInfoList.getId());
+//                intent.putExtra("targetPortrait", Common.userInfoList.getPortrait());
+//                intent.putExtra("myRole", "remote");
+//                startActivity(intent);
+
+
+//                Intent intent = new Intent(getActivity(), AllEffectActivity.class);
+//                intent.putExtra("form_where","ZuopinTopicActivity");
+//                startActivity(intent);
             }
         });
         //首页初始化
@@ -596,8 +608,11 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                     intent.putExtra(THEME_KEY, 4);
                     getActivity().startActivity(intent);
                 }else {
-                    Intent intent = new Intent(getActivity(), PublishPostActivity.class);
-                    getActivity().startActivity(intent);
+                    Intent intent = new Intent(getActivity(), AllEffectActivity.class);
+                    intent.putExtra("form_where","ZuopinTopicActivity");
+                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), PublishPostActivity.class);
+//                    getActivity().startActivity(intent);
                 }
 
             }
@@ -719,6 +734,12 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         posts.setMore_five(jsonObject.getString("more_five"));
                         posts.setPlay_completed(jsonObject.getString("play_completed"));
                         posts.setPlay_time(jsonObject.getString("play_time"));
+                        posts.setPostpicture(jsonObject.getString("postpicture"));
+                        posts.setVitality(jsonObject.getString("vitality"));
+                        posts.setPost(jsonObject.getString("post"));
+                        posts.setComment(jsonObject.getString("comment"));
+                        posts.setTopic(jsonObject.getString("topic"));
+                        posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
                         luntanLists.add(posts);
                     }
                 }
@@ -755,6 +776,12 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         posts.setMore_five(jsonObject.getString("more_five"));
                         posts.setPlay_completed(jsonObject.getString("play_completed"));
                         posts.setPlay_time(jsonObject.getString("play_time"));
+                        posts.setPostpicture(jsonObject.getString("postpicture"));
+                        posts.setVitality(jsonObject.getString("vitality"));
+                        posts.setPost(jsonObject.getString("post"));
+                        posts.setComment(jsonObject.getString("comment"));
+                        posts.setTopic(jsonObject.getString("topic"));
+                        posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
                         luntanLists.add(posts);
                     }
                 }

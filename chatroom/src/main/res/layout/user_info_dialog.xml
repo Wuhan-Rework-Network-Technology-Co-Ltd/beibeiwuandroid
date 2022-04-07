@@ -157,7 +157,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/text_color_11"
+                android:textSize="18sp"
+                android:background="@drawable/round_gradient_blue"
+                android:textColor="@color/text_color_4"
                 android:text="主页"/>
         </LinearLayout>
 

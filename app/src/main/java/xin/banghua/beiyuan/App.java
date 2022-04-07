@@ -6,9 +6,9 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.http.HttpResponseCache;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -24,6 +24,11 @@ import com.baidu.mobads.sdk.api.MobadsPermissionSettings;
 import com.bytedance.sdk.openadsdk.TTAdConfig;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdSdk;
+import com.faceunity.nama.FURenderer;
+import com.faceunity.nama.post.DemoApplication;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.liulishuo.filedownloader.connection.FileDownloadConnection;
+import com.liulishuo.filedownloader.connection.FileDownloadUrlConnection;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,11 +39,13 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.agora.capture.video.camera.CameraVideoManager;
 import io.agora.chatroom.ChatRoomApplication;
 import io.agora.chatroom.manager.ChatRoomManager;
 import io.agora.chatroom.manager.RtcManager;
 import io.agora.chatroom.manager.RtmManager;
 import io.agora.chatroom.model.Constant;
+import io.agora.rtc.RtcEngine;
 import io.rong.contactcard.IContactCardInfoProvider;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
@@ -58,10 +65,14 @@ import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.LoginSmsActivity;
 import xin.banghua.beiyuan.Signin.OneKeyLogInActivityResult;
+import xin.banghua.beiyuan.chat.MessageReceivedService;
+import xin.banghua.beiyuan.chat.faceunity.PreprocessorFaceUnity;
+import xin.banghua.beiyuan.chat.faceunity.RtcEngineEventHandler;
+import xin.banghua.beiyuan.chat.faceunity.RtcEngineEventHandlerProxy;
+import xin.banghua.beiyuan.utils.NoEtagFileDownloaUrlConnection;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 import xin.banghua.onekeylogin.ModeSelectActivity;
-import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
 import xyz.doikki.videoplayer.player.VideoViewConfig;
 import xyz.doikki.videoplayer.player.VideoViewManager;
@@ -77,8 +88,8 @@ import xyz.doikki.videoplayer.player.VideoViewManager;
 public class App extends Application implements Application.ActivityLifecycleCallbacks{
     private static final String TAG = "App";
 
-    public static Application mApplication;
-    public static Application getApplication() {
+    public static App mApplication;
+    public static App getApplication() {
         return mApplication;
     }
     /**
@@ -103,7 +114,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
     public void onCreate() {
         super.onCreate();
 
-
+        //消息接收服务
+        ChatRoomManager.startIntent = new Intent(getApplicationContext(), MessageReceivedService.class);
 
         mApplication = this;
 
@@ -113,10 +125,39 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         PushClass.initPushService(getApplicationContext());
 
+        //美颜
+        DemoApplication.registerFURender(this);
+
+        FileDownloader.setupOnApplicationOnCreate(this)
+                .connectionCreator(new FileDownloadUrlConnection
+                        .Creator(new FileDownloadUrlConnection.Configuration()
+                        .connectTimeout(15_000) // set connection timeout.
+                        .readTimeout(15_000) // set read timeout.
+                ) {
+                    @Override
+                    public FileDownloadConnection create(String originUrl) throws IOException {
+                        return new NoEtagFileDownloaUrlConnection(originUrl);
+                    }
+                })
+                .commit();
+
+        //下载美颜素材
+        File file_fu = new File("data/data/xin.banghua.beiyuan/files/faceunity");
+        if (!file_fu.exists()){
+            Common.downloadFU();
+        }
 
         //一键登录
         ModeSelectActivity.sign_in_intent = new Intent(mApplication, LoginSmsActivity.class);
         ModeSelectActivity.log_in_intent = new Intent(mApplication, OneKeyLogInActivityResult.class);
+
+
+        //声网,用于文字登录和语音房间
+        RtmManager.instance(getApplication()).init();
+        RtcManager.instance(getApplication()).init();
+
+        //声网RTC，用于语音通话和视频通话
+        initRtcEngine();
 
 
         Log.d(TAG, "onCreate: onActivityonCreate:");
@@ -149,41 +190,41 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
 //        closeAndroidPDialog();
 
-        RongIMClient.getInstance().setOnReceiveMessageListener(new RongIMClient.OnReceiveMessageWrapperListener() {
-            /**
-             * 接收实时或者离线消息。
-             * 注意:
-             * 1. 针对接收离线消息时，服务端会将 200 条消息打成一个包发到客户端，客户端对这包数据进行解析。
-             * 2. hasPackage 标识是否还有剩余的消息包，left 标识这包消息解析完逐条抛送给 App 层后，剩余多少条。
-             * 如何判断离线消息收完：
-             * 1. hasPackage 和 left 都为 0；
-             * 2. hasPackage 为 0 标识当前正在接收最后一包（200条）消息，left 为 0 标识最后一包的最后一条消息也已接收完毕。
-             *
-             * @param message    接收到的消息对象
-             * @param left       每个数据包数据逐条上抛后，还剩余的条数
-             * @param hasPackage 是否在服务端还存在未下发的消息包
-             * @param offline    消息是否离线消息
-             * @return 是否处理消息。 如果 App 处理了此消息，返回 true; 否则返回 false 由 SDK 处理。
-             */
-            @Override
-            public boolean onReceived(final Message message, final int left, boolean hasPackage, boolean offline) {
-                Log.d(TAG, "onMessageClick: 1被封禁");
-                if (message.getObjectName().equals("RC:TxtMsg")){
-                    String[] textSplit = message.getContent().toString().split("'");
-                    if (textSplit[1].contains("你因为违规，已被封禁。") && message.getSenderUserId().equals("1")){
-                        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sp.edit();
-                        editor.putString("userID", "");
-                        editor.commit();
-                        Intent intent = new Intent(App.getApplication(), OneKeyLoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-                        startActivity(intent);
-                        System.exit(0);
-                    }
-                }
-                return false;
-            }
-        });
+//        RongIMClient.getInstance().setOnReceiveMessageListener(new RongIMClient.OnReceiveMessageWrapperListener() {
+//            /**
+//             * 接收实时或者离线消息。
+//             * 注意:
+//             * 1. 针对接收离线消息时，服务端会将 200 条消息打成一个包发到客户端，客户端对这包数据进行解析。
+//             * 2. hasPackage 标识是否还有剩余的消息包，left 标识这包消息解析完逐条抛送给 App 层后，剩余多少条。
+//             * 如何判断离线消息收完：
+//             * 1. hasPackage 和 left 都为 0；
+//             * 2. hasPackage 为 0 标识当前正在接收最后一包（200条）消息，left 为 0 标识最后一包的最后一条消息也已接收完毕。
+//             *
+//             * @param message    接收到的消息对象
+//             * @param left       每个数据包数据逐条上抛后，还剩余的条数
+//             * @param hasPackage 是否在服务端还存在未下发的消息包
+//             * @param offline    消息是否离线消息
+//             * @return 是否处理消息。 如果 App 处理了此消息，返回 true; 否则返回 false 由 SDK 处理。
+//             */
+//            @Override
+//            public boolean onReceived(final Message message, final int left, boolean hasPackage, boolean offline) {
+//                Log.d(TAG, "onMessageClick: 1被封禁");
+//                if (message.getObjectName().equals("RC:TxtMsg")){
+//                    String[] textSplit = message.getContent().toString().split("'");
+//                    if (textSplit[1].contains("你因为违规，已被封禁。") && message.getSenderUserId().equals("1")){
+//                        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = sp.edit();
+//                        editor.putString("userID", "");
+//                        editor.commit();
+//                        Intent intent = new Intent(App.getApplication(), OneKeyLoginActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+//                        startActivity(intent);
+//                        System.exit(0);
+//                    }
+//                }
+//                return false;
+//            }
+//        });
 
 
         //获取融云token
@@ -225,6 +266,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
 
         frontOrBack();
+
+
     }
 
     public static void initThirdSDK(){
@@ -360,7 +403,13 @@ public class App extends Application implements Application.ActivityLifecycleCal
                     Log.v("vergo", "**********切到前台**********");
                     setFrontOrBack("1");
 
-                    ChatRoomManager.instance(getApplication()).joinChannel("0");
+                    if (Common.userInfoList == null && !(new SharedHelper(getApplicationContext()).readUserInfo().get("userID").equals(""))){
+                        Intent intent = new Intent(App.getApplication(),LaunchActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                        startActivity(intent);
+                    }else {
+                        ChatRoomManager.instance(getApplication()).joinChannel("0");
+                    }
                 }
                 count++;
             }
@@ -568,4 +617,52 @@ public class App extends Application implements Application.ActivityLifecycleCal
         Log.d(TAG, "onActivityDestroyed: ");
     }
 
+
+
+
+
+
+
+    private CameraVideoManager mVideoManager;
+    private RtcEngine mRtcEngine;
+    private RtcEngineEventHandlerProxy mRtcEventHandler;
+
+    private void initRtcEngine() {
+        String appId = "957ac9a2ac63427686d2144e75caa972";
+        if (TextUtils.isEmpty(appId)) {
+            throw new RuntimeException("NEED TO use your App ID, get your own ID at https://dashboard.agora.io/");
+        }
+
+        mRtcEventHandler = new RtcEngineEventHandlerProxy();
+        try {
+            mRtcEngine = RtcEngine.create(this, appId, mRtcEventHandler);
+            mRtcEngine.enableVideo();
+            mRtcEngine.setChannelProfile(io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        } catch (Exception e) {
+            throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
+        }
+    }
+
+    public void initVideoCaptureAsync() {
+        Context application = getApplicationContext();
+        FURenderer.setup(application);
+        mVideoManager = new CameraVideoManager(application,
+                new PreprocessorFaceUnity(application));
+    }
+
+    public RtcEngine rtcEngine() {
+        return mRtcEngine;
+    }
+
+    public void addRtcHandler(RtcEngineEventHandler handler) {
+        mRtcEventHandler.addEventHandler(handler);
+    }
+
+    public void removeRtcHandler(RtcEngineEventHandler handler) {
+        mRtcEventHandler.removeEventHandler(handler);
+    }
+
+    public CameraVideoManager videoManager() {
+        return mVideoManager;
+    }
 }

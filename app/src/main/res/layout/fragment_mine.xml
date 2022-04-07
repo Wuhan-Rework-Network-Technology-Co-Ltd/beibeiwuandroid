@@ -66,6 +66,22 @@
                         android:layout_width="30dp"
                         android:layout_height="20dp"
                         android:src="@mipmap/vip"/>
+
+
+                    <ImageView
+                        android:id="@+id/lv_img"
+                        android:layout_width="30dp"
+                        android:layout_height="20dp"
+                        android:layout_margin="3dp"
+                        android:src="@mipmap/lv1"/>
+
+
+                    <ImageView
+                        android:id="@+id/rp_verify_img"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_margin="3dp"
+                        android:src="@drawable/ic_rp_verify"/>
                 </LinearLayout>
 
 

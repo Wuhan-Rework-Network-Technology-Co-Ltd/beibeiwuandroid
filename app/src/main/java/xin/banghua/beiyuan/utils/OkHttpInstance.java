@@ -149,6 +149,42 @@ public class OkHttpInstance {
         }
     }
 
+    //TOOD 获取用户属性
+    public static void getUserAttributesMe(String userId,@Nullable OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("userId", userId)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getUserAttributesMe&m=socialchat")
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        if (okHttpResponseCallBack!=null){
+                            String resultString = response.body().string();
+                            Log.d(TAG, "run:获取用户属性" +userId+ resultString);
+                            if (resultString.equals("false")){
+                                return;
+                            }
+
+                            ThreadUtils.runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                        }
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     //TODO 撤销招募令
     public static void deleteRecruitment(OkHttpResponseCallBack okHttpResponseCallBack) {
@@ -274,6 +310,7 @@ public class OkHttpInstance {
                     try (Response response = client.newCall(request).execute()) {
                         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                         String resultString = response.body().string();
+                        Common.userInfoList.setFollow((Integer.parseInt(Common.userInfoList.getFollow())+1)+"");
                         runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
                     }catch (Exception e) {
                         e.printStackTrace();
@@ -311,6 +348,7 @@ public class OkHttpInstance {
                             try (Response response = client.newCall(request).execute()) {
                                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                                 String resultString = response.body().string();
+                                Common.userInfoList.setFollow((Integer.parseInt(Common.userInfoList.getFollow())-1)+"");
                                 runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
                             }catch (Exception e) {
                                 e.printStackTrace();
@@ -411,7 +449,7 @@ public class OkHttpInstance {
                             .add("pageIndex",pageIndex)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Friendsapplynewnew&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Friendsapplynewnewnew&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -712,7 +750,7 @@ public class OkHttpInstance {
      * @param userAccount
      * @param okHttpResponseCallBack
      */
-    public static void signinOneKeyLogin(final String userAccount,OkHttpResponseCallBack okHttpResponseCallBack){
+    public static void smsLogin(final String userAccount, OkHttpResponseCallBack okHttpResponseCallBack){
         try {
             new Thread(new Runnable() {
                 @Override
@@ -944,6 +982,356 @@ public class OkHttpInstance {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 得到主题文章
+     *
+     * @param topic                  主题
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getTopicPost(final String topic,String pageIndex,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("topic", topic)
+                            .add("pageIndex", pageIndex)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getTopicPost&m=socialchat")
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String responseString = response.body().string();
+                        Log.d(TAG, "run: 得到主题文章"+topic+responseString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(responseString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 音乐列表
+     * @param okHttpResponseCallBack
+     */
+    public static void getOnlineMusicList(String pageindex,String query,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("pageindex",pageindex)
+                            .add("query",query)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=GetOnlineMusic&m=moyuan")
+                            .post(formBody)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 音乐列表获取的值"+resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 获得脚本
+     *
+     * @param pageIndex              页面索引
+     * @param type                   类型
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getScript(String pageIndex,String type,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("pageIndex",pageIndex)
+                            .add("type",type)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getScript&m=socialchat")
+                            .post(formBody)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 获得脚本"+resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 小贝比赛
+     */
+    public static void xiaobeiMatch(String type,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("id",Common.userInfoList.getId())
+                            .add("type",type)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://redis.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=xiaobeiMatch&m=rediscache")
+                            .post(formBody)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 小贝比赛"+resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 删除小贝比赛
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void removeXiaobeiMatch(String type,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("id",Common.userInfoList.getId())
+                            .add("type",type)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://redis.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=removeXiaobeiMatch&m=rediscache")
+                            .post(formBody)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 删除小贝比赛"+resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 重置匹配
+     *
+     * @param value                  价值
+     */
+    public static void resetMatch(String value){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("id",Common.userInfoList.getId())
+                            .add("value",value)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=resetMatch&m=socialchat")
+                            .post(formBody)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 重置匹配"+resultString);
+                        //runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 得到视频
+     *
+     * @param tag                    标签
+     * @param pageIndex              页面索引
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getVideo(String tag,String pageIndex,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("tag",tag)
+                            .add("pageIndex",pageIndex)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getVideo&m=socialchat")
+                            .post(formBody)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 得到视频"+resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /**
+     * 获取真人认证token
+     * @param okHttpResponseCallBack
+     */
+    public static void getRPVerifyToken(String metaInfo,String certNo,String certName,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("metaInfo", metaInfo)
+                            .add("certNo", certNo)
+                            .add("certName", certName)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/otherinterface/aliyun/InitFaceVerify.php")
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 获取真人认证token"+resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 远程请求真人认证信息
+     */
+    public static void saveRPVerifyToken(String certifyId,String cert_name,String cert_no){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("id",Common.userInfoList.getId())
+                            .add("cert_name", cert_name)
+                            .add("cert_no", cert_no)
+                            .add("certifyId", certifyId)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/otherinterface/aliyun/DescribeFaceVerify.php")
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Log.d(TAG, "run: 远程请求真人认证信息"+resultString);
+                        if (!resultString.equals("认证失败")){
+                            Common.userInfoList.setRp_verify_time(resultString);
+                        }
+//                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    //TODO okhttp点赞
+    public static void like(String postid,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("postid", postid)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntanlike&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: okhttp点赞"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
                 }catch (Exception e) {
                     e.printStackTrace();
                 }

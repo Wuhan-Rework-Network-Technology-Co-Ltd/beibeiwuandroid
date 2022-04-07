@@ -188,6 +188,8 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_chat_room);
 
+        Log.d(TAG, "onCreate: 聊天室开始");
+
         VideoViewManager.setConfig(VideoViewConfig.newBuilder()
                 .setPlayerFactory(ExoMediaPlayerFactory.create())
                 .build());
@@ -231,10 +233,10 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
             e.printStackTrace();
         }
 
-//        VideoViewManager.setConfig(VideoViewConfig.newBuilder()
-//                //使用使用IjkPlayer解码
-//                .setPlayerFactory(ExoMediaPlayerFactory.create())
-//                .build());
+        VideoViewManager.setConfig(VideoViewConfig.newBuilder()
+                //使用使用IjkPlayer解码
+                .setPlayerFactory(ExoMediaPlayerFactory.create())
+                .build());
 
         cb_mixing = findViewById(R.id.cb_mixing);
         SeatManager.cb_mixing = cb_mixing;
