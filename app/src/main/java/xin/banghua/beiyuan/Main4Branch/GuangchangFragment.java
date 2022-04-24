@@ -41,6 +41,7 @@ import xin.banghua.beiyuan.Adapter.DongtaiSliderAdapter;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 /**
@@ -76,9 +77,9 @@ public class GuangchangFragment extends Fragment implements BaseSliderView.OnSli
         super.onViewCreated(view, savedInstanceState);
 
         //使用okhttp获取全部用户信息
-        //getDataDongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
+        //getDataDongtai("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=guangchang&m=socialchat");
         //使用okhttp获取推荐的幻灯片
-        getDataSlide("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
+        getDataSlide("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=guangchang&m=socialchat");
 
         initNavigateButton(view);
 
@@ -230,7 +231,7 @@ public class GuangchangFragment extends Fragment implements BaseSliderView.OnSli
             public void run(){
                 sh = new SharedHelper(mView.getContext());
                 userInfo = sh.readUserInfo();
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getDongtai")
                         .add("userID", userInfo.get("userID"))
@@ -260,7 +261,7 @@ public class GuangchangFragment extends Fragment implements BaseSliderView.OnSli
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getSlide")
                         .build();
@@ -309,7 +310,7 @@ public class GuangchangFragment extends Fragment implements BaseSliderView.OnSli
                         Log.d(TAG, "handleMessage: 幻灯片接收的值"+msg.obj.toString());
                         JSONArray jsonArray = new ParseJSONArray(msg.obj.toString()).getParseJSON();
                         sliderJsonArray = jsonArray;
-                        getDataDongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guangchang&m=socialchat");
+                        getDataDongtai("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=guangchang&m=socialchat");
                         //initSlider(mView,jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();

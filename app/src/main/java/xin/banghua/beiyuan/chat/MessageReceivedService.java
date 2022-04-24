@@ -22,45 +22,9 @@ import io.agora.rtm.RtmMessage;
 
 public class MessageReceivedService extends Service{
 
-    public static String mPeerId = "";//当前聊天对象id
-    public static boolean ifMessageSoundOn = true;//是否打开消息提示音，默认打开。会话界面需要判断，是否接收消息是当前聊天对象，是则关闭，不是则打开，如果是且黑屏也打开。
-    public static boolean ifScreenOn = true;//当前是否锁屏
 
     private static final String TAG = "MessageReceivedService";
 
-
-    //角标
-    public static final String BADGE_INTERACT_ALL = "badge_message_all";
-    public static final String BADGE_INTERACT_LIKE = "badge_message_like";
-    public static final String BADGE_INTERACT_AT = "badge_message_at";
-    public static final String BADGE_INTERACT_COMMENT = "badge_message_comment";
-    public static final String BADGE_INTERACT_GIFT = "badge_message_gift";
-    public static final String BADGE_INTERACT_REWARD = "badge_message_reward";
-    public static final String BADGE_INTERACT_XUNYUAN_LIKE = "badge_message_xunyuan_like";
-
-    //消息类型
-    public static final String MESSAGE_TYPE_TEXT = "text";//文本消息
-    public static final String MESSAGE_TYPE_POST = "post";//文本消息,post的cover是网络图片地址，不需要保存
-    public static final String MESSAGE_TYPE_IMAGE = "image";//图片消息,发送方的image保存的是本地地址，接收方的image保存的是缩略图，需要保存mediaId,用于接收方点击时下载原图
-    public static final String MESSAGE_TYPE_LOCATION = "location";//图片消息,cover是截图，需要像图片一样保存
-    public static final String MESSAGE_TYPE_AUDIO = "audio";//文件消息
-    public static final String MESSAGE_TYPE_VIDEO = "video";//文件消息,封面就用视频第一帧
-    public static final String MESSAGE_TYPE_FILE = "file";//文件消息,暂时不做
-    public static final String MESSAGE_TYPE_TIME = "time";//时间消息，不用于发送，只用于本地数据库储存
-    public static final String MESSAGE_TYPE_PROMPT = "prompt";//提示消息，不用于发送，只用于本地数据库储存
-    public static final String MESSAGE_TYPE_CALL_VOICE = "call_voice";//语音呼叫
-    public static final String MESSAGE_TYPE_CALL_VIDEO = "call_video";//视频呼叫
-    public static final String MESSAGE_TYPE_CALL_GAME = "call_game";//游戏呼叫
-    public static final String MESSAGE_TYPE_CALL_FIVE_CHESS = "call_five_chess";//游戏呼叫
-    public static final String MESSAGE_TYPE_CALL_DRAW_GUESS = "call_draw_guess";//游戏呼叫
-    public static final String MESSAGE_TYPE_CALL_KTV = "call_ktv";//ktv呼叫
-    public static final String MESSAGE_TYPE_MATCH_TEXT = "match_text";//匹配文字
-    public static final String MESSAGE_TYPE_MATCH_VOICE = "match_voice";//匹配语音呼叫
-    public static final String MESSAGE_TYPE_MATCH_VIDEO = "match_video";//匹配视频呼叫
-    public static final String MESSAGE_TYPE_MATCH_KTV = "match_ktv";//匹配ktv
-    public static final String MESSAGE_TYPE_MATCH_GAME = "match_game";//匹配游戏
-    public static final String MESSAGE_TYPE_MATCH_FIVE_CHESS = "match_five_chess";//匹配游戏
-    public static final String MESSAGE_TYPE_MATCH_DRAW_GUESS = "match_draw_guess";//匹配游戏
 
     public MessageReceivedService() {
     }
@@ -111,26 +75,6 @@ public class MessageReceivedService extends Service{
                 Log.d(TAG, "onMessageReceived: 收到空消息"+s);
                 return;
             }
-//            String messageJson = rtmMessage.getText();
-//            Log.d(TAG, "onMessageReceived: 收到空消息"+messageJson);
-//            if (messageJson.contains("match_voice")){
-//                Intent intent = new Intent(mContext, VoiceChatViewActivity.class);
-//                intent.putExtra("channel", "match"+Common.userInfoList.getId());
-//                intent.putExtra("targetId", Common.userInfoList.getId());
-//                intent.putExtra("targetPortrait", Common.userInfoList.getPortrait());
-//                intent.putExtra("myRole", "remote");
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-//                mContext.startActivity(intent);
-//            }
-//            if (messageJson.contains("match_video")){
-//                Intent intent = new Intent(mContext, VideoChatViewActivity.class);
-//                intent.putExtra("channel", "match"+Common.userInfoList.getId());
-//                intent.putExtra("targetId", Common.userInfoList.getId());
-//                intent.putExtra("targetPortrait", Common.userInfoList.getPortrait());
-//                intent.putExtra("myRole", "remote");
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-//                mContext.startActivity(intent);
-//            }
         }
 
 

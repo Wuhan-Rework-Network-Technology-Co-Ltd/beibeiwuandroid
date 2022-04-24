@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -30,6 +33,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.agora.chatroom.OkHttpInstance;
+import io.agora.chatroom.OkHttpResponseCallBack;
 import io.agora.chatroom.util.PortraitFrameView;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -67,6 +72,7 @@ public class MeFragment extends Fragment {
     LinearLayout tuiguangma_btn;
     LinearLayout sawme_btn;
     LinearLayout setting_btn;
+    LinearLayout referral_btn;
 
     LinearLayout wallet_btn;
     LinearLayout store_btn;
@@ -110,6 +116,13 @@ public class MeFragment extends Fragment {
             }else {
                 rp_verify_img.setVisibility(View.GONE);
             }
+
+
+            if (TextUtils.isEmpty(Common.userInfoList.getReferral())){
+                referral_btn.setVisibility(View.VISIBLE);
+            }else if (Common.userInfoList.getReferral().equals("0")){
+                referral_btn.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -137,9 +150,61 @@ public class MeFragment extends Fragment {
         follow_tv = view.findViewById(R.id.follow_tv);
         fans_tv = view.findViewById(R.id.fans_tv);
         //vip
-        getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+        getVipinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
 
         initData(view);
+
+
+        referral_btn = view.findViewById(R.id.referral_btn);
+        referral_btn.setVisibility(View.GONE);
+        referral_btn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setIcon(R.drawable.ic_nickname);
+            builder.setTitle("输入推荐人");
+            final AlertDialog dialog = builder.create();
+            View dialogView = View.inflate(getActivity(), R.layout.dialog_foot_edittext, null);
+            dialog.setView(dialogView);
+            dialog.show();
+            EditText editText =  dialogView.findViewById(R.id.editText);
+            editText.setHint("输入推荐人id~");
+            TextView dialog_hint = dialogView.findViewById(R.id.dialog_hint);
+            dialog_hint.setVisibility(View.GONE);
+            Button dismissdialog_btn = dialogView.findViewById(R.id.cancel_btn);
+            dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            Button confirm_btn = dialogView.findViewById(R.id.confirm_btn);
+            confirm_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (TextUtils.isEmpty(editText.getText().toString())){
+                        Toast.makeText(getActivity(),"不能为空",Toast.LENGTH_SHORT);
+                        dialog.dismiss();
+                        return;
+                    }
+                    //推荐人
+                    for (String element: io.agora.chatroom.Common.referralList) {
+                        if (editText.getText().toString().equals(element)){
+                            Toast.makeText(mContext,"获取新手大礼包（3日vip体验，专属头像框，新人曝光推荐）",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    referral_btn.setVisibility(View.GONE);
+                    OkHttpInstance.setReferral(editText.getText().toString(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            Common.userInfoList.setReferral(editText.getText().toString());
+                            io.agora.chatroom.Common.myUserInfoList.setReferral(editText.getText().toString());
+                        }
+                    });
+
+                    dialog.dismiss();
+                }
+            });
+        });
 
         store_btn = view.findViewById(R.id.store_btn);
         store_btn.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +253,7 @@ public class MeFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
                         .build();
@@ -301,14 +366,14 @@ public class MeFragment extends Fragment {
                 //Toast.makeText(mContext, "您的推广码是："+myid, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(mContext, SliderWebViewActivity.class);
                 intent.putExtra("slidername","分享推广码");
-                intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=99999&c=entry&do=referralgetscore_page&m=socialchat&userid="+myid);
+                intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=999999&c=entry&do=referralgetscore_page&m=socialchat&userid="+myid);
                 mContext.startActivity(intent);
             }
         });
         jifen_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getScore("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getscore&m=socialchat");
+                getScore("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getscore&m=socialchat");
             }
         });
         openvip_btn.setOnClickListener(new View.OnClickListener() {
@@ -386,7 +451,7 @@ public class MeFragment extends Fragment {
                     vipconversion_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sorttovip("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sorttovip&m=socialchat",allscore);
+                            sorttovip("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=sorttovip&m=socialchat",allscore);
                         }
                     });
                     Button dismissdialog_btn = view.findViewById(R.id.dismissdialog_btn);
@@ -485,7 +550,7 @@ public class MeFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", myid)
                         .build();
@@ -517,7 +582,7 @@ public class MeFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("allscore", allscore)

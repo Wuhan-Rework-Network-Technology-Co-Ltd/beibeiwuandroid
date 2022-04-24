@@ -31,7 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingBottom="80dp">
+            android:paddingBottom="80dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textView11"
@@ -120,7 +121,7 @@
                 android:id="@+id/switch5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="允许SVIP发起聊天"
+                android:text="允许SVIP和匹配用户直接发起聊天"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
@@ -138,6 +139,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="动态自动播放视频"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="30dp">
+
+            <Switch
+                android:id="@+id/switch7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开启前台通知栏"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 

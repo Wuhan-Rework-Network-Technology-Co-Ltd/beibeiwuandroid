@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -60,6 +61,7 @@ import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoProvider {
@@ -144,11 +146,17 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
         }
     }
 
+    ImageView back_img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+
+        back_img = findViewById(R.id.back_img);
+        back_img.setOnClickListener(v -> {
+            onBackPressed();
+        });
         try {
             Log.d(TAG, "onCreate: Main2Activity");
             //登录判断
@@ -456,7 +464,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
             public void run() {
                 SharedHelper shvalue = new SharedHelper(getApplicationContext());
                 String userID = shvalue.readUserInfo().get("userID");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", userID)
                         .add("pageindex", pageindex+"")
@@ -473,7 +481,7 @@ public class Main2Activity extends AppCompatActivity implements RongIM.UserInfoP
                     Message message = handler.obtainMessage();
                     message.obj = response.body().string();
                     message.what = 1;
-                    Log.d(TAG, "run: Userinfo发送的值" + message.obj.toString());
+                    Log.d(TAG, "run: 好友列表的值" + message.obj.toString());
                     handler.sendMessageDelayed(message, 10);
                 } catch (Exception e) {
                     e.printStackTrace();

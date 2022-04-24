@@ -34,6 +34,7 @@ import xin.banghua.beiyuan.Adapter.UserInfoAdapter;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class SawMeActivity extends AppCompatActivity {
     private static final String TAG = "SawMeActivity";
@@ -69,7 +70,7 @@ public class SawMeActivity extends AppCompatActivity {
 
 
         //vip
-        getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+        getVipinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
 
 
     }
@@ -81,7 +82,7 @@ public class SawMeActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
                         .build();
@@ -169,7 +170,7 @@ public class SawMeActivity extends AppCompatActivity {
                 Map<String,String> locationInfo = sh.readLocation();
                 SharedHelper shuserinfo = new SharedHelper(SawMeActivity.this.getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getUserInfo")
                         .add("userID",myid)

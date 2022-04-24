@@ -1,8 +1,10 @@
 package io.agora.chatroom.manager;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static io.agora.chatroom.ThreadUtils.runOnUiThread;
 import static io.agora.chatroom.ktv.KtvFrameLayout.ktvView;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -92,8 +94,30 @@ public final class ChatRoomManager extends SeatManager implements MessageManager
     }
 
 
+    /**
+     * Activity是否在前台
+     * @param context
+     * @return
+     */
+    private boolean isOnForground(Context context){
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcessInfoList = activityManager.getRunningAppProcesses();
+        if(appProcessInfoList == null){
+            return false;
+        }
+
+        String packageName = context.getPackageName();
+        for(ActivityManager.RunningAppProcessInfo processInfo : appProcessInfoList){
+            if(processInfo.processName.equals(packageName) && processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND ){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static  Intent startIntent;
     public void joinChannel(String channelId) {
+        Log.d(TAG, "joinChannel: 加入平道了又");
         if (channelId.equals("")){
             return;
         }
@@ -104,7 +128,14 @@ public final class ChatRoomManager extends SeatManager implements MessageManager
                 @Override
                 public void onSuccess(Void aVoid) {
 
-                    mContext.startService(startIntent);
+                    try {
+                        if(isOnForground(mContext)){
+                            mContext.startService(startIntent);
+                        }
+                    }catch (Exception e){
+                        Log.e(TAG, "onSuccess: 抛出异常");
+                    }
+
 
 
                     Member member = new Member(Common.myUserInfoList.getId(), Common.myUserInfoList.getNickname(),

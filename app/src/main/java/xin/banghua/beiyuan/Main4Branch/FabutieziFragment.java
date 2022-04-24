@@ -50,6 +50,7 @@ import xin.banghua.beiyuan.CheckPermission;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.utils.MD5Tool;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 public class FabutieziFragment extends Fragment {
@@ -207,7 +208,7 @@ public class FabutieziFragment extends Fragment {
                 platename = ((RadioButton)mView.findViewById(bankuai_rg.getCheckedRadioButtonId())).getText().toString();
 
                 release_btn.setClickable(false);
-                postFabutiezi("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabutiezi&m=socialchat");
+                postFabutiezi("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=fabutiezi&m=socialchat");
 
             }
         });
@@ -316,7 +317,7 @@ public class FabutieziFragment extends Fragment {
                 SharedHelper shuserinfo = SharedHelper.getInstance(App.getApplication());
                 String myid = shuserinfo.readUserInfo().get("userID");
                 //开始网络传输
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
                 MultipartBody.Builder multipartBody = new MultipartBody.Builder();
                 multipartBody.setType(MultipartBody.FORM);

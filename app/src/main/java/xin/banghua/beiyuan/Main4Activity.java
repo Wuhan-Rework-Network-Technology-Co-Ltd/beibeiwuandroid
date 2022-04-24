@@ -50,6 +50,8 @@ import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.BindAccountActivity;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.match.MatchActivity;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class Main4Activity extends AppCompatActivity {
     Uniquelogin uniquelogin;
@@ -76,7 +78,7 @@ public class Main4Activity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_haoyou:
 
-                    Intent intent2 = new Intent(Main4Activity.this, Main2Activity.class);
+                    Intent intent2 = new Intent(Main4Activity.this, MatchActivity.class);
                     startActivity(intent2);
                     return true;
                 case R.id.navigation_xiaoxi:
@@ -128,7 +130,7 @@ public class Main4Activity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.navigation_dongtai);
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this,handler);
-        badgeBottomNav.getDataFriendsapply("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
+        badgeBottomNav.getDataFriendsapply("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
         //未读信息监听
         iUnReadMessageObserver = new IUnReadMessageObserver() {
             @Override
@@ -158,12 +160,12 @@ public class Main4Activity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run(){
-                    OkHttpClient client = new OkHttpClient();
+                    OkHttpClient client = OkHttpInstance.getInstance();
                     RequestBody formBody = new FormBody.Builder()
                             .add("system", "android")
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getversion&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getversion&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -200,12 +202,12 @@ public class Main4Activity extends AppCompatActivity {
             io.agora.chatroom.model.Constant.sUserId = Integer.parseInt(Common.myID);
             Log.d(TAG, "ifSignin: 聊天室我的id"+io.agora.chatroom.model.Constant.sUserId);
             uniquelogin = new Uniquelogin(this,handler);
-            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
             //登录后，更新定位信息，包括经纬度和更新时间
             //获取用户id和定位值
 //            SharedHelper shlocation = new SharedHelper(getApplicationContext());
 //            Map<String,String> locationInfo = shlocation.readLocation();
-            //postLocationInfo(userInfo.get("userID"),locationInfo.get("latitude"),locationInfo.get("longitude"),"https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=updatelocation&m=socialchat");
+            //postLocationInfo(userInfo.get("userID"),locationInfo.get("latitude"),locationInfo.get("longitude"),"https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=updatelocation&m=socialchat");
             //开启定位服务
 //            Intent startIntent = new Intent(this, LocationService.class);
 //            startService(startIntent);
@@ -229,7 +231,7 @@ public class Main4Activity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", userID)
                         .build();

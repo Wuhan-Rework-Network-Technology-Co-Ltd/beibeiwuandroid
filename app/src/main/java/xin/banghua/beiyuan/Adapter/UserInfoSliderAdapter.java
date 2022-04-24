@@ -39,6 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.agora.chatroom.gift.GiftList;
 import io.agora.chatroom.gift.GiftSentAdapter;
 import io.agora.chatroom.util.PortraitFrameView;
+import io.agora.chatroom.util.WealthAndGlamour;
 import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
@@ -75,6 +76,12 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
     UserInfoCallBack userInfoCallBack;
     public void setBtnListen(UserInfoCallBack userInfoCallBack){
         this.userInfoCallBack = userInfoCallBack;
+    }
+
+    //设置按钮监听
+    UserInfoCallBack userInfoCallBackDeleteFans;
+    public void setBtnListenDeleteFans(UserInfoCallBack userInfoCallBackDeleteFans){
+        this.userInfoCallBackDeleteFans = userInfoCallBackDeleteFans;
     }
 
     List<UserInfoList> userInfoLists = new ArrayList<>();
@@ -221,13 +228,16 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
         }else if (viewHolder instanceof UserinfoHolder){
             UserInfoList currentItem = userInfoLists.get(i);
 
+            ((UserinfoHolder) viewHolder).wealth_view.initShow("wealth",currentItem.getAll_money());
+            ((UserinfoHolder) viewHolder).glamour_view.initShow("glamour",currentItem.getAll_income());
+
             ((UserinfoHolder) viewHolder).lv_img.setImageResource(Common.getLevelFromUser(currentItem));
 
             ((UserinfoHolder) viewHolder).online_tv.setText(currentItem.getOnline());
             if (currentItem.getOnline().equals("在线")){
-                Glide.with(mContext).load(R.mipmap.green_point).into( ((UserinfoHolder) viewHolder).online_img);
+                Glide.with(mContext).load(R.mipmap.green_point).into(((UserinfoHolder) viewHolder).online_img);
             }else {
-                Glide.with(mContext).load(R.mipmap.gray_point).into( ((UserinfoHolder) viewHolder).online_img);
+                Glide.with(mContext).load(R.mipmap.gray_point).into(((UserinfoHolder) viewHolder).online_img);
             }
 
             ((UserinfoHolder) viewHolder).portraitFrameView.setPortraitFrame(currentItem.getPortraitframe());
@@ -272,7 +282,6 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                     Resources resources = mContext.getResources();
                     Drawable drawable = resources.getDrawable(R.mipmap.huizhang,null);
                     ((UserinfoHolder) viewHolder).userVIP.setForeground(drawable);
-
 
                     Glide.with(mContext)
                             .asBitmap()
@@ -407,6 +416,61 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
             });
 
 
+            if (userInfoCallBackDeleteFans!=null){
+                ((UserinfoHolder) viewHolder).userinfoLayout.setOnLongClickListener(new View.OnLongClickListener(){
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Log.d(TAG, "长按中");
+                        final DialogPlus dialog = DialogPlus.newDialog(mContext)
+                                .setAdapter(new BaseAdapter() {
+                                    @Override
+                                    public int getCount() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public Object getItem(int position) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public long getItemId(int position) {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public View getView(int position, View convertView, ViewGroup parent) {
+                                        return null;
+                                    }
+                                })
+                                .setFooter(R.layout.dialog_foot_confirm)
+                                .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
+                                .create();
+                        dialog.show();
+                        View view = dialog.getFooterView();
+                        TextView prompt = view.findViewById(R.id.prompt_tv);
+                        prompt.setText("确定要删除吗？");
+                        Button dismissdialog_btn = view.findViewById(R.id.cancel_btn);
+                        dismissdialog_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        Button confirm_btn = view.findViewById(R.id.confirm_btn);
+                        confirm_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                userInfoCallBackDeleteFans.getUserInfo(currentItem);
+                                userInfoLists.remove(i);
+                                notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        });
+                        return true;
+                    }
+                });
+            }
             if(userInfoCallBack!=null){
                 ((UserinfoHolder) viewHolder).custom_btn.setVisibility(View.VISIBLE);
 
@@ -454,7 +518,7 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
                         confirm_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                OkHttpInstance.deleteFriendNumber(currentItem.getId(),responseString -> {
+                                OkHttpInstance.deleteFriendNumber(Common.userInfoList.getId(),currentItem.getId(),responseString -> {
                                     userInfoLists.remove(i);
                                     notifyDataSetChanged();
                                 });
@@ -546,6 +610,10 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
     public class UserinfoHolder extends RecyclerView.ViewHolder{
 
         private static final String TAG = "UserinfoHolder";
+
+        WealthAndGlamour wealth_view;
+        WealthAndGlamour glamour_view;
+
         TextView userID;
         CircleImageView userPortrait;
         TextView userNickName;
@@ -579,6 +647,10 @@ public class UserInfoSliderAdapter extends RecyclerView.Adapter implements  View
         ImageView rp_verify_img;
         public UserinfoHolder(@NonNull View itemView) {
             super(itemView);
+
+
+            wealth_view = itemView.findViewById(R.id.wealth_view);
+            glamour_view = itemView.findViewById(R.id.glamour_view);
 
             rp_verify_img = itemView.findViewById(R.id.rp_verify_img);
 

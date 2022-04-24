@@ -77,6 +77,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <service
+            android:name=".chat.MessageReceivedForegroundService"
+            android:persistent="true"
+            android:priority="1000" /> <!-- 注：此service必须在2.2.5版本以后（包括2.2.5版本）加入 -->
+        <activity
+            android:name=".MainBranch.SousuoResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainBranch.SousuoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Personage.NewPersonageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".match.MatchActivity"
+            android:exported="false" />
         <activity
             android:name=".Main4Branch.DouyinActivity"
             android:exported="false" />

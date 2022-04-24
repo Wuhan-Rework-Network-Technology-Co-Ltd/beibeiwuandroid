@@ -77,7 +77,7 @@ public class WalletActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SliderWebViewActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
             intent.putExtra("slidername","账单");
-            intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=99999&c=entry&do=user_bill&m=socialchat&id="+Common.myID);
+            intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=999999&c=entry&do=user_bill&m=socialchat&id="+Common.myID);
             startActivity(intent);
         });
         withdraw_layout.setOnClickListener(v -> {

@@ -40,12 +40,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.App;
 import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.Personage.SetRemarkAndTagActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class ConversationSettingActivity extends AppCompatActivity {
     private static final String TAG = "ConversationSettingActi";
@@ -306,7 +308,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        addBlacklist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat",targetId);
+                        addBlacklist("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addblacklist&m=socialchat",targetId);
                         dialog.dismiss();
                     }
                 });
@@ -403,7 +405,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
     }
 
     public void initPersonage(JSONObject jsonObject) throws JSONException {
-        Glide.with(this)
+        Glide.with(App.getApplication())
                 .asBitmap()
                 .load(Common.getOssResourceUrl(jsonObject.getString("portrait")))
                 .into(portrait);
@@ -443,7 +445,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", targetId)
                         .build();
@@ -476,7 +478,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("yourid", targetId)
@@ -509,7 +511,7 @@ public class ConversationSettingActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("yourid", targetId)

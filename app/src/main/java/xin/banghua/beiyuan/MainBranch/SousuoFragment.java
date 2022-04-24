@@ -48,6 +48,7 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.CityAdapter;
 import xin.banghua.beiyuan.Signin.ProvinceAdapter;
 import xin.banghua.beiyuan.bean.AddrBean;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 /**
@@ -127,7 +128,7 @@ public class SousuoFragment extends Fragment {
         online = view.findViewById(R.id.online);
 
 
-        //getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+        getVipinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
         //初始化导航按钮
         initNavigateButton(view);
 
@@ -261,19 +262,35 @@ public class SousuoFragment extends Fragment {
         direct_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: 直接搜索"+getDirectBundle().getString("nameOrPhone"));
+                Log.d(TAG, "onClick: 直接搜索"+searchView.getQuery().toString());
 //                Navigation.findNavController(v).navigate(R.id.sousuo_result_action, getDirectBundle());
-                Bundle bundle = new Bundle();
-                bundle.putString("type","direct");
-                bundle.putString("nameOrPhone",searchView.getQuery().toString());
-                Navigation.findNavController(view).navigate(R.id.sousuo_result_action, bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("type","direct");
+//                bundle.putString("nameOrPhone",searchView.getQuery().toString());
+//                Navigation.findNavController(view).navigate(R.id.sousuo_result_action, bundle);
+
+                Intent intent = new Intent(getActivity(),SousuoResultActivity.class);
+                intent.putExtra("type","direct");
+                intent.putExtra("nameOrPhone",searchView.getQuery().toString());
+                getActivity().startActivity(intent);
             }
         });
         condition_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: 条件搜索");
-                Navigation.findNavController(v).navigate(R.id.sousuo_result_action, getConditionBundle(view));
+                //Navigation.findNavController(v).navigate(R.id.sousuo_result_action, getConditionBundle(view));
+                Intent intent = new Intent(getActivity(),SousuoResultActivity.class);
+                intent.putExtra("type","condition");
+                intent.putExtra("userAge",userAge_et.getText().toString());
+                intent.putExtra("userRegion",userRegion_et.getText().toString());
+                userGender = ((RadioButton) view.findViewById(userGender_rg.getCheckedRadioButtonId())).getText().toString();
+                userProperty = ((RadioButton) view.findViewById(userProperty_rg.getCheckedRadioButtonId())).getText().toString();
+                userOnline = ((RadioButton) view.findViewById(userOnline_rg.getCheckedRadioButtonId())).getText().toString();
+                intent.putExtra("userGender",userGender);
+                intent.putExtra("userProperty",userProperty);
+                intent.putExtra("userOnline",userOnline);
+                getActivity().startActivity(intent);
             }
         });
     }
@@ -414,7 +431,7 @@ public class SousuoFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
                         .build();

@@ -28,6 +28,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Main5Branch.SomeonesluntanActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.mediapicker.Image.ImagePicker;
 
 public class FabugentieActivity extends AppCompatActivity {
@@ -141,7 +142,7 @@ public class FabugentieActivity extends AppCompatActivity {
 
                 followtext = content_et.getText().toString();
 
-                postFabugentie("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabugentie&m=socialchat");
+                postFabugentie("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=fabugentie&m=socialchat");
 
             }
         });
@@ -227,7 +228,7 @@ public class FabugentieActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
                 //开始网络传输
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
                 MultipartBody.Builder multipartBody = new MultipartBody.Builder();
                 multipartBody.setType(MultipartBody.FORM);

@@ -2,7 +2,6 @@ package xin.banghua.beiyuan.Main2Branch;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,7 +35,6 @@ import xin.banghua.beiyuan.Adapter.UserInfoCallBack;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
 import xin.banghua.beiyuan.BadgeBottomNav;
-import xin.banghua.beiyuan.Main2Activity;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
@@ -158,8 +156,7 @@ public class NewFriend extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //this.finish(); // back button
-                Intent intent2 = new Intent(NewFriend.this, Main2Activity.class);
-                startActivity(intent2);
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -258,7 +255,7 @@ public class NewFriend extends AppCompatActivity {
             public void run(){
                 SharedHelper shvalue = new SharedHelper(getApplicationContext());
                 String userID = shvalue.readUserInfo().get("userID");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", userID)
                         .add("pageindex", pageindex+"")

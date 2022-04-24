@@ -32,6 +32,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class FlashPhotoPreviewActivity extends RongBaseNoActionbarActivity {
     Button cancel_btn,confirm_btn;
@@ -103,7 +104,7 @@ public class FlashPhotoPreviewActivity extends RongBaseNoActionbarActivity {
                         senttime = message.getSentTime()+"";
                         Log.d(TAG,"闪图消息发送成功"+message.getContent().toString()+"|"+message.toString());
                         //保存到服务器
-                        saveFlashPhoto("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=saveflashphoto&m=socialchat");
+                        saveFlashPhoto("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=saveflashphoto&m=socialchat");
                     }
                     @Override
                     public void onError(io.rong.imlib.model.Message message, RongIMClient.ErrorCode errorCode) {
@@ -154,7 +155,7 @@ public class FlashPhotoPreviewActivity extends RongBaseNoActionbarActivity {
                 File tempFile =new File(photoPath.trim());
                 String fileName = tempFile.getName();
                 //开始网络传输
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)

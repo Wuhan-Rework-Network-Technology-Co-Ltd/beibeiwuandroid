@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -62,8 +63,10 @@ import xin.banghua.beiyuan.MainBranch.LocationService;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.chat.MessageReceivedForegroundService;
 import xin.banghua.beiyuan.custom_ui.ad.CommonCallBackInterfaceWithSlashAd;
 import xin.banghua.beiyuan.custom_ui.ad.SplashAdFrameLayout;
+import xin.banghua.beiyuan.match.MatchActivity;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
@@ -98,10 +101,10 @@ public class LaunchActivity extends Activity {
 //            }
 //        });
 
-        App.getApplication().initVideoCaptureAsync();
 
 
-        intent = new Intent(LaunchActivity.this, Main4Activity.class);
+
+        intent = new Intent(LaunchActivity.this, MatchActivity.class);
 
         Log.d(TAG, "onCreate: applet OSS测试"+ Common.getOssResourceUrl("https://appletattachment.oss-cn-beijing.aliyuncs.com/images/11/2018/10/ASPPPs46NZmnZpYUhp9Y4FES06evuu.jpg"));
         Log.d(TAG, "onCreate: moyuan OSS测试"+ Common.getOssResourceUrl("https://moyuanoss.oss-cn-shanghai.aliyuncs.com/images/11/2018/10/ASPPPs46NZmnZpYUhp9Y4FES06evuu.jpg"));
@@ -166,6 +169,10 @@ public class LaunchActivity extends Activity {
         LanSoEditor.initSDK(LaunchActivity.this, null);
         LanSongFileUtil.setFileDir("data/data/xin.banghua.beiyuan/files/"+System.currentTimeMillis()+"/");
         LibyuvUtil.loadLibrary();
+
+
+
+
 
         RongIM.setConversationListBehaviorListener(new RongIM.ConversationListBehaviorListener() {
             @Override
@@ -255,6 +262,44 @@ public class LaunchActivity extends Activity {
 //        Log.d(TAG, "onCreate: 图片地址"+Common.imageTranslateUri(mContext,R.mipmap.emoji_1));
 //        Glide.with(mContext).load(Common.imageTranslateUri(mContext,R.mipmap.emoji_1)).into(launchImage);
         launchImage.setImageResource(R.drawable.launch);
+
+
+
+
+
+        if(io.agora.chatroom.Common.referralList.length==0){
+            io.agora.chatroom.OkHttpInstance.getReferral(responseString -> {
+                io.agora.chatroom.Common.referralList = responseString.split(",");
+            });
+        }
+
+        launchImage.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //是否开启前端通知栏
+                if (SharedHelper.getInstance(mContext).readForegroundNotificationSetting()){
+                    // 启动服务
+                    if (!CheckPermission.verifyPushPermission(LaunchActivity.this)){
+                        Toast.makeText(mContext, "通知权限未开启，可能导致好友消息收到不及时", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Intent mForegroundService;
+                        if (!MessageReceivedForegroundService.serviceIsLive) {
+                            // Android 8.0使用startForegroundService在前台启动新服务
+                            mForegroundService = new Intent(mContext, MessageReceivedForegroundService.class);
+                            mForegroundService.putExtra("Foreground", "This is a foreground service.");
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                startForegroundService(mForegroundService);
+                            } else {
+                                startService(mForegroundService);
+                            }
+                        } else {
+                            Toast.makeText(mContext, "前台服务正在运行中...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                }
+            }
+        },1000);
     }
 
     Uniquelogin uniquelogin;
@@ -277,12 +322,12 @@ public class LaunchActivity extends Activity {
             io.agora.chatroom.model.Constant.sUserId = Integer.parseInt(Common.myID);
             Log.d(TAG, "ifSignin: 聊天室我的id"+io.agora.chatroom.model.Constant.sUserId);
             uniquelogin = new Uniquelogin(this,handler);
-            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
             //登录后，更新定位信息，包括经纬度和更新时间
             //获取用户id和定位值
             SharedHelper shlocation = new SharedHelper(getApplicationContext());
             Map<String,String> locationInfo = shlocation.readLocation();
-            //postLocationInfo(userInfo.get("userID"),locationInfo.get("latitude"),locationInfo.get("longitude"),"https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=updatelocation&m=socialchat");
+            //postLocationInfo(userInfo.get("userID"),locationInfo.get("latitude"),locationInfo.get("longitude"),"https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=updatelocation&m=socialchat");
             //开启定位服务
             Intent startIntent = new Intent(this, LocationService.class);
             startService(startIntent);
@@ -367,7 +412,7 @@ public class LaunchActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", userID)
                         .build();
@@ -660,7 +705,7 @@ public class LaunchActivity extends Activity {
 
     public void intentMain(int i){
         Log.d(TAG, "onStart: 跳转首页intentMain"+i);
-        Intent intent = new Intent(LaunchActivity.this, Main4Activity.class);
+        Intent intent = new Intent(LaunchActivity.this, MatchActivity.class);
         startActivity(intent);
         finish();
         //实现定位授权，初始图片，

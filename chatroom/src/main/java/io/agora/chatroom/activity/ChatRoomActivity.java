@@ -428,8 +428,7 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
                         initMessageRecyclerView();
                         initManager();
                         isRefresh = true;
-
-
+                        
                         if (mChannelId.equals(Constant.sUserId+"")){
                             switch_room_btn.setVisibility(VISIBLE);
                             switch_room_tv.setVisibility(VISIBLE);
@@ -865,11 +864,11 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomEvent
         mWebView.setVisibility(VISIBLE);
 
 
-        String url = "https://console.banghua.xin/app/index.php?i=99999&c=entry&do=Game_fivechess&m=socialchat&channel_id="+mChannelId+"&user_one="+ user_one + "&user_two="+user_two+"&myId="+ Constant.sUserId;
+        String url = "https://console.banghua.xin/app/index.php?i=999999&c=entry&do=Game_fivechess&m=socialchat&channel_id="+mChannelId+"&user_one="+ user_one + "&user_two="+user_two+"&myId="+ Constant.sUserId;
         if (mChannelType.equals(FIVE_CHESS_TYPE)){
-            url = "https://console.banghua.xin/app/index.php?i=99999&c=entry&do=Game_fivechess&m=socialchat&channel_id="+mChannelId+"&user_one="+ user_one + "&user_two="+user_two+"&myId="+ Constant.sUserId;
+            url = "https://console.banghua.xin/app/index.php?i=999999&c=entry&do=Game_fivechess&m=socialchat&channel_id="+mChannelId+"&user_one="+ user_one + "&user_two="+user_two+"&myId="+ Constant.sUserId;
         }else if (mChannelType.equals(DRAW_GUESS_TYPE)){
-            url = "https://console.banghua.xin/app/index.php?i=99999&c=entry&do=Game_drawguess&m=socialchat&channel_id="+mChannelId+"&myId="+ Constant.sUserId;
+            url = "https://console.banghua.xin/app/index.php?i=999999&c=entry&do=Game_drawguess&m=socialchat&channel_id="+mChannelId+"&myId="+ Constant.sUserId;
         }
         Log.d(TAG, "init: 游戏地址"+url);
 

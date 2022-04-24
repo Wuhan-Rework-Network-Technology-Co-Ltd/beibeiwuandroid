@@ -7,17 +7,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xin.banghua.beiyuan.MainActivity;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class OkHttpHelper {
     Response response = null;
@@ -42,7 +40,7 @@ public class OkHttpHelper {
             @Override
             public void run() {
                 try {
-                    OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
+                    OkHttpClient client = OkHttpInstance.getInstance();//创建OkHttpClient对象
                     Request request = new Request.Builder()
                             .url(url)//请求接口。如果需要传参拼接到接口后面。
                             .build();//创建Request 对象
@@ -68,7 +66,7 @@ public class OkHttpHelper {
 
     //TODO 异步的GET
     public void getDataAsync(String url) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = OkHttpInstance.getInstance();
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -99,7 +97,7 @@ public class OkHttpHelper {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("acid", "4")
                         .build();
@@ -126,7 +124,7 @@ public class OkHttpHelper {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userAccount", userAccount)
                         .add("userPassword",userPassword)

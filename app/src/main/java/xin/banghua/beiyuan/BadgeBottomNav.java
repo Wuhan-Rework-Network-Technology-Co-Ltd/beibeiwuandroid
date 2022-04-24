@@ -19,6 +19,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class BadgeBottomNav {
     //未读信息监听相关
@@ -80,7 +81,7 @@ public class BadgeBottomNav {
             public void run(){
                 SharedHelper shvalue = new SharedHelper(context.getApplicationContext());
                 String userID = shvalue.readUserInfo().get("userID");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", userID)
                         .build();

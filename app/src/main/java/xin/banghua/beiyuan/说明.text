@@ -1,3 +1,14 @@
+//文字阴影
+                        android:shadowColor="@color/black"
+                        android:shadowRadius="1"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+
+//举报
+ReportDialog reportDialog = new ReportDialog(ConversationSettingActivity.this);
+reportDialog.show(ReportDialog.REPORT_TYPE_1,targetId);
+
+
 //获取adapter中间位置
 int currentPosition = ((RecyclerView.LayoutParams) recyclerView.getChildAt(0).getLayoutParams()).getViewAdapterPosition();
 
@@ -48,7 +59,7 @@ viewHolder.userVIP.setForeground(drawable);
 
 
 if (result.get("resultStatus").equals("9000"))//一定要用.equals
-https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=tuijian&m=socialchat
+https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=tuijian&m=socialchat
 <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -161,7 +172,7 @@ String myportrait = shuserinfo.readUserInfo().get("userPortrait");
                 SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getUserInfo")
                         .build();

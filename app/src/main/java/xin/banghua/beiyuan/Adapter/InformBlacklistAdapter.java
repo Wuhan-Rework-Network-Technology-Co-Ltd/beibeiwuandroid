@@ -25,6 +25,7 @@ import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main4Branch.InformReasonActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class InformBlacklistAdapter extends BaseAdapter {
@@ -85,7 +86,7 @@ public class InformBlacklistAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 //拉黑
-                addblacklist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
+                addblacklist("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addblacklist&m=socialchat");
             }
         });
 
@@ -95,7 +96,7 @@ public class InformBlacklistAdapter extends BaseAdapter {
             delete_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deletepost("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deletepost&m=socialchat");
+                    deletepost("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deletepost&m=socialchat");
                 }
             });
         }
@@ -138,7 +139,7 @@ public class InformBlacklistAdapter extends BaseAdapter {
                 shuserinfo = new SharedHelper(context.getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid",myid)
                         .add("yourid",userid)
@@ -168,7 +169,7 @@ public class InformBlacklistAdapter extends BaseAdapter {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("postid",itemid)
                         .build();

@@ -205,11 +205,7 @@ public class PersonageFragment extends Fragment {
                 make_follow.setBackgroundResource(R.drawable.red_10);
                 make_follow.setTextColor(getResources().getColor(R.color.text_color_4));
                 OkHttpInstance.unfollow(mUserID,responseString -> {
-                    for (int i = 0;i < Common.followList.size();i++){
-                        if (Common.followList.get(i).getUserId().equals(mUserID)){
-                            Common.followList.remove(i);
-                        }
-                    }
+
                 });
             }
         });
@@ -261,7 +257,7 @@ public class PersonageFragment extends Fragment {
                         move_friendapply.setVisibility(View.VISIBLE);
                         make_friend.setEnabled(false);
                         make_friend.setText("申请好友中，等待对方同意");
-                        getFriendNumber("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsnumber&m=socialchat");
+                        getFriendNumber("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=friendsnumber&m=socialchat");
                         dialog.dismiss();
                     }
                 });
@@ -273,13 +269,13 @@ public class PersonageFragment extends Fragment {
             public void onClick(View v) {
 //                if (Common.vipTime == null && !Common.ifBuySVip) {
 //                    Common.ifBuySVip = false;
-//                    getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
+//                    getVipinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
 //                }else {
 //                    moveFriendApply();
 //                }
 
                 Common.ifBuySVip = false;
-                getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
+                getVipinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",1);
             }
         });
 
@@ -342,7 +338,7 @@ public class PersonageFragment extends Fragment {
                             Toast.makeText(mContext,"已加入黑名单",Toast.LENGTH_LONG).show();
 
 
-                            addBlacklist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addblacklist&m=socialchat");
+                            addBlacklist("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addblacklist&m=socialchat");
                             dialog.dismiss();
                         }
                     });
@@ -389,7 +385,7 @@ public class PersonageFragment extends Fragment {
                         public void onClick(View v) {
                             add_blacklist_tv.setText("加入黑名单");
                             Toast.makeText(mContext,"已移除黑名单",Toast.LENGTH_LONG).show();
-                            deleteBlackList("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteblacklist&m=socialchat");
+                            deleteBlackList("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deleteblacklist&m=socialchat");
                             dialog.dismiss();
                         }
                     });
@@ -481,13 +477,13 @@ public class PersonageFragment extends Fragment {
             public void onClick(View v) {
 //                if (Common.vipTime == null && !Common.ifBuySVip) {
 //                    Common.ifBuySVip = false;
-//                    getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
+//                    getVipinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
 //                }else {
 //                    svipChat();
 //                }
 
                 Common.ifBuySVip = false;
-                getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
+                getVipinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat",2);
             }
         });
 
@@ -507,7 +503,7 @@ public class PersonageFragment extends Fragment {
 
         getDataPersonage(getString(R.string.personage_url));
 
-        addSawMe("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addsawme&m=socialchat");
+        addSawMe("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addsawme&m=socialchat");
 
         ifFriend(getString(R.string.iffriendnew_url));
     }
@@ -519,7 +515,7 @@ public class PersonageFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(mContext);
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
                         .build();
@@ -554,7 +550,7 @@ public class PersonageFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(mContext);
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("yourid", mUserID)
@@ -587,7 +583,7 @@ public class PersonageFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(App.getApplication());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("yourid", mUserID)
@@ -825,7 +821,7 @@ public class PersonageFragment extends Fragment {
                         Log.d(TAG, "handleMessage: 进入好友判断");
                         if (msg.obj.toString().equals("好友人数未超过限制")){
                             Log.d(TAG, "handleMessage: 跳转添加好友");
-                            makeFriend("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addfriend&m=socialchat");
+                            makeFriend("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addfriend&m=socialchat");
                         }else {
                             Log.d(TAG, "handleMessage: 会员数量满");
                             make_friend.setText("今日免费5次已用完，请办理会员或明日再试");
@@ -988,7 +984,7 @@ public class PersonageFragment extends Fragment {
                 }
             });
         }else {
-            deleteFriendNumber(mUserID,"https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
+            deleteFriendNumber(mUserID,"https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
         }
     }
     public void svipChat(){
@@ -1046,7 +1042,7 @@ public class PersonageFragment extends Fragment {
                 public void run(){
                     SharedHelper shuserinfo = new SharedHelper(mContext.getApplicationContext());
                     String myid = shuserinfo.readUserInfo().get("userID");
-                    OkHttpClient client = new OkHttpClient();
+                    OkHttpClient client = OkHttpInstance.getInstance();
                     RequestBody formBody = new FormBody.Builder()
                             .add("myid", myid)
                             .add("yourid", mUserID)
@@ -1078,7 +1074,7 @@ public class PersonageFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(mContext.getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
                 Log.d(TAG, "删除新好友myid"+myid+"yourid"+yourid);
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("yourid", yourid)
@@ -1106,7 +1102,7 @@ public class PersonageFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", mUserID)
                         .build();
@@ -1140,7 +1136,7 @@ public class PersonageFragment extends Fragment {
                 String yourid = shuserinfo.readUserInfo().get("userID");
                 String yournickname = shuserinfo.readUserInfo().get("userNickName");
                 String yourportrait = shuserinfo.readUserInfo().get("userPortrait");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", mUserID)
                         .add("yourid", yourid)
@@ -1176,7 +1172,7 @@ public class PersonageFragment extends Fragment {
             public void run(){
                 SharedHelper shuserinfo = new SharedHelper(App.getApplication().getApplicationContext());
                 String yourid = shuserinfo.readUserInfo().get("userID");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", mUserID)
                         .add("yourid", yourid)
@@ -1209,7 +1205,7 @@ public class PersonageFragment extends Fragment {
                 String yourid = shuserinfo.readUserInfo().get("userID");
                 String yournickname = shuserinfo.readUserInfo().get("userNickName");
                 String yourportrait = shuserinfo.readUserInfo().get("userPortrait");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", mUserID)
                         .add("yourid", yourid)
@@ -1242,7 +1238,7 @@ public class PersonageFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(App.getApplication().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("yourid", mUserID)
@@ -1275,7 +1271,7 @@ public class PersonageFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(App.getApplication().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .build();

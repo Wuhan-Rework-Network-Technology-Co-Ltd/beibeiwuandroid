@@ -132,19 +132,17 @@
                     android:textColor="@color/color_white"
                     android:textSize="11sp" />
 
-                <ImageView
+                <io.agora.chatroom.util.WealthAndGlamour
+                    android:id="@+id/wealth_view"
                     android:layout_width="48dp"
-                    android:layout_height="15dp"
-                    android:layout_marginLeft="8dp"
-                    android:src="@mipmap/xin" />
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="8dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="15dp"
-                    android:layout_marginLeft="-30dp"
-                    android:text="  100"
-                    android:textColor="@color/color_level"
-                    android:textSize="11sp" />
+                <io.agora.chatroom.util.WealthAndGlamour
+                    android:id="@+id/glamour_view"
+                    android:layout_width="48dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="8dp"/>
 
 
                 <TextView

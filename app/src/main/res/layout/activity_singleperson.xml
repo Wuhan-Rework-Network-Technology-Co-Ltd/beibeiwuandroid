@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Personage.PersonageActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -178,6 +179,7 @@
                             android:text=" 100"
                             android:textColor="@color/color_level"
                             android:textSize="11sp" />
+
                     </LinearLayout>
 
                     <TextView
@@ -261,7 +263,7 @@
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="他(她)的帖子"
+                    android:text="他(她)的全部帖子"
                     android:textColor="@color/color333"
                     android:textSize="14sp" />
                 <RelativeLayout
@@ -509,6 +511,7 @@
                     android:textColor="@color/color_zjlt"
                     android:layout_marginLeft="15dp"/>
                 <TextView
+                    android:id="@+id/chat_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="开通svip会员可免去添加好友过程直接发起聊天"
@@ -567,7 +570,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
             <LinearLayout
                 android:background="@drawable/bg_az"
                 android:layout_marginTop="10dp"
@@ -643,5 +646,11 @@
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 tools:listitem="@layout/image_text_view"/>
         </LinearLayout>
+
+
+        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+            android:id="@+id/luntan_RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

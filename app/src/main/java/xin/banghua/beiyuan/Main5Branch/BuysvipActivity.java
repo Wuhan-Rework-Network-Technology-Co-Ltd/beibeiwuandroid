@@ -27,9 +27,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class BuysvipActivity extends AppCompatActivity {
     private static final String TAG = "BuysvipActivity";
@@ -127,7 +128,7 @@ public class BuysvipActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(BuysvipActivity.this);
                 String userid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", userid)
                         .add("id", svipid+"")
@@ -163,7 +164,7 @@ public class BuysvipActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(BuysvipActivity.this);
                 String userid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", userid)
                         .add("id", svipid+"")
@@ -197,7 +198,7 @@ public class BuysvipActivity extends AppCompatActivity {
             public void run(){
 
                 Log.d(TAG, "run: 进入阿里pay");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("appname", "socialchat")
                         .add("orderid", orderid)

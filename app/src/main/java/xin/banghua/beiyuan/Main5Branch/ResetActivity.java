@@ -61,6 +61,8 @@ import xin.banghua.beiyuan.Signin.CityAdapter;
 import xin.banghua.beiyuan.Signin.ProvinceAdapter;
 import xin.banghua.beiyuan.bean.AddrBean;
 import xin.banghua.beiyuan.utils.MD5Tool;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class ResetActivity extends AppCompatActivity {
 
@@ -105,7 +107,7 @@ public class ResetActivity extends AppCompatActivity {
         current_address = findViewById(R.id.current_address);
         current_address.setVisibility(View.GONE);
 
-        getDataPersonage("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=personage&m=socialchat");
+        getDataPersonage("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=personage&m=socialchat");
 
 
         if (title.equals("手机绑定")){
@@ -121,7 +123,7 @@ public class ResetActivity extends AppCompatActivity {
                         Toast.makeText(ResetActivity.this, "请输入手机号", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    sendCode("https://www.banghua.xin/sms.php",userAcountString);
+                    sendCode("https://www.banghua.xin/sms_beibeiwu.php",userAcountString);
                     countDown();
                 }
             });
@@ -131,11 +133,16 @@ public class ResetActivity extends AppCompatActivity {
 
     //TODO okhttp验证信息
     public void verificationCode(final String verificationCodeString){
-        if (smscode.equals(verificationCodeString)){
-            submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","手机绑定");
-        }else {
-            Toast.makeText(ResetActivity.this, "验证码错误", Toast.LENGTH_LONG).show();
-        }
+        OkHttpInstance.smsVerify(userAcountString, verificationCodeString, new OkHttpResponseCallBack() {
+            @Override
+            public void getResponseString(String responseString) {
+                if(responseString.equals("true")){
+                    submitValue("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=reset&m=socialchat","手机绑定");
+                }else {
+                    Toast.makeText(ResetActivity.this, "验证码错误", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
     private void initView() {
         spCity = findViewById(R.id.spinner_city);
@@ -204,7 +211,7 @@ public class ResetActivity extends AppCompatActivity {
             public void run(){
                 SharedHelper shuserinfo = new SharedHelper(getBaseContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", myid)
                         .build();
@@ -353,22 +360,22 @@ public class ResetActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (title){
                     case "头像设置":
-                        setUserPortrait("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat");
+                        setUserPortrait("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=reset&m=socialchat");
                         break;
                     case "性别设置":
-                        submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","性别");
+                        submitValue("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=reset&m=socialchat","性别");
                         break;
                     case "属性设置":
-                        submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","属性");
+                        submitValue("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=reset&m=socialchat","属性");
                         break;
                     case "意见反馈":
-                        submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=feedback&m=socialchat","意见");
+                        submitValue("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=feedback&m=socialchat","意见");
                         break;
                     case "手机绑定":
                         verificationCode(verificationCode_et.getText().toString());
                         break;
                     default:
-                        submitValue("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=reset&m=socialchat","其他");
+                        submitValue("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=reset&m=socialchat","其他");
                         break;
                 }
                 Toast.makeText(v.getContext(), "提交成功", Toast.LENGTH_LONG).show();
@@ -456,7 +463,7 @@ public class ResetActivity extends AppCompatActivity {
                 String myid = shuserinfo.readUserInfo().get("userID");
                 String mynickname = shuserinfo.readUserInfo().get("userNickName");
                 String myportrait = shuserinfo.readUserInfo().get("userPortrait");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody;
                 switch (type){
                     case "性别":
@@ -531,7 +538,7 @@ public class ResetActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
                 //开始网络传输
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
@@ -606,7 +613,7 @@ public class ResetActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("phoneNumber", phoneNumber)
                         .build();
@@ -619,7 +626,7 @@ public class ResetActivity extends AppCompatActivity {
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
                     Message message=handler.obtainMessage();
-                    message.obj=response.body().string();
+                    message.obj=(Integer.parseInt(response.body().string())-18)+"";
                     message.what=5;
                     Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
                     handler.sendMessageDelayed(message,10);

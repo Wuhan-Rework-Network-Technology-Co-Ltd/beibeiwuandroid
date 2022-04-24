@@ -31,6 +31,7 @@ import xin.banghua.beiyuan.Adapter.DongtaiList;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class CircleActivity extends AppCompatActivity {
     private static final String TAG = "CircleActivity";
@@ -50,7 +51,7 @@ public class CircleActivity extends AppCompatActivity {
 
         mView = getWindow().getDecorView();
 
-        getDataDongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=circle&m=socialchat");
+        getDataDongtai("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=circle&m=socialchat");
 
         ImageView back_btn = findViewById(R.id.iv_back_left);
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +131,7 @@ public class CircleActivity extends AppCompatActivity {
             public void run(){
                 sh = new SharedHelper(mView.getContext());
                 userInfo = sh.readUserInfo();
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userID", userInfo.get("userID"))
                         .build();

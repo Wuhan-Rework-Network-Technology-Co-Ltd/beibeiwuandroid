@@ -23,6 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class InformReasonActivity extends AppCompatActivity {
     private static final String TAG = "InformReasonActivity";
@@ -48,7 +49,7 @@ public class InformReasonActivity extends AppCompatActivity {
                     Toast.makeText(context, "请输入账号密码", Toast.LENGTH_LONG).show();
                 }else {
                     String reason = informreason.getText().toString().trim();
-                    addInformer("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addinform&m=socialchat",informparameters,reason);
+                    addInformer("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addinform&m=socialchat",informparameters,reason);
                 }
             }
         });
@@ -79,7 +80,7 @@ public class InformReasonActivity extends AppCompatActivity {
 
 
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", informparameters[0])
                         .add("itemid",informparameters[1])

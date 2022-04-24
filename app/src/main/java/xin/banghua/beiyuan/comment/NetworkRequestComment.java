@@ -17,7 +17,7 @@ import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class NetworkRequestComment {
     private static final String TAG = "NetworkRequestComment";
-    private static OkHttpClient uniqueInstance = new OkHttpClient();
+    private static OkHttpClient uniqueInstance = OkHttpInstance.getInstance();
     //Singleton类只有一个构造方法并且是被private修饰的，所以用户无法通过new方法创建该对象实例
     private NetworkRequestComment(){}
     public static OkHttpClient getInstance(){
@@ -39,7 +39,7 @@ public class NetworkRequestComment {
                         .add("ifauthlike",ifauthlike)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sendCommentLike&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=sendCommentLike&m=socialchat")
                         .post(formBody)
                         .build();
                 try (Response response = client.newCall(request).execute()) {
@@ -75,7 +75,7 @@ public class NetworkRequestComment {
                         .add("ifauthreply",ifauthreply)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sendComment&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=sendComment&m=socialchat")
                         .post(formBody)
                         .build();
                 Log.d(TAG, "run: * 发布评论"+mainID+subID);
@@ -107,7 +107,7 @@ public class NetworkRequestComment {
                         .add("comment_id",comment_id)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteComment&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deleteComment&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -142,7 +142,7 @@ public class NetworkRequestComment {
                         .add("pageIndex",pageIndex)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getMainComment&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getMainComment&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -176,7 +176,7 @@ public class NetworkRequestComment {
                         .add("pageIndex",pageIndex)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSubComment&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getSubComment&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -209,7 +209,7 @@ public class NetworkRequestComment {
                         .add("comment_id",comment_id)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSelectedComment&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getSelectedComment&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -243,7 +243,7 @@ public class NetworkRequestComment {
                         .add("pageIndex",pageIndex+"")
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getMyComment&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getMyComment&m=socialchat")
                         .post(formBody)
                         .build();
 

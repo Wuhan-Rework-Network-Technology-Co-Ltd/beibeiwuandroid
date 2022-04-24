@@ -181,7 +181,7 @@ public class FlashPhotoPlugin implements IPluginModule {
 ////                        senttime = message.getSentTime()+"";
 ////                        Log.d(TAG,"发送成功"+message.getContent().toString()+"|"+message.toString());
 ////                        //保存到服务器
-////                        saveFlashPhoto("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=saveflashphoto&m=socialchat");
+////                        saveFlashPhoto("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=saveflashphoto&m=socialchat");
 ////                    }
 ////                    @Override
 ////                    public void onError(Message message, RongIMClient.ErrorCode errorCode) {
@@ -215,7 +215,7 @@ public class FlashPhotoPlugin implements IPluginModule {
 //                File tempFile =new File(photoPath.trim());
 //                String fileName = tempFile.getName();
 //                //开始网络传输
-//                OkHttpClient client = new OkHttpClient();
+//                OkHttpClient client = OkHttpInstance.getInstance();
 //                MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
 //                RequestBody requestBody = new MultipartBody.Builder()
 //                        .setType(MultipartBody.FORM)

@@ -1,6 +1,8 @@
 package xin.banghua.beiyuan.Main4Branch;
 
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -38,9 +40,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.mediapicker.Image.ImagePicker;
-
-import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -164,7 +165,7 @@ public class FabudongtaiFragment extends Fragment {
                 Log.d(TAG, "onClick: 分享的选项："+((RadioButton)mView.findViewById(guangchang_rg.getCheckedRadioButtonId())).getText().toString());
                 Log.d(TAG, "onClick: 又分享的谢谢"+(mView.findViewById(guangchang_rg.getCheckedRadioButtonId())).toString());
 
-                postFabudongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabudongtai&m=socialchat");
+                postFabudongtai("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=fabudongtai&m=socialchat");
 
             }
         });
@@ -197,7 +198,7 @@ public class FabudongtaiFragment extends Fragment {
                 File tempFile =new File(dongtaiImage1.trim());
                 String fileName = tempFile.getName();
                 //开始网络传输
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
 
                 MultipartBody.Builder multipartBody = new MultipartBody.Builder();

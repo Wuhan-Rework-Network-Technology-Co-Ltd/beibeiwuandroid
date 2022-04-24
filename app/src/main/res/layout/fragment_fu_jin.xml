@@ -62,7 +62,7 @@
                 android:id="@+id/tuijian_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="推荐"
+                android:text="精华"
                 android:paddingTop="5dp"
                 android:textSize="15sp"
                 android:textColor="@color/color8a"/>

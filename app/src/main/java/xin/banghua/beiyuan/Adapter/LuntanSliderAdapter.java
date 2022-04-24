@@ -47,6 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.agora.chatroom.activity.ChatRoomActivity;
 import io.agora.chatroom.manager.RtmManager;
 import io.agora.chatroom.util.PortraitFrameView;
+import io.agora.chatroom.util.WealthAndGlamour;
 import io.agora.rtm.ErrorInfo;
 import io.agora.rtm.ResultCallback;
 import io.agora.rtm.RtmMessage;
@@ -70,6 +71,7 @@ import xin.banghua.beiyuan.custom_ui.CustomVideoView;
 import xin.banghua.beiyuan.custom_ui.MatchDialog;
 import xin.banghua.beiyuan.custom_ui.NiceImageView;
 import xin.banghua.beiyuan.custom_ui.NiceZoomImageView;
+import xin.banghua.beiyuan.script.ScriptActivity;
 import xin.banghua.beiyuan.topic.TopicAddedItem;
 import xin.banghua.beiyuan.topic.TopicList;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
@@ -142,7 +144,6 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             return viewHolder;
         }
         return null;
-
     }
 
     @Override
@@ -151,7 +152,6 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         if (viewHolder instanceof LuntanSliderAdapter.ViewHolder){
             ((ViewHolder) viewHolder).portraitFrameView.setPortraitFrame(((ViewHolder) viewHolder).portraitFrameView.getTag().toString());
         }
-
     }
     HashMap<Integer,ViewHolder> viewHolders = new HashMap<Integer,ViewHolder>();
     public ViewHolder getViewHolder(int position){
@@ -282,6 +282,30 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                 ((SliderHolder) viewHolder).slider_layout.setVisibility(View.GONE);
                 ((SliderHolder) viewHolder).match_layout.setVisibility(View.VISIBLE);
 
+                Glide.with(App.getApplication()).load(R.mipmap.peiyin).into(((SliderHolder) viewHolder).script_img);
+                ((SliderHolder) viewHolder).script_img.setOnClickListener(v -> {
+                    if (Common.myID ==null){
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
+                                .setTitle("登录后可以发起匹配！")
+                                .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent intent = new Intent(mContext, OneKeyLoginActivity.class);
+                                        intent.putExtra(THEME_KEY, 4);
+                                        mContext.startActivity(intent);
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                        builder.create().show();
+                    }else {
+                        mContext.startActivity(new Intent(mContext, ScriptActivity.class));
+                    }
+                });
+
                 Glide.with(App.getApplication()).load(R.mipmap.voice_match).into(((SliderHolder) viewHolder).voice_match_img);
                 ((SliderHolder) viewHolder).voice_match_img.setOnClickListener(v -> {
                     if (Common.myID ==null){
@@ -352,7 +376,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                     }
                 });
 
-                Glide.with(App.getApplication()).load(R.mipmap.short_video).into(((SliderHolder) viewHolder).video_dynamic_img);
+                Glide.with(App.getApplication()).load(R.mipmap.douyin).into(((SliderHolder) viewHolder).video_dynamic_img);
                 ((SliderHolder) viewHolder).video_dynamic_img.setOnClickListener(v -> {
                     if (Common.myID ==null){
                         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext)
@@ -457,6 +481,8 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             final LuntanList currentItem = luntanLists.get(currentPosition-1);
             Log.d(TAG, "onBindViewHolder: 测试帖子"+currentItem.getAuthid()+currentItem.getAuthnickname());
 
+            ((ViewHolder) viewHolder).wealth_view.initShow("wealth",currentItem.getAll_money());
+            ((ViewHolder) viewHolder).glamour_view.initShow("glamour",currentItem.getAll_income());
 
             ((ViewHolder) viewHolder).lv_img.setImageResource(Common.getLevelFromPost(currentItem));
 
@@ -767,7 +793,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
                     Log.d(TAG, "onClick: clicked on: " + currentItem.getId());
                     //Toast.makeText(mContext, mUserID.get(i) + mUserNickName.get(i), Toast.LENGTH_LONG).show();
                     viewHolder_btn = (ViewHolder) viewHolder;
-                    like("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntanlike&m=socialchat",currentItem.getId());
+                    like("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=luntanlike&m=socialchat",currentItem.getId());
                 }
             });
 //            ((ViewHolder) viewHolder).favorite.setText(currentItem.getFavorite());
@@ -1037,6 +1063,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         ImageView precaution_fraud;
 
         LinearLayout match_layout;
+        ImageView script_img;
         ImageView voice_match_img;
         ImageView video_match_img;
         ImageView video_dynamic_img;
@@ -1054,6 +1081,8 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
             voice_match_img = itemView.findViewById(R.id.voice_match_img);
             video_match_img = itemView.findViewById(R.id.video_match_image);
             video_dynamic_img = itemView.findViewById(R.id.video_dynamic_image);
+
+            script_img = itemView.findViewById(R.id.script_image);
         }
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -1120,8 +1149,15 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         LinearLayout topic_layout;
 
         ImageView rp_verify_img;
+
+        WealthAndGlamour wealth_view;
+        WealthAndGlamour glamour_view;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+
+            wealth_view = itemView.findViewById(R.id.wealth_view);
+            glamour_view = itemView.findViewById(R.id.glamour_view);
 
             rp_verify_img = itemView.findViewById(R.id.rp_verify_img);
 
@@ -1209,7 +1245,7 @@ public class LuntanSliderAdapter extends RecyclerView.Adapter  implements  ViewP
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("postid", postid)
                         .build();

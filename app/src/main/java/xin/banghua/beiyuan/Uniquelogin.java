@@ -14,6 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class Uniquelogin {
 
@@ -78,7 +79,7 @@ public class Uniquelogin {
                 SharedPreferences sp = context.getSharedPreferences("uniquelogintoken", Context.MODE_PRIVATE);
                 String token = sp.getString("uniquelogintoken", "");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("token", token)

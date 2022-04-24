@@ -48,6 +48,7 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
             Log.d("新好友","RC:TxtMsg");
             String[] textSplit = message.getContent().toString().split("'");
             if (textSplit[1].contains("有人申请您为好友了")){
+                Common.newFriendsNum = Common.newFriendsNum + 1;
                 Log.d("新好友","申请您为好友了"+textSplit[3]);
                 Intent intent = new Intent(view.getContext(), NewFriend.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
@@ -81,7 +82,7 @@ public class MyConversationClickListener implements RongIM.ConversationClickList
                 Intent intent = new Intent(view.getContext(), SliderWebViewActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 intent.putExtra("slidername","审核");
-                intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=99999&c=entry&do=post_censorship&m=socialchat&page=1&id="+Common.userInfoList.getId());
+                intent.putExtra("sliderurl","https://console.banghua.xin/app/index.php?i=999999&c=entry&do=post_censorship&m=socialchat&page=1&id="+Common.userInfoList.getId());
                 view.getContext().startActivity(intent);
             }
         }

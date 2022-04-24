@@ -22,12 +22,12 @@ import okhttp3.Response;
 
 public class OkHttpInstance {
     private static final String TAG = "OkHttpInstance";
-    private static OkHttpClient uniqueInstance = new OkHttpClient();
+    private static OkHttpClient.Builder uniqueInstance = new OkHttpClient.Builder();
     //Singleton类只有一个构造方法并且是被private修饰的，所以用户无法通过new方法创建该对象实例
     private OkHttpInstance(){}
     public static OkHttpClient getInstance(){
-        uniqueInstance.newBuilder().proxy(Proxy.NO_PROXY);
-        return uniqueInstance;
+        uniqueInstance.proxy(Proxy.NO_PROXY);
+        return uniqueInstance.build();
     }
     /**
      * RTM获取token
@@ -134,7 +134,7 @@ public class OkHttpInstance {
 
                     RequestBody requestBody = multipartBody.build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=roomSet&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=roomSet&m=socialchat")
                             .post(requestBody)
                             .build();
 
@@ -169,7 +169,7 @@ public class OkHttpInstance {
                         .add("audioroomtype", audioroomtype)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=createRoom&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=createRoom&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -291,7 +291,7 @@ public class OkHttpInstance {
                             .add("userId", userId)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://redis.banghua.xin/app/index.php?i=888&c=entry&a=webapp&do=getUserAttributesXiaobei&m=rediscache")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getUserAttributes&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -338,7 +338,7 @@ public class OkHttpInstance {
                             .add("vip", vip)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sendBarrage&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=sendBarrage&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -372,7 +372,7 @@ public class OkHttpInstance {
                         .add("pageIndex", pageIndex+"")
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getBarrageList&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getBarrageList&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -403,7 +403,7 @@ public class OkHttpInstance {
                 RequestBody formBody = new FormBody.Builder()
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=agoraRoomMem&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=agoraRoomMem&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -470,7 +470,7 @@ public class OkHttpInstance {
                         .add("pageIndex", pageIndex)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getKtvMusicList&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getKtvMusicList&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -503,7 +503,7 @@ public class OkHttpInstance {
                         .add("roomId", roomId)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSongList&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getSongList&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -537,7 +537,7 @@ public class OkHttpInstance {
                         .add("musicId", musicId)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=addSong&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addSong&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -569,7 +569,7 @@ public class OkHttpInstance {
                         .add("roomId", roomId)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteSong&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deleteSong&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -601,7 +601,7 @@ public class OkHttpInstance {
                         .add("userId", userId)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteSongUser&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deleteSongUser&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -630,7 +630,7 @@ public class OkHttpInstance {
                         .add("userId", Constant.sUserId+"")
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteSongRoom&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deleteSongRoom&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -663,7 +663,7 @@ public class OkHttpInstance {
                         .add("songId", songId)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSongFromSongId&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getSongFromSongId&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -720,7 +720,7 @@ public class OkHttpInstance {
                 RequestBody formBody = new FormBody.Builder()
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getGiftList&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getGiftList&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -754,7 +754,7 @@ public class OkHttpInstance {
                         .add("receiverId",  receiverId)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=sendGift&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=sendGift&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -786,7 +786,7 @@ public class OkHttpInstance {
                         .add("coinId", coinId)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=buyCoinWechat&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=buyCoinWechat&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -815,7 +815,7 @@ public class OkHttpInstance {
                         .add("coinId", coinId)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=buyCoinAlipay&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=buyCoinAlipay&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -842,7 +842,7 @@ public class OkHttpInstance {
                         .add("userId", Constant.sUserId+"")
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteRecruitment&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deleteRecruitment&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -873,7 +873,7 @@ public class OkHttpInstance {
                         .add("post_id", post_id)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=playOnce&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=playOnce&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -902,7 +902,7 @@ public class OkHttpInstance {
                         .add("post_id", post_id)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=moreThanFiveSeconds&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=moreThanFiveSeconds&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -933,7 +933,7 @@ public class OkHttpInstance {
                         .add("play_time", play_time)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=playCompleted&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=playCompleted&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -964,7 +964,7 @@ public class OkHttpInstance {
                         .add("play_time", play_time)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=playTime&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=playTime&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -996,7 +996,39 @@ public class OkHttpInstance {
                 RequestBody formBody = new FormBody.Builder()
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getFilterWords&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getFilterWords&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (okHttpResponseCallBack!=null){
+                        String resultString = response.body().string();
+                        Log.d(TAG, "得到过滤词" + resultString);
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 得到推荐
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getReferral(OkHttpResponseCallBack okHttpResponseCallBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getReferral&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -1033,7 +1065,7 @@ public class OkHttpInstance {
                             .add("topic", topic)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getTopic&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getTopic&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -1069,7 +1101,7 @@ public class OkHttpInstance {
                             .add("topic", topic)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=createTopic&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=createTopic&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -1157,5 +1189,39 @@ public class OkHttpInstance {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * 设置推荐
+     *
+     * @param referral               推荐
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void setReferral(String referral,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("referral", referral)
+                        .add("id", Common.myUserInfoList.getId())
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=setReferral&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 设置推荐"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

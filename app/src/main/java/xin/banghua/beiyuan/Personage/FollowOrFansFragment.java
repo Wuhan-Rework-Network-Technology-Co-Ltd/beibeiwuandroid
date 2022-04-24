@@ -18,10 +18,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import xin.banghua.beiyuan.Adapter.UserInfoCallBack;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 import xin.banghua.pullloadmorerecyclerview.CusPullLoadMoreRecyclerView;
 
 /**
@@ -141,6 +144,20 @@ public class FollowOrFansFragment extends Fragment {
 
         pullLoadMoreRecyclerView.startWaveLoadingShow();
 
+
+        if (mParam2.equals("粉丝") && mParam1.equals(Common.userInfoList.getId())){
+            exampleFragmentAdapter.setBtnListenDeleteFans(new UserInfoCallBack() {
+                @Override
+                public void getUserInfo(UserInfoList userInfoList) {
+                    OkHttpInstance.deleteFans(userInfoList.getId(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+
+                        }
+                    });
+                }
+            });
+        }
 
     }
 

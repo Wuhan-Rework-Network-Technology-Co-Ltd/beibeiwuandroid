@@ -31,10 +31,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "BlackListAdapter";
@@ -107,7 +108,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.View
             @Override
             public void onClick(View v) {
                 //删除黑名单
-                deleteBlackList("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteblacklist&m=socialchat",currentItem.getmUserID());
+                deleteBlackList("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deleteblacklist&m=socialchat",currentItem.getmUserID());
                 if (friendList.size() > 0) {
                     friendList.remove(i);
                     notifyDataSetChanged();
@@ -203,7 +204,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.View
                 SharedHelper shuserinfo = new SharedHelper(mContext);
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("yourid", yourid)

@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.agora.chatroom.OkHttpInstance;
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;
@@ -66,7 +67,7 @@ public class DataRepositroyImpl implements IDataRepositroy {
             searchKey = "";
         }
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = OkHttpInstance.getInstance();
         RequestBody formBody = new FormBody.Builder()
                 .add("searchKey", searchKey)
                 .build();
@@ -121,7 +122,7 @@ public class DataRepositroyImpl implements IDataRepositroy {
 
         final String[] resultString = {"{}"};
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = OkHttpInstance.getInstance();
         RequestBody formBody = new FormBody.Builder()
                 .add("musicId", musicId)
                 .build();
@@ -149,7 +150,7 @@ public class DataRepositroyImpl implements IDataRepositroy {
         return Observable.just(mGson.fromJson(resultString[0], MemberMusicModel.class));
     }
 
-    private OkHttpClient okHttpClient = new OkHttpClient();
+    private OkHttpClient okHttpClient = OkHttpInstance.getInstance();
 
     @Override
     public Completable download(@NonNull File file, @NonNull String url) {

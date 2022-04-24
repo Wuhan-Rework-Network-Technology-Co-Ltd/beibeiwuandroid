@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.agora.chatroom.Common;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -47,6 +48,7 @@ import xin.banghua.beiyuan.LaunchActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.bean.AddrBean;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class Userset extends AppCompatActivity {
     private static final String TAG = "Userset";
@@ -108,9 +110,9 @@ public class Userset extends AppCompatActivity {
             }
             if_submited = 1;
             if (logtype.equals("1")){
-                postSignUp("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signup&m=socialchat");
+                postSignUp("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=signup&m=socialchat");
             }else if (logtype.equals("2")){
-                postWXSignUp("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signupwx&m=socialchat");
+                postWXSignUp("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=signupwx&m=socialchat");
             }
             return true;
         }
@@ -264,9 +266,9 @@ public class Userset extends AppCompatActivity {
                 }
                 if_submited = 1;
                 if (logtype.equals("1")){
-                    postSignUp("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signup&m=socialchat");
+                    postSignUp("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=signup&m=socialchat");
                 }else if (logtype.equals("2")){
-                    postWXSignUp("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signupwx&m=socialchat");
+                    postWXSignUp("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=signupwx&m=socialchat");
                 }
             }
         });
@@ -372,7 +374,7 @@ public class Userset extends AppCompatActivity {
                 //获取文件名
                 Log.d("进入run","run");
                 //开始网络传输
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
                 MultipartBody.Builder builder = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
@@ -399,6 +401,18 @@ public class Userset extends AppCompatActivity {
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (String element: Common.referralList) {
+                                if (referral.equals(element)){
+                                    Toast.makeText(mContext,"获取新手大礼包（3日vip体验，专属头像框，新人曝光推荐）",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+
+
                     //Log.d("form形式的post",response.body().string());
                     //格式：{"error":"0","info":"登陆成功"}
                     Message message=handler.obtainMessage();
@@ -423,7 +437,7 @@ public class Userset extends AppCompatActivity {
                 File tempFile =new File(userPortrait.trim());
                 String fileName = tempFile.getName();
                 //开始网络传输
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image");
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)

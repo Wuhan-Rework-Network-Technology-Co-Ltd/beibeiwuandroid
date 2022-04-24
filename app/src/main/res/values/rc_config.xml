@@ -72,7 +72,7 @@
     <integer name="rc_gifmsg_auto_download_size">1024</integer>
 
     <!--是否启用阅后即焚插件-->
-    <bool name="rc_open_destruct_plugin">false</bool>
+    <bool name="rc_open_destruct_plugin">true</bool>
 
     <!--多选时,最大多选消息数 -->
     <integer name="rc_max_message_selected_count">100</integer>

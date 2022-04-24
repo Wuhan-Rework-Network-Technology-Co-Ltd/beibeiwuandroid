@@ -35,6 +35,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder>  {
 
@@ -92,13 +93,13 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
         viewHolder.weixin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getUnifiedorder("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=payunifiedorder2&m=socialchat",currentItem.getVipid());
+                getUnifiedorder("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=payunifiedorder2&m=socialchat",currentItem.getVipid());
             }
         });
         viewHolder.alipay_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alipayorder("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=alipayaddorder2&m=socialchat",currentItem.getVipid());
+                alipayorder("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=alipayaddorder2&m=socialchat",currentItem.getVipid());
             }
         });
 
@@ -227,7 +228,7 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
                 SharedHelper shuserinfo = new SharedHelper(mContext.getApplicationContext());
                 String userid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("vipid", vipid)
                         .add("userid", userid)
@@ -259,7 +260,7 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
             public void run(){
 
                 Log.d(TAG, "run: 进入阿里pay");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("appname", "socialchat")
                         .add("orderid", orderid)
@@ -293,7 +294,7 @@ public class BuyvipAdapter extends RecyclerView.Adapter<BuyvipAdapter.ViewHolder
                 SharedHelper shuserinfo = new SharedHelper(mContext.getApplicationContext());
                 String userid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userid", userid)
                         .add("vipid", vipid)

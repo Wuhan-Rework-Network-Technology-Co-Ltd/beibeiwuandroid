@@ -36,17 +36,26 @@
         android:id="@+id/match_layout"
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:weightSum="3"
+        android:weightSum="2"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/script_image"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:layout_height="match_parent"
+            android:src="@mipmap/peiyin" />
+
         <ImageView
             android:id="@+id/voice_match_img"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:layout_height="match_parent"
-            android:src="@mipmap/voice_match" />
+            android:src="@mipmap/voice_match"
+            android:visibility="gone"/>
         <ImageView
             android:id="@+id/video_match_image"
             android:layout_marginLeft="0dp"
@@ -55,14 +64,15 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:layout_height="match_parent"
-            android:src="@mipmap/video_match" />
+            android:src="@mipmap/video_match"
+            android:visibility="gone"/>
         <ImageView
             android:id="@+id/video_dynamic_image"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             android:layout_height="match_parent"
-            android:src="@mipmap/short_video" />
+            android:src="@mipmap/douyin" />
     </LinearLayout>
 
     <com.daimajia.slider.library.SliderLayout

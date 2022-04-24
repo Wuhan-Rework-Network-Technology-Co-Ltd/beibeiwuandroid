@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="3"
                 android:background="@drawable/rc_cs_group_cancel_pressed"
-                android:text="推荐"
+                android:text="精华"
                 android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold" />

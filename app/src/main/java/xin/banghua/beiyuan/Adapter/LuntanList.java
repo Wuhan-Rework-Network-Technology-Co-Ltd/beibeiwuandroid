@@ -10,6 +10,11 @@ public class LuntanList  implements Serializable {
     public LuntanList() {
     }
 
+    @JSONField(name = "all_money")
+    String all_money = "0.00";
+    @JSONField(name = "all_income")
+    String all_income = "0.00";
+
     @JSONField(name="rp_verify_time")
     String rp_verify_time = "";//真人认证成功时间，存在则说明完成了真人认证
 
@@ -130,6 +135,22 @@ public class LuntanList  implements Serializable {
         this.authsvip = authsvip;
 
         this.comment_sum = comment_sum;
+    }
+
+    public String getAll_money() {
+        return all_money;
+    }
+
+    public void setAll_money(String all_money) {
+        this.all_money = all_money;
+    }
+
+    public String getAll_income() {
+        return all_income;
+    }
+
+    public void setAll_income(String all_income) {
+        this.all_income = all_income;
     }
 
     public String getRp_verify_time() {

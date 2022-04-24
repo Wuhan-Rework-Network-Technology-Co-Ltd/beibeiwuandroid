@@ -180,6 +180,8 @@ public class CommentDialog {
         bottomSheetDialog.show();
     }
     MainRecyclerAdapterAdapter mainRecyclerAdapterAdapter;
+
+    String previous_comment = "";
     public void loadComment(LuntanList luntanList){
         mainID = "0";
         mainID_user = "0";
@@ -263,11 +265,16 @@ public class CommentDialog {
             send_comment.setVisibility(View.GONE);
         }
         send_comment.setOnClickListener(view1 -> {
+            if (comment_et.getText().toString().equals(previous_comment)){
+                Toast.makeText(mContext,"请不要重复发布相同内容",Toast.LENGTH_LONG).show();
+                return;
+            }
             if (comment_et.getText().length()>100){
                 Toast.makeText(mContext,"字数不能超过100字节",Toast.LENGTH_LONG).show();
             }else if (comment_et.getText().length()==0){
                 Toast.makeText(mContext,"字数不能为空",Toast.LENGTH_LONG).show();
             }else {
+                previous_comment = comment_et.getText().toString();
                 OkHttpInstance.getUserAttributes(luntanList.getAuthid(), new OkHttpResponseCallBack() {
                     @Override
                     public void getResponseString(String responseString) {

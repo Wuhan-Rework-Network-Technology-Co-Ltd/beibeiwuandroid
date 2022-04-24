@@ -70,6 +70,7 @@ import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.bean.AddrBean;
 import xin.banghua.beiyuan.custom_ui.CustomVideoView;
 import xin.banghua.beiyuan.publish.AllEffectActivity;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.ScreenUtils;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
@@ -150,6 +151,9 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+
         marqueeTv =  view.findViewById(R.id.marquee);
         look_just_btn = view.findViewById(R.id.look_just_btn);
 
@@ -591,7 +595,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                //getVipinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
+                //getVipinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=viptimeinsousuo&m=socialchat");
                 getDataPostlist(getString(R.string.luntan_url),"精华","1");
             }
         });
@@ -740,6 +744,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         posts.setComment(jsonObject.getString("comment"));
                         posts.setTopic(jsonObject.getString("topic"));
                         posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
+                        posts.setAll_money(jsonObject.getString("all_money"));
+                        posts.setAll_income(jsonObject.getString("all_income"));
                         luntanLists.add(posts);
                     }
                 }
@@ -782,6 +788,8 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                         posts.setComment(jsonObject.getString("comment"));
                         posts.setTopic(jsonObject.getString("topic"));
                         posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
+                        posts.setAll_money(jsonObject.getString("all_money"));
+                        posts.setAll_income(jsonObject.getString("all_income"));
                         luntanLists.add(posts);
                     }
                 }
@@ -1009,7 +1017,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getGonggao")
                         .build();
@@ -1036,7 +1044,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getSlide")
                         .add("slidesort", subNav)
@@ -1069,7 +1077,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
 
                 Log.d(TAG, "run: 搜索帖子地址："+subNav);
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getPostlist")
                         .add("myid", myid)
@@ -1108,7 +1116,7 @@ public class LuntanFragment extends Fragment implements BaseSliderView.OnSliderC
                 SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
                         .build();

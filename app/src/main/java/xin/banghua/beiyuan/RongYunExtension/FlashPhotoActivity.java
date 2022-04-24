@@ -1,5 +1,8 @@
 package xin.banghua.beiyuan.RongYunExtension;
 
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_UP;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,13 +30,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.Common;
-
-import static android.view.MotionEvent.ACTION_DOWN;
-import static android.view.MotionEvent.ACTION_UP;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class FlashPhotoActivity extends AppCompatActivity {
     private String TAG = "FlashPhoto";
@@ -63,7 +64,7 @@ public class FlashPhotoActivity extends AppCompatActivity {
                 Log.v(TAG, "getAction" + event.getAction());
                 if(event.getAction() == ACTION_DOWN) {// pressed
                     longtouch_btn.setText("");
-                    getFlashPhoto("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getflashphoto&m=socialchat");
+                    getFlashPhoto("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getflashphoto&m=socialchat");
                 }else if (event.getAction() == ACTION_UP){
                     Toast.makeText(getApplicationContext(), "图片已销毁", Toast.LENGTH_LONG).show();
                     finish();
@@ -141,7 +142,7 @@ public class FlashPhotoActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("uniqueid", uniqueid)
                         .add("senderuserid", myid)

@@ -7,10 +7,16 @@
     android:orientation="vertical"
     tools:context=".ConversationListActivity">
 
+    <Button
+        android:id="@+id/address_book"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="通讯录"/>
     <fragment
         android:id="@+id/conversationlist"
         android:name="io.rong.imkit.fragment.ConversationListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         tools:ignore="Instantiatable" />
 </LinearLayout>

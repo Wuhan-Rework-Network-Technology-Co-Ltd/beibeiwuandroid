@@ -53,14 +53,15 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
 import xin.banghua.beiyuan.App;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.GlobalDialogSingle;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.SliderWebViewActivity;
-import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.utils.GpsUtil;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 /**
@@ -387,7 +388,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                 Map<String, String> locationInfo = sh.readLocation();
                 String myid = sh.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getUserInfo")
                         .add("myid", myid)
@@ -408,7 +409,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
                     Message message = handler.obtainMessage();
                     message.obj = response.body().string();
                     message.what = 1;
-                    Log.d(TAG, "run: Userinfo发送的值" + message.obj.toString());
+                    Log.d(TAG, "run: 附近的值" + message.obj.toString());
                     handler.sendMessageDelayed(message, 10);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -423,7 +424,7 @@ public class FujinFragment extends Fragment implements BaseSliderView.OnSliderCl
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getSlide")
                         .build();

@@ -2,14 +2,15 @@ package xin.banghua.beiyuan.Main4Branch;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -30,6 +31,7 @@ import xin.banghua.beiyuan.Adapter.PostAdapter;
 import xin.banghua.beiyuan.Adapter.PostHead;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class PostListActivity extends AppCompatActivity {
     private static final String TAG = "PostListActivity";
@@ -100,7 +102,7 @@ public class PostListActivity extends AppCompatActivity {
             }
         });
 
-        //getDataPosthead("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=postdetail&m=socialchat");
+        //getDataPosthead("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=postdetail&m=socialchat");
         initPostHead();
     }
 
@@ -127,7 +129,7 @@ public class PostListActivity extends AppCompatActivity {
                 PostHead posts = new PostHead(posttitle,authid,authnickname,authportrait,posttext,postPicture1,postPicture2,postPicture3,time);
                 postHeads.add(posts);
 
-        getDataFollowlist("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=postdetail&m=socialchat");
+        getDataFollowlist("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=postdetail&m=socialchat");
 
     }
 
@@ -212,7 +214,7 @@ public class PostListActivity extends AppCompatActivity {
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run(){
-//                OkHttpClient client = new OkHttpClient();
+//                OkHttpClient client = OkHttpInstance.getInstance();
 //                RequestBody formBody = new FormBody.Builder()
 //                        .add("type", "getDataPosthead")
 //                        .add("postid",id)
@@ -240,7 +242,7 @@ public class PostListActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getDataFollowlist")
                         .add("postid",id)

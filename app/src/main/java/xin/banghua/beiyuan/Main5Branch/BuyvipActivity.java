@@ -29,6 +29,7 @@ import xin.banghua.beiyuan.Adapter.BuyvipAdapter;
 import xin.banghua.beiyuan.Adapter.BuyvipList;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class BuyvipActivity extends AppCompatActivity {
     private static final String TAG = "BuyvipActivity";
@@ -50,7 +51,7 @@ public class BuyvipActivity extends AppCompatActivity {
             }
         });
 
-        getVip("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getvip&m=socialchat");
+        getVip("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getvip&m=socialchat");
     }
 
     //TODO 初始化Viprecyclerview
@@ -115,7 +116,7 @@ public class BuyvipActivity extends AppCompatActivity {
             @Override
             public void run(){
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .build();
                 Request request = new Request.Builder()

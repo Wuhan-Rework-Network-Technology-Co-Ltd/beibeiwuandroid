@@ -428,7 +428,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
                 Log.d(TAG, "onClick: clicked on: " + currentItem.getId());
                 //Toast.makeText(mContext, mUserID.get(i) + mUserNickName.get(i), Toast.LENGTH_LONG).show();
                 viewHolder_btn = viewHolder;
-                like("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntanlike&m=socialchat",currentItem.getId());
+                like("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=luntanlike&m=socialchat",currentItem.getId());
             }
         });
         //viewHolder.favorite.setText(currentItem.getFavorite());
@@ -817,7 +817,7 @@ public class LuntanAdapter extends RecyclerView.Adapter<LuntanAdapter.ViewHolder
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("postid", postid)
                         .build();

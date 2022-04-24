@@ -29,12 +29,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <fragment
-                android:id="@+id/conversation"
-                android:name="io.rong.imkit.fragment.ConversationFragment"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:ignore="Instantiatable" />
+                android:orientation="vertical">
+                <xin.banghua.beiyuan.match.MatchCard
+                    android:id="@+id/match_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <fragment
+                    android:id="@+id/conversation"
+                    android:name="io.rong.imkit.fragment.ConversationFragment"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    tools:ignore="Instantiatable" />
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/svip_hint_tv"
@@ -43,6 +55,9 @@
                 android:text="SVIP会员发起，如不希望被直接发起聊天，可到设置隐私中关闭SVIP直接发起，如只是不希望被此用户打扰可拉黑此用户"
                 android:textAlignment="center"
                 android:visibility="gone" />
+
+
+
         </FrameLayout>
 
     </LinearLayout>

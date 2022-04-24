@@ -42,6 +42,7 @@ import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 
@@ -86,10 +87,10 @@ public class SousuoresultFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated: 获取的参数"+getArguments().getString("type")+";"+getArguments().getString("userProperty")+";"+getArguments().getString("userGender")+";"+getArguments().getString("userRegion")+";"+getArguments().getString("userAge"));
+        Log.d(TAG, "onViewCreated: 获取的参数"+getActivity().getIntent().getStringExtra("type")+";"+getActivity().getIntent().getStringExtra("userProperty")+";"+getActivity().getIntent().getStringExtra("userGender")+";"+getActivity().getIntent().getStringExtra("userRegion")+";"+getActivity().getIntent().getStringExtra("userAge"));
 
         //初始化导航按钮
-        initNavigateButton(view);
+        //initNavigateButton(view);
 
         final PullLoadMoreRecyclerView recyclerView = view.findViewById(R.id.tuijian_RecyclerView);
         adapter = new UserInfoSliderAdapter(getActivity(),userInfoLists);
@@ -106,7 +107,7 @@ public class SousuoresultFragment extends Fragment {
             @Override
             public void onLoadMore() {
                 pageindex = pageindex+1;
-                if (getArguments().getString("type")=="direct") {
+                if (getActivity().getIntent().getStringExtra("type").equals("direct")) {
                     getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),pageindex+"",responseString -> {
                         userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
                         adapter.swapData(userInfoLists);
@@ -122,13 +123,13 @@ public class SousuoresultFragment extends Fragment {
             }
         });
 
-        if (getArguments().getString("type")=="direct") {
+        if (getActivity().getIntent().getStringExtra("type").equals("direct")) {
             //获取用户信息
             getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),"1",responseString -> {
                 userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
                 adapter.swapData(userInfoLists);
             });
-        }else if(getArguments().getString("type")=="condition"){
+        }else if(getActivity().getIntent().getStringExtra("type").equals("condition")){
             getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),"1",responseString -> {
                 userInfoLists.addAll(JSON.parseArray(responseString,UserInfoList.class));
                 adapter.swapData(userInfoLists);
@@ -211,7 +212,7 @@ public class SousuoresultFragment extends Fragment {
 //            @Override
 //            public void onLoadMore() {
 //                pageindex = pageindex+1;
-//                if (getArguments().getString("type")=="direct") {
+//                if (getActivity().getIntent().getStringExtra("type")=="direct") {
 //                    getDataUserinfo(getString(R.string.directsousuo_url),getArguments(),pageindex+"");
 //                }else {
 //                    getDataUserinfo(getString(R.string.conditionsousuo_url),getArguments(),pageindex+"");
@@ -231,26 +232,26 @@ public class SousuoresultFragment extends Fragment {
                 SharedHelper sh = new SharedHelper(getActivity());
                 Map<String,String> locationInfo = sh.readLocation();
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = null;
-                if (getArguments().getString("type")=="direct") {
+                if (getActivity().getIntent().getStringExtra("type").equals("direct")) {
                     Log.d(TAG, "run: 进入direct post");
                     formBody = new FormBody.Builder()
                             .add("type", "getUserInfo")
-                            .add("nameorphone",getArguments().getString("nameOrPhone"))
+                            .add("nameorphone",getActivity().getIntent().getStringExtra("nameOrPhone"))
                             .add("latitude",locationInfo.get("latitude"))
                             .add("longitude",locationInfo.get("longitude"))
                             .add("pageindex",pageindex)
                             .build();
-                }else if(getArguments().getString("type")=="condition"){
+                }else if(getActivity().getIntent().getStringExtra("type").equals("condition")){
                     Log.d(TAG, "run: 进入condition post");
                     formBody = new FormBody.Builder()
                             .add("type", "getUserInfo")
-                            .add("userAge",getArguments().getString("userAge"))
-                            .add("userRegion",getArguments().getString("userRegion"))
-                            .add("userGender",getArguments().getString("userGender"))
-                            .add("userProperty",getArguments().getString("userProperty"))
-                            .add("userOnline",getArguments().getString("userOnline"))
+                            .add("userAge",getActivity().getIntent().getStringExtra("userAge"))
+                            .add("userRegion",getActivity().getIntent().getStringExtra("userRegion"))
+                            .add("userGender",getActivity().getIntent().getStringExtra("userGender"))
+                            .add("userProperty",getActivity().getIntent().getStringExtra("userProperty"))
+                            .add("userOnline",getActivity().getIntent().getStringExtra("userOnline"))
                             .add("latitude",locationInfo.get("latitude"))
                             .add("longitude",locationInfo.get("longitude"))
                             .add("pageindex",pageindex)
@@ -266,7 +267,9 @@ public class SousuoresultFragment extends Fragment {
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                    okHttpResponseCallBack.getResponseString(response.body().string());
+                    String responseData = response.body().string();
+                    Log.d(TAG, "run: 条件搜索"+responseData);
+                    okHttpResponseCallBack.getResponseString(responseData);
 //                    Message message=handler.obtainMessage();
 //                    message.obj=response.body().string();
 //                    message.what=1;

@@ -256,4 +256,20 @@ public class SharedHelper {
         SharedPreferences sp = mContext.getSharedPreferences("prompt", MODE_PRIVATE);
         return sp.getBoolean(name, false);
     }
+
+    //TODO 用于前端通知显示
+    //定义一个保存数据的方法   前端通知显示设置
+    public void saveForegroundNotificationSetting(Boolean isShow) {
+        SharedPreferences sp = mContext.getSharedPreferences("isShow", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("isShow", isShow);
+        editor.commit();
+        //Toast.makeText(mContext, "信息已写入SharedPreference中", Toast.LENGTH_SHORT).show();
+    }
+
+    //定义一个读取SP文件的方法
+    public Boolean readForegroundNotificationSetting() {
+        SharedPreferences sp = mContext.getSharedPreferences("isShow", MODE_PRIVATE);
+        return sp.getBoolean("isShow", true);
+    }
 }

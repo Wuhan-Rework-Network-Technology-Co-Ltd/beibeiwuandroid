@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -57,11 +58,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.FriendList;
 import xin.banghua.beiyuan.AlphabeticalOrder.PinyinUtils;
+import xin.banghua.beiyuan.Main2Branch.NewFriend;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONObject;
 import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.match.MatchActivity;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 public class Main3Activity extends AppCompatActivity {
@@ -88,6 +92,10 @@ public class Main3Activity extends AppCompatActivity {
     LinearLayout notification_hint_layout;
     TextView open_note_tv,close_note_hint_tv;
 
+
+
+    Button address_book;
+    Button new_friend;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -101,7 +109,7 @@ public class Main3Activity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_haoyou:
 
-                    Intent intent2 = new Intent(Main3Activity.this, Main2Activity.class);
+                    Intent intent2 = new Intent(Main3Activity.this, MatchActivity.class);
                     startActivity(intent2);
                     return true;
                 case R.id.navigation_xiaoxi:
@@ -125,6 +133,13 @@ public class Main3Activity extends AppCompatActivity {
     };
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (Common.newFriendsNum!=0)
+            new_friend.setText("新朋友+"+Common.newFriendsNum);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
@@ -140,13 +155,26 @@ public class Main3Activity extends AppCompatActivity {
             }
         }
 
+        address_book = findViewById(R.id.address_book);
+        address_book.setOnClickListener(v -> {
+            Intent intent = new Intent(Main3Activity.this,Main2Activity.class);
+            startActivity(intent);
+        });
+
+        new_friend = findViewById(R.id.new_friend);
+        new_friend.setOnClickListener(v -> {
+            Common.newFriendsNum = 0;
+            Intent intent = new Intent(Main3Activity.this, NewFriend.class);
+            startActivity(intent);
+        });
+
         //底部导航初始化和配置监听，默认选项
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_xiaoxi);
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this,handler);
-        badgeBottomNav.getDataFriendsapply("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
+        badgeBottomNav.getDataFriendsapply("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
         //未读信息监听
         iUnReadMessageObserver = new IUnReadMessageObserver() {
             @Override
@@ -176,7 +204,7 @@ public class Main3Activity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run(){
-                        OkHttpClient client = new OkHttpClient();
+                        OkHttpClient client = OkHttpInstance.getInstance();
                         RequestBody formBody = new FormBody.Builder()
                                 .add("userid", userId)
                                 .build();
@@ -257,7 +285,7 @@ public class Main3Activity extends AppCompatActivity {
         }else{
             //唯一登录验证
             uniquelogin = new Uniquelogin(this,handler);
-            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
         }
     }
     @Override
@@ -302,7 +330,7 @@ public class Main3Activity extends AppCompatActivity {
 
         try {
             mFragment.add(mConversationList);//加入会话列表
-            mFragment.add(FriendFragment.getInstance());
+            //mFragment.add(FriendFragment.getInstance());
         }catch (Exception e){
 
         }
@@ -408,7 +436,7 @@ public class Main3Activity extends AppCompatActivity {
             public void run(){
                 SharedHelper shvalue = new SharedHelper(getApplicationContext());
                 String userID = shvalue.readUserInfo().get("userID");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", userID)
                         .build();
@@ -423,7 +451,7 @@ public class Main3Activity extends AppCompatActivity {
                     Message message=handler.obtainMessage();
                     message.obj=response.body().string();
                     message.what=1;
-                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+                    Log.d(TAG, "run: 1好友列表的值"+message.obj.toString());
                     handler.sendMessageDelayed(message,10);
                 }catch (Exception e) {
                     e.printStackTrace();
@@ -529,44 +557,6 @@ public class Main3Activity extends AppCompatActivity {
                 }
             });
 
-//        SharedPreferences sp = getApplication().getSharedPreferences("firstStarted", Context.MODE_PRIVATE);
-//        if (sp.getString("firstStarted", "null").equals("null")) {
-
-
-
-
-//                new GlobalDialogSingle(this, "", "当前未获取通知权限", "去开启", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 33494);
-//                        Intent intent = new Intent();
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-//                            intent.putExtra("android.provider.extra.APP_PACKAGE", Main3Activity.this.getPackageName());
-//                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {  //5.0
-//                            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-//                            intent.putExtra("app_package", Main3Activity.this.getPackageName());
-//                            intent.putExtra("app_uid", Main3Activity.this.getApplicationInfo().uid);
-//                            startActivity(intent);
-//                        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {  //4.4
-//                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-//                            intent.setData(Uri.parse("package:" + Main3Activity.this.getPackageName()));
-//                        } else if (Build.VERSION.SDK_INT >= 15) {
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-//                            intent.setData(Uri.fromParts("package", Main3Activity.this.getPackageName(), null));
-//                        }
-//                        startActivity(intent);
-//                    }
-//                }).show();
-
-
-//            SharedPreferences.Editor editor = sp.edit();
-//            editor.putString("firstStarted", "firstStarted");
-//            editor.commit();
-//            }
             //未打开通知
             AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle("通知权限")

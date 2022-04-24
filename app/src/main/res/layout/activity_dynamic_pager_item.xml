@@ -93,6 +93,7 @@
                         android:layout_marginLeft="10dp"
                         android:drawableLeft="@drawable/ic_location"
                         android:text="南京"
+                        android:visibility="gone"
                         android:shadowColor="@color/black"
                         android:textColor="@color/text_color_4"
                         android:textSize="15sp" />
@@ -104,6 +105,9 @@
                         android:layout_gravity="left"
                         android:layout_marginLeft="10dp"
                         android:text="你好"
+                        android:shadowRadius="1"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
                         android:shadowColor="@color/black"
                         android:textColor="@color/text_color_4"
                         android:textSize="18sp" />
@@ -115,6 +119,9 @@
                         android:layout_gravity="left"
                         android:shadowColor="@color/black"
                         android:layout_margin="10dp"
+                        android:shadowRadius="1"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
                         android:text="TextViewasddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
                         android:textColor="@color/text_color_2" />
 
@@ -218,6 +225,9 @@
                         android:gravity="center"
                         android:text="0"
                         android:shadowColor="@color/black"
+                        android:shadowRadius="1"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
                         android:textColor="@color/text_color_4"
                         android:textSize="12sp" />
 
@@ -237,6 +247,9 @@
                         android:gravity="center"
                         android:text="0"
                         android:shadowColor="@color/black"
+                        android:shadowRadius="1"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
                         android:textColor="@color/text_color_4"
                         android:textSize="12sp" />
 

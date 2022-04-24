@@ -32,6 +32,7 @@ import xin.banghua.beiyuan.Adapter.FriendList;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class BlackListActivity extends AppCompatActivity {
 
@@ -167,7 +168,7 @@ public class BlackListActivity extends AppCompatActivity {
                 SharedHelper shvalue = new SharedHelper(getApplicationContext());
                 String myid = shvalue.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("pageindex", pageindex+"")

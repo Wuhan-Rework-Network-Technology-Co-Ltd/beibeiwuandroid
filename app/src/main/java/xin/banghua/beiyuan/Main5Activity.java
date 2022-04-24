@@ -29,6 +29,7 @@ import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.model.Conversation;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.match.MatchActivity;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 public class Main5Activity extends AppCompatActivity {
@@ -52,7 +53,7 @@ public class Main5Activity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_haoyou:
 
-                    Intent intent2 = new Intent(Main5Activity.this, Main2Activity.class);
+                    Intent intent2 = new Intent(Main5Activity.this, MatchActivity.class);
                     startActivity(intent2);
                     return true;
                 case R.id.navigation_xiaoxi:
@@ -82,13 +83,16 @@ public class Main5Activity extends AppCompatActivity {
         ifSignin();
         mTextMessage = (TextView) findViewById(R.id.message);
 
+        getWindow().setStatusBarColor(getResources().getColor(R.color.mine_color_bg,null));
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+
         //底部导航初始化和配置监听，默认选项
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_wode);
         //好友申请数
         BadgeBottomNav badgeBottomNav = new BadgeBottomNav(this,handler);
-        badgeBottomNav.getDataFriendsapply("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
+        badgeBottomNav.getDataFriendsapply("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=friendsapplynumber&m=socialchat");
         //未读信息监听
         iUnReadMessageObserver = new IUnReadMessageObserver() {
             @Override
@@ -112,7 +116,7 @@ public class Main5Activity extends AppCompatActivity {
         }else{
             //唯一登录验证
             uniquelogin = new Uniquelogin(this,handler);
-            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
         }
     }
     @Override

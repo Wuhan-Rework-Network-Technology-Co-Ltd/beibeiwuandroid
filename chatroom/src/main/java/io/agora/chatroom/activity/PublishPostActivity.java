@@ -352,7 +352,7 @@ public class PublishPostActivity extends AppCompatActivity {
                 platename = ((RadioButton)findViewById(bankuai_rg.getCheckedRadioButtonId())).getText().toString();
 
                 release_btn.setClickable(false);
-                postFabutiezi("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=fabutiezinew&m=socialchat");
+                postFabutiezi("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=fabutiezinew&m=socialchat");
 
             }
         });
@@ -498,7 +498,7 @@ public class PublishPostActivity extends AppCompatActivity {
                 String videoName = "post.mp4";
                 String myid = PublishPostActivity.this.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("userID", "");
                 //开始网络传输
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
                 MediaType MEDIA_TYPE_VIDEO = MediaType.parse("video/*");
                 MultipartBody.Builder multipartBody = new MultipartBody.Builder();

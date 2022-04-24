@@ -39,6 +39,7 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.Signin.Userset;
 import xin.banghua.beiyuan.Uniquelogin;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     private static final String TAG = "WXEntryActivity";
@@ -142,7 +143,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                             nickname = jsonObject.getString("nickname");
                             openid = jsonObject.getString("openid");
 
-                            saveUserinfo("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=weinxinregister&m=socialchat",openid,nickname,portrait);
+                            saveUserinfo("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=weinxinregister&m=socialchat",openid,nickname,portrait);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -248,7 +249,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             @Override
             public void run(){
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getUserInfo")
                         .build();
@@ -277,7 +278,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             @Override
             public void run(){
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getUserInfo")
                         .build();
@@ -307,7 +308,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             @Override
             public void run(){
                 mContext = getApplicationContext();
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("openid", openid)
                         .add("nickname", nickname)
@@ -341,7 +342,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("phonebrand", PushClass.phoneBrand)
@@ -349,7 +350,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         .add("frontorback","1")
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
+                        .url("https://redis.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
                         .post(formBody)
                         .build();
 
@@ -366,7 +367,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             @Override
             public void run(){
                 Log.d("融云注册信息","进入融云注册");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userID", userID)
                         .add("userNickName",userNickName)
@@ -403,7 +404,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             @Override
             public void run(){
                 Log.d("融云注册信息","进入融云注册");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userID", userID)
                         .add("userNickName",userNickName)

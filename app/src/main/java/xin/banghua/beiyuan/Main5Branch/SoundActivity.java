@@ -17,6 +17,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class SoundActivity extends AppCompatActivity {
     RadioGroup sound_on_off;
@@ -94,13 +95,13 @@ public class SoundActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("disturb", disturb)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeidisturb&m=rediscache")
+                        .url("https://redis.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=xiaobeidisturb&m=rediscache")
                         .post(formBody)
                         .build();
 

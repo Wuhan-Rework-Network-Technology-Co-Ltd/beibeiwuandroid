@@ -76,7 +76,7 @@ public class ContactCardExtensionModule implements IExtensionModule {
         if (conversationType.equals(Conversation.ConversationType.PRIVATE)
                 || conversationType.equals(Conversation.ConversationType.GROUP)) {
             pluginModules.add(new ContactCardPlugin());
-            pluginModules.add(new FlashPhotoPlugin());
+            pluginModules.add(new FlashPhotoPlugin());//闪图插件
             pluginModules.add(new GiftPlugin());
         }
         return pluginModules;

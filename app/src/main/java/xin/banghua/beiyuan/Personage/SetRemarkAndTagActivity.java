@@ -26,9 +26,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.FriendList;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class SetRemarkAndTagActivity extends AppCompatActivity {
     private static final String TAG = "SetRemarkAndTagActivity";
@@ -154,7 +155,7 @@ public class SetRemarkAndTagActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(SetRemarkAndTagActivity.this);
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("friendid", xin.banghua.beiyuan.Common.conversationSettingUserId)

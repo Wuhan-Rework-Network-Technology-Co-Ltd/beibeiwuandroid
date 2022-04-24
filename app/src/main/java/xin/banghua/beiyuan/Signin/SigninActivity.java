@@ -46,6 +46,7 @@ import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.SliderWebViewActivity;
 import xin.banghua.beiyuan.Uniquelogin;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 public class SigninActivity extends Activity {
@@ -165,7 +166,7 @@ public class SigninActivity extends Activity {
                     }
                     signIn.setClickable(false);
                     Toast.makeText(mContext, "登陆中", Toast.LENGTH_LONG).show();
-                    postSignIn("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signin&m=socialchat",userAccount.getText().toString(),userPassword.getText().toString());
+                    postSignIn("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=signin&m=socialchat",userAccount.getText().toString(),userPassword.getText().toString());
                 }
 
             }
@@ -267,7 +268,7 @@ public class SigninActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userAccount", userAccount)
                         .add("userPassword",userPassword)
@@ -304,7 +305,7 @@ public class SigninActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("phonebrand", PushClass.phoneBrand)
@@ -312,7 +313,7 @@ public class SigninActivity extends Activity {
                         .add("frontorback","1")
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
+                        .url("https://redis.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=xiaobeisignin&m=rediscache")
                         .post(formBody)
                         .build();
 
@@ -330,7 +331,7 @@ public class SigninActivity extends Activity {
             @Override
             public void run(){
                 Log.d("融云注册信息","进入融云注册");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userID", userID)
                         .add("userNickName",userNickName)

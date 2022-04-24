@@ -32,12 +32,12 @@ public class HelpCenter extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {//27就是8.1
             //做一些处理  webview打开
-            init("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+            init("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=helpcenter&m=socialchat");
         } else{
             //在版本低于此的时候，做一些处理   浏览器打开
-            openBrower("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+            openBrower("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=helpcenter&m=socialchat");
         }
-        //init("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=helpcenter&m=socialchat");
+        //init("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=helpcenter&m=socialchat");
     }
 
 

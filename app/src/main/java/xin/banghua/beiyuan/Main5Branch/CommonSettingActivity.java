@@ -43,6 +43,7 @@ import xin.banghua.beiyuan.RongYunExtension.MyContactCard;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.utils.MD5Tool;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class CommonSettingActivity extends AppCompatActivity {
     private static final String TAG = "CommonSettingActivity";
@@ -107,7 +108,7 @@ public class CommonSettingActivity extends AppCompatActivity {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setAccountdelete_btn("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Accountdelete&m=socialchat");
+                        setAccountdelete_btn("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=Accountdelete&m=socialchat");
                         dialog.dismiss();
                     }
                 });
@@ -214,7 +215,7 @@ public class CommonSettingActivity extends AppCompatActivity {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getDataFriends("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=friends&m=socialchat");
+                        getDataFriends("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=friends&m=socialchat");
                         Toast.makeText(mContext, "清除聊天记录", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -230,7 +231,7 @@ public class CommonSettingActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(mContext);
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
                         .add("sign", MD5Tool.getSign(myid))
@@ -262,7 +263,7 @@ public class CommonSettingActivity extends AppCompatActivity {
             public void run(){
                 SharedHelper shvalue = new SharedHelper(getApplicationContext());
                 String userID = shvalue.readUserInfo().get("userID");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", userID)
                         .build();

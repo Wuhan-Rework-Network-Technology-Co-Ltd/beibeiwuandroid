@@ -1,6 +1,7 @@
 package xin.banghua.beiyuan.Main5Branch;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -252,6 +253,31 @@ public class GoodsFragment extends Fragment {
                     });
                 });
             }
+
+            if (!TextUtils.isEmpty(Common.userInfoList.getReferral()) && (currentItem.getDescription().equals("推广专属头像框") || currentItem.getDescription().equals("推广专属坐骑"))){
+                for (String element: io.agora.chatroom.Common.referralList) {
+                    if (Common.userInfoList.getReferral().equals(element)){
+                        holder.buy_btn.setVisibility(View.VISIBLE);
+                        holder.buy_btn.setClickable(true);
+                        holder.buy_btn.setText("装备");
+                        holder.buy_btn.setBackgroundResource(R.drawable.red_round);
+                        holder.buy_btn.setOnClickListener(v -> {
+                            if (currentItem.getType().equals("头像框")){
+                                Common.userInfoList.setPortraitframe(currentItem.getSvga());
+                            }else if (currentItem.getType().equals("坐骑")){
+                                Common.userInfoList.setVeilcel(currentItem.getSvga());
+                            }
+                            OkHttpInstance.equipGoods(currentItem.getId(), new OkHttpResponseCallBack() {
+                                @Override
+                                public void getResponseString(String responseString) {
+                                    notifyDataSetChanged();
+                                }
+                            });
+                        });
+                    }
+                }
+            }
+
             if (Common.isSVip(Common.userInfoList) && (currentItem.getDescription().equals("svip专属头像框") || currentItem.getDescription().equals("svip专属坐骑") || currentItem.getDescription().equals("vip专属头像框") || currentItem.getDescription().equals("vip专属坐骑"))){
                 holder.buy_btn.setVisibility(View.VISIBLE);
                 holder.buy_btn.setClickable(true);

@@ -15,11 +15,6 @@ import android.view.View;
 import com.alibaba.ha.adapter.AliHaAdapter;
 import com.alibaba.ha.adapter.AliHaConfig;
 import com.alibaba.ha.adapter.Plugin;
-import com.alibaba.sdk.android.cloudcode.CloudCodeInitializer;
-import com.alibaba.sdk.android.cloudcode.CloudCodeLog;
-import com.alibaba.sdk.android.logger.LogLevel;
-import com.baidu.mobads.sdk.api.BDAdConfig;
-import com.baidu.mobads.sdk.api.BDDialogParams;
 import com.baidu.mobads.sdk.api.MobadsPermissionSettings;
 import com.bytedance.sdk.openadsdk.TTAdConfig;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
@@ -35,6 +30,8 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,9 +66,12 @@ import xin.banghua.beiyuan.chat.MessageReceivedService;
 import xin.banghua.beiyuan.chat.faceunity.PreprocessorFaceUnity;
 import xin.banghua.beiyuan.chat.faceunity.RtcEngineEventHandler;
 import xin.banghua.beiyuan.chat.faceunity.RtcEngineEventHandlerProxy;
+import xin.banghua.beiyuan.match.MatchMessage;
+import xin.banghua.beiyuan.match.MatchMessageProvider;
 import xin.banghua.beiyuan.utils.NoEtagFileDownloaUrlConnection;
 import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
+import xin.banghua.beiyuan.utils.ZipUtils;
 import xin.banghua.onekeylogin.ModeSelectActivity;
 import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
 import xyz.doikki.videoplayer.player.VideoViewConfig;
@@ -114,6 +114,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
     public void onCreate() {
         super.onCreate();
 
+
+        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3");
         //消息接收服务
         ChatRoomManager.startIntent = new Intent(getApplicationContext(), MessageReceivedService.class);
 
@@ -144,7 +146,13 @@ public class App extends Application implements Application.ActivityLifecycleCal
         //下载美颜素材
         File file_fu = new File("data/data/xin.banghua.beiyuan/files/faceunity");
         if (!file_fu.exists()){
-            Common.downloadFU();
+            //Common.downloadFU();
+        }
+
+        try {
+            ZipUtils.UnZipFolder(Common.getAssetsCacheFile(this,"faceunity.zip"),"data/data/" + "xin.banghua.beiyuan" + "/files/faceunity");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         //一键登录
@@ -180,6 +188,18 @@ public class App extends Application implements Application.ActivityLifecycleCal
         RongIM.init(this,"m7ua80gbmo0km");
         RongExtensionManager.getInstance().registerExtensionModule(new SightExtensionModule());
         RongIM.getInstance().setConversationClickListener(new MyConversationClickListener());
+
+        //RongExtensionManager.getInstance().addExtensionModule(new ContactCardExtensionModule());
+        RongIM.registerMessageType(MatchMessage.class); //注册名片消息
+        RongIM.getInstance().registerMessageTemplate(new MatchMessageProvider());
+
+        List<String> phrasesList = new ArrayList<>();
+        phrasesList.add("hi，可以交个朋友吗？");
+        phrasesList.add("哈喽，在忙什么呢？");
+        phrasesList.add("你好，在干嘛呢，一起聊天呀！");
+        phrasesList.add("你喜欢可爱的小动物吗？");
+        phrasesList.add("你觉得异性之间会有纯友谊吗？");
+        RongExtensionManager.getInstance().addPhraseList(phrasesList);
 //        initContactCard();
         //验证连接成功
 //          connect("JeXL+71vahbPjzSTYBlf3Okw/3FJenp53iTgy0iFgV+zWO2xI0jlx8+r479bFjga59uiwpcN87KhrP49wK/ZpQ==");
@@ -234,9 +254,11 @@ public class App extends Application implements Application.ActivityLifecycleCal
         rongyunConnect.connect(token);
 
 
-        RongExtensionManager.getInstance().addExtensionModule(new ContactCardExtensionModule());
 
 
+
+        RongIM.getInstance().enableNewComingMessageIcon(true);//显示新消息提醒
+        RongIM.getInstance().enableUnreadMessageIcon(true);//显示未读消息数目
 
 
         VideoViewManager.setConfig(VideoViewConfig.newBuilder()
@@ -306,26 +328,26 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         //云码
         // 用户签署隐私协议之后，调用云码sdk初始化
-        CloudCodeInitializer.init(getApplication());
-        // 如果没有在manifest中配置渠道ID和媒体ID，需要在此处传入
-//        CloudCodeInitializer.init(this, "598394599954655233", "598800657214651394");
-        // 设置日志输出级别为debug
-        CloudCodeLog.setLevel(LogLevel.DEBUG);
+//        CloudCodeInitializer.init(getApplication());
+//        // 如果没有在manifest中配置渠道ID和媒体ID，需要在此处传入
+////        CloudCodeInitializer.init(this, "598394599954655233", "598800657214651394");
+//        // 设置日志输出级别为debug
+//        CloudCodeLog.setLevel(LogLevel.DEBUG);
 
 
         //百度广告
-        BDAdConfig bdAdConfig = new BDAdConfig.Builder()
-                // 1、设置app名称，可选
-                .setAppName("小贝乐园")
-                // 2、应用在mssp平台申请到的appsid，和包名一一对应，此处设置等同于在AndroidManifest.xml里面设置
-                .setAppsid("f678b1ce")
-                // 3、设置下载弹窗的类型和按钮动效样式，可选
-                .setDialogParams(new BDDialogParams.Builder()
-                        .setDlDialogType(BDDialogParams.TYPE_BOTTOM_POPUP)
-                        .setDlDialogAnimStyle(BDDialogParams.ANIM_STYLE_NONE)
-                        .build())
-                .build(getApplication());
-        bdAdConfig.init();
+//        BDAdConfig bdAdConfig = new BDAdConfig.Builder()
+//                // 1、设置app名称，可选
+//                .setAppName("小贝乐园")
+//                // 2、应用在mssp平台申请到的appsid，和包名一一对应，此处设置等同于在AndroidManifest.xml里面设置
+//                .setAppsid("f678b1ce")
+//                // 3、设置下载弹窗的类型和按钮动效样式，可选
+//                .setDialogParams(new BDDialogParams.Builder()
+//                        .setDlDialogType(BDDialogParams.TYPE_BOTTOM_POPUP)
+//                        .setDlDialogAnimStyle(BDDialogParams.ANIM_STYLE_NONE)
+//                        .build())
+//                .build(getApplication());
+//        bdAdConfig.init();
 
         // 设置SDK可以使用的权限，包含：设备信息、定位、存储、APP LIST
         // 注意：建议授权SDK读取设备信息，SDK会在应用获得系统权限后自行获取IMEI等设备信息
@@ -446,7 +468,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
             new Thread(new Runnable() {
                 @Override
                 public void run(){
-                    OkHttpClient client = new OkHttpClient();
+                    OkHttpClient client = OkHttpInstance.getInstance();
                     RequestBody formBody = new FormBody.Builder()
                             .add("myid", userInfo.get("userID"))
                             .add("frontorback", frontOrBack)
@@ -454,7 +476,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
                             .add("pushregid",PushClass.pushRegID)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeifrontorback&m=rediscache")
+                            .url("https://redis.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=xiaobeifrontorback&m=rediscache")
                             .post(formBody)
                             .build();
                     try (Response response = client.newCall(request).execute()) {

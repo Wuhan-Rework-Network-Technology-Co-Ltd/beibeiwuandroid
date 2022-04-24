@@ -43,12 +43,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Adapter.UserInfoList;
 import xin.banghua.beiyuan.Adapter.UserInfoSliderAdapter;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.SliderWebViewActivity;
-import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 /**
@@ -449,7 +450,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
                 Map<String,String> locationInfo = sh.readLocation();
                 String myid = sh.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getUserInfo")
                         .add("myid", myid)
@@ -469,7 +470,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
                     Message message=handler.obtainMessage();
                     message.obj=response.body().string();
                     message.what=1;
-                    Log.d(TAG, "run: Userinfo发送的值"+message.obj.toString());
+                    Log.d(TAG, "run: 推荐人的值"+message.obj.toString());
                     handler.sendMessageDelayed(message,10);
                 }catch (Exception e) {
                     e.printStackTrace();
@@ -484,7 +485,7 @@ public class TuijianFragment extends Fragment implements BaseSliderView.OnSlider
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getSlide")
                         .build();

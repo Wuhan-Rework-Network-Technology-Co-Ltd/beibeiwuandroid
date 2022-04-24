@@ -278,6 +278,8 @@ public class DouYinViewAdapter extends RecyclerView.Adapter<DouYinViewAdapter.Vi
         });
 
 
+        //holder.tv_poi.setText(currentItem.get);
+
         //关注按钮,判断是否已关注
 
         holder.add_follow_img.setClickable(false);

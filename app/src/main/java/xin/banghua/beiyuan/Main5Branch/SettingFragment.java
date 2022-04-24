@@ -46,6 +46,7 @@ import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
 import xin.banghua.beiyuan.utils.MD5Tool;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 
@@ -258,7 +259,7 @@ public class SettingFragment extends Fragment {
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setAccountdelete_btn("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Accountdelete&m=socialchat");
+                        setAccountdelete_btn("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=Accountdelete&m=socialchat");
                         dialog.dismiss();
                     }
                 });
@@ -274,12 +275,12 @@ public class SettingFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://redis.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=xiaobeisignout&m=rediscache")
+                        .url("https://redis.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=xiaobeisignout&m=rediscache")
                         .post(formBody)
                         .build();
 
@@ -297,7 +298,7 @@ public class SettingFragment extends Fragment {
             new Thread(new Runnable() {
                 @Override
                 public void run(){
-                    OkHttpClient client = new OkHttpClient();
+                    OkHttpClient client = OkHttpInstance.getInstance();
                     RequestBody formBody = new FormBody.Builder()
                             .add("system", "android")
                             .build();
@@ -329,7 +330,7 @@ public class SettingFragment extends Fragment {
                 SharedHelper shuserinfo = new SharedHelper(getActivity().getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("id", myid)
                         .add("sign", MD5Tool.getSign(myid))

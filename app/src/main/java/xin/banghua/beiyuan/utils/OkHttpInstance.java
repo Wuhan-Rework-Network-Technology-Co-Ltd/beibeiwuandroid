@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.Proxy;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -24,13 +25,13 @@ import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 
 public class OkHttpInstance {
     private static final String TAG = "OkHttpInstance";
-    private static OkHttpClient uniqueInstance = new OkHttpClient();
+    private static OkHttpClient.Builder uniqueInstance = new OkHttpClient.Builder();
     //Singleton类只有一个构造方法并且是被private修饰的，所以用户无法通过new方法创建该对象实例
     private OkHttpInstance(){}
     public static OkHttpClient getInstance(){
-        return uniqueInstance;
+        uniqueInstance.proxy(Proxy.NO_PROXY);
+        return uniqueInstance.build();
     }
-
     /**
      * 广告开关
      * @param okHttpResponseCallBack
@@ -43,7 +44,7 @@ public class OkHttpInstance {
                 RequestBody formBody = new FormBody.Builder()
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=isShowADNew&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=isShowADNew&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -71,7 +72,7 @@ public class OkHttpInstance {
                         .add("id", Common.myID)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=SvipTry&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=SvipTry&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -94,7 +95,7 @@ public class OkHttpInstance {
                         .add("id", Common.myID)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=SvipTry&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=SvipTry&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -122,9 +123,11 @@ public class OkHttpInstance {
                     OkHttpClient client = OkHttpInstance.getInstance();
                     RequestBody formBody = new FormBody.Builder()
                             .add("userId", userId)
+                            .add("latitude", Common.latitude)
+                            .add("longitude", Common.longitude)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getUserAttributes&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getUserAttributes&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -132,7 +135,7 @@ public class OkHttpInstance {
                         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                         if (okHttpResponseCallBack!=null){
                             String resultString = response.body().string();
-                            Log.d(TAG, "run:获取用户属性" +userId+ resultString);
+                            Log.d(TAG, "run:获取用户属性" +Common.latitude+"|"+Common.longitude);
                             if (resultString.equals("false")){
                                 return;
                             }
@@ -160,7 +163,7 @@ public class OkHttpInstance {
                             .add("userId", userId)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getUserAttributesMe&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getUserAttributesMe&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -196,7 +199,7 @@ public class OkHttpInstance {
                         .add("id", Common.myID)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=deleteRecruitment&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deleteRecruitment&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -230,7 +233,7 @@ public class OkHttpInstance {
                             .add("id", Common.userInfoList.getId())
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=UpdateOnline&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=UpdateOnline&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -263,7 +266,7 @@ public class OkHttpInstance {
                             .add("id", id)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getFollowList&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getFollowList&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -303,7 +306,7 @@ public class OkHttpInstance {
                             .add("you", you)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=follow&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=follow&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -337,11 +340,11 @@ public class OkHttpInstance {
                         public void run(){
                             OkHttpClient client = OkHttpInstance.getInstance();
                             RequestBody formBody = new FormBody.Builder()
-                                    .add("me", Common.myID)
+                                    .add("me", Common.userInfoList.getId())
                                     .add("you", you)
                                     .build();
                             Request request = new Request.Builder()
-                                    .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=unfollow&m=socialchat")
+                                    .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=unfollow&m=socialchat")
                                     .post(formBody)
                                     .build();
 
@@ -349,6 +352,11 @@ public class OkHttpInstance {
                                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                                 String resultString = response.body().string();
                                 Common.userInfoList.setFollow((Integer.parseInt(Common.userInfoList.getFollow())-1)+"");
+                                for (int i = 0;i < Common.followList.size();i++){
+                                    if (Common.followList.get(i).getUserId().equals(you)){
+                                        Common.followList.remove(i);
+                                    }
+                                }
                                 runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
                             }catch (Exception e) {
                                 e.printStackTrace();
@@ -362,7 +370,39 @@ public class OkHttpInstance {
         }
     }
 
+    /**
+     * 删除粉丝
+     * @param okHttpResponseCallBack
+     */
+    public static void deleteFans(String you,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("me", you)
+                            .add("you", Common.userInfoList.getId())
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=unfollow&m=socialchat")
+                            .post(formBody)
+                            .build();
 
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        String resultString = response.body().string();
+                        Common.userInfoList.setFans((Integer.parseInt(Common.userInfoList.getFans())-1)+"");
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 获取用户关注的人
@@ -379,7 +419,7 @@ public class OkHttpInstance {
                             .add("pageIndex",pageIndex)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getFollowUser&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getFollowUser&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -413,7 +453,7 @@ public class OkHttpInstance {
                             .add("pageIndex",pageIndex)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getFansUser&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getFansUser&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -449,7 +489,7 @@ public class OkHttpInstance {
                             .add("pageIndex",pageIndex)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=Friendsapplynewnewnew&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=Friendsapplynewnewnew&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -483,7 +523,7 @@ public class OkHttpInstance {
                             .add("yourid",yourid)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=agreefriendnew&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=agreefriendnew&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -519,7 +559,7 @@ public class OkHttpInstance {
                             .add("transamount", transamount)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=withdraw&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=withdraw&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -554,7 +594,7 @@ public class OkHttpInstance {
                             .add("slidesort", slidesort)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getSlide&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getSlide&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -589,7 +629,7 @@ public class OkHttpInstance {
                             .add("type", type)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getStore&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getStore&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -623,7 +663,7 @@ public class OkHttpInstance {
                             .add("goods_id", goods_id)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=buyStoreGoods&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=buyStoreGoods&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -656,7 +696,7 @@ public class OkHttpInstance {
                             .add("authid", Common.userInfoList.getId())
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getMyGoods&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getMyGoods&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -691,7 +731,7 @@ public class OkHttpInstance {
                             .add("goods_id",goods_id)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=equipGoods&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=equipGoods&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -726,7 +766,7 @@ public class OkHttpInstance {
                             .add("phoneNumber", phoneNumber)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://www.banghua.xin/sms.php")
+                            .url("https://www.banghua.xin/sms_beibeiwu.php")
                             .post(formBody)
                             .build();
 
@@ -760,7 +800,7 @@ public class OkHttpInstance {
                             .add("userAccount", userAccount)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=SigninOneKeyLogin&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=SigninOneKeyLogin&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -786,18 +826,18 @@ public class OkHttpInstance {
      * @param yourid                 yourid
      * @param okHttpResponseCallBack 好http响应回电话
      */
-    public static void deleteFriendNumber(final String yourid,OkHttpResponseCallBack okHttpResponseCallBack){
+    public static void deleteFriendNumber(String myid,String yourid,OkHttpResponseCallBack okHttpResponseCallBack){
         try {
             new Thread(new Runnable() {
                 @Override
                 public void run(){
                     OkHttpClient client = OkHttpInstance.getInstance();
                     RequestBody formBody = new FormBody.Builder()
-                            .add("myid", Common.userInfoList.getId())
+                            .add("myid", myid)
                             .add("yourid", yourid)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -816,6 +856,42 @@ public class OkHttpInstance {
         }
     }
 
+
+    /**
+     * 删除朋友
+     *
+     * @param yourid                 yourid
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void deleteFriend(final String yourid,OkHttpResponseCallBack okHttpResponseCallBack){
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    OkHttpClient client = OkHttpInstance.getInstance();
+                    RequestBody formBody = new FormBody.Builder()
+                            .add("myid", Common.userInfoList.getId())
+                            .add("yourid", yourid)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=deletefriendnew&m=socialchat")
+                            .post(formBody)
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        Log.d(TAG, "run: 删除朋友");
+                        String responseString = response.body().string();
+                        runOnUiThread(()->okHttpResponseCallBack.getResponseString(responseString));
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 获取数据postlist
@@ -848,7 +924,7 @@ public class OkHttpInstance {
                             .add("filter_region", filter_region)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntannewnewnew&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=luntannewnewnew&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -883,7 +959,7 @@ public class OkHttpInstance {
                             .add("commentID", commentID)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=tipoffComment&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=tipoffComment&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -919,7 +995,7 @@ public class OkHttpInstance {
                             .add("userAccount", userAccount)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=bindPhone&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=bindPhone&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -946,7 +1022,7 @@ public class OkHttpInstance {
             @Override
             public void run(){
                 Log.d("融云注册信息","进入融云注册");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userID", userInfoList.getId())
                         .add("userNickName",userInfoList.getNickname())
@@ -1007,7 +1083,7 @@ public class OkHttpInstance {
                             .add("pageIndex", pageIndex)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getTopicPost&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getTopicPost&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -1079,7 +1155,7 @@ public class OkHttpInstance {
                             .add("type",type)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getScript&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getScript&m=socialchat")
                             .post(formBody)
                             .build();
                     try (Response response = client.newCall(request).execute()) {
@@ -1181,7 +1257,7 @@ public class OkHttpInstance {
                             .add("value",value)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=resetMatch&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=resetMatch&m=socialchat")
                             .post(formBody)
                             .build();
                     try (Response response = client.newCall(request).execute()) {
@@ -1218,7 +1294,7 @@ public class OkHttpInstance {
                             .add("pageIndex",pageIndex)
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getVideo&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getVideo&m=socialchat")
                             .post(formBody)
                             .build();
                     try (Response response = client.newCall(request).execute()) {
@@ -1317,12 +1393,12 @@ public class OkHttpInstance {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("postid", postid)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=luntanlike&m=socialchat")
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=luntanlike&m=socialchat")
                         .post(formBody)
                         .build();
 
@@ -1331,6 +1407,434 @@ public class OkHttpInstance {
 
                     String resultString = response.body().string();
                     Log.d(TAG, "run: okhttp点赞"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 匹配用户上网
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getOnlineMatchUser(String id,String gender,String property,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("id",id)
+                        .add("gender",gender)
+                        .add("property",property)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getOnlineMatchUser&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 匹配用户上网"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+
+    /**
+     * 匹配用户上网
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getOnlineMatchUserOne(OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("id",Common.userInfoList.getId())
+                        .add("gender",Common.userInfoList.getGender())
+                        .add("property",Common.userInfoList.getProperty())
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getOnlineMatchUserOneNew&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 匹配用户上网"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 上网匹配num
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getOnlineMatchNum(OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getOnlineMatchNum&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 上网匹配num"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 上网比赛时间
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getOnlineMatchTimes(OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("id",Common.userInfoList.getId())
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getOnlineMatchTimes&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 上网比赛时间"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 个人动态
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getDataPostlist(String authid,String pageindex,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("authid", authid)
+                        .add("pageindex",pageindex)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=someonesluntannew&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 个人动态"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 得到朋友数字
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void getFriendNumber(OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", Common.userInfoList.getId())
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=friendsnumber&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 个人动态"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 加入朋友
+     *
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void addfriend(String userId,String yourwords,String giftLists,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", userId)
+                        .add("yourid", Common.userInfoList.getId())
+                        .add("yournickname", Common.userInfoList.getNickname())
+                        .add("yourportrait", Common.userInfoList.getPortrait())
+                        .add("yourwords",yourwords)
+                        .add("gift_string", giftLists)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addfriend&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 加入朋友"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * addblacklist
+     *
+     * @param yourid                 yourid
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void addblacklist(String yourid,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", Common.userInfoList.getId())
+                        .add("yourid", yourid)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=addblacklist&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    //拉黑了好友，则刷新
+                    try {
+                        xin.banghua.beiyuan.Common.newFriendOrDeleteFriend = true;
+                        xin.banghua.beiyuan.Common.friendListMap.remove(yourid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: 加入朋友"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * iffriendnew
+     *
+     * @param myid                   myid
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void iffriendnew(String myid,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("myid", myid)
+                        .add("yourid", Common.userInfoList.getId())
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=iffriendnew&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: iffriendnew"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * 手机短信验证
+     *
+     * @param phone                  电话
+     * @param code                   代码
+     * @param okHttpResponseCallBack 好http响应回电话
+     */
+    public static void smsVerify(String phone,String code,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("phone", phone)
+                        .add("code", code)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=smsVerify&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: smsVerify"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public static void tuijiannew(String pageindex,String selectedGender,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("type", "getUserInfo")
+                        //.add("myid", Common.myID)
+                        .add("pageindex", pageindex)
+                        .add("selectedGender", selectedGender)
+                        .add("latitude",Common.latitude)
+                        .add("longitude",Common.longitude)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=tuijiannew&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: tuijiannew"+pageindex+selectedGender);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    public static void fujinnew(String pageindex,String selectedGender,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("type", "getUserInfo")
+                        //.add("myid", Common.myID)
+                        .add("pageindex", pageindex)
+                        .add("selectedGender", selectedGender)
+                        .add("latitude",Common.latitude)
+                        .add("longitude",Common.longitude)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=fujinnew&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: fujinnew"+resultString);
+                    runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    public static void wealthAndGlamour(String type,String pageindex,String selectedGender,OkHttpResponseCallBack okHttpResponseCallBack){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                OkHttpClient client = OkHttpInstance.getInstance();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("type", type)
+                        .add("pageindex", pageindex)
+                        .add("selectedGender", selectedGender)
+                        .add("latitude",Common.latitude)
+                        .add("longitude",Common.longitude)
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=wealthAndGlamour&m=socialchat")
+                        .post(formBody)
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    String resultString = response.body().string();
+                    Log.d(TAG, "run: wealthAndGlamour"+resultString);
                     runOnUiThread(()->okHttpResponseCallBack.getResponseString(resultString));
                 }catch (Exception e) {
                     e.printStackTrace();

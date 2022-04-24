@@ -45,6 +45,8 @@ public class Common {
 
     public static String[] filterString = {};
 
+    public static String[] referralList = {};
+
     static Intent intentChatRoomService;//聊天室
     public static void instanceChatRoomService(Context context){
         intentChatRoomService = new Intent(context, ChatRoomService.class);
@@ -72,6 +74,20 @@ public class Common {
             return resourceUrl;//微信头像
         }else {
             return OSS_PREFIX + resourceUrl;//现在的oss只保存后缀，前缀要自己添加
+        }
+    }
+
+    /**
+     * 转变大于10000的数字单位为w，例如24234：2.4w
+     * @param num
+     * @return
+     */
+    public static String changeNumberFormatIntoW(Double num) {
+        if(num<10000){
+            return String.valueOf(num);
+        }else{
+            double n = (double)num/10000;
+            return String.format("%.1f",n)+"w";
         }
     }
 

@@ -40,6 +40,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.Main3Branch.ConversationSettingActivity;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.match.MatchCard;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 public class ConversationActivity extends AppCompatActivity {
@@ -72,6 +74,7 @@ public class ConversationActivity extends AppCompatActivity {
     }
 
     public static ConstraintLayout container;
+    MatchCard matchCard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +82,8 @@ public class ConversationActivity extends AppCompatActivity {
 
 
 
-
-
         container = findViewById(R.id.container);
+
 
 
         GiftDialog.getInstance(this,false,container,null);
@@ -95,6 +97,15 @@ public class ConversationActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: 人名："+title);
         targetId = intent.getData().getQueryParameter("targetId") ;
         Log.d(TAG, "onCreate: id："+targetId);
+
+        matchCard = findViewById(R.id.match_card);
+        if (targetId.equals("1")){
+            matchCard.setVisibility(View.GONE);
+        }else {
+            matchCard.setVisibility(View.VISIBLE);
+            matchCard.show(targetId);
+        }
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -113,7 +124,7 @@ public class ConversationActivity extends AppCompatActivity {
                 SharedHelper shuserinfo = new SharedHelper(getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", targetId)
                         .add("yourid", myid)
@@ -180,7 +191,7 @@ public class ConversationActivity extends AppCompatActivity {
             case android.R.id.home:
                 //this.finish(); // back button
                 //启动会话列表    为了刷新未读信息数
-                startActivity(new Intent(ConversationActivity.this, Main3Activity.class));
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);

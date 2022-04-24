@@ -48,6 +48,17 @@ import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.ZipUtils;
 
 public class Common {
+
+
+    public static int onlineMatchTimes = -1;
+
+    /**
+     * 新朋友num
+     */
+    public static int newFriendsNum = 0;
+
+    public static String chatFrom = "normal";
+
     public static String myID = null;
     private static final String TAG = "Common";
 
@@ -93,6 +104,15 @@ public class Common {
     }
 
 
+
+    public static Boolean isFollow(String uid){
+        for (int i = 0; i < Common.followList.size(); i++){
+            if (Common.followList.get(i).getUserId().equals(uid)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * 是朋友
@@ -326,10 +346,10 @@ public class Common {
             shortstring = "最近在线";
         } else if(deltime > 60*60) {
             //shortstring = (int)(deltime/(60*60)) + "小时前";
-            shortstring = "今天在线";
-        } else if(deltime > 300) {
-            //shortstring = (int)(deltime/(60)) + "分前";
             shortstring = "刚刚在线";
+        } else if(deltime > 300) {
+            shortstring = (int)(deltime/(60)) + "分前";
+            //shortstring = "刚刚在线";
         } else {
             shortstring = "在线";
         }
@@ -709,6 +729,36 @@ public class Common {
             return "data/data/xin.banghua.beiyuan/files/"+type+"/"+fileName+".mp4";
         }
     }
+
+    public static String getAssetsCacheFile(Context context, String fileName) {
+        Context mContext = App.getApplication();
+        File cacheFile = new File(mContext.getCacheDir(), fileName);
+
+        try {
+            InputStream inputStream = mContext.getAssets().open(fileName);
+            try {
+                FileOutputStream outputStream = new FileOutputStream(cacheFile);
+
+                try {
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = inputStream.read(buf)) > 0) {
+                        outputStream.write(buf, 0, len);
+                    }
+                } finally {
+                    outputStream.close();
+                }
+            } finally {
+                inputStream.close();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return cacheFile.getAbsolutePath();
+    }
+
     /**
      * 附加文件下载，如在线音乐等
      * @param type         类型，如:audio,image,etc

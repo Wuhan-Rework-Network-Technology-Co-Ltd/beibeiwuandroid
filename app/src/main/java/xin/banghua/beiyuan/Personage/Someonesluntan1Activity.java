@@ -33,6 +33,7 @@ import xin.banghua.beiyuan.Adapter.LuntanList;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.custom_ui.CustomVideoView;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.beiyuan.utils.ScreenUtils;
 
 public class Someonesluntan1Activity extends AppCompatActivity {
@@ -131,6 +132,8 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                     posts.setComment(jsonObject.getString("comment"));
                     posts.setTopic(jsonObject.getString("topic"));
                     posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
+                    posts.setAll_money(jsonObject.getString("all_money"));
+                    posts.setAll_income(jsonObject.getString("all_income"));
                     luntanLists.add(posts);
                 }
                 adapter.setLuntanLists(luntanLists);
@@ -167,6 +170,8 @@ public class Someonesluntan1Activity extends AppCompatActivity {
                     posts.setComment(jsonObject.getString("comment"));
                     posts.setTopic(jsonObject.getString("topic"));
                     posts.setRp_verify_time(jsonObject.getString("rp_verify_time"));
+                    posts.setAll_money(jsonObject.getString("all_money"));
+                    posts.setAll_income(jsonObject.getString("all_income"));
                     luntanLists.add(posts);
                 }
             }
@@ -309,13 +314,6 @@ public class Someonesluntan1Activity extends AppCompatActivity {
 
             });
         }
-
-
-
-
-
-
-
     }
     //网络数据部分
     //处理返回的数据
@@ -346,7 +344,7 @@ public class Someonesluntan1Activity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("authid", authid)
                         .add("pageindex",pageindex)

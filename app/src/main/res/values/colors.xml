@@ -42,6 +42,10 @@
     <color name="background_gray">#F8F9FA</color>
 
 
+    <color name="match_color_bg">#0D6FCA</color>
+
+    <color name="mine_color_bg">#491094</color>
+
     <color name="text_color_1">#212121</color>
     <color name="text_color_2">#FBE7CF</color>
     <color name="text_color_3">#33424C</color>

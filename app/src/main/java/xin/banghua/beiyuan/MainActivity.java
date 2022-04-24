@@ -1,5 +1,6 @@
 package xin.banghua.beiyuan;
 
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 import static xin.banghua.onekeylogin.Constant.THEME_KEY;
 
 import android.Manifest;
@@ -19,18 +20,27 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +53,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.MainBranch.SousuoActivity;
+import xin.banghua.beiyuan.MainBranch.WealthAndGlamourFragment;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
 import xin.banghua.beiyuan.Signin.SigninActivity;
+import xin.banghua.beiyuan.match.MatchActivity;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 import xin.banghua.onekeylogin.login.OneKeyLoginActivity;
 
 //import android.support.design.widget.BottomNavigationView;
@@ -91,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra(THEME_KEY, 4);
                         startActivity(intent);
                     }else {
-                        Intent intent2 = new Intent(MainActivity.this, Main2Activity.class);
+                        Intent intent2 = new Intent(MainActivity.this, MatchActivity.class);
                         startActivity(intent2);
                     }
                     return true;
@@ -126,7 +140,18 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+    private List<Fragment> menuViewPagerView_fragment = new ArrayList<>();
+    private List<String> menuViewPagerView_menu = new ArrayList<>();
 
+    FragmentPagerAdapter mFragmentPagerAdapter;
+
+    TabLayout viewpager_menu;
+    ViewPager viewPager;
+
+    WealthAndGlamourFragment wealthAndGlamourFragment1;
+    WealthAndGlamourFragment wealthAndGlamourFragment2;
+    WealthAndGlamourFragment wealthAndGlamourFragment3;
+    WealthAndGlamourFragment wealthAndGlamourFragment4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         /**
@@ -142,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        NavController navController = findNavController(R.id.fragmentContainerView);
 
         //判断是否登录
         ifSignin();
@@ -178,6 +205,148 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         RongIM.getInstance().addUnReadMessageCountChangedObserver(iUnReadMessageObserver,Conversation.ConversationType.PRIVATE);
+
+
+
+        viewpager_menu = findViewById(R.id.viewpager_menu);
+        viewPager = findViewById(R.id.viewpager);
+        menuViewPagerView_menu.add("精华");
+        menuViewPagerView_menu.add("附近");
+        menuViewPagerView_menu.add("财富榜");
+        menuViewPagerView_menu.add("魅力榜");
+
+        wealthAndGlamourFragment1 = WealthAndGlamourFragment.newInstance("tuijian","all");
+        wealthAndGlamourFragment2 = WealthAndGlamourFragment.newInstance("fujin","all");
+        wealthAndGlamourFragment3 = WealthAndGlamourFragment.newInstance("all_money","all");
+        wealthAndGlamourFragment4 = WealthAndGlamourFragment.newInstance("all_income","all");
+
+        menuViewPagerView_fragment.add(wealthAndGlamourFragment1);
+        menuViewPagerView_fragment.add(wealthAndGlamourFragment2);
+        menuViewPagerView_fragment.add(wealthAndGlamourFragment3);
+        menuViewPagerView_fragment.add(wealthAndGlamourFragment4);
+        //配置ViewPager的适配器
+        mFragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+            @Override
+            public Fragment getItem(int position) {
+                return menuViewPagerView_fragment.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return menuViewPagerView_fragment.size();
+            }
+
+            @Nullable
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return menuViewPagerView_menu.get(position);
+            }
+        };
+
+        viewPager.setAdapter(mFragmentPagerAdapter);
+        viewpager_menu.setupWithViewPager(viewPager);
+
+        viewPager.setOffscreenPageLimit(4);
+
+
+        initView();
+    }
+
+
+    //button
+    LinearLayout seewho_tablerow,seewho_tablerow2;
+    ImageView seewho_btn,seeall_btn,seefemale_btn,seemale_btn,vipDescription,goToRoom,goToRoomTwo;
+    private String selectedGender = "all";
+    public void initView(){
+        vipDescription = findViewById(R.id.vipDescription);
+        vipDescription.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, SliderWebViewActivity.class);
+            intent.putExtra("slidername","会员权益");
+            intent.putExtra("sliderurl","https://www.chengzijianzhan.com/tetris/page/6774435626746904584/");
+            startActivity(intent);
+        });
+        goToRoom = findViewById(R.id.goToRoom);
+        goToRoom.setOnClickListener(v -> {
+            if (Common.myID ==null){
+                Intent intentSignin = new Intent(mContext, SigninActivity.class);
+                startActivity(intentSignin);
+            }else {
+                Intent intent = new Intent(mContext, ChannelGridActivity.class);
+                startActivity(intent);
+            }
+        });
+        goToRoomTwo = findViewById(R.id.goToRoomTwo);
+        goToRoomTwo.setOnClickListener(v -> {
+            if (Common.myID ==null){
+                Intent intentSignin = new Intent(mContext, SigninActivity.class);
+                startActivity(intentSignin);
+            }else {
+                Intent intent = new Intent(mContext, ChannelGridActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        initNavigateButton();
+        //快捷按钮
+        seewho_tablerow = findViewById(R.id.seewho_tablerow);
+        seewho_tablerow2 = findViewById(R.id.seewho_tablerow2);
+        seewho_btn = findViewById(R.id.seewho_btn);
+        seewho_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (seewho_tablerow.getVisibility()==View.VISIBLE){
+                    seewho_tablerow.setVisibility(View.GONE);
+                    seewho_tablerow2.setVisibility(View.GONE);
+                }else {
+                    seewho_tablerow.setVisibility(View.VISIBLE);
+                    seewho_tablerow2.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        seeall_btn = findViewById(R.id.seeall_btn);
+        seeall_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGender = "all";
+
+                wealthAndGlamourFragment1.reloadData(selectedGender);
+                wealthAndGlamourFragment2.reloadData(selectedGender);
+                wealthAndGlamourFragment3.reloadData(selectedGender);
+                wealthAndGlamourFragment4.reloadData(selectedGender);
+            }
+        });
+        seefemale_btn = findViewById(R.id.seefemale_btn);
+        seefemale_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGender = "女";
+
+                wealthAndGlamourFragment1.reloadData(selectedGender);
+                wealthAndGlamourFragment2.reloadData(selectedGender);
+                wealthAndGlamourFragment3.reloadData(selectedGender);
+                wealthAndGlamourFragment4.reloadData(selectedGender);
+            }
+        });
+        seemale_btn = findViewById(R.id.seemale_btn);
+        seemale_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGender = "男";
+
+                wealthAndGlamourFragment1.reloadData(selectedGender);
+                wealthAndGlamourFragment2.reloadData(selectedGender);
+                wealthAndGlamourFragment3.reloadData(selectedGender);
+                wealthAndGlamourFragment4.reloadData(selectedGender);
+            }
+        });
+    }
+    //三个按钮初始化
+    private void initNavigateButton(){
+        Button sousuo = findViewById(R.id.sousuo_btn);
+        sousuo.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, SousuoActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -221,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             //唯一登录验证
             uniquelogin = new Uniquelogin(this,handler);
-            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
+            uniquelogin.compareUniqueLoginToken("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=uniquelogin&m=socialchat");
         }
     }
 
@@ -233,12 +402,12 @@ public class MainActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run(){
-                    OkHttpClient client = new OkHttpClient();
+                    OkHttpClient client = OkHttpInstance.getInstance();
                     RequestBody formBody = new FormBody.Builder()
                             .add("system", "android")
                             .build();
                     Request request = new Request.Builder()
-                            .url("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=getversion&m=socialchat")
+                            .url("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=getversion&m=socialchat")
                             .post(formBody)
                             .build();
 
@@ -300,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("userID", userID)
                         .add("latitude", latitude)

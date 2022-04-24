@@ -146,7 +146,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                             .load(R.drawable.ic_vip_gray)
                             .into(viewHolder.vip_gray);
                 }else {
-                    int vip_time = Integer.parseInt(currentItem.getmVip());
+                    int vip_time = 0;
+                    try {
+                        vip_time = Integer.parseInt(currentItem.getmVip());
+                    }catch (Exception e){
+                        Log.e(TAG, "onBindViewHolder: 抛出异常");
+                    }
+
                     if (vip_time > current_timestamp) {
                         //vipicon分级
                         Log.d("会员时长", ((Integer.parseInt(currentItem.getmVip())) - current_timestamp)+"");

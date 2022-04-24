@@ -25,6 +25,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SliderWebViewActivity;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
+import xin.banghua.beiyuan.utils.OkHttpResponseCallBack;
 
 public class SignupActivity extends Activity {
     private Context mContext;
@@ -83,7 +85,7 @@ public class SignupActivity extends Activity {
                     Toast.makeText(mContext, "请输入手机号", Toast.LENGTH_LONG).show();
                     return;
                 }
-                sendCode("https://www.banghua.xin/sms.php",userAcountString);
+                sendCode("https://www.banghua.xin/sms_beibeiwu.php",userAcountString);
                 countDown();
             }
         });
@@ -130,7 +132,7 @@ public class SignupActivity extends Activity {
             switch (msg.what){
                 case 2:
                     Toast.makeText(mContext, "验证码发送成功", Toast.LENGTH_LONG).show();
-                    smscode = msg.obj.toString();
+                    //smscode = msg.obj.toString();
                     break;
                 case 3:
                     if (msg.arg1==0){
@@ -147,7 +149,10 @@ public class SignupActivity extends Activity {
     };
     //TODO okhttp验证信息
     public void verificationCode(final String verificationCodeString){
-                if (smscode.equals(verificationCodeString)){
+        OkHttpInstance.smsVerify(userAcountString, verificationCodeString, new OkHttpResponseCallBack() {
+            @Override
+            public void getResponseString(String responseString) {
+                if(responseString.equals("true")){
                     Intent intent = new Intent(SignupActivity.this, Userset.class);
                     intent.putExtra("logtype","1");
                     intent.putExtra("userAccount",userAcountString);
@@ -156,6 +161,8 @@ public class SignupActivity extends Activity {
                 }else {
                     Toast.makeText(mContext, "验证码错误", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
     }
 
     //TODO okhttp获取用户信息
@@ -163,7 +170,7 @@ public class SignupActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("phoneNumber", phoneNumber)
                         .build();

@@ -20,6 +20,7 @@ import xin.banghua.beiyuan.LaunchActivity;
 import xin.banghua.beiyuan.PushPackage.PushClass;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 public class OneKeyLogInActivityResult extends AppCompatActivity {
@@ -78,7 +79,7 @@ public class OneKeyLogInActivityResult extends AppCompatActivity {
          new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", myid)
                         .add("phonebrand", PushClass.phoneBrand)

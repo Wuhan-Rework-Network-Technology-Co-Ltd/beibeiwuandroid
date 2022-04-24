@@ -36,6 +36,7 @@ import okhttp3.Response;
 import xin.banghua.beiyuan.ParseJSON.ParseJSONArray;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 
 /**
@@ -76,9 +77,9 @@ public class GuanzhuFragment extends Fragment implements BaseSliderView.OnSlider
         super.onViewCreated(view, savedInstanceState);
 
         //使用okhttp获取全部用户信息
-        getDataDongtai("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guanzhu&m=socialchat");
+        getDataDongtai("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=guanzhu&m=socialchat");
         //使用okhttp获取推荐的幻灯片
-        getDataSlide("https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=guanzhu&m=socialchat");
+        getDataSlide("https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=guanzhu&m=socialchat");
 
         initNavigateButton(view);
 
@@ -215,7 +216,7 @@ public class GuanzhuFragment extends Fragment implements BaseSliderView.OnSlider
             public void run(){
                 sh = new SharedHelper(mView.getContext());
                 userInfo = sh.readUserInfo();
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getDongtai")
                         .add("userID", userInfo.get("userID"))
@@ -245,7 +246,7 @@ public class GuanzhuFragment extends Fragment implements BaseSliderView.OnSlider
         new Thread(new Runnable() {
             @Override
             public void run(){
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "getSlide")
                         .build();

@@ -1217,7 +1217,7 @@
 11-11 20:47:10.686 E/ANDR-PERF-MPCTL(  658): Invalid profile no. 0, total profiles 0 only
 11-11 20:47:10.702 D/Linux   (23400): [Posix_connect Debug]Process xin.banghua.beiyuan :443 
 11-11 20:47:10.939 W/Settings( 2293): Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
-11-11 20:47:11.110 D/ConversationFragment(23400): run: 看看Response{protocol=http/1.1, code=200, message=OK, url=https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=signin&m=socialchat}
+11-11 20:47:11.110 D/ConversationFragment(23400): run: 看看Response{protocol=http/1.1, code=200, message=OK, url=https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=signin&m=socialchat}
 11-11 20:47:11.113 D/登录信息(23400): 登陆成功
 11-11 20:47:11.123 D/进入handler(23400): 0
 11-11 20:47:11.123 D/发送通知(23400): 登陆成功

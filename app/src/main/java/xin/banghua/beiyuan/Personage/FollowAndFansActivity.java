@@ -33,7 +33,7 @@ public class FollowAndFansActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish(); // back button
+                onBackPressed(); // back button
                 return true;
         }
         return super.onOptionsItemSelected(item);

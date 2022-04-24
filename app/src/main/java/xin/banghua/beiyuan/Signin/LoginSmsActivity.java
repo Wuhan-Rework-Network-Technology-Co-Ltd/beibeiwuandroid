@@ -180,7 +180,7 @@ public class LoginSmsActivity extends AppCompatActivity {
                 @Override
                 public void getResponseString(String responseString) {
                     Toast.makeText(mContext, "验证码发送成功", Toast.LENGTH_LONG).show();
-                    smscode = responseString;
+                    //smscode = responseString;
 
                     countDown = 60;
                     countDown();
@@ -217,7 +217,7 @@ public class LoginSmsActivity extends AppCompatActivity {
                     @Override
                     public void getResponseString(String responseString) {
                         Toast.makeText(mContext, "验证码发送成功", Toast.LENGTH_LONG).show();
-                        smscode = responseString;
+                        //smscode = responseString;
 
                         page_1.setVisibility(View.GONE);
                         captcha.setVisibility(View.GONE);
@@ -258,18 +258,23 @@ public class LoginSmsActivity extends AppCompatActivity {
             @Override
             public void inputComplete() {
                 if (codeView.getInputContent().length()==4){
-                    if (codeView.getInputContent().equals(smscode)){
-                        OkHttpInstance.smsLogin(userAccountString, new OkHttpResponseCallBack() {
-                            @Override
-                            public void getResponseString(String responseString) {
-                                log_in_intent.putExtra("login_result",responseString);
-                                startActivity(log_in_intent);
+                    OkHttpInstance.smsVerify(userAccountString, codeView.getInputContent(), new OkHttpResponseCallBack() {
+                        @Override
+                        public void getResponseString(String responseString) {
+                            if(responseString.equals("true")){
+                                OkHttpInstance.smsLogin(userAccountString, new OkHttpResponseCallBack() {
+                                    @Override
+                                    public void getResponseString(String responseString) {
+                                        log_in_intent.putExtra("login_result",responseString);
+                                        startActivity(log_in_intent);
+                                    }
+                                });
+                            }else {
+                                Toast.makeText(LoginSmsActivity.this,"验证码错误，请重新输入",Toast.LENGTH_SHORT).show();
+                                codeView.clearInputContent();
                             }
-                        });
-                    }else {
-                        Toast.makeText(LoginSmsActivity.this,"验证码错误，请重新输入",Toast.LENGTH_SHORT).show();
-                        codeView.clearInputContent();
-                    }
+                        }
+                    });
                 }
             }
 

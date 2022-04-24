@@ -32,11 +32,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import xin.banghua.beiyuan.Common;
 import xin.banghua.beiyuan.Main2Activity;
 import xin.banghua.beiyuan.Personage.PersonageActivity;
 import xin.banghua.beiyuan.R;
 import xin.banghua.beiyuan.SharedPreferences.SharedHelper;
-import xin.banghua.beiyuan.Common;
+import xin.banghua.beiyuan.utils.OkHttpInstance;
 
 public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.ViewHolder>  {
     private static final String TAG = "NewFriendsAdapter";
@@ -240,7 +241,7 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                 confirm_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        deleteFriendNumber(i,mUserID.get(i),"https://console.banghua.xin/app/index.php?i=99999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
+                        deleteFriendNumber(i,mUserID.get(i),"https://console.banghua.xin/app/index.php?i=999999&c=entry&a=webapp&do=DeleteFriendsapply&m=socialchat");
                         dialog.dismiss();
                     }
                 });
@@ -321,7 +322,7 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                 String myid = shUserInfo.readUserInfo().get("userID");
                 String mynickname = shUserInfo.readUserInfo().get("userNickName");
                 String myportrait = shUserInfo.readUserInfo().get("userPortrait");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("type", "agreefriend")
                         .add("myid",myid)
@@ -360,7 +361,7 @@ public class NewFriendsAdapter extends RecyclerView.Adapter<NewFriendsAdapter.Vi
                 SharedHelper shuserinfo = new SharedHelper(mContext.getApplicationContext());
                 String myid = shuserinfo.readUserInfo().get("userID");
                 Log.d(TAG, "删除新好友myid"+myid+"yourid"+yourid);
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = OkHttpInstance.getInstance();
                 RequestBody formBody = new FormBody.Builder()
                         .add("myid", yourid)
                         .add("yourid", myid)

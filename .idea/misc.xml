@@ -37,16 +37,20 @@
         <entry key="app/src/main/res/drawable/ic_vip_gray.xml" value="0.18952702702702703" />
         <entry key="app/src/main/res/drawable/ic_vip_white.xml" value="0.18952702702702703" />
         <entry key="app/src/main/res/drawable/ic_zoom_icon.xml" value="0.17730263157894738" />
+        <entry key="app/src/main/res/drawable/match_bg.xml" value="0.25" />
         <entry key="app/src/main/res/drawable/rc_gift_plugin_icon.xml" value="0.25225225225225223" />
         <entry key="app/src/main/res/drawable/red_10.xml" value="0.18453947368421053" />
         <entry key="app/src/main/res/drawable/red_cycle.xml" value="0.18618421052631579" />
         <entry key="app/src/main/res/drawable/red_round.xml" value="0.18952702702702703" />
         <entry key="app/src/main/res/drawable/round_blue.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/round_blue_normal.xml" value="0.18618421052631579" />
         <entry key="app/src/main/res/drawable/round_gradient_blue.xml" value="0.25495495495495496" />
         <entry key="app/src/main/res/drawable/round_grey_normal.xml" value="0.17730263157894738" />
+        <entry key="app/src/main/res/drawable/round_sime_white.xml" value="0.1868421052631579" />
         <entry key="app/src/main/res/drawable/selector_music_play_pic.xml" value="0.18618421052631579" />
         <entry key="app/src/main/res/drawable/shape_circle_dialog_bg.xml" value="0.18618421052631579" />
         <entry key="app/src/main/res/drawable/shape_play_button_background.xml" value="0.18618421052631579" />
+        <entry key="app/src/main/res/drawable/stroke_bg.xml" value="0.18618421052631579" />
         <entry key="app/src/main/res/drawable/tjhy_10.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/drawable/yuan_et_shixin.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/drawable/yuan_sex_nan.xml" value="0.29010416666666666" />
@@ -56,9 +60,12 @@
         <entry key="app/src/main/res/layout/activity_buysvip.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_buyvip.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/activity_common_setting.xml" value="0.2324561403508772" />
-        <entry key="app/src/main/res/layout/activity_conversation.xml" value="0.23097826086956522" />
+        <entry key="app/src/main/res/layout/activity_conversation.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_conversation_list.xml" value="0.14002732240437157" />
+        <entry key="app/src/main/res/layout/activity_conversation_setting.xml" value="0.13114754098360656" />
         <entry key="app/src/main/res/layout/activity_douyin.xml" value="0.14002732240437157" />
         <entry key="app/src/main/res/layout/activity_dynamic_pager_item.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_find_password.xml" value="0.13148907103825136" />
         <entry key="app/src/main/res/layout/activity_follow_and_fans.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/activity_imager_pager.xml" value="0.17725409836065573" />
         <entry key="app/src/main/res/layout/activity_inform_reason.xml" value="0.1" />
@@ -70,7 +77,9 @@
         <entry key="app/src/main/res/layout/activity_main4.xml" value="0.2264957264957265" />
         <entry key="app/src/main/res/layout/activity_main5.xml" value="0.2324561403508772" />
         <entry key="app/src/main/res/layout/activity_make_friend.xml" value="0.23097826086956522" />
+        <entry key="app/src/main/res/layout/activity_match.xml" value="0.11" />
         <entry key="app/src/main/res/layout/activity_new_friend.xml" value="0.2324561403508772" />
+        <entry key="app/src/main/res/layout/activity_new_perosnage.xml" value="0.13114754098360656" />
         <entry key="app/src/main/res/layout/activity_one_key_log_in.xml" value="0.21693840579710144" />
         <entry key="app/src/main/res/layout/activity_online_match.xml" value="0.22882882882882882" />
         <entry key="app/src/main/res/layout/activity_personage.xml" value="0.2324561403508772" />
@@ -84,7 +93,10 @@
         <entry key="app/src/main/res/layout/activity_signin.xml" value="0.21693840579710144" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2264957264957265" />
         <entry key="app/src/main/res/layout/activity_singleperson.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_someonesluntan.xml" value="0.13114754098360656" />
         <entry key="app/src/main/res/layout/activity_sound.xml" value="0.2324561403508772" />
+        <entry key="app/src/main/res/layout/activity_sousuo.xml" value="0.15334699453551912" />
+        <entry key="app/src/main/res/layout/activity_sousuo_result.xml" value="0.15334699453551912" />
         <entry key="app/src/main/res/layout/activity_store.xml" value="0.21693840579710144" />
         <entry key="app/src/main/res/layout/activity_sub_conversation_list.xml" value="0.22882882882882882" />
         <entry key="app/src/main/res/layout/activity_topic_post.xml" value="0.11" />
@@ -99,8 +111,10 @@
         <entry key="app/src/main/res/layout/badge_unreadmessage.xml" value="0.1" />
         <entry key="app/src/main/res/layout/comment_dialog.xml" value="0.17905405405405406" />
         <entry key="app/src/main/res/layout/comment_main_item.xml" value="0.17905405405405406" />
+        <entry key="app/src/main/res/layout/custom_notification.xml" value="0.25" />
         <entry key="app/src/main/res/layout/custom_video_view.xml" value="0.1369535519125683" />
         <entry key="app/src/main/res/layout/dialog_foot_confirm.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_foot_edittext.xml" value="0.14002732240437157" />
         <entry key="app/src/main/res/layout/dialog_foot_luntan_search.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_foot_needsvip.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_foot_needvip.xml" value="0.1" />
@@ -116,7 +130,7 @@
         <entry key="app/src/main/res/layout/fragment_local_music.xml" value="0.1287568306010929" />
         <entry key="app/src/main/res/layout/fragment_luntan.xml" value="0.2264957264957265" />
         <entry key="app/src/main/res/layout/fragment_me.xml" value="0.27708333333333335" />
-        <entry key="app/src/main/res/layout/fragment_mine.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_mine.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_new_dynamic.xml" value="0.17598684210526316" />
         <entry key="app/src/main/res/layout/fragment_online_music.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_personage.xml" value="0.27708333333333335" />
@@ -128,6 +142,7 @@
         <entry key="app/src/main/res/layout/fragment_sousuoresult.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/fragment_topic_post.xml" value="0.16710526315789473" />
         <entry key="app/src/main/res/layout/fragment_tuijian.xml" value="0.27395833333333336" />
+        <entry key="app/src/main/res/layout/fragment_wealth_and_glamour.xml" value="0.13148907103825136" />
         <entry key="app/src/main/res/layout/gift_dialog.xml" value="0.165" />
         <entry key="app/src/main/res/layout/guangchang_fragment_adapter.xml" value="0.25" />
         <entry key="app/src/main/res/layout/home_fragment_adapter.xml" value="0.25" />
@@ -140,9 +155,14 @@
         <entry key="app/src/main/res/layout/layout_tiktok_controller.xml" value="0.12773224043715847" />
         <entry key="app/src/main/res/layout/level_frame.xml" value="0.240990990990991" />
         <entry key="app/src/main/res/layout/match_dialog.xml" value="0.17598684210526316" />
+        <entry key="app/src/main/res/layout/match_message_provider.xml" value="0.14002732240437157" />
+        <entry key="app/src/main/res/layout/match_portrait_framelayout.xml" value="0.14002732240437157" />
         <entry key="app/src/main/res/layout/music_cut_dialog.xml" value="0.1287568306010929" />
         <entry key="app/src/main/res/layout/music_listview_item.xml" value="0.1287568306010929" />
         <entry key="app/src/main/res/layout/music_selector_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/new_person_header.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/new_person_page.xml" value="0.13114754098360656" />
+        <entry key="app/src/main/res/layout/new_peson_post.xml" value="0.125" />
         <entry key="app/src/main/res/layout/picture_item.xml" value="0.240990990990991" />
         <entry key="app/src/main/res/layout/portrait_frame_view.xml" value="0.21693840579710144" />
         <entry key="app/src/main/res/layout/recyclerview_dongtai.xml" value="0.240990990990991" />
@@ -167,6 +187,7 @@
         <entry key="app/src/main/res/layout/video_view_with_cover.xml" value="0.18074324324324326" />
         <entry key="app/src/main/res/menu/menu_toolbar_conversation.xml" value="0.240990990990991" />
         <entry key="app/src/main/res/menu/menu_toolbar_userset.xml" value="0.240990990990991" />
+        <entry key="app/src/main/res/menu/navigation.xml" value="0.17598684210526316" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
         <entry key="chatroom/src/main/res/drawable/bg_az.xml" value="0.18952702702702703" />
@@ -190,6 +211,7 @@
         <entry key="chatroom/src/main/res/drawable/round_gradient_blue.xml" value="0.25495495495495496" />
         <entry key="chatroom/src/main/res/drawable/round_grey_normal.xml" value="0.18618421052631579" />
         <entry key="chatroom/src/main/res/drawable/round_shock.xml" value="0.25495495495495496" />
+        <entry key="chatroom/src/main/res/drawable/round_sime_yellow.xml" value="0.1868421052631579" />
         <entry key="chatroom/src/main/res/drawable/shape_corner_transparent.xml" value="0.18952702702702703" />
         <entry key="chatroom/src/main/res/layout/activity_channel_grid.xml" value="0.27395833333333336" />
         <entry key="chatroom/src/main/res/layout/activity_chat_room.xml" value="0.1802536231884058" />
@@ -228,6 +250,7 @@
         <entry key="chatroom/src/main/res/layout/topic_item.xml" value="0.18074324324324326" />
         <entry key="chatroom/src/main/res/layout/user_info_dialog.xml" value="0.240990990990991" />
         <entry key="chatroom/src/main/res/layout/view_toast_custom.xml" value="0.17481884057971014" />
+        <entry key="chatroom/src/main/res/layout/wealth_and_glamour.xml" value="0.375" />
         <entry key="contactcard/src/main/res/drawable/rc_contact_plugin_icon.xml" value="0.25225225225225223" />
         <entry key="faceunity/src/main/res/layout/activity_live_main.xml" value="0.17598684210526316" />
         <entry key="faceunity/src/main/res/layout/activity_script.xml" value="0.17247267759562843" />
